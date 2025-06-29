@@ -1,0 +1,100 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/widgets/custom-text-field-widget.dart';
+import 'package:hawiah_client/core/widgets/global-elevated-button-widget.dart';
+
+class AddNewLocationScreen extends StatelessWidget {
+  const AddNewLocationScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "إضافة عنوان جديد",
+          style: TextStyle(color: Colors.black),
+        ),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "العنوان الحالي",
+              style: TextStyle(color: Colors.black, fontSize: 15.sp),
+            ),
+            SizedBox(height: 10.h),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              decoration: BoxDecoration(
+                color: Color(0xffF9F9F9),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Color(0xffF9F9F9)),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/icons/location_map_icon.png",
+                    height: 20,
+                    width: 20,
+                  ),
+                  SizedBox(width: 10.w),
+                  Expanded(
+                    child: Text(
+                      "شارع الملك عمر بن عبد العزيز, RUQA 1523",
+                      style: TextStyle(color: Colors.black, fontSize: 15.sp),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10.h),
+            CustomTextField(
+              labelText: "العنوان",
+              hintText: "العنوان",
+              initialValue: "",
+              onChanged: (value) => {},
+            ),
+            Spacer(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/icons/check_icon.png",
+                  height: 20,
+                  width: 20,
+                ),
+                SizedBox(width: 10.w),
+                Text(
+                  "جعل هذا العنوان عنواني الإفتراضي",
+                  style: TextStyle(color: Colors.black, fontSize: 15.sp),
+                ),
+              ],
+            ),
+            SizedBox(height: 20.h),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: GlobalElevatedButton(
+                label: "إضافة العنوان",
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                backgroundColor: Color(0xff2D01FE),
+                textColor: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                borderRadius: BorderRadius.circular(10),
+                fixedWidth: 0.80, // 80% of the screen width
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

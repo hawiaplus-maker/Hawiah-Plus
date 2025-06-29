@@ -1,0 +1,2 @@
+E:/freelance/hawiah_client-main/android/app/.cxx/Debug/2k4b1u1m/x86_64/CMakeFiles/edit_cache.dir
+E:/freelance/hawiah_client-main/android/app/.cxx/Debug/2k4b1u1m/x86_64/CMakeFiles/rebuild_cache.dir

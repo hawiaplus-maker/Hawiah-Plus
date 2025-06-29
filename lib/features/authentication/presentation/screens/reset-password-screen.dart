@@ -1,0 +1,170 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/widgets/custom-text-field-widget.dart';
+import 'package:hawiah_client/core/widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
+
+import '../controllers/auth-cubit/auth-cubit.dart';
+import '../controllers/auth-cubit/auth-state.dart';
+
+class ResetPasswordScreen extends StatelessWidget {
+  const ResetPasswordScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        body: BlocConsumer<AuthCubit, AuthState>(
+          builder: (BuildContext context, AuthState state) {
+            final authCubit = AuthCubit.get(context);
+
+            String passwordReset = authCubit.passwordReset;
+
+            String passwordConfirmReset = authCubit.passwordConfirmReset;
+            bool passwordVisibleReset = authCubit.passwordVisibleReset;
+            final listPasswordCriteria = authCubit.listPasswordCriteria;
+            return Container(
+              alignment: Alignment.topCenter,
+              padding: EdgeInsets.symmetric(horizontal: 25.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "createNewPassword".tr(),
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "enterSecurePassword".tr(),
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                  CustomTextField(
+                    labelText: 'password'.tr(),
+                    hintText: 'enter_your_password'.tr(),
+                    initialValue: passwordReset,
+                    obscureText: !passwordVisibleReset,
+                    hasSuffixIcon: true,
+                    suffixIcon: IconButton(
+                      icon: Image.asset(
+                        passwordVisibleReset
+                            ? 'assets/icons/eye_password_icon.png'
+                            : 'assets/icons/eye_hide_password_icon.png',
+                        color: Theme.of(context).primaryColorDark,
+                        height: 24.0,
+                        width: 24.0,
+                      ),
+                      onPressed: () {
+                        authCubit.togglePasswordVisibilityReset();
+                      },
+                    ),
+                    onChanged: (value) {
+                      passwordReset = value;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  CustomTextField(
+                    labelText: 'confirm_password'.tr(),
+                    hintText: 'enter_your_password'.tr(),
+                    initialValue: passwordConfirmReset,
+                    obscureText: !passwordVisibleReset,
+                    hasSuffixIcon: true,
+                    suffixIcon: IconButton(
+                      icon: Image.asset(
+                        passwordVisibleReset
+                            ? 'assets/icons/eye_password_icon.png'
+                            : 'assets/icons/eye_hide_password_icon.png',
+                        color: Theme.of(context).primaryColorDark,
+                        height: 24.0,
+                        width: 24.0,
+                      ),
+                      onPressed: () {
+                        authCubit.togglePasswordVisibilityReset();
+                      },
+                    ),
+                    onChanged: (value) {
+                      passwordConfirmReset = value;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: listPasswordCriteria.length,
+                    itemBuilder: (context, index) {
+                      final passwordCriteria = listPasswordCriteria[index];
+                      return ListTile(
+                        leading: Icon(
+                          passwordCriteria.isValid
+                              ? Icons.check_circle
+                              : Icons.remove_circle,
+                          color: passwordCriteria.isValid
+                              ? Color(0xff2AD352)
+                              : Colors.red,
+                          size: 18,
+                        ),
+                        minLeadingWidth: 0,
+                        horizontalTitleGap: 5,
+                        title: Text(
+                          passwordCriteria.description.tr(),
+                          style: TextStyle(
+                              fontSize: 12.sp,
+                              color: passwordCriteria.isValid
+                                  ? Color(0xff2AD352)
+                                  : Colors.red),
+                        ),
+                      );
+                    },
+                  ),
+                  Spacer(),
+                  SizedBox(height: 20),
+                  Center(
+                    child: GlobalElevatedButton(
+                      label: "continue".tr(),
+                      onPressed: () {
+                        context.read<AuthCubit>().timer.cancel();
+                        Navigator.pushAndRemoveUntil<void>(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                const LoginScreen(),
+                          ),
+                          (route) => false,
+                        );
+                      },
+                      backgroundColor: Color(0xffEDEEFF),
+                      textColor: Color(0xff2D01FE),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      borderRadius: BorderRadius.circular(20),
+                      fixedWidth: 0.80, // 80% of the screen width
+                    ),
+                  ),
+                  SizedBox(height: 40),
+                ],
+              ),
+            );
+          },
+          listener: (BuildContext context, AuthState state) {},
+        ));
+  }
+}
