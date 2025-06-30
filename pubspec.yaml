@@ -72,6 +72,25 @@ flutter:
     - assets/gifs/
     - assets/global_icon/
     - assets/svg/
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/font/Cairo-ExtraLight.ttf
+          weight: 100
+        - asset: assets/font/Cairo-Light.ttf
+          weight: 300
+        - asset: assets/font/Cairo-Regular.ttf
+          weight: 400
+        - asset: assets/font/Cairo-Medium.ttf
+          weight: 500
+        - asset: assets/font/Cairo-SemiBold.ttf
+          weight: 600
+        - asset: assets/font/Cairo-Bold.ttf
+          weight: 700
+        - asset: assets/font/Cairo-ExtraBold.ttf
+          weight: 800
+        - asset: assets/font/Cairo-Black.ttf
+          weight: 900    
 
 flutter_native_splash:
   image: assets/gifs/splash_animation.gif
@@ -80,3 +99,5 @@ flutter_native_splash:
   ios: true
 
 flutter_lints: ^3.0.0
+
+
