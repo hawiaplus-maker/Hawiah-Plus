@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hawiah_client/core/widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/location-item-widget.dart';
 import 'package:hawiah_client/features/location/presentation/screens/add-new-location-screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/location-map-screen.dart';

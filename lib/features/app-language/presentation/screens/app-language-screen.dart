@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:hawiah_client/core/custom_widgets/appbar-global-widget.dart';
 import 'package:hawiah_client/features/app-language/presentation/controllers/app-language-cubit/app-language-cubit.dart';
 import 'package:hawiah_client/features/app-language/presentation/widgets/language-list-view-widget.dart';
-import 'package:hawiah_client/Core/widgets/appbar-global-widget.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/features/app-language/presentation/widgets/language-description-widget.dart';
 import 'package:hawiah_client/features/app-language/presentation/widgets/floating-action-button-widget.dart';

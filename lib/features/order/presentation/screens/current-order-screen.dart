@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/features/home/presentation/screens/qr-code-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/extend-time-order-screen.dart';
 
-import '../../../../core/widgets/global-elevated-button-widget.dart';
+import '../../../../core/custom_widgets/global-elevated-button-widget.dart';
 
 class CurrentOrderScreen extends StatelessWidget {
   @override

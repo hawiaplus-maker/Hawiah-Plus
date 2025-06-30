@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hawiah_client/core/widgets/custom-text-field-widget.dart';
-import 'package:hawiah_client/core/widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
+import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 
 class AddNewLocationScreen extends StatelessWidget {
   const AddNewLocationScreen({super.key});

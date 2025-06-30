@@ -4,9 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/bloc-config/bloc_observer.dart';
 import 'package:hawiah_client/core/bloc-config/bloc_providers.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/features/splash/presentation/screens/splash-screen.dart';
 import 'package:hawiah_client/injection_container.dart';
 
+
+late BuildContext genContext;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
@@ -30,6 +33,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      genContext = CommonMethods.navigatorKey.currentContext ?? context;
     //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
     return ScreenUtilInit(
       designSize: const Size(381, 828),

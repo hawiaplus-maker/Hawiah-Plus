@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hawiah_client/core/widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/company-profile-completion-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/personal-profile-completion-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/reset-password-screen.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/features/order/presentation/functions/show-feedback-bottom-sheet.dart';
 
-import '../../../../core/widgets/global-elevated-button-widget.dart';
+import '../../../../core/custom_widgets/global-elevated-button-widget.dart';
 
 class OldOrderScreen extends StatelessWidget {
   @override

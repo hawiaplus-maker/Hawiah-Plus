@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/phone-input-widget.dart';
+import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 
 import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
@@ -47,11 +48,14 @@ class RegisterScreen extends StatelessWidget {
                 SizedBox(height: 50.h),
                 RegisterButtonWidget(),
                 SizedBox(height: 35.h),
-                TermsAndConditionsSection(
-                  checkedValueTerms: checkedValueTerms,
-                  onCheckboxChanged: (value) {
-                    authChange.updateCheckedValueTerms(value ?? false);
-                  },
+                BlocProvider(
+                  create: (context) => SettingCubit(),
+                  child: TermsAndConditionsSection(
+                    checkedValueTerms: checkedValueTerms,
+                    onCheckboxChanged: (value) {
+                      authChange.updateCheckedValueTerms(value ?? false);
+                    },
+                  ),
                 ),
                 Spacer(),
                 FooterRegisterWidget(),

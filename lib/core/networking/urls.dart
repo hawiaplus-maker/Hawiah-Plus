@@ -17,5 +17,6 @@ class Urls {
   //! ===================> Live Api <=================== !//
   static const String baseUrl = '';
   static const String login = '${baseUrl}user/login';
+  static const String settings = '${baseUrl}/settings';
 
 }

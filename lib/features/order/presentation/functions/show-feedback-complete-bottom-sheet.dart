@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hawiah_client/core/widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 
 void showThankYouBottomSheet(BuildContext context) {
   showModalBottomSheet(

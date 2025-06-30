@@ -12,7 +12,6 @@ GetIt sl = GetIt.instance;
 
 class AppInjector {
   static Future<void> init() async {
-    // Features Injectors
     AppLanguageInjection.init();
     OnBoardingInjection.init();
     AuthenticationInjection.init();
