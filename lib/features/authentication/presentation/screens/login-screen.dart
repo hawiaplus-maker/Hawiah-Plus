@@ -13,57 +13,70 @@ import 'package:hawiah_client/features/authentication/presentation/widgets/login
 import 'package:hawiah_client/features/authentication/presentation/widgets/login-widgets/password-input-widget.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBarAuthWidget(),
       body: BlocConsumer<AuthCubit, AuthState>(
         builder: (BuildContext context, AuthState state) {
-          return Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "welcome".tr(),
-                  style: TextStyle(fontSize: 25.sp, color: Colors.black),
-                ),
-                Text(
-                  "welcome_back".tr(),
-                  style: TextStyle(fontSize: 15.sp, color: Color(0xff979797)),
-                ),
-                SizedBox(height: 20.h),
-                PhoneInputWidget(),
-                SizedBox(height: 20.h),
-                PasswordInputWidget(),
-                SizedBox(height: 10.h),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const ForgetPasswordScreen()));
-                  },
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "forgot_password".tr(),
-                      style:
-                          TextStyle(color: Color(0xff2D01FE), fontSize: 15.sp),
+          return Form(
+            key: formKey,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "welcome".tr(),
+                    style: TextStyle(fontSize: 25.sp, color: Colors.black),
+                  ),
+                  Text(
+                    "welcome_back".tr(),
+                    style: TextStyle(fontSize: 15.sp, color: Color(0xff979797)),
+                  ),
+                  SizedBox(height: 20.h),
+                  PhoneInputWidget(),
+                  SizedBox(height: 20.h),
+                  PasswordInputWidget(),
+                  SizedBox(height: 10.h),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const ForgetPasswordScreen()));
+                    },
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "forgot_password".tr(),
+                        style: TextStyle(
+                            color: Color(0xff2D01FE), fontSize: 15.sp),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 20.h),
-                ActionButtonsWidget(),
-                Spacer(),
-                FooterTextWidget(),
-                SizedBox(height: 20.h),
-              ],
+                  SizedBox(height: 20.h),
+                  ActionButtonsWidget(
+                    formKey: formKey,
+                  ),
+                  Spacer(),
+                  FooterTextWidget(),
+                  SizedBox(height: 20.h),
+                ],
+              ),
             ),
           );
         },
@@ -79,6 +92,14 @@ class LoginScreen extends StatelessWidget {
             );
           }
           if (state is AuthSuccess) {
+            Fluttertoast.showToast(
+              msg: state.message,
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0,
+            );
             Navigator.pushAndRemoveUntil<void>(
               context,
               MaterialPageRoute<void>(
