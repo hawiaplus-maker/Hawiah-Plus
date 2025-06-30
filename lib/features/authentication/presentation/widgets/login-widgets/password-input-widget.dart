@@ -11,6 +11,7 @@ class PasswordInputWidget extends StatelessWidget {
     final passwordVisible = authCubit.passwordVisibleLogin;
 
     return TextFormField(
+      validator: (value) => value!.isEmpty ? 'password_required'.tr() : null,
       keyboardType: TextInputType.text,
       initialValue: password,
       obscureText: !passwordVisible,
