@@ -34,6 +34,8 @@ class _LayoutScreenState extends State<LayoutScreen> {
     return Scaffold(
       body: _screens[selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
+        color: Color(0xffE5E7FE),
+        buttonBackgroundColor: const Color(0xff2B03F0),
         items: [
           Image.asset(
             "assets/icons/home_icon.png",
@@ -41,7 +43,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
             height: 25.h,
             width: 25.w,
             color: selectedIndex == 0
-                ? Colors.black
+                ? Colors.white
                 : Color(0xff929292), // Dynamically set the color
           ),
           Image.asset(
@@ -50,7 +52,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
             height: 25.h,
             width: 25.w,
             color: selectedIndex == 1
-                ? Colors.black
+                ? Colors.white
                 : Color(0xff929292), // Dynamically set the color
           ),
           Image.asset(
@@ -59,7 +61,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
             height: 25.h,
             width: 25.w,
             color: selectedIndex == 2
-                ? Colors.black
+                ? Colors.white
                 : Color(0xff929292), // Dynamically set the color
           ),
           Image.asset(
@@ -68,7 +70,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
             height: 25.h,
             width: 25.w,
             color: selectedIndex == 3
-                ? Colors.black
+                ? Colors.white
                 : Color(0xff929292), // Dynamically set the color
           ),
         ],
@@ -77,18 +79,10 @@ class _LayoutScreenState extends State<LayoutScreen> {
         // color: Color(0xff929292),
         // colorSelected: Colors.white,
         // indexSelected: selectedIndex,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
 
         onTap: (int index) => setState(() {
-          if (index == 1) {
-            selectedIndex = 0;
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ExploreScreen()),
-            );
-          } else {
-            selectedIndex = index;
-          }
+          selectedIndex = index;
         }),
         // top: -25,
         // animated: true,
