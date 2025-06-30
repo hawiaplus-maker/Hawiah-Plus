@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/widgets/global-elevated-button-widget.dart';
-import 'package:hawiah_client/features/authentication/presentation/screens/start-account-verification-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 
 class RegisterButtonWidget extends StatelessWidget {
   @override
@@ -9,10 +9,12 @@ class RegisterButtonWidget extends StatelessWidget {
     return GlobalElevatedButton(
       label: "sign_up".tr(),
       onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  StartAccountVerificationScreen()));
+        final cleanedPhone =
+            AuthCubit.get(context).phoneNumber.replaceFirst('+966', '0');
+        AuthCubit.get(context).register(
+          phoneNumber: cleanedPhone,
+          type: AuthCubit.get(context).selectedAccountType,
+        );
       },
       backgroundColor: Color(0xffEDEEFF),
       textColor: Color(0xff2D01FE),

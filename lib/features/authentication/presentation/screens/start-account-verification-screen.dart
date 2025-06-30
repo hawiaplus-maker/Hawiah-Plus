@@ -9,8 +9,9 @@ import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
 
 class StartAccountVerificationScreen extends StatelessWidget {
-  const StartAccountVerificationScreen({super.key});
-
+  const StartAccountVerificationScreen({super.key, this.phoneNumber, this.otp});
+  final String? phoneNumber;
+  final int? otp;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +86,9 @@ class StartAccountVerificationScreen extends StatelessWidget {
                               children: [
                                 Text("send_code_via_sms".tr()),
                                 SizedBox(height: 5.h),
-                                Text('+966 5 123 45678'),
+                                Text(
+                                    '${'966'}${phoneNumber!.replaceAll('05', '5')}+' ??
+                                        '+966 5 123 45678'),
                               ],
                             ),
                             Radio(
@@ -113,7 +116,9 @@ class StartAccountVerificationScreen extends StatelessWidget {
                               children: [
                                 Text("send_code_via_whatsapp".tr()),
                                 SizedBox(height: 5.h),
-                                Text('+966 5 123 45678'),
+                                Text(
+                                    '${'966'}${phoneNumber!.replaceAll('05', '5')}+' ??
+                                        '+966 5 123 45678'),
                               ],
                             ),
                             Radio(
@@ -163,7 +168,9 @@ class StartAccountVerificationScreen extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => VerificationOtpScreen()));
+                                builder: (context) => VerificationOtpScreen(
+                                      phoneNumber: phoneNumber,
+                                    )));
                       },
                       backgroundColor: Color(0xffEDEEFF),
                       textColor: Color(0xff2D01FE),

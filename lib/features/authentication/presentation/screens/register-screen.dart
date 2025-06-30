@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/start-account-verification-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/phone-input-widget.dart';
 
@@ -21,47 +23,66 @@ class RegisterScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBarAuthWidget(),
       body: BlocConsumer<AuthCubit, AuthState>(
-        builder: (BuildContext context, AuthState state) {
-          final authChange = AuthCubit.get(context);
-          final accountTypes = authChange.accountTypes;
-          final selectedAccountType = authChange.selectedAccountType;
-          final checkedValueTerms = authChange.checkedValueTerms;
+          builder: (BuildContext context, AuthState state) {
+        final authChange = AuthCubit.get(context);
+        final accountTypes = authChange.accountTypes;
+        final selectedAccountType = authChange.selectedAccountType;
+        final checkedValueTerms = authChange.checkedValueTerms;
 
-          return Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                WelcomeTextWidget(),
-                SizedBox(height: 30.h),
-                AccountTypeToggleWidget(
-                  selectedAccountType: selectedAccountType,
-                  accountTypes: accountTypes,
-                  onToggle: (index) {
-                    authChange.updateSelectedAccountType(index!);
-                  },
-                ),
-                SizedBox(height: 40.h),
-                PhoneInputWidget(),
-                SizedBox(height: 50.h),
-                RegisterButtonWidget(),
-                SizedBox(height: 35.h),
-                TermsAndConditionsSection(
-                  checkedValueTerms: checkedValueTerms,
-                  onCheckboxChanged: (value) {
-                    authChange.updateCheckedValueTerms(value ?? false);
-                  },
-                ),
-                Spacer(),
-                FooterRegisterWidget(),
-                SizedBox(height: 20.h),
-              ],
-            ),
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              WelcomeTextWidget(),
+              SizedBox(height: 30.h),
+              AccountTypeToggleWidget(
+                selectedAccountType: selectedAccountType,
+                accountTypes: accountTypes,
+                onToggle: (index) {
+                  authChange.updateSelectedAccountType(index!);
+                },
+              ),
+              SizedBox(height: 40.h),
+              PhoneInputWidget(),
+              SizedBox(height: 50.h),
+              RegisterButtonWidget(),
+              SizedBox(height: 35.h),
+              TermsAndConditionsSection(
+                checkedValueTerms: checkedValueTerms,
+                onCheckboxChanged: (value) {
+                  authChange.updateCheckedValueTerms(value ?? false);
+                },
+              ),
+              Spacer(),
+              FooterRegisterWidget(),
+              SizedBox(height: 20.h),
+            ],
+          ),
+        );
+      }, listener: (context, state) {
+        if (state is AuthSuccess) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => StartAccountVerificationScreen(
+                      phoneNumber: state.data?['mobile'],
+                      otp: state.data?['otp'],
+                    )),
           );
-        },
-        listener: (BuildContext context, AuthState state) {},
-      ),
+        }
+        if (state is AuthError) {
+          Fluttertoast.showToast(
+            msg: state.message,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.redAccent,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        }
+      }),
     );
   }
 }

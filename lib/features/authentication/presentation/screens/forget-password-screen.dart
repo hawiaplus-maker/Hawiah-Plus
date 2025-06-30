@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/core/widgets/global-phone-input-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
@@ -77,12 +78,12 @@ class ForgetPasswordScreen extends StatelessWidget {
                 GlobalElevatedButton(
                   label: "continue".tr(),
                   onPressed: () {
-                    authCubit.isResetPassword = true;
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                StartAccountVerificationScreen()));
+                    final cleanedPhone = AuthCubit.get(context)
+                        .phoneNumber
+                        .replaceFirst('+966', '0');
+                    AuthCubit.get(context).forgotPassword(
+                      phoneNumber: cleanedPhone,
+                    );
                   },
                   backgroundColor: Color(0xff2D01FE),
                   textColor: Colors.white,
@@ -95,7 +96,36 @@ class ForgetPasswordScreen extends StatelessWidget {
             ),
           );
         },
-        listener: (BuildContext context, AuthState state) {},
+        listener: (BuildContext context, AuthState state) {
+          if (state is AuthError) {
+            Fluttertoast.showToast(
+              msg: state.message,
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              backgroundColor: Colors.redAccent,
+              textColor: Colors.black,
+              fontSize: 16.0,
+            );
+          }
+          if (state is AuthSuccess) {
+            AuthCubit.get(context).isResetPassword = true;
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => StartAccountVerificationScreen(
+                          phoneNumber: '9+++++++++++++dd',
+                        )));
+          } else if (state is AuthError) {
+            Fluttertoast.showToast(
+              msg: state.message,
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              backgroundColor: Colors.redAccent,
+              textColor: Colors.white,
+              fontSize: 16.0,
+            );
+          }
+        },
       ),
     );
   }
