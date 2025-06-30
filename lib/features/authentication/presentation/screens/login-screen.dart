@@ -1,15 +1,17 @@
+import 'package:easy_localization/easy_localization.dart' as es;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:easy_localization/easy_localization.dart' as es;
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/forget-password-screen.dart';
-import 'package:hawiah_client/features/authentication/presentation/widgets/login-widgets/action-buttons-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/phone-input-widget.dart';
-import 'package:hawiah_client/features/authentication/presentation/widgets/login-widgets/password-input-widget.dart';
+import 'package:hawiah_client/features/authentication/presentation/widgets/login-widgets/action-buttons-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/login-widgets/footer-text-widget.dart';
+import 'package:hawiah_client/features/authentication/presentation/widgets/login-widgets/password-input-widget.dart';
+import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -40,14 +42,19 @@ class LoginScreen extends StatelessWidget {
                 PasswordInputWidget(),
                 SizedBox(height: 10.h),
                 GestureDetector(
-                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgetPasswordScreen()));
-                   },
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const ForgetPasswordScreen()));
+                  },
                   child: Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "forgot_password".tr(),
-                      style: TextStyle(color: Color(0xff2D01FE), fontSize: 15.sp),
+                      style:
+                          TextStyle(color: Color(0xff2D01FE), fontSize: 15.sp),
                     ),
                   ),
                 ),
@@ -60,7 +67,36 @@ class LoginScreen extends StatelessWidget {
             ),
           );
         },
-        listener: (BuildContext context, AuthState state) {},
+        listener: (BuildContext context, AuthState state) {
+          if (state is AuthError) {
+            Fluttertoast.showToast(
+              msg: state.message,
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              backgroundColor: Colors.redAccent,
+              textColor: Colors.black,
+              fontSize: 16.0,
+            );
+          }
+          if (state is AuthSuccess) {
+            Navigator.pushAndRemoveUntil<void>(
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) => const LayoutScreen(),
+              ),
+              (route) => false,
+            );
+          } else if (state is AuthError) {
+            Fluttertoast.showToast(
+              msg: state.message,
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              backgroundColor: Colors.redAccent,
+              textColor: Colors.white,
+              fontSize: 16.0,
+            );
+          }
+        },
       ),
     );
   }

@@ -1,7 +1,12 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
+import 'package:hawiah_client/core/networking/api_helper.dart';
+import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
@@ -95,7 +100,10 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   // Resend the code and reset the timer
-  void resendCode() {
+  resendCode(String phoneNumber) {
+    resendCodeToApi(
+      phoneNumber: phoneNumber,
+    );
     remainingTime = 30; // Reset the timer
 
     isTimerCompleted = false;
@@ -152,7 +160,6 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthChange());
   }
 
-  
   final List<PasswordCriteria> listPasswordCriteria = [
     PasswordCriteria(
       description: "contains8Characters",
@@ -171,6 +178,249 @@ class AuthCubit extends Cubit<AuthState> {
       isValid: false,
     ),
   ];
+
+  ///**************************************login*********************** */
+  Future<void> login({
+    required String? phoneNumber,
+    required String? password,
+  }) async {
+    emit(AuthLoading());
+
+    final body = FormData.fromMap({
+      'password': password,
+      'mobile': phoneNumber,
+    });
+
+    final response = await ApiHelper.instance.post(
+      Urls.login,
+      body: body,
+      hasToken: false,
+    );
+
+    if (response.state == ResponseState.complete) {
+      final data = response.data['data'];
+      final message = response.data['message'] ?? 'Login completed';
+
+      if (data != null) {
+        HiveMethods.updateToken(data['api_token']);
+        emit(AuthSuccess(
+          message: message,
+        ));
+      } else {
+        emit(AuthError(message));
+      }
+    } else if (response.state == ResponseState.unauthorized) {
+      emit(AuthError(response.data['message'] ?? "بيانات الدخول غير صحيحة"));
+    } else if (response.state == ResponseState.error) {
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+    } else if (response.state == ResponseState.offline) {
+      emit(AuthError("لا يوجد اتصال بالإنترنت"));
+    } else {
+      emit(AuthError("حدث خطأ غير متوقع"));
+    }
+  }
+
+  ///******************Register*********************** */
+  ///
+  Future<void> register({
+    required String? phoneNumber,
+    required int? type,
+  }) async {
+    emit(AuthLoading());
+
+    final body = FormData.fromMap({
+      'type': type,
+      'mobile': phoneNumber,
+    });
+
+    final response = await ApiHelper.instance.post(
+      Urls.register,
+      body: body,
+      hasToken: false,
+    );
+
+    if (response.state == ResponseState.complete) {
+      final data = response.data['data'];
+      final message = response.data['message'] ?? 'Login completed';
+
+      if (data != null) {
+        emit(AuthSuccess(
+          message: message,
+          data: response.data['data'] as Map<String, dynamic>,
+        ));
+      } else {
+        emit(AuthError(message));
+      }
+    } else if (response.state == ResponseState.unauthorized) {
+      emit(AuthError(response.data['message'] ?? "بيانات الدخول غير صحيحة"));
+    } else if (response.state == ResponseState.error) {
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+    } else if (response.state == ResponseState.offline) {
+      emit(AuthError("لا يوجد اتصال بالإنترنت"));
+    } else {
+      emit(AuthError("حدث خطأ غير متوقع"));
+    }
+  }
+
+  ///**************************************otp*********************** */
+  Future<void> otp({
+    required String? phoneNumber,
+    required int? otp,
+  }) async {
+    emit(AuthLoading());
+
+    final body = FormData.fromMap({
+      'otp': otp,
+      'mobile': phoneNumber,
+    });
+
+    final response = await ApiHelper.instance.post(
+      Urls.verify,
+      body: body,
+      hasToken: false,
+    );
+
+    if (response.state == ResponseState.complete) {
+      final data = response.data['data'];
+      final message = response.data['message'] ?? 'Login completed';
+
+      if (data != null) {
+        emit(AuthSuccess(message: message));
+      } else {
+        emit(AuthError(message));
+      }
+    } else if (response.state == ResponseState.unauthorized) {
+      emit(AuthError(response.data['message'] ?? "بيانات الدخول غير صحيحة"));
+    } else if (response.state == ResponseState.error) {
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+    } else if (response.state == ResponseState.offline) {
+      emit(AuthError("لا يوجد اتصال بالإنترنت"));
+    } else {
+      emit(AuthError("حدث خطأ غير متوقع"));
+    }
+  }
+
+  //*************rend code************************** */
+  Future<void> resendCodeToApi({
+    required String? phoneNumber,
+  }) async {
+    emit(AuthLoading());
+
+    final body = FormData.fromMap({
+      'mobile': phoneNumber,
+    });
+
+    final response = await ApiHelper.instance.post(
+      Urls.resend,
+      body: body,
+      hasToken: false,
+    );
+
+    if (response.state == ResponseState.complete) {
+      final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
+
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+
+      emit(AuthSuccess(message: message));
+    } else if (response.state == ResponseState.unauthorized) {
+      emit(AuthError(response.data['message'] ?? "بيانات غير صحيحة"));
+    } else if (response.state == ResponseState.error) {
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+    } else if (response.state == ResponseState.offline) {
+      emit(AuthError("لا يوجد اتصال بالإنترنت"));
+    } else {
+      emit(AuthError("حدث خطأ غير متوقع"));
+    }
+  }
+
+  //*************forgot password************************** */
+  Future<void> forgotPassword({
+    required String? phoneNumber,
+  }) async {
+    emit(AuthLoading());
+
+    final body = FormData.fromMap({
+      'mobile': phoneNumber,
+    });
+
+    final response = await ApiHelper.instance.post(
+      Urls.forgetPassword,
+      body: body,
+      hasToken: false,
+    );
+
+    if (response.state == ResponseState.complete) {
+      final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
+
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+
+      emit(AuthSuccess(message: message));
+    } else if (response.state == ResponseState.unauthorized) {
+      emit(AuthError(response.data['message'] ?? "بيانات غير صحيحة"));
+    } else if (response.state == ResponseState.error) {
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+    } else if (response.state == ResponseState.offline) {
+      emit(AuthError("لا يوجد اتصال بالإنترنت"));
+    } else {
+      emit(AuthError("حدث خطأ غير متوقع"));
+    }
+  }
+
+  //*************reset password************************** */
+  Future<void> resetPassword({
+    required String? phoneNumber,
+    required String? otp,
+    required String? password,
+    required String? password_confirmation,
+  }) async {
+    emit(AuthLoading());
+    final body = FormData.fromMap({
+      'mobile': phoneNumber,
+      'otp': otp,
+      'password': password,
+      'password_confirmation': password_confirmation,
+    });
+    final response = await ApiHelper.instance.post(
+      Urls.resetPassword,
+      body: body,
+      hasToken: false,
+    );
+    if (response.state == ResponseState.complete) {
+      final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+
+      emit(AuthSuccess(message: message));
+    } else if (response.state == ResponseState.unauthorized) {
+      emit(AuthError(response.data['message'] ?? "بيانات غير صحيحة"));
+    } else if (response.state == ResponseState.error) {
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+    } else if (response.state == ResponseState.offline) {
+      emit(AuthError("لا يوجد اتصال بالإنترنت"));
+    } else {
+      emit(AuthError("حدث خطأ غير متوقع"));
+    }
+  }
 }
 
 class PasswordCriteria {

@@ -18,7 +18,10 @@ class AppLanguageCubit extends Cubit<AppLanguageState> {
     emit(AppLanguageRebuild());
   }
 
-  List<String> languages = ["arabic", "english", "french", "german", "spanish"];
+  List<String> languages = [
+    "arabic",
+    "english",
+  ];
 }
 
 class MyOrdersModel {

@@ -9,6 +9,7 @@ class GlobalElevatedButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final BorderRadiusGeometry borderRadius;
   final double? fixedWidth;
+  final bool isLoading;
 
   const GlobalElevatedButton({
     Key? key,
@@ -19,7 +20,8 @@ class GlobalElevatedButton extends StatelessWidget {
     this.icon,
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
     this.borderRadius = const BorderRadius.all(Radius.circular(20)),
-    this.fixedWidth = 0.80, // 80% width of the screen
+    this.fixedWidth = 0.80,
+    this.isLoading = false, // 80% width of the screen
   }) : super(key: key);
 
   @override
@@ -27,14 +29,16 @@ class GlobalElevatedButton extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed: onPressed, // Disable if not enabled
       icon: icon != null ? icon : SizedBox.shrink(),
-      label: Text(
-        label,
-        style: TextStyle(
-          fontSize: 16.0,
-          color: textColor,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      label: isLoading
+          ? CircularProgressIndicator()
+          : Text(
+              label,
+              style: TextStyle(
+                fontSize: 16.0,
+                color: textColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
         padding: padding,
