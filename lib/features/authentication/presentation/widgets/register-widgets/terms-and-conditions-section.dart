@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/authentication/presentation/bottom_sheet/privacy_bottom_sheet.dart';
 import 'package:hawiah_client/features/authentication/presentation/bottom_sheet/terms_bottom_sheet.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 
@@ -67,6 +68,8 @@ class _TermsAndConditionsSectionState extends State<TermsAndConditionsSection> {
                             ..onTap = () {
                               NavigatorMethods.showAppBottomSheet(
                                   context,
+                                  enableDrag: true,
+                                  isScrollControlled: true,
                                   TermsBottomSheet(
                                     terms: context.locale.languageCode == 'ar'
                                         ? setting?.termsCondition?.ar ?? ""
@@ -83,7 +86,15 @@ class _TermsAndConditionsSectionState extends State<TermsAndConditionsSection> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              // Handle the tap on "Privacy Policy"
+                              NavigatorMethods.showAppBottomSheet(
+                                  context,
+                                  enableDrag: true,
+                                  isScrollControlled: true,
+                                  PrivacyBottomSheet(
+                                    privacy: context.locale.languageCode == 'ar'
+                                        ? setting?.privacy?.ar ?? ""
+                                        : setting?.privacy?.en ?? "",
+                                  ));
                             },
                         ),
                       ],

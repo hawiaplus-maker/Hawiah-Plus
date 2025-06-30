@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/bloc-config/bloc_observer.dart';
 import 'package:hawiah_client/core/bloc-config/bloc_providers.dart';
+import 'package:hawiah_client/core/theme/cubit/app_theme_cubit.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/features/splash/presentation/screens/splash-screen.dart';
@@ -29,7 +30,9 @@ void main() async {
       path: 'assets/translations', startLocale: Locale('ar'),
       fallbackLocale:
           const Locale('en'), // Add a fallback locale if you haven't
-      child: const MyApp(), // Wrap MyApp instead of PetCareHomeScreen
+      child: BlocProvider(
+         create: (context) => AppThemeCubit()..initial(),
+        child: const MyApp()), // Wrap MyApp instead of PetCareHomeScreen
     ),
   );
 }
@@ -94,6 +97,7 @@ class _MyAppState extends State<MyApp> {
 
   ThemeData appTHeme() {
     return ThemeData(
+              fontFamily: 'Cairo',
               appBarTheme: const AppBarTheme(
                 color: Colors.white,
               ),
