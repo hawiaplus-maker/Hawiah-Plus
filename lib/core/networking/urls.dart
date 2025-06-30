@@ -15,7 +15,6 @@ class Urls {
       "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4";
 
   //! ===================> Live Api <=================== !//
-  static const String baseUrl = '';
-  static const String login = '${baseUrl}user/login';
-
+  static const String baseUrl = 'https://hawia-sa.com/api/';
+  static const String login = '${baseUrl}login';
 }
