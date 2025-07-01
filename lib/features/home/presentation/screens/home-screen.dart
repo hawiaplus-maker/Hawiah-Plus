@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/features/home/presentation/screens/home-new-order-screen.dart';
+import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_state.dart';
 
@@ -20,17 +22,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     context.read<HomeCubit>().getCategories();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final profile = context.read<ProfileCubit>().user;
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset(
-              "assets/icons/profile_company_icon.png",
+            CustomNetworkImage(
+              radius: 30,
+              fit: BoxFit.fill,
+              imageUrl: profile.image,
               height: 40.h,
               width: 40.w,
             ),
@@ -45,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 12.sp, color: Color(0xffA9A9AA)),
                 ),
                 Text(
-                  "شركة الأوائل المحدودة",
+                  profile.name,
                   style: TextStyle(fontSize: 14.sp, color: Color(0xff19104E)),
                 ),
               ],
@@ -203,29 +209,12 @@ class _SliderWidgetsState extends State<SliderWidgets> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                fullImageUrl,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    height: 150,
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator(),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: 150,
-                    alignment: Alignment.center,
-                    color: Colors.grey[100],
-                    child: Icon(Icons.error, color: Colors.red),
-                  );
-                },
-              ),
-            ),
+                borderRadius: BorderRadius.circular(10),
+                child: CustomNetworkImage(
+                  imageUrl: fullImageUrl,
+                  height: 200.h,
+                  width: double.infinity,
+                )),
           ],
         ),
       );
