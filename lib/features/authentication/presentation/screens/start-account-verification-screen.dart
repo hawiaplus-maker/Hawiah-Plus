@@ -86,9 +86,8 @@ class StartAccountVerificationScreen extends StatelessWidget {
                               children: [
                                 Text("send_code_via_sms".tr()),
                                 SizedBox(height: 5.h),
-                                Text(
-                                    '${'966'}${phoneNumber!.replaceAll('05', '5')}+' ??
-                                        '+966 5 123 45678'),
+                                Text('${phoneNumber!.replaceAll('05', '5')}' ??
+                                    '+966 5 123 45678'),
                               ],
                             ),
                             Radio(
@@ -103,33 +102,6 @@ class StartAccountVerificationScreen extends StatelessWidget {
                       ),
                       Divider(
                         height: 30,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          authChange.updateSelectedSmsOrWhatsApp(2);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("send_code_via_whatsapp".tr()),
-                                SizedBox(height: 5.h),
-                                Text(
-                                    '${'966'}${phoneNumber!.replaceAll('05', '5')}+' ??
-                                        '+966 5 123 45678'),
-                              ],
-                            ),
-                            Radio(
-                              value: 2,
-                              groupValue: selectedSmsOrWhatsApp,
-                              onChanged: (value) {
-                                authChange.updateSelectedSmsOrWhatsApp(value!);
-                              },
-                            ),
-                          ],
-                        ),
                       ),
                     ],
                   ),
@@ -170,6 +142,8 @@ class StartAccountVerificationScreen extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (context) => VerificationOtpScreen(
                                       phoneNumber: phoneNumber,
+                                      otp:otp
+
                                     )));
                       },
                       backgroundColor: Color(0xffEDEEFF),

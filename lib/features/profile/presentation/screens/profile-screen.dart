@@ -1,7 +1,5 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hawiah_client/features/app-language/presentation/screens/app-language-screen.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/chat-screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/choose-location-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/orders-screen.dart';
@@ -10,6 +8,7 @@ import 'package:hawiah_client/features/profile/presentation/screens/language-scr
 import 'package:hawiah_client/features/profile/presentation/screens/privacy-policy-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/setting-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/terms-and-conditions.dart';
+import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -60,24 +59,36 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                     Spacer(),
-                    Row(
-                      children: [
-                        Image.asset(
-                          "assets/icons/edit_icon.png",
-                          height: 15.h,
-                          width: 15.w,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push<void>(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) =>
+                                   UserProfile(),
+                            ));
+                      },
+                      child: Container(
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              "assets/icons/edit_icon.png",
+                              height: 15.h,
+                              width: 15.w,
+                            ),
+                            SizedBox(
+                              width: 5.w,
+                            ),
+                            Text(
+                              "تعديل",
+                              style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: Color(0xff2D01FE),
+                                  decoration: TextDecoration.underline),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: 5.w,
-                        ),
-                        Text(
-                          "تعديل",
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              color: Color(0xff2D01FE),
-                              decoration: TextDecoration.underline),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),

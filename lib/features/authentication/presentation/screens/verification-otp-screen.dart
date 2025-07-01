@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/company-profile-completion-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/personal-profile-completion-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/reset-password-screen.dart';
@@ -15,9 +14,11 @@ import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
 
 class VerificationOtpScreen extends StatefulWidget {
-  const VerificationOtpScreen({Key? key, this.phoneNumber}) : super(key: key);
+  const VerificationOtpScreen({Key? key, this.phoneNumber, this.otp})
+      : super(key: key);
 
   final String? phoneNumber;
+  final int? otp;
   @override
   _VerificationOtpScreenState createState() => _VerificationOtpScreenState();
 }
@@ -226,7 +227,10 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const ResetPasswordScreen()));
+                      builder: (context) => ResetPasswordScreen(
+                            phone: widget.phoneNumber ?? "",
+                            otp: widget.otp ?? 0,
+                          )));
             } else {
               if (context.read<AuthCubit>().selectedAccountType == 0) {
                 Navigator.pushReplacement(

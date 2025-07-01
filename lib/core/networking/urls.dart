@@ -27,4 +27,7 @@ class Urls {
   static const String resetPassword = '${baseUrl}reset-password';
   static String showServices(int id) => '${baseUrl}services/$id';
   static const String services = '${baseUrl}services';
+  static const String profile = '${baseUrl}users/profile';
+  static const String updateProfile = '${baseUrl}users/update-profile';
+  static const String categories = '${baseUrl}categories';
 }

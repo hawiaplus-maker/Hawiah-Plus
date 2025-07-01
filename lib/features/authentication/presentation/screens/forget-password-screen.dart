@@ -2,10 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/global-phone-input-widget.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/start-account-verification-screen.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -114,7 +113,8 @@ class ForgetPasswordScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => StartAccountVerificationScreen(
-                          phoneNumber: '9+++++++++++++dd',
+                          phoneNumber: state.data?['mobile'],
+                          otp: state.data?['otp'],
                         )));
           } else if (state is AuthError) {
             Fluttertoast.showToast(

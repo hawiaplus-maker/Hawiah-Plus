@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    context.read<HomeCubit>().getservices();
+    context.read<HomeCubit>().getCategories();
     super.initState();
   }
 
@@ -83,6 +83,9 @@ class _HomeScreenState extends State<HomeScreen> {
         margin: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           children: [
+            SizedBox(
+              height: 10.h,
+            ),
             SliderWidgets(),
             SizedBox(height: 10.h),
             BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
@@ -113,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Image.network(
-                              homeCubit.services?.message[index].image ?? "",
+                              homeCubit.categorieS?.message?[index].image ?? "",
                               height: 70.h,
                               width: 70.w,
                               fit: BoxFit.fill,
@@ -141,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(height: 5.h),
                             Text(
-                              homeCubit.services?.message[index].title ?? "",
+                              homeCubit.categorieS?.message?[index].title ?? "",
                               style: TextStyle(
                                   fontSize: 14.sp, color: Color(0xff3A3A3A)),
                               textAlign: TextAlign.center,
@@ -152,14 +155,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   itemCount:
-                      homeCubit.services?.message.length, // Number of items
+                      homeCubit.categorieS?.message?.length, // Number of items
                 ),
               );
             }),
             SizedBox(height: 10.h),
-            ClipRRect(
-                borderRadius: BorderRadius.circular(20.r),
-                child: Image.asset("assets/images/order_barcode_image.png")),
+            // ClipRRect(
+            //     borderRadius: BorderRadius.circular(20.r),
+            //     child: Image.asset("assets/images/order_barcode_image.png")),
           ],
         ),
       ),

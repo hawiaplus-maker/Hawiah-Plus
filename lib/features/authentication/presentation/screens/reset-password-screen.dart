@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
@@ -10,8 +11,10 @@ import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
-  const ResetPasswordScreen({super.key});
-
+  const ResetPasswordScreen(
+      {super.key, required this.phone, required this.otp});
+  final String phone;
+  final int otp;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,14 +144,11 @@ class ResetPasswordScreen extends StatelessWidget {
                     child: GlobalElevatedButton(
                       label: "continue".tr(),
                       onPressed: () {
-                        context.read<AuthCubit>().timer.cancel();
-                        Navigator.pushAndRemoveUntil<void>(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                                const LoginScreen(),
-                          ),
-                          (route) => false,
+                        AuthCubit.get(context).resetPassword(
+                          password: passwordReset,
+                          password_confirmation: passwordConfirmReset,
+                          phoneNumber: phone,
+                          otp: otp.toString(),
                         );
                       },
                       backgroundColor: Color(0xffEDEEFF),
@@ -164,7 +164,37 @@ class ResetPasswordScreen extends StatelessWidget {
               ),
             );
           },
-          listener: (BuildContext context, AuthState state) {},
+          listener: (BuildContext context, AuthState state) {
+            if (state is AuthError) {
+              Fluttertoast.showToast(
+                msg: state.message,
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                backgroundColor: Colors.redAccent,
+                textColor: Colors.black,
+                fontSize: 16.0,
+              );
+            }
+            if (state is AuthSuccess) {
+              context.read<AuthCubit>().timer.cancel();
+              Navigator.pushAndRemoveUntil<void>(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => const LoginScreen(),
+                ),
+                (route) => false,
+              );
+            } else if (state is AuthError) {
+              Fluttertoast.showToast(
+                msg: state.message,
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                backgroundColor: Colors.redAccent,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
+            }
+          },
         ));
   }
 }

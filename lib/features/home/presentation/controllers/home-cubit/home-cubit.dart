@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
+import 'package:hawiah_client/features/home/presentation/model/categories_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/services_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/show_services_model.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -157,6 +158,43 @@ class HomeCubit extends Cubit<HomeState> {
       _services = ServicesModel.fromJson(_servicesResponse.data);
       emit(HomeChange());
     } else if (_servicesResponse.state == ResponseState.unauthorized) {
+      emit(HomeChange());
+    }
+  }
+
+  ///**************************categories************************ */
+  void initialCategories() {
+    _categoriesResponse = ApiResponse(
+      state: ResponseState.sleep,
+      data: null,
+    );
+    _services = null;
+    emit(HomeChange());
+  }
+
+  ApiResponse _categoriesResponse = ApiResponse(
+    state: ResponseState.sleep,
+    data: null,
+  );
+  ApiResponse get categoriesResponse => _categoriesResponse;
+
+  CategoriesModel? _categories;
+  CategoriesModel? get categorieS => _categories;
+  Future<void> getCategories() async {
+    _sliderResponse = ApiResponse(
+      state: ResponseState.loading,
+      data: null,
+    );
+    _slider = null;
+    emit(HomeChange());
+
+    _categoriesResponse = await ApiHelper.instance.get(Urls.categories);
+
+    if (categoriesResponse.state == ResponseState.complete &&
+        _categoriesResponse.data != null) {
+      _categories = CategoriesModel.fromJson(_categoriesResponse.data);
+      emit(HomeChange());
+    } else if (_categoriesResponse.state == ResponseState.unauthorized) {
       emit(HomeChange());
     }
   }

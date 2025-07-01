@@ -358,6 +358,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     if (response.state == ResponseState.complete) {
       final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
+      final data = response.data['data'];
 
       Fluttertoast.showToast(
         msg: message,
@@ -368,7 +369,7 @@ class AuthCubit extends Cubit<AuthState> {
         fontSize: 16.0,
       );
 
-      emit(AuthSuccess(message: message));
+      emit(AuthSuccess(message: message, data: data));
     } else if (response.state == ResponseState.unauthorized) {
       emit(AuthError(response.data['message'] ?? "بيانات غير صحيحة"));
     } else if (response.state == ResponseState.error) {
