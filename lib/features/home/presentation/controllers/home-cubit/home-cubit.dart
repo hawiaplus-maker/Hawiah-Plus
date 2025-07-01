@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hawiah_client/core/networking/api_helper.dart';
+import 'package:hawiah_client/core/networking/urls.dart';
+import 'package:hawiah_client/features/home/presentation/model/services_model.dart';
+import 'package:hawiah_client/features/home/presentation/model/show_services_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'home-state.dart';
@@ -84,8 +88,78 @@ class HomeCubit extends Cubit<HomeState> {
   DateTime? selectedDay;
   DateTime? rangeStart;
   DateTime? rangeEnd;
+  void initialSlider() {
+    _sliderResponse = ApiResponse(
+      state: ResponseState.sleep,
+      data: null,
+    );
+    _slider = null;
+    emit(HomeChange());
+  }
 
- 
+  ApiResponse _sliderResponse = ApiResponse(
+    state: ResponseState.sleep,
+    data: null,
+  );
+  ApiResponse get sliderResponse => _sliderResponse;
+
+  ShowservicesModel? _slider;
+  ShowservicesModel? get setting => _slider;
+  Future<void> getslider() async {
+    _sliderResponse = ApiResponse(
+      state: ResponseState.loading,
+      data: null,
+    );
+    _slider = null;
+    emit(HomeChange());
+
+    _sliderResponse = await ApiHelper.instance.get(Urls.showServices(81));
+
+    if (_sliderResponse.state == ResponseState.complete &&
+        _sliderResponse.data != null) {
+      _slider = ShowservicesModel.fromJson(_sliderResponse.data);
+      emit(HomeChange());
+    } else if (_sliderResponse.state == ResponseState.unauthorized) {
+      emit(HomeChange());
+    }
+  }
+
+  //********************************services********************* */
+  void initialservices() {
+    _servicesResponse = ApiResponse(
+      state: ResponseState.sleep,
+      data: null,
+    );
+    _services = null;
+    emit(HomeChange());
+  }
+
+  ApiResponse _servicesResponse = ApiResponse(
+    state: ResponseState.sleep,
+    data: null,
+  );
+  ApiResponse get servicesResponse => _servicesResponse;
+
+  ServicesModel? _services;
+  ServicesModel? get services => _services;
+  Future<void> getservices() async {
+    _sliderResponse = ApiResponse(
+      state: ResponseState.loading,
+      data: null,
+    );
+    _slider = null;
+    emit(HomeChange());
+
+    _servicesResponse = await ApiHelper.instance.get(Urls.services);
+
+    if (_servicesResponse.state == ResponseState.complete &&
+        _servicesResponse.data != null) {
+      _services = ServicesModel.fromJson(_servicesResponse.data);
+      emit(HomeChange());
+    } else if (_servicesResponse.state == ResponseState.unauthorized) {
+      emit(HomeChange());
+    }
+  }
 }
 
 class TransportationCategoryModel {

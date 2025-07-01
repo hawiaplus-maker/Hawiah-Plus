@@ -5,6 +5,7 @@ import 'package:hawiah_client/features/explore/presentation/controllers/explore-
 import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-cubit.dart';
 import 'package:hawiah_client/features/order/presentation/controllers/order-cubit/order-cubit.dart';
+import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:hawiah_client/injection_container.dart';
 
 class BlocProviders {
@@ -28,6 +29,11 @@ class BlocProviders {
       BlocProvider<OrderCubit>(
         create: (context) => sl<OrderCubit>(),
       ),
+      BlocProvider<OrderCubit>(
+        create: (context) => sl<OrderCubit>(),
+      ),
+      BlocProvider<SettingCubit>(
+        create: (context) => sl<SettingCubit>())
     ];
   }
 }

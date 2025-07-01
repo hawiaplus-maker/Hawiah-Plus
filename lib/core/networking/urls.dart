@@ -25,4 +25,6 @@ class Urls {
   static const String resend = '${baseUrl}resend-otp';
   static const String forgetPassword = '${baseUrl}forget-password';
   static const String resetPassword = '${baseUrl}reset-password';
+  static String showServices(int id) => '${baseUrl}services/$id';
+  static const String services = '${baseUrl}services';
 }

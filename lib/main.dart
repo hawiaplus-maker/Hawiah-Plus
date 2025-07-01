@@ -6,13 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/bloc-config/bloc_observer.dart';
 import 'package:hawiah_client/core/bloc-config/bloc_providers.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/theme/cubit/app_theme_cubit.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
-import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/features/splash/presentation/screens/splash-screen.dart';
 import 'package:hawiah_client/injection_container.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 
 late BuildContext genContext;
 void main() async {
@@ -31,8 +30,8 @@ void main() async {
       fallbackLocale:
           const Locale('en'), // Add a fallback locale if you haven't
       child: BlocProvider(
-         create: (context) => AppThemeCubit()..initial(),
-        child: const MyApp()), // Wrap MyApp instead of PetCareHomeScreen
+          create: (context) => AppThemeCubit()..initial(),
+          child: const MyApp()), // Wrap MyApp instead of PetCareHomeScreen
     ),
   );
 }
@@ -66,10 +65,9 @@ class _MyAppState extends State<MyApp> {
     log("app lang is ==== ${HiveMethods.getLang()}" "lang");
   }
 
-  
   @override
   Widget build(BuildContext context) {
-      genContext = CommonMethods.navigatorKey.currentContext ?? context;
+    genContext = CommonMethods.navigatorKey.currentContext ?? context;
     //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
     return ScreenUtilInit(
       designSize: const Size(381, 828),
@@ -97,77 +95,70 @@ class _MyAppState extends State<MyApp> {
 
   ThemeData appTHeme() {
     return ThemeData(
-              fontFamily: 'Cairo',
-              appBarTheme: const AppBarTheme(
-                color: Colors.white,
-              ),
-              scaffoldBackgroundColor: Colors.white,
-              canvasColor: Colors.white,
-              primarySwatch: Colors.blue,
-              textTheme: TextTheme(
-                bodyLarge:
-                    TextStyle(color: Colors.black), // Default text style
-                bodyMedium:
-                    TextStyle(color: Colors.black), // For smaller text
-                displayLarge: TextStyle(color: Colors.black), // Headlines
-              ),
-              inputDecorationTheme: InputDecorationTheme(
-                hintStyle: TextStyle(
-                  color: Colors.grey[600], // Lighter grey color for hint text
-                  fontSize: 16, // A standard font size for hints
-                ),
-                labelStyle: TextStyle(
-                  color: Colors.black, // Label color (for fields with label)
-                  fontSize: 16, // Standard font size for labels
-                  fontWeight: FontWeight.w500, // Medium weight for clarity
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black.withOpacity(
-                        0.6), // Slightly greyish black for border
-                    width:
-                        1.5, // Slightly thicker border for better visibility
-                  ),
-                  borderRadius: BorderRadius.circular(
-                      12.0), // Rounded corners for modern look
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey.withOpacity(
-                        0.6), // Slightly greyish black for disabled state
-                    width:
-                        1.5, // Slightly thicker border for better visibility
-                  ),
-                  borderRadius: BorderRadius.circular(
-                      12.0), // Rounded corners for modern look
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color:
-                        Colors.blue, // Blue color when the field is focused
-                    width: 2.0, // Thicker border when focused
-                  ),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.red, // Red color for error state
-                    width: 2.0, // Slightly thicker for visibility
-                  ),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors
-                        .red, // Red color when focused and in error state
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                // Optional: Adding `contentPadding` to adjust space inside the field
-                contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14), // More space for readability
-              ));
+        fontFamily: 'Cairo',
+        appBarTheme: const AppBarTheme(
+          color: Colors.white,
+        ),
+        scaffoldBackgroundColor: Colors.white,
+        canvasColor: Colors.white,
+        primarySwatch: Colors.blue,
+        textTheme: TextTheme(
+          bodyLarge: TextStyle(color: Colors.black), // Default text style
+          bodyMedium: TextStyle(color: Colors.black), // For smaller text
+          displayLarge: TextStyle(color: Colors.black), // Headlines
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          hintStyle: TextStyle(
+            color: Colors.grey[600], // Lighter grey color for hint text
+            fontSize: 16, // A standard font size for hints
+          ),
+          labelStyle: TextStyle(
+            color: Colors.black, // Label color (for fields with label)
+            fontSize: 16, // Standard font size for labels
+            fontWeight: FontWeight.w500, // Medium weight for clarity
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.black
+                  .withOpacity(0.6), // Slightly greyish black for border
+              width: 1.5, // Slightly thicker border for better visibility
+            ),
+            borderRadius:
+                BorderRadius.circular(12.0), // Rounded corners for modern look
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.grey.withOpacity(
+                  0.6), // Slightly greyish black for disabled state
+              width: 1.5, // Slightly thicker border for better visibility
+            ),
+            borderRadius:
+                BorderRadius.circular(12.0), // Rounded corners for modern look
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.blue, // Blue color when the field is focused
+              width: 2.0, // Thicker border when focused
+            ),
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.red, // Red color for error state
+              width: 2.0, // Slightly thicker for visibility
+            ),
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.red, // Red color when focused and in error state
+              width: 2.0,
+            ),
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          // Optional: Adding `contentPadding` to adjust space inside the field
+          contentPadding: EdgeInsets.symmetric(
+              horizontal: 16, vertical: 14), // More space for readability
+        ));
   }
 }

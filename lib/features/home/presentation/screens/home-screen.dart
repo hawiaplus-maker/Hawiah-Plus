@@ -3,12 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/features/home/presentation/screens/home-new-order-screen.dart';
+import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
+import 'package:hawiah_client/features/setting/cubit/setting_state.dart';
 
 import '../controllers/home-cubit/home-cubit.dart';
 import '../controllers/home-cubit/home-state.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    context.read<HomeCubit>().getservices();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,75 +79,153 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: BlocConsumer<HomeCubit, HomeState>(
-        builder: (BuildContext context, HomeState state) {
-          final homeCubit = HomeCubit.get(context);
-          final transportationCategoriesList =
-              homeCubit.transportationCategoriesList;
-          return Container(
-            margin: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Column(
-              children: [
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(20.r),
-                    child: Image.asset("assets/images/banner_image.PNG")),
-                SizedBox(height: 10.h),
-                Container(
-                  height: 0.30.sh,
-                  child: GridView.builder(
-                    shrinkWrap: true, scrollDirection: Axis.horizontal,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // 4 columns
-                      crossAxisSpacing: 10.w, // Space between columns
-                      mainAxisSpacing: 10.h, // Space between rows
-                      childAspectRatio:
-                          1.5, // Adjust this to change the size of grid items
-                    ),
-                    itemBuilder: (context, index) => GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const HomeNewOrderScreen()));
-                      },
+      body: Container(
+        margin: EdgeInsets.symmetric(horizontal: 20.w),
+        child: Column(
+          children: [
+            SliderWidgets(),
+            SizedBox(height: 10.h),
+            BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
+              final homeCubit = HomeCubit.get(context);
+              return Expanded(
+                flex: 3,
+                child: ListView.builder(
+                  shrinkWrap: false, scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const HomeNewOrderScreen()));
+                    },
+                    child: Card(
+                      elevation: 5,
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child: Container(
-                        alignment: Alignment.center,
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 10.w, vertical: 10.h),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Image.asset(
-                              transportationCategoriesList[index].logo,
+                            Image.network(
+                              homeCubit.services?.message[index].image ?? "",
                               height: 70.h,
                               width: 70.w,
                               fit: BoxFit.fill,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return SizedBox(
+                                  height: 70.h,
+                                  width: 70.w,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                        strokeWidth: 2),
+                                  ),
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  height: 70.h,
+                                  width: 70.w,
+                                  color: Colors.grey[100],
+                                  child: Icon(Icons.broken_image,
+                                      color: Colors.grey),
+                                );
+                              },
                             ),
                             SizedBox(height: 5.h),
                             Text(
-                              transportationCategoriesList[index].title,
+                              homeCubit.services?.message[index].title ?? "",
                               style: TextStyle(
-                                  fontSize: 13.sp, color: Color(0xff3A3A3A)),
+                                  fontSize: 14.sp, color: Color(0xff3A3A3A)),
                               textAlign: TextAlign.center,
                             ),
                           ],
                         ),
                       ),
                     ),
-                    itemCount:
-                        transportationCategoriesList.length, // Number of items
                   ),
+                  itemCount:
+                      homeCubit.services?.message.length, // Number of items
                 ),
-                Spacer(),
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(20.r),
-                    child:
-                        Image.asset("assets/images/order_barcode_image.png")),
-              ],
-            ),
-          );
-        },
-        listener: (BuildContext context, HomeState state) {},
+              );
+            }),
+            SizedBox(height: 10.h),
+            ClipRRect(
+                borderRadius: BorderRadius.circular(20.r),
+                child: Image.asset("assets/images/order_barcode_image.png")),
+          ],
+        ),
       ),
     );
+  }
+}
+
+class SliderWidgets extends StatefulWidget {
+  const SliderWidgets({
+    super.key,
+  });
+
+  @override
+  State<SliderWidgets> createState() => _SliderWidgetsState();
+}
+
+class _SliderWidgetsState extends State<SliderWidgets> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<SettingCubit>().getsetting();
+  }
+
+  Widget build(BuildContext context) {
+    final langCode = context.locale.languageCode; // 'ar' أو 'en'
+    final imagePath = langCode == 'ar'
+        ? context.read<SettingCubit>().setting?.sliderImage?.ar
+        : context.read<SettingCubit>().setting?.sliderImage?.en;
+
+    final fullImageUrl = "https://hawia-sa.com/$imagePath";
+    return BlocBuilder<SettingCubit, SettingState>(builder: (context, state) {
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey, width: 1),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                fullImageUrl,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    height: 150,
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 150,
+                    alignment: Alignment.center,
+                    color: Colors.grey[100],
+                    child: Icon(Icons.error, color: Colors.red),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

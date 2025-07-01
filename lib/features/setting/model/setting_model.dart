@@ -361,7 +361,7 @@ class SettingModel {
     data['excel_user_upload_example'] = this.excelUserUploadExample;
     return data;
   }
-}
+} 
 
 class Title {
   String? en;

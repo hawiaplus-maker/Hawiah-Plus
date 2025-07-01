@@ -44,4 +44,5 @@ class SettingCubit extends Cubit<SettingState> {
       emit(SettingUpdate());
     }
   }
+  
 }
