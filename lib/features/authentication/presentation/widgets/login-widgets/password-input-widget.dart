@@ -11,10 +11,11 @@ class PasswordInputWidget extends StatelessWidget {
     final passwordVisible = authCubit.passwordVisibleLogin;
 
     return TextFormField(
-      validator: (value) => value!.isEmpty ? 'password_required'.tr() : null,
+     // validator: (value) => value!.isEmpty ? 'password_required'.tr() : null,
       keyboardType: TextInputType.text,
       initialValue: password,
       obscureText: !passwordVisible,
+      
       decoration: InputDecoration(
         labelText: 'password'.tr(),
         hintText: 'enter_your_password'.tr(),
@@ -31,7 +32,7 @@ class PasswordInputWidget extends StatelessWidget {
         suffixIcon: IconButton(
           icon: Image.asset(
             passwordVisible
-                ? 'assets/icons/eye_password_icon.png' // Icon for visible password
+                ? 'assets/icons/view.png' // Icon for visible password
                 : 'assets/icons/eye_hide_password_icon.png', // Icon for hidden password
             color: Theme.of(context).primaryColorDark,
             height: 24.0,

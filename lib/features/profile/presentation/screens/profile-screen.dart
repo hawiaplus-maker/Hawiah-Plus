@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/chat-screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/choose-location-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/orders-screen.dart';
+import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/faq-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/language-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/privacy-policy-screen.dart';
@@ -15,17 +18,20 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final profile = context.read<ProfileCubit>().user;
     return Scaffold(
       appBar: AppBar(
         title: Text("الملف الشخصي"),
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () {},
-          icon: Image.asset(
-            "assets/icons/notfication_icon.png",
-          ),
-          constraints: BoxConstraints(maxWidth: 40.w, maxHeight: 40.h),
-        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Image.asset(
+              "assets/icons/notfication_icon.png",
+            ),
+            constraints: BoxConstraints(maxWidth: 40.w, maxHeight: 40.h),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -35,10 +41,12 @@ class ProfileScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
                   children: [
-                    Image.asset(
-                      "assets/icons/profile_company_icon.png",
+                    CustomNetworkImage(
+                      imageUrl: profile.image,
                       height: 70.h,
                       width: 70.w,
+                      radius: 45,
+                      fit: BoxFit.contain,
                     ),
                     SizedBox(
                       width: 10.w,
@@ -47,12 +55,12 @@ class ProfileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "شركة الأوائل",
+                          profile.name,
                           style:
                               TextStyle(fontSize: 16.sp, color: Colors.black),
                         ),
                         Text(
-                          "MailSimple@simple.com",
+                          profile.email,
                           style: TextStyle(
                               fontSize: 12.sp, color: Color(0xffB5B5B5)),
                         ),
@@ -64,8 +72,7 @@ class ProfileScreen extends StatelessWidget {
                         Navigator.push<void>(
                             context,
                             MaterialPageRoute<void>(
-                              builder: (BuildContext context) =>
-                                   UserProfile(),
+                              builder: (BuildContext context) => UserProfile(),
                             ));
                       },
                       child: Container(
@@ -289,10 +296,10 @@ class ProfileScreen extends StatelessWidget {
         children: [
           Column(
             children: [
-              Image.asset(logo, height: 40.h, width: 40.w),
+              Image.asset(logo, height: 40.h, width: 35.w),
               Text(
                 title,
-                style: TextStyle(fontSize: 14.sp, color: color),
+                style: TextStyle(fontSize: 13.sp, color: color),
               ),
             ],
           ),
