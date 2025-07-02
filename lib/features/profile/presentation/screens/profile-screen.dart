@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
+import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
+import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/chat-screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/choose-location-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/orders-screen.dart';
@@ -13,9 +17,14 @@ import 'package:hawiah_client/features/profile/presentation/screens/setting-scre
 import 'package:hawiah_client/features/profile/presentation/screens/terms-and-conditions.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final profile = context.read<ProfileCubit>().user;
@@ -260,22 +269,71 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     );
                   }),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                child: Row(children: [
-                  Image.asset("assets/icons/sign_out_icon.png",
-                      height: 30.h, width: 30.w),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Text(
-                    "تسجيل خروج",
-                    style: TextStyle(fontSize: 14.sp, color: Colors.black),
-                  ),
-                ]),
+              BlocConsumer<AuthCubit, AuthState>(
+                builder: (context, state) {
+                  return InkWell(
+                    onTap: () {
+                      AuthCubit.get(context).logout();
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.w, vertical: 10.h),
+                      child: Row(children: [
+                        Image.asset("assets/icons/sign_out_icon.png",
+                            height: 30.h, width: 30.w),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        Text(
+                          "تسجيل خروج",
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.black),
+                        ),
+                      ]),
+                    ),
+                  );
+                },
+                listener: (BuildContext context, state) {
+                  if (state is AuthError) {
+                    Fluttertoast.showToast(
+                      msg: state.message,
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.redAccent,
+                      textColor: Colors.black,
+                      fontSize: 16.0,
+                    );
+                  }
+                  if (state is AuthSuccess) {
+                    Fluttertoast.showToast(
+                      msg: state.message,
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                    Navigator.pushAndRemoveUntil<void>(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) => const LoginScreen(),
+                      ),
+                      (route) => false,
+                    );
+                  } else if (state is AuthError) {
+                    Fluttertoast.showToast(
+                      msg: state.message,
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.redAccent,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  }
+                },
               ),
               SizedBox(
-                height: 10.h,
+                height: 70.h,
               ),
             ],
           ),

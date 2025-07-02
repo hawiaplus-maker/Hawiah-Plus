@@ -30,4 +30,5 @@ class Urls {
   static const String profile = '${baseUrl}users/profile';
   static const String updateProfile = '${baseUrl}users/update-profile';
   static const String categories = '${baseUrl}categories';
+  
 }

@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     context.read<HomeCubit>().getCategories();
-
+    context.read<ProfileCubit>().fetchProfile();
     super.initState();
   }
 
@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final profile = context.read<ProfileCubit>().user;
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         title: Row(
           children: [

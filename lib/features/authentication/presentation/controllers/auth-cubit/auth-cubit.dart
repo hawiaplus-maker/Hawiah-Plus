@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -111,8 +112,20 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthChange()); // Emit state to update UI
   }
 
+  GlobalKey<FormState> formKeyCompleteProfile = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordControllerCompleteProfile =
+      TextEditingController();
+  TextEditingController confirmPasswordControllerCompleteProfile =
+      TextEditingController();
   String nameCompleteProfile = '';
   String emailCompleteProfile = '';
+  String usernameCompleteProfile = '';
   String passwordCompleteProfile = '';
   bool passwordVisibleCompleteProfile = false;
   String confirmPasswordCompleteProfile = '';
@@ -203,6 +216,7 @@ class AuthCubit extends Cubit<AuthState> {
 
       if (data != null) {
         HiveMethods.updateToken(data['api_token']);
+
         emit(AuthSuccess(
           message: message,
         ));
@@ -285,6 +299,7 @@ class AuthCubit extends Cubit<AuthState> {
       final message = response.data['message'] ?? 'Login completed';
 
       if (data != null) {
+        HiveMethods.updateToken(data['user']['api_token']);
         emit(AuthSuccess(message: message));
       } else {
         emit(AuthError(message));
@@ -384,7 +399,7 @@ class AuthCubit extends Cubit<AuthState> {
   //*************reset password************************** */
   Future<void> resetPassword({
     required String? phoneNumber,
-    required String? otp,
+    required int? otp,
     required String? password,
     required String? password_confirmation,
   }) async {
@@ -420,6 +435,81 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthError("لا يوجد اتصال بالإنترنت"));
     } else {
       emit(AuthError("حدث خطأ غير متوقع"));
+    }
+  }
+
+  ///*************logout************************** */
+  Future<void> logout() async {
+    emit(AuthLoading());
+
+    final response = await ApiHelper.instance.post(
+      Urls.logout,
+      hasToken: true,
+    );
+
+    if (response.state == ResponseState.complete) {
+      final data = response.data['data'];
+      final message = response.data['message'] ?? 'Logout completed';
+
+      if (response.state == ResponseState.complete) {
+        emit(AuthSuccess(
+          message: message,
+        ));
+      } else if (response.state == ResponseState.unauthorized) {
+        emit(AuthError(response.data['message'] ?? "تم انتهاء الجلسة"));
+      } else if (response.state == ResponseState.error) {
+        emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+      } else if (response.state == ResponseState.offline) {
+        emit(AuthError("لا يوجد اتصال بالإنترنت"));
+      } else {
+        emit(AuthError("حدث خطأ غير متوقع"));
+      }
+    }
+  }
+
+  Future<void> updateProfile({
+    required String name,
+    required String email,
+    File? imageFile,
+    String? password,
+    String? password_confirmation,
+  }) async {
+    emit(AuthLoading());
+
+    try {
+      final data = <String, dynamic>{
+        'name': name,
+        'email': email,
+        'password': password,
+        'password_confirmation': password_confirmation
+      };
+
+      // لو فيه صورة، أضفها كـ MultipartFile
+      if (imageFile != null) {
+        data['image'] = await MultipartFile.fromFile(
+          imageFile.path,
+          filename: "profile.jpg",
+        );
+      }
+
+      final formData = FormData.fromMap(data);
+
+      final response = await ApiHelper.instance.post(
+        Urls.updateProfile,
+        body: formData,
+        hasToken: true,
+        isMultipart: true,
+      );
+
+      if (response.data != null && response.data['message'] != null) {
+        final message = response.data['message'];
+        print(response.data.toString());
+        emit(AuthSuccess(message: message));
+      } else {
+        emit(AuthError(response.data['message']));
+      }
+    } catch (e) {
+      emit(AuthError("حدث خطأ أثناء التحديث: $e"));
     }
   }
 }

@@ -7,8 +7,9 @@ import 'package:hawiah_client/features/authentication/presentation/controllers/a
 
 class RegisterButtonWidget extends StatelessWidget {
   final GlobalKey<FormState> formKey;
-
-  const RegisterButtonWidget({Key? key, required this.formKey})
+  final int type;
+  const RegisterButtonWidget(
+      {Key? key, required this.formKey, required this.type})
       : super(key: key);
 
   @override
@@ -30,8 +31,9 @@ class RegisterButtonWidget extends StatelessWidget {
 
                     authCubit.register(
                       phoneNumber: cleanedPhone,
-                      type: authCubit.selectedAccountType,
+                      type: type,
                     );
+                   
                   }
                 },
           backgroundColor: Color.fromARGB(255, 183, 201, 250).withOpacity(.7),

@@ -36,7 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         final accountTypes = authChange.accountTypes;
         final selectedAccountType = authChange.selectedAccountType;
         final checkedValueTerms = authChange.checkedValueTerms;
-
+        final selectedTypeValue = selectedAccountType == 0 ? 1 : 2;
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 10.w),
           child: Form(
@@ -64,6 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(height: 50.h),
                 RegisterButtonWidget(
                   formKey: formKey,
+                  type: selectedTypeValue,
                 ),
                 SizedBox(height: 35.h),
                 BlocProvider(
