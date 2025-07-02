@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
 import 'package:image_picker/image_picker.dart'; // إضافة المكتبة
@@ -91,7 +92,9 @@ class _UserProfileState extends State<UserProfile> {
                             ? FileImage(_pickedImage!)
                             : (imageUrl.isNotEmpty
                                 ? NetworkImage(imageUrl) as ImageProvider
-                                : NetworkImage(imageUrl) as ImageProvider),
+                                : AssetImage(
+                                    AppImages.profileEmptyImage,
+                                  )),
                         child: Align(
                           alignment: Alignment.bottomRight,
                           child: CircleAvatar(
@@ -164,7 +167,9 @@ class _UserProfileState extends State<UserProfile> {
           } else if (state is ProfileLoading) {
             return Center(child: CircularProgressIndicator());
           } else
-            return Container();
+            return Container(
+              color: Colors.red,
+            );
         },
       ),
     );

@@ -87,19 +87,19 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 10.h,
-            ),
-            SliderWidgets(),
-            SizedBox(height: 10.h),
-            BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
-              final homeCubit = HomeCubit.get(context);
-              return Expanded(
-                flex: 3,
-                child: ListView.builder(
-                  shrinkWrap: false, scrollDirection: Axis.vertical,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 10.h,
+              ),
+              SliderWidgets(),
+              SizedBox(height: 10.h),
+              BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
+                final homeCubit = HomeCubit.get(context);
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -162,14 +162,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   itemCount:
                       homeCubit.categorieS?.message?.length, // Number of items
-                ),
-              );
-            }),
-            SizedBox(height: 10.h),
-            // ClipRRect(
-            //     borderRadius: BorderRadius.circular(20.r),
-            //     child: Image.asset("assets/images/order_barcode_image.png")),
-          ],
+                );
+              }),
+              SizedBox(height: 10.h),
+              // ClipRRect(
+              //     borderRadius: BorderRadius.circular(20.r),
+              //     child: Image.asset("assets/images/order_barcode_image.png")),
+            ],
+          ),
         ),
       ),
     );

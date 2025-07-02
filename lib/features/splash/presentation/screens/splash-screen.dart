@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/features/app-language/presentation/screens/app-language-screen.dart';
@@ -13,32 +15,33 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<ProfileCubit>().fetchProfile(
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    // Add slight delay to ensure context is available
+    await Future.delayed(Duration.zero);
+
+    final cubit = context.read<ProfileCubit>();
+
+    cubit.fetchProfile(
       onSuccess: () {
-        Future.delayed(const Duration(seconds: 4), () {
-          // Navigate to the next screen
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    const LayoutScreen()), // replace with your next screen
-          );
-        });
+        log("Navigation to LayoutScreen");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  const LayoutScreen()), // replace with your next screen
+        );
       },
       onError: () {
-        Future.delayed(const Duration(seconds: 4), () {
-          // Navigate to the next screen
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    const AppLanguageScreen()), // replace with your next screen
-          );
-        });
+        log("Navigation to AppLanguageScreen");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const AppLanguageScreen()),
+        );
       },
     );
-
-    // Delay for splash screen to display
   }
 
   @override
@@ -46,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Center(
         child: Image.asset(
-          'assets/gifs/splash_animation.gif', // Your GIF file path
+          'assets/gifs/splash_animation.gif',
           width: double.infinity,
           height: double.infinity,
           fit: BoxFit.fill,

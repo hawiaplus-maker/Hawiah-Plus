@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -19,21 +20,25 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     emit(ProfileLoading());
     try {
-      final response = await await ApiHelper.instance.get("${Urls.profile}");
-      if (response.state == ResponseState.complete) {
-        user = UserProfileModel.fromJson(response.data);
-        onSuccess?.call();
-        emit(ProfileUpdateSuccess(response.data));
-      }
-      if (response.state == ResponseState.error ||
-          response.state == ResponseState.unauthorized) {
-        onError?.call();
-        emit(ProfileError(response.data));
-      }
+      final response = await ApiHelper.instance.get("${Urls.profile}");
 
-      emit(ProfileLoaded(user));
+      if (response.state == ResponseState.complete) {
+        user = UserProfileModel.fromJson(
+            response.data); // Access 'message' from response
+        log("Profile fetched successfully");
+        emit(ProfileLoaded(user)); // Only emit once
+        onSuccess?.call(); // Call success callback after state emission
+      } else if (response.state == ResponseState.error ||
+          response.state == ResponseState.unauthorized) {
+        log("Profile fetch failed: ${response.data}");
+        emit(ProfileError(
+            response.data['message'] ?? "Failed to fetch profile"));
+        onError?.call(); // Call error callback after state emission
+      }
     } catch (e) {
+      log("Profile fetch error: $e");
       emit(ProfileError("Failed to fetch profile: $e"));
+      onError?.call(); // Call error callback on exception
     }
   }
 
@@ -75,9 +80,10 @@ class ProfileCubit extends Cubit<ProfileState> {
         final message = response.data['message'];
 
         // إعادة تحميل البيانات بعد التحديث
-        await fetchProfile();
 
+        // emit(ProfileLoaded(user));
         emit(ProfileUpdateSuccess(message));
+        await fetchProfile();
       } else {
         emit(ProfileError("فشل تحديث البيانات"));
       }

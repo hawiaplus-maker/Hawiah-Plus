@@ -17,4 +17,5 @@ class AppImages {
 
   static const String closeIcon = 'assets/svg/closeIcon.svg';
   static const String logoIcon = 'assets/icons/app_icon.png';
+  static const String profileEmptyImage = 'assets/images/profileEmptyImage.png';
 }

@@ -32,6 +32,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
       TabItem(icon: Icons.person),
     ];
     return Scaffold(
+      extendBody: true,
       body: _screens[selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
         color: Color(0xffE5E7FE),
