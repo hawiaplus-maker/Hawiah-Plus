@@ -19,7 +19,7 @@ class OnBoardingPageView extends StatelessWidget {
       onPageChanged: onPageChanged,
       itemCount: onBoardingImages.length,
       itemBuilder: (context, index) {
-        return Image.asset(
+        return Image.network(
           onBoardingImages[index],
           fit: BoxFit.fill,
         );
@@ -27,4 +27,3 @@ class OnBoardingPageView extends StatelessWidget {
     );
   }
 }
-

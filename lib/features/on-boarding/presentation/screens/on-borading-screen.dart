@@ -7,38 +7,57 @@ import 'package:hawiah_client/features/on-boarding/presentation/widgets/on-board
 import '../controllers/on-boarding-cubit/on-boarding-cubit.dart';
 import '../controllers/on-boarding-cubit/on-boarding-state.dart';
 
-class OnBoardingScreen extends StatelessWidget {
+class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
+
+  @override
+  State<OnBoardingScreen> createState() => _OnBoardingScreenState();
+}
+
+class _OnBoardingScreenState extends State<OnBoardingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => OnBoardingCubit.get(context).getOnboarding());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<OnBoardingCubit, OnBoardingState>(
-        builder: (BuildContext context, state) {
-          final onBoardingCubit = OnBoardingCubit.get(context);
-          final currentIndex = onBoardingCubit.currentIndex;
-          final onBoardingImages = onBoardingCubit.onBoardingList
-              .map((e) => e.onboardingImage)
-              .toList();
-          final onboardingIcons = onBoardingCubit.onBoardingList
-              .map((e) => e.onboardingIcon)
-              .toList();
-          final onboardingTitles = onBoardingCubit.onBoardingList
-              .map((e) => e.onboardingTitle)
-              .toList();
-          final onboardingContents = onBoardingCubit.onBoardingList
-              .map((e) => e.onboardingContent)
-              .toList();
-          final progressValue = onBoardingCubit.progressValue;
-          final pageController = onBoardingCubit.pageController;
+        listener: (context, state) {},
+        builder: (context, state) {
+          final cubit = OnBoardingCubit.get(context);
+
+          if (state is OnBoardingLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (state is OnBoardingError || cubit.onBoardingList.isEmpty) {
+            return const Center(child: Text("حدث خطأ أثناء تحميل البيانات."));
+          }
+
+          final currentIndex = cubit.currentIndex;
+          final progressValue = cubit.progressValue;
+          final pageController = cubit.pageController;
+
+          final onBoardingImages =
+              cubit.onBoardingList.map((e) => e.image ?? "").toList();
+          final onboardingTitles =
+              cubit.onBoardingList.map((e) => e.title?.ar ?? "").toList();
+          final onboardingContents =
+              cubit.onBoardingList.map((e) => e.about?.ar ?? "").toList();
+          final onboardingIcons = List.generate(
+            cubit.onBoardingList.length,
+            (index) => "", 
+          );
 
           return Stack(
             children: [
               OnBoardingPageView(
                 onBoardingImages: onBoardingImages,
                 pageController: pageController,
-                onPageChanged: (index) =>
-                    onBoardingCubit.changePageController(index),
+                onPageChanged: (index) => cubit.changePageController(index),
               ),
               OnBoardingAppBar(),
               OnBoardingContent(
@@ -53,9 +72,7 @@ class OnBoardingScreen extends StatelessWidget {
             ],
           );
         },
-        listener: (BuildContext context, Object? state) {},
       ),
     );
   }
 }
-

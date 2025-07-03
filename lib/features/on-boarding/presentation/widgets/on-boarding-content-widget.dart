@@ -6,7 +6,6 @@ import 'package:hawiah_client/features/authentication/presentation/screens/login
 import 'package:hawiah_client/features/on-boarding/presentation/widgets/circular-progress-stack-widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-
 class OnBoardingContent extends StatelessWidget {
   final int currentIndex;
   final List<String> onboardingIcons;
@@ -28,6 +27,11 @@ class OnBoardingContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String removeHtmlTags(String htmlText) {
+      final regex = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: true);
+      return htmlText.replaceAll(regex, '');
+    }
+
     return Positioned(
       bottom: 20,
       right: 15,
@@ -35,7 +39,7 @@ class OnBoardingContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(
+          Image.network(
             onboardingIcons[currentIndex],
             height: 30,
             width: 40,
@@ -44,7 +48,7 @@ class OnBoardingContent extends StatelessWidget {
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 0.8.sw),
             child: Text(
-              onboardingTitles[currentIndex].tr(),
+              removeHtmlTags(onboardingContents[currentIndex]).tr(),
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 25.sp,

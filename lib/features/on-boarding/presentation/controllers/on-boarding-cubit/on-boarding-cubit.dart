@@ -1,68 +1,67 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hawiah_client/core/networking/api_helper.dart';
+import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-state.dart';
+import 'package:hawiah_client/features/on-boarding/presentation/model/on_boarding_model.dart';
 
 class OnBoardingCubit extends Cubit<OnBoardingState> {
   static OnBoardingCubit get(BuildContext context) => BlocProvider.of(context);
 
   OnBoardingCubit() : super(OnBoardingInitial());
+
   int currentIndex = 0;
   double progressValue = 0.25;
   PageController pageController = PageController(initialPage: 0);
 
-  changePageController(int index) {
+  OnBoardingModel? onboarding;
+  ApiResponse _onboardingResponse =
+      ApiResponse(state: ResponseState.sleep, data: null);
+  ApiResponse get onboardingResponse => _onboardingResponse;
+
+  List<Data> get onBoardingList => onboarding?.data ?? [];
+
+  void changePageController(int index) {
     currentIndex = index;
-
-    // Calculate progress based on the index (0, 1, 2)
-    progressValue = (index + 1) / onBoardingList.length; // 0.25, 0.5, 0.75, 1.0
+    progressValue =
+        (index + 1) / (onBoardingList.isEmpty ? 1 : onBoardingList.length);
     pageController.animateToPage(
-      currentIndex, // Move to the next index
-      duration: Duration(milliseconds: 300), // Duration of the animation
-      curve: Curves.easeInOut, // Animation curve
+      currentIndex,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
     );
-    // Emit the state to notify listeners
     emit(OnBoardingChange());
   }
 
-  skipPage() {
-    currentIndex = onBoardingList.length - 1;
-    pageController.jumpToPage(currentIndex);
+  void skipPage() {
+    if (onBoardingList.isNotEmpty) {
+      currentIndex = onBoardingList.length - 1;
+      pageController.jumpToPage(currentIndex);
+      emit(OnBoardingChange());
+    }
+  }
+
+  void changeRebuild() => emit(OnBoardingRebuild());
+
+  void initialOnboarding() {
+    _onboardingResponse = ApiResponse(state: ResponseState.sleep, data: null);
+    onboarding = null;
     emit(OnBoardingChange());
   }
 
-  changeRebuild() {
-    emit(OnBoardingRebuild());
+  Future<void> getOnboarding() async {
+    emit(OnBoardingLoading());
+    _onboardingResponse = await ApiHelper.instance.get(Urls.onBoarding);
+
+    if (_onboardingResponse.state == ResponseState.complete) {
+      try {
+        onboarding = OnBoardingModel.fromJson(_onboardingResponse.data);
+        emit(OnBoardingSuccess());
+      } catch (e) {
+        emit(OnBoardingError());
+      }
+    } else {
+      emit(OnBoardingError());
+    }
   }
-
-  List<OnBoardingModel> onBoardingList = [
-    OnBoardingModel(
-        onboardingImage: "assets/icons/onboarding1.png",
-        onboardingIcon: "assets/icons/home_icon.png",
-        onboardingTitle: "on_boarding_title_1",
-        onboardingContent: "on_boarding_content_1"),
-    OnBoardingModel(
-        onboardingImage: "assets/icons/onboarding2.png",
-        onboardingIcon: "assets/icons/tent_icon.png",
-        onboardingTitle: "on_boarding_title_2",
-        onboardingContent: "on_boarding_content_2"),
-    OnBoardingModel(
-        onboardingImage: "assets/icons/onboarding3.png",
-        onboardingIcon: "assets/icons/tent_icon.png",
-        onboardingTitle: "on_boarding_title_3",
-        onboardingContent: "on_boarding_content_3"),
-  ];
-}
-
-class OnBoardingModel {
-  String onboardingImage;
-  String onboardingIcon;
-  String onboardingTitle;
-  String onboardingContent;
-
-  OnBoardingModel({
-    required this.onboardingImage,
-    required this.onboardingIcon,
-    required this.onboardingTitle,
-    required this.onboardingContent,
-  });
 }
