@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/location/presentation/screens/map_screen.dart';
 
 class AddNewLocationScreen extends StatelessWidget {
   const AddNewLocationScreen({super.key});
@@ -59,7 +62,35 @@ class AddNewLocationScreen extends StatelessWidget {
               initialValue: "",
               onChanged: (value) => {},
             ),
-            Spacer(),
+            // TextButton(
+            //     onPressed: () {
+            //       NavigatorMethods.pushNamed(context, MapScreen.routeName,
+            //           arguments: MapScreenArgs(
+            //             onLocationSelected: (lat, lng, locality) {},
+            //           ));
+            //     },
+            //     child: Text("اختر عنوان من الخريطة")),
+            Container(
+              height: 300.h,
+              child: GoogleMap(
+                onTap: (argument) {
+                  NavigatorMethods.pushNamed(context, MapScreen.routeName,
+                      arguments: MapScreenArgs(
+                        onLocationSelected: (lat, lng, locality) {},
+                      ));
+                },
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(24.7136, 46.6753),
+                  zoom: 12,
+                ),
+                markers: Set<Marker>.of([
+                  Marker(
+                    markerId: MarkerId("1"),
+                    position: LatLng(24.7136, 46.6753),
+                  ),
+                ]),
+              ),
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,

@@ -18,7 +18,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profile = context.read<ProfileCubit>().user;
+   // final profile = context.read<ProfileCubit>().user;
     return Scaffold(
       appBar: AppBar(
         title: Text("الملف الشخصي"),
@@ -42,7 +42,7 @@ class ProfileScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     CustomNetworkImage(
-                      imageUrl: profile.image,
+                      imageUrl: "profile.image",
                       height: 70.h,
                       width: 70.w,
                       radius: 45,
@@ -55,12 +55,12 @@ class ProfileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          profile.name,
+                         " profile.name",
                           style:
                               TextStyle(fontSize: 16.sp, color: Colors.black),
                         ),
                         Text(
-                          profile.email,
+                          "profile.email",
                           style: TextStyle(
                               fontSize: 12.sp, color: Color(0xffB5B5B5)),
                         ),

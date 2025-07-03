@@ -1,35 +1,31 @@
-
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
-import 'package:hawiah_client/core/utils/common_methods.dart';
-import 'package:hawiah_client/main.dart';
-import 'package:bot_toast/bot_toast.dart';
-
+import 'package:hawiah_client/core/routes/app_routers_import.dart';
 
 import '../theme/app_colors.dart';
 
 class NavigatorMethods {
-  static void pushNamed(
-    BuildContext context,
-    String routeName, {
-    dynamic arguments,
-  }) {
-    Navigator.pushNamed(context, routeName, arguments: arguments);
+  static void pushNamed(BuildContext context, String routeName,
+      {dynamic arguments}) {
+    Navigator.pushNamed(
+      context,
+      routeName,
+      arguments: arguments,
+    );
   }
 
-  static void pushReplacementNamed(
-    BuildContext context,
-    String routeName, {
-    dynamic arguments,
-  }) {
-    Navigator.pushReplacementNamed(context, routeName, arguments: arguments);
+  static void pushReplacementNamed(BuildContext context, String routeName,
+      {dynamic arguments}) {
+    Navigator.pushReplacementNamed(
+      context,
+      routeName,
+      arguments: arguments,
+    );
   }
 
-  static void pushNamedAndRemoveUntil(
-    BuildContext context,
-    String routeName, {
-    dynamic arguments,
-  }) {
+  static void pushNamedAndRemoveUntil(BuildContext context, String routeName,
+      {dynamic arguments}) {
     Navigator.pushNamedAndRemoveUntil(
       context,
       routeName,
@@ -47,7 +43,10 @@ class NavigatorMethods {
       context: context,
       barrierDismissible: willPop,
       builder: (context) {
-        return PopScope(canPop: willPop, child: dialog);
+        return PopScope(
+          canPop: willPop,
+          child: dialog,
+        );
       },
     );
   }
@@ -67,7 +66,10 @@ class NavigatorMethods {
       enableDrag: enableDrag,
       context: context,
       builder: (context) {
-        return PopScope(canPop: willPop, child: bottomSheet);
+        return PopScope(
+          canPop: willPop,
+          child: bottomSheet,
+        );
       },
     );
   }
@@ -79,25 +81,23 @@ class NavigatorMethods {
     Color? backgroundColor,
     Color? loadingColor,
   }) {
-    FocusScope.of(
-      CommonMethods.navigatorKey.currentContext ?? genContext,
-    ).requestFocus(FocusNode());
+    FocusScope.of(AppRouters.navigatorKey.currentContext!)
+        .requestFocus(FocusNode());
     BotToast.showCustomLoading(
-      toastBuilder:
-          (cancelFunc) => Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              color: backgroundColor ?? AppColor.scaffoldColor,
-              borderRadius: BorderRadius.circular(radius),
-            ),
-            child: Center(
-              child: CustomLoading(
-                color: loadingColor ?? AppColor.mainAppColor,
-                size: loadingSize,
-              ),
-            ),
+      toastBuilder: (cancelFunc) => Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: backgroundColor ?? AppColor.scaffoldColor,
+          borderRadius: BorderRadius.circular(radius),
+        ),
+        child: Center(
+          child: CustomLoading(
+            color: loadingColor ?? AppColor.mainAppColor,
+            size: loadingSize,
           ),
+        ),
+      ),
     );
   }
 

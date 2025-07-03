@@ -53,7 +53,9 @@ dependencies:
   loading_indicator: ^3.1.1
   shimmer_animation: ^2.2.1
   flutter_widget_from_html: ^0.16.0 
-
+  animations: ^2.0.11
+  geocoding: ^3.0.0
+  location: ^7.0.0
   
 dev_dependencies:
   flutter_test:
