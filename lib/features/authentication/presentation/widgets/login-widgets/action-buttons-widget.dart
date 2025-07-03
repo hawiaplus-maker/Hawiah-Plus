@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
-
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 
@@ -23,13 +22,14 @@ class ActionButtonsWidget extends StatelessWidget {
               label: "login".tr(),
               onPressed: isLoading
                   ? null
-                  : () {
+                  : () async {
                       if (formKey.currentState!.validate()) {
                         final cleanedPhone = AuthCubit.get(context)
                             .phoneNumber
                             .replaceFirst('+966', '0');
                         AuthCubit.get(context).login(
-                            phoneNumber: cleanedPhone,
+                            phoneNumber:
+                                AuthCubit.get(context).PhoneController.text,
                             password: AuthCubit.get(context).passwordLogin);
                       }
 

@@ -5,13 +5,14 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final String? initialValue;
   final TextInputType keyboardType;
-    final bool enabledText;
+  final bool enabledText;
 
   final bool obscureText;
   final bool hasSuffixIcon;
   final Widget? suffixIcon;
   final ValueChanged<String> onChanged;
   final String? Function(String?)? validator;
+  TextEditingController? controller;
 
   CustomTextField({
     required this.labelText,
@@ -20,16 +21,18 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.hasSuffixIcon = false,
-        this.enabledText = true,
-
+    this.enabledText = true,
     this.suffixIcon,
     required this.onChanged,
     this.validator,
+    this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(enabled:enabledText ,
+    return TextFormField(
+      enabled: enabledText,
+      controller: controller,
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,

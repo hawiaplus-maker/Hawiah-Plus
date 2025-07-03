@@ -4,6 +4,7 @@ import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/features/home/presentation/model/categories_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/services_model.dart';
+import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/show_services_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -15,73 +16,11 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
   String? languageSelected;
 
-  changeRebuild() {
-    emit(HomeChange());
-  }
-
-  List<TransportationCategoryModel> transportationCategoriesList = [
-    TransportationCategoryModel(
-        title: "سطحة", logo: "assets/images/car_image.png"),
-    TransportationCategoryModel(
-        title: "نقل بضاعة", logo: "assets/images/car_image.png"),
-    TransportationCategoryModel(
-        title: "سيارات", logo: "assets/images/car_image.png"),
-    TransportationCategoryModel(
-        title: "شاحنات", logo: "assets/images/car_image.png"),
-    TransportationCategoryModel(
-        title: "معدات ثقيلة", logo: "assets/images/car_image.png"),
-    TransportationCategoryModel(
-        title: "نقل أغراض منزلية", logo: "assets/images/car_image.png"),
-    TransportationCategoryModel(
-        title: "نقل الأثاث", logo: "assets/images/car_image.png"),
-    TransportationCategoryModel(
-        title: "نقل مواد بناء", logo: "assets/images/car_image.png"),
-    TransportationCategoryModel(
-        title: "نقل سيارات", logo: "assets/images/car_image.png"),
-    TransportationCategoryModel(
-        title: "نقل بضائع ثقيلة", logo: "assets/images/car_image.png"),
-  ];
-
   List<String> categories = [
     "warehouse",
     "box",
   ];
   String? selectedCategory;
-
-  List<String> hawaiaList = ["حاوية مباني", "حاوية طبية"];
-  String? selectedHawaia;
-
-  void changeHawaia(String? value) {
-    selectedHawaia = value;
-    emit(HomeRebuild());
-  }
-
-  void changeCategory(String? value) {
-    selectedCategory = value;
-    emit(HomeRebuild());
-  }
-
-  List<CarModel> carList = [
-    CarModel(
-      title: 'Toyota Corolla',
-      sizes: ['Small', 'Medium', 'Large'],
-      pricePerDay: 250.0,
-      distanceFromLocation: 2.5,
-      logo: 'assets/images/car_image.png',
-    ),
-    CarModel(
-        title: 'Honda Civic',
-        sizes: ['Small', 'Medium'],
-        pricePerDay: 300.0,
-        distanceFromLocation: 3.0,
-        logo: 'assets/images/car_image.png'),
-    CarModel(
-        title: 'Ford Focus',
-        sizes: ['Medium', 'Large'],
-        pricePerDay: 280.0,
-        distanceFromLocation: 1.8,
-        logo: 'assets/images/car_image.png'),
-  ];
 
   CalendarFormat calendarFormat = CalendarFormat.month;
   RangeSelectionMode rangeSelectionMode = RangeSelectionMode.toggledOn;
@@ -89,6 +28,18 @@ class HomeCubit extends Cubit<HomeState> {
   DateTime? selectedDay;
   DateTime? rangeStart;
   DateTime? rangeEnd;
+
+  changeRebuild() {
+    emit(HomeChange());
+  }
+
+  void setRangeStart(DateTime start, int days) {
+    rangeStart = start;
+    rangeEnd = start.add(Duration(days: days));
+    rangeSelectionMode = RangeSelectionMode.toggledOn;
+    changeRebuild();
+  }
+
   void initialSlider() {
     _sliderResponse = ApiResponse(
       state: ResponseState.sleep,
@@ -195,6 +146,45 @@ class HomeCubit extends Cubit<HomeState> {
       _categories = CategoriesModel.fromJson(_categoriesResponse.data);
       emit(HomeChange());
     } else if (_categoriesResponse.state == ResponseState.unauthorized) {
+      emit(HomeChange());
+    }
+  }
+
+  //**************************categories************************ */
+  void initialShowCategories() {
+    _showCategoriesResponse = ApiResponse(
+      state: ResponseState.sleep,
+      data: null,
+    );
+    _showCategories = null;
+    emit(HomeChange());
+  }
+
+  ApiResponse _showCategoriesResponse = ApiResponse(
+    state: ResponseState.sleep,
+    data: null,
+  );
+  ApiResponse get showCategoriesResponse => _sliderResponse;
+
+  ShowCategoriesModel? _showCategories;
+  ShowCategoriesModel? get showCategories => _showCategories;
+  Future<void> getshowCategories(int id) async {
+    _showCategoriesResponse = ApiResponse(
+      state: ResponseState.loading,
+      data: null,
+    );
+    _showCategories = null;
+    emit(HomeChange());
+
+    _showCategoriesResponse =
+        await ApiHelper.instance.get(Urls.showCategory(id));
+
+    if (_showCategoriesResponse.state == ResponseState.complete &&
+        _showCategoriesResponse.data != null) {
+      _showCategories =
+          ShowCategoriesModel.fromJson(_showCategoriesResponse.data);
+      emit(HomeChange());
+    } else if (_showCategoriesResponse.state == ResponseState.unauthorized) {
       emit(HomeChange());
     }
   }

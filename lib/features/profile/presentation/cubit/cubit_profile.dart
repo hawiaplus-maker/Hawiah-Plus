@@ -45,9 +45,11 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateProfile({
     required String name,
     required String username,
-    required String mobile,
+    String? mobile,
     required String email,
     File? imageFile,
+    String? password,
+    String? password_confirmation,
   }) async {
     emit(ProfileLoading());
 
@@ -57,6 +59,8 @@ class ProfileCubit extends Cubit<ProfileState> {
         'username': username,
         'mobile': mobile,
         'email': email,
+        'password': password,
+        'password_confirmation': password_confirmation
       };
 
       // لو فيه صورة، أضفها كـ MultipartFile

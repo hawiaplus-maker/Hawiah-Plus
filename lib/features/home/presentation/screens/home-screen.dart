@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         title: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
@@ -116,11 +117,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: homeCubit.categorieS?.message?.length ?? 0,
                   itemBuilder: (context, index) => GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const HomeNewOrderScreen()),
-                    ),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeNewOrderScreen(
+                                    id: homeCubit
+                                            .categorieS?.message?[index].id ??
+                                        0,
+                                  )));
+                    },
                     child: Card(
                       elevation: 5,
                       shape: RoundedRectangleBorder(
@@ -128,8 +134,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         margin: EdgeInsets.symmetric(
                             horizontal: 10.w, vertical: 10.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Image.network(
@@ -155,7 +161,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Colors.grey),
                               ),
                             ),
-                            SizedBox(height: 5.h),
+                            SizedBox(
+                              width: 20.h,
+                            ),
                             Text(
                               homeCubit.categorieS?.message?[index].title ?? '',
                               style: TextStyle(

@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hawiah_client/core/custom_widgets/custom-drop-down-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/features/home/presentation/screens/payment-screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/choose-location-screen.dart';
@@ -12,8 +11,11 @@ import '../controllers/home-cubit/home-cubit.dart';
 import '../controllers/home-cubit/home-state.dart';
 
 class HomeDetailsOrderScreen extends StatelessWidget {
-  const HomeDetailsOrderScreen({super.key});
-
+  const HomeDetailsOrderScreen(
+      {super.key, this.title, this.description, this.finalDate});
+  final String? title;
+  final String? description;
+  final int? finalDate;
   void _showCalendarModal(BuildContext context, HomeCubit homeCubit) {
     showModalBottomSheet(
       context: context,
@@ -43,17 +45,10 @@ class HomeDetailsOrderScreen extends StatelessWidget {
                       CalendarFormat.month: 'Month',
                     },
                     onDaySelected: (selectedDay, focusedDay) {
-                      if (!isSameDay(homeCubit.selectedDay, selectedDay)) {
-                        mystate(() {
-                          homeCubit.selectedDay = selectedDay;
-                          homeCubit.focusedDay = focusedDay;
-                          homeCubit.rangeStart = null;
-                          homeCubit.rangeEnd = null;
-                          homeCubit.rangeSelectionMode =
-                              RangeSelectionMode.toggledOff;
-                        });
-                        homeCubit.changeRebuild();
-                      }
+                      mystate(() {
+                        homeCubit.setRangeStart(selectedDay, finalDate ?? 1);
+                      });
+                      Navigator.pop(context);
                     },
                     onRangeSelected: (start, end, focusedDay) {
                       mystate(() {
@@ -93,6 +88,12 @@ class HomeDetailsOrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dimensions = extractDimensions(description);
+
+    final dimensionText = [
+      if (dimensions.containsKey('الطول')) 'الطول: ${dimensions['الطول']}',
+      if (dimensions.containsKey('العرض')) 'العرض: ${dimensions['العرض']}',
+    ].join('، ');
     return Scaffold(
       appBar: AppBar(
         title: Text("request_hawaia".tr()),
@@ -106,112 +107,6 @@ class HomeDetailsOrderScreen extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 20.w),
             child: Column(
               children: [
-                CustomDropdownWidget(
-                  labelText: "hawaia".tr(),
-                  selectedValue: homeCubit.selectedHawaia,
-                  items: homeCubit.hawaiaList,
-                  onChanged: (value) {
-                    homeCubit.changeHawaia(value!);
-                  },
-                  iconAsset: "assets/icons/hawiah_icon.png", // Optional icon
-                ),
-                CustomDropdownWidget(
-                  labelText: "small_size".tr(),
-                  selectedValue: null,
-                  items: [],
-                  onChanged: (value) {
-                    homeCubit.changeHawaia(value!);
-                  },
-                  iconAsset:
-                      "assets/icons/hawiah_size_icon.png", // Optional icon
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _showCalendarModal(context, homeCubit);
-                  },
-                  child: Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color(0xffDADADA)),
-                    ),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          "assets/icons/hawiah_date_icon.png",
-                          height: 25.h,
-                          width: 25.w,
-                        ),
-                        SizedBox(width: 10.w),
-                        Text(
-                          homeCubit.rangeStart != null
-                              ? DateFormat('yyyy-MM-dd')
-                                  .format(homeCubit.rangeStart!)
-                              : "date_start".tr(),
-                          style: TextStyle(fontSize: 14.sp),
-                        ),
-                        Spacer(),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 5.w),
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xffEDEEFF),
-                          ),
-                          child: Icon(Icons.arrow_drop_down),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                    margin: EdgeInsets.symmetric(vertical: 10.h),
-                    child: Text("to".tr(),
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                        ))),
-                GestureDetector(
-                  onTap: () {
-                    _showCalendarModal(context, homeCubit);
-                  },
-                  child: Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color(0xffDADADA)),
-                    ),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          "assets/icons/hawiah_date_icon.png",
-                          height: 25.h,
-                          width: 25.w,
-                        ),
-                        SizedBox(width: 10.w),
-                        Text(
-                          homeCubit.rangeEnd != null
-                              ? DateFormat('yyyy-MM-dd')
-                                  .format(homeCubit.rangeEnd!)
-                              : "date_end".tr(),
-                          style: TextStyle(fontSize: 14.sp),
-                        ),
-                        Spacer(),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 5.w),
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xffEDEEFF),
-                          ),
-                          child: Icon(Icons.arrow_drop_down),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10.h),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -252,6 +147,161 @@ class HomeDetailsOrderScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                SizedBox(height: 10.h),
+                Container(
+                  height: 60.h,
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(
+                    vertical: 10.h,
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Color(0xffDADADA)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        "assets/icons/hawiah_icon.png",
+                        width: 30.w,
+                        height: 30.h,
+                      ),
+                      SizedBox(width: 10.w),
+                      Text(
+                        title ?? "",
+                        style: TextStyle(
+                            fontSize: 16.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      Spacer(),
+                      Container(
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xffEDEEFF),
+                        ),
+                        child: Icon(Icons.arrow_drop_down),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Container(
+                  height: 60.h,
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(
+                    vertical: 10.h,
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Color(0xffDADADA)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        "assets/icons/hawiah_size_icon.png",
+                        width: 30.w,
+                        height: 30.h,
+                      ),
+                      SizedBox(width: 10.w),
+                      Text(
+                        dimensionText.isNotEmpty
+                            ? dimensionText
+                            : "لا يوجد تفاصيل",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Spacer(),
+                      Container(
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xffEDEEFF),
+                        ),
+                        child: Icon(Icons.arrow_drop_down),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                GestureDetector(
+                  onTap: () {
+                    _showCalendarModal(context, homeCubit);
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Color(0xffDADADA)),
+                    ),
+                    child: Row(
+                      children: [
+                        Image.asset("assets/icons/hawiah_date_icon.png",
+                            height: 25.h, width: 25.w),
+                        SizedBox(width: 10.w),
+                        Text(
+                          homeCubit.rangeStart != null
+                              ? DateFormat('yyyy-MM-dd')
+                                  .format(homeCubit.rangeStart!)
+                              : "date_start".tr(),
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        Spacer(),
+                        Container(
+                          padding: EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xffEDEEFF),
+                          ),
+                          child: Icon(Icons.arrow_drop_down),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Color(0xffDADADA)),
+                  ),
+                  child: Row(
+                    children: [
+                      Image.asset("assets/icons/hawiah_date_icon.png",
+                          height: 25.h, width: 25.w),
+                      SizedBox(width: 10.w),
+                      Text(
+                        homeCubit.rangeEnd != null
+                            ? DateFormat('yyyy-MM-dd')
+                                .format(homeCubit.rangeEnd!)
+                            : "date_end".tr(),
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
+                      Spacer(),
+                      Container(
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xffEDEEFF),
+                        ),
+                        child: Icon(Icons.arrow_drop_down),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10.h),
                 Spacer(),
                 Container(
                   margin: EdgeInsets.only(top: 20.h),
@@ -279,5 +329,31 @@ class HomeDetailsOrderScreen extends StatelessWidget {
         listener: (BuildContext context, HomeState state) {},
       ),
     );
+  }
+
+  Map<String, String> extractDimensions(String? description) {
+    if (description == null || description.isEmpty) return {};
+
+    final result = <String, String>{};
+
+    final sizeMatch = RegExp(r'الحجم[:：]?\s*(\d+\.?\d*)\s*ياردة مكعبة')
+        .firstMatch(description);
+    if (sizeMatch != null) {
+      result['الحجم'] = '${sizeMatch.group(1)} ياردة مكعبة';
+    }
+
+    final lengthMatch =
+        RegExp(r'طول الحاوية[:：]?\s*(\d+\.?\d*)\s*م').firstMatch(description);
+    if (lengthMatch != null) {
+      result['الطول'] = '${lengthMatch.group(1)} م';
+    }
+
+    final widthMatch =
+        RegExp(r'عرض الحاوية[:：]?\s*(\d+\.?\d*)\s*م').firstMatch(description);
+    if (widthMatch != null) {
+      result['العرض'] = '${widthMatch.group(1)} م';
+    }
+
+    return result;
   }
 }
