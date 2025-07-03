@@ -69,8 +69,7 @@ class CompanyStepOne extends StatelessWidget {
           labelText: 'password'.tr(),
           hintText: 'enter_your_password'.tr(),
           initialValue: passwordCompleteProfile,
-          obscureText: !passwordVisibleCompleteProfile,
-          hasSuffixIcon: true,
+         
           suffixIcon: IconButton(
             icon: Image.asset(
               passwordVisibleCompleteProfile
@@ -91,8 +90,7 @@ class CompanyStepOne extends StatelessWidget {
           labelText: 'confirm_password'.tr(),
           hintText: 'enter_your_password'.tr(),
           initialValue: confirmPasswordCompleteProfile,
-          obscureText: !passwordVisibleCompleteProfile,
-          hasSuffixIcon: true,
+         
           suffixIcon: IconButton(
             icon: Image.asset(
               passwordVisibleCompleteProfile

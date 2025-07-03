@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 
@@ -20,6 +21,7 @@ class ActionButtonsWidget extends StatelessWidget {
             child: GlobalElevatedButton(
               isLoading: isLoading,
               label: "login".tr(),
+
               onPressed: isLoading
                   ? null
                   : () async {
@@ -40,7 +42,7 @@ class ActionButtonsWidget extends StatelessWidget {
                       //             const PersonalProfileCompletionScreen()));
                     },
               backgroundColor: Color(0xffEDEEFF),
-              textColor: Color(0xff2D01FE),
+              textColor: AppColor.darkMainAppColor,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               borderRadius: BorderRadius.circular(10),
               fixedWidth: 0.80, // 80% of the screen width
@@ -52,7 +54,7 @@ class ActionButtonsWidget extends StatelessWidget {
             child: GlobalElevatedButton(
               label: "login_as_guest".tr(),
               onPressed: () {},
-              backgroundColor: Color(0xff2D01FE),
+              backgroundColor: AppColor.mainAppColor,
               textColor: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               borderRadius: BorderRadius.circular(10),

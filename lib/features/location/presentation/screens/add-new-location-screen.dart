@@ -5,7 +5,7 @@ import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart'
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/location/presentation/screens/map_screen.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 class AddNewLocationScreen extends StatelessWidget {
   const AddNewLocationScreen({super.key});
 
@@ -116,7 +116,7 @@ class AddNewLocationScreen extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.pop(context);
                 },
-                backgroundColor: Color(0xff2D01FE),
+                backgroundColor: AppColor.mainAppColor,
                 textColor: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 borderRadius: BorderRadius.circular(10),

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/forget-password-screen.dart';
@@ -40,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Text(
                     "welcome".tr(),
-                    style: TextStyle(fontSize: 25.sp, color: Colors.black),
+                    style: AppTextStyle.text20_700,
                   ),
                   Text(
                     "welcome_back".tr(),
@@ -48,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: 20.h),
                   PhoneInputWidget(
-                    controller:  AuthCubit.get(context).PhoneController,
+                    controller: AuthCubit.get(context).PhoneController,
                   ),
                   SizedBox(height: 20.h),
                   PasswordInputWidget(),
@@ -66,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         "forgot_password".tr(),
                         style: TextStyle(
-                            color: Color(0xff2D01FE), fontSize: 15.sp),
+                            color: AppColor.mainAppColor, fontSize: 15.sp),
                       ),
                     ),
                   ),

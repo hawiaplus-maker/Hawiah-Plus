@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/single-chat-screen.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class ChatScreen extends StatelessWidget {
                 ),
                 suffixIcon: Icon(
                   Icons.search,
-                  color: Color(0xFF2D01FE), // Change icon color to #2D01FE
+                  color: AppColor.mainAppColor, // Change icon color to #2D01FE
                   size: 25,
                 ),
               ),

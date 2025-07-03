@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/features/app-language/presentation/screens/app-language-screen.dart';
 
 class AppBarAuthWidget extends StatelessWidget implements PreferredSizeWidget {
@@ -20,8 +22,8 @@ class AppBarAuthWidget extends StatelessWidget implements PreferredSizeWidget {
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Row(
             children: [
-              Image.asset(
-                "assets/icons/support_icon.png",
+              SvgPicture.asset(
+                AppImages.supportIcon,
                 height: 25.h,
                 width: 25.w,
                 fit: BoxFit.fill,
@@ -39,8 +41,8 @@ class AppBarAuthWidget extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   );
                 },
-                child: Image.asset(
-                  "assets/icons/language_icon.png",
+                child: SvgPicture.asset(
+                  AppImages.langIcon,
                   height: 25.h,
                   width: 25.w,
                   fit: BoxFit.fill,

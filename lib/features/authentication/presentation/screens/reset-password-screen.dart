@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
 
@@ -74,8 +74,8 @@ class ResetPasswordScreen extends StatelessWidget {
                       controller: authCubit.passwordController,
                       labelText: 'password'.tr(),
                       hintText: 'enter_your_password'.tr(),
-                      obscureText: !passwordVisibleReset,
-                      hasSuffixIcon: true,
+                      // obscureText: !passwordVisibleReset,
+                      // hasSuffixIcon: true,
                       suffixIcon: IconButton(
                         icon: Image.asset(
                           passwordVisibleReset
@@ -113,8 +113,8 @@ class ResetPasswordScreen extends StatelessWidget {
                       controller: authCubit.confirmPasswordController,
                       labelText: 'confirm_password'.tr(),
                       hintText: 'enter_your_password'.tr(),
-                      obscureText: !passwordVisibleReset,
-                      hasSuffixIcon: true,
+                      // obscureText: !passwordVisibleReset,
+                      // hasSuffixIcon: true,
                       suffixIcon: IconButton(
                         icon: Image.asset(
                           passwordVisibleReset
@@ -170,8 +170,8 @@ class ResetPasswordScreen extends StatelessWidget {
                             authCubit.passwordController.text.isNotEmpty &&
                                     authCubit.confirmPasswordController.text
                                         .isNotEmpty
-                                ? Color(0xff2D01FE)
-                                : Color(0xff2D01FE).withOpacity(0.5),
+                                ? AppColor.mainAppColor
+                                : AppColor.mainAppColor.withOpacity(0.5),
                         padding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                         borderRadius: BorderRadius.circular(20),

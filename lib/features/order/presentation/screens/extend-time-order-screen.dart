@@ -7,9 +7,7 @@ import 'package:hawiah_client/features/home/presentation/screens/payment-screen.
 import 'package:hawiah_client/features/order/presentation/controllers/order-cubit/order-cubit.dart';
 import 'package:hawiah_client/features/order/presentation/controllers/order-cubit/order-state.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 class ExtendTimeOrderScreen extends StatelessWidget {
   const ExtendTimeOrderScreen({super.key});
 
@@ -76,7 +74,7 @@ class ExtendTimeOrderScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  backgroundColor: Color(0xff2D01FE),
+                  backgroundColor: AppColor.mainAppColor,
                   textColor: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   borderRadius: BorderRadius.circular(10),
@@ -105,7 +103,6 @@ class ExtendTimeOrderScreen extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 20.w),
             child: Column(
               children: [
-                
                 GestureDetector(
                   onTap: () {
                     _showCalendarModal(context, orderCubit);
@@ -204,7 +201,7 @@ class ExtendTimeOrderScreen extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => PaymentScreen()));
                     },
-                    backgroundColor: Color(0xff2D01FE),
+                    backgroundColor: AppColor.mainAppColor,
                     textColor: Colors.white,
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     borderRadius: BorderRadius.circular(10),

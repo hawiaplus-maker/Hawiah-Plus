@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 class CompanyStepThree extends StatelessWidget {
   const CompanyStepThree({super.key});
 
@@ -9,11 +9,11 @@ class CompanyStepThree extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-         Image.asset(
-                "assets/images/complete_company_profile_image.PNG",
-                height: 0.40.sh,
-                width: 0.70.sw,
-              ),
+        Image.asset(
+          "assets/images/complete_company_profile_image.PNG",
+          height: 0.40.sh,
+          width: 0.70.sw,
+        ),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -38,12 +38,12 @@ class CompanyStepThree extends StatelessWidget {
                 margin: EdgeInsets.symmetric(horizontal: 10.w),
                 height: 5,
                 width: 5,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: Colors.grey),
+                decoration:
+                    BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
               ),
               Text(
                 "contract_download".tr(),
-                style: TextStyle(color: Color(0xff2D01FE), fontSize: 14),
+                style: TextStyle(color: AppColor.mainAppColor, fontSize: 14),
               ),
               Spacer(),
               TextButton(
@@ -51,7 +51,7 @@ class CompanyStepThree extends StatelessWidget {
                 child: Text(
                   "attachment".tr(),
                   style: TextStyle(
-                      color: Color(0xff2D01FE),
+                      color: AppColor.mainAppColor,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold),
                 ),
@@ -68,7 +68,6 @@ class CompanyStepThree extends StatelessWidget {
             style: TextStyle(color: Color(0xffB8B8B8), fontSize: 15.sp),
           ),
         ),
-       
       ],
     );
   }

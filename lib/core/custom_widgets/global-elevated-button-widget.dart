@@ -15,7 +15,7 @@ class GlobalElevatedButton extends StatelessWidget {
     Key? key,
     required this.label,
     required this.onPressed,
-    this.backgroundColor = const Color(0xff2D01FE),
+    this.backgroundColor = const Color(0xff2204AE),
     this.textColor = Colors.white,
     this.icon,
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),

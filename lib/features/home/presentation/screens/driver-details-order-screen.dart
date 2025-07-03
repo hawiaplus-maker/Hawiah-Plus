@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 class DriverDetailsOrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -194,7 +194,7 @@ class DriverDetailsOrderScreen extends StatelessWidget {
                           (route) => false,
                         );
                       },
-                      backgroundColor: Color(0xff2D01FE),
+                      backgroundColor: AppColor.mainAppColor,
                       textColor: Colors.white,
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 12),

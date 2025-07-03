@@ -16,7 +16,7 @@ import 'package:hawiah_client/features/profile/presentation/screens/privacy-poli
 import 'package:hawiah_client/features/profile/presentation/screens/setting-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/terms-and-conditions.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -99,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               "تعديل",
                               style: TextStyle(
                                   fontSize: 16.sp,
-                                  color: Color(0xff2D01FE),
+                                  color: AppColor.mainAppColor,
                                   decoration: TextDecoration.underline),
                             ),
                           ],

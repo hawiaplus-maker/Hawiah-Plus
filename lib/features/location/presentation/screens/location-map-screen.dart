@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 class LocationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -117,7 +117,7 @@ class LocationScreen extends StatelessWidget {
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
-                      backgroundColor: Color(0xff2D01FE),
+                      backgroundColor: AppColor.mainAppColor,
                       textColor: Colors.white,
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 12),

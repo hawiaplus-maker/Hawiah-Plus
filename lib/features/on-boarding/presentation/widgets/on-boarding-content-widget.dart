@@ -1,7 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/widgets/circular-progress-stack-widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -39,33 +42,22 @@ class OnBoardingContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(
-            onboardingIcons[currentIndex],
-            height: 30,
-            width: 40,
-            fit: BoxFit.contain,
-          ),
           ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 0.8.sw),
-            child: Text(
-              removeHtmlTags(onboardingContents[currentIndex]).tr(),
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25.sp,
-                  fontWeight: FontWeight.w700),
-            ),
-          ),
+              constraints: BoxConstraints(maxWidth: 0.8.sw),
+              child: HtmlWidget(
+                onboardingTitles[currentIndex].tr(),
+                textStyle:
+                    AppTextStyle.text24_700.copyWith(color: Colors.white),
+              )),
+          SizedBox(height: 15.h),
           ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 0.8.sw),
-            child: Text(
-              onboardingContents[currentIndex].tr(),
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w600),
-            ),
-          ),
-          SizedBox(height: 20.h),
+              constraints: BoxConstraints(maxWidth: 0.8.sw),
+              child: HtmlWidget(
+                onboardingContents[currentIndex].tr(),
+                textStyle:
+                    AppTextStyle.text16_500.copyWith(color: Colors.white),
+              )),
+          SizedBox(height: 30.h),
           currentIndex != 2
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -90,10 +82,10 @@ class OnBoardingContent extends StatelessWidget {
                       (route) => false,
                     );
                   },
-                  backgroundColor: Colors.blue,
+                  backgroundColor: AppColor.blueColor,
                   textColor: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  borderRadius: BorderRadius.circular(30), // Rounded corners
+                  borderRadius: BorderRadius.circular(16), // Rounded corners
                   fixedWidth: 0.80, // 80% of the screen width
                   icon: Icon(
                     Icons.arrow_back, // Icon for the button

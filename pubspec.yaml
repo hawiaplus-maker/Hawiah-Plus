@@ -56,6 +56,7 @@ dependencies:
   animations: ^2.0.11
   geocoding: ^3.0.0
   location: ^7.0.0
+  country_picker: ^2.0.26
   
 dev_dependencies:
   flutter_test:

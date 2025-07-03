@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/features/order/presentation/screens/current-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/old-order-screen.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import '../controllers/order-cubit/order-cubit.dart';
 import '../controllers/order-cubit/order-state.dart';
 
@@ -79,8 +79,9 @@ class OrdersScreen extends StatelessWidget {
                             width: 0.40.sw,
                             height: 60,
                             decoration: BoxDecoration(
-                              color:
-                                  isActive ? Color(0xff2D01FE) : Colors.white,
+                              color: isActive
+                                  ? AppColor.mainAppColor
+                                  : Colors.white,
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Center(
@@ -176,14 +177,14 @@ class OrdersScreen extends StatelessWidget {
                                   Text(
                                     "تفاصيل الطلب",
                                     style: TextStyle(
-                                      color: Color(0xff2D01FE),
+                                      color: AppColor.mainAppColor,
                                       fontSize: 13,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   SizedBox(width: 5),
                                   Icon(Icons.arrow_forward_ios,
-                                      color: Color(0xff2D01FE), size: 20),
+                                      color: AppColor.mainAppColor, size: 20),
                                 ],
                               ),
                             ],

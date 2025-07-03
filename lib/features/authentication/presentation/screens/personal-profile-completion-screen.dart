@@ -10,7 +10,7 @@ import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart'
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
 
@@ -143,8 +143,8 @@ class _PersonalProfileCompletionScreenState
                               authCubit.passwordControllerCompleteProfile,
                           labelText: 'password'.tr(),
                           hintText: 'enter_your_password'.tr(),
-                          obscureText: !passwordVisibleCompleteProfile,
-                          hasSuffixIcon: true,
+                          // obscureText: !passwordVisibleCompleteProfile,
+                          // hasSuffixIcon: true,
                           suffixIcon: IconButton(
                             icon: Image.asset(
                               passwordVisibleCompleteProfile
@@ -171,8 +171,8 @@ class _PersonalProfileCompletionScreenState
                               .confirmPasswordControllerCompleteProfile,
                           labelText: 'confirm_password'.tr(),
                           hintText: 'enter_your_password'.tr(),
-                          obscureText: !passwordVisibleCompleteProfile,
-                          hasSuffixIcon: true,
+                          // obscureText: !passwordVisibleCompleteProfile,
+                          // hasSuffixIcon: true,
                           suffixIcon: IconButton(
                             icon: Image.asset(
                               passwordVisibleCompleteProfile
@@ -209,7 +209,7 @@ class _PersonalProfileCompletionScreenState
                                   );
                             }
                           },
-                          backgroundColor: Color(0xff2D01FE),
+                          backgroundColor: AppColor.mainAppColor,
                           textColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                               horizontal: 20, vertical: 12),
@@ -256,7 +256,7 @@ class _PersonalProfileCompletionScreenState
                   );
                 },
                 btnOkText: "continue_to_homepage".tr(),
-                btnOkColor: Color(0xff2D01FE))
+                btnOkColor: AppColor.mainAppColor)
               ..show();
           }
           if (state is AuthError) {

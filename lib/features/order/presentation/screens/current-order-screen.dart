@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/features/home/presentation/screens/qr-code-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/extend-time-order-screen.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import '../../../../core/custom_widgets/global-elevated-button-widget.dart';
 
 class CurrentOrderScreen extends StatelessWidget {
@@ -120,7 +120,7 @@ class CurrentOrderScreen extends StatelessWidget {
                               ),
                             );
                           },
-                          backgroundColor: Color(0xff2D01FE),
+                          backgroundColor: AppColor.mainAppColor,
                           textColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                               horizontal: 20, vertical: 12),
@@ -308,7 +308,7 @@ class CurrentOrderScreen extends StatelessWidget {
                     child: GlobalElevatedButton(
                       label: "تحميل الفاتورة PDF",
                       onPressed: () {},
-                      backgroundColor: Color(0xff2D01FE),
+                      backgroundColor: AppColor.mainAppColor,
                       textColor: Colors.white,
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 12),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/features/order/presentation/functions/show-feedback-bottom-sheet.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import '../../../../core/custom_widgets/global-elevated-button-widget.dart';
 
 class OldOrderScreen extends StatelessWidget {
@@ -84,7 +84,7 @@ class OldOrderScreen extends StatelessWidget {
                       ),
                       label: "إعادة الطلب",
                       onPressed: () {},
-                      backgroundColor: Color(0xff2D01FE),
+                      backgroundColor: AppColor.mainAppColor,
                       textColor: Colors.white,
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -162,7 +162,7 @@ class OldOrderScreen extends StatelessWidget {
                       showFeedbackBottomSheet(context);
                     },
                     backgroundColor: Colors.white,
-                    textColor: Color(0xff2D01FE),
+                    textColor: AppColor.mainAppColor,
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     borderRadius: BorderRadius.circular(20),
                     fixedWidth: 0.80, // 80% of the screen width
@@ -208,7 +208,7 @@ class OldOrderScreen extends StatelessWidget {
                     child: GlobalElevatedButton(
                       label: "تحميل الفاتورة PDF",
                       onPressed: () {},
-                      backgroundColor: Color(0xff2D01FE),
+                      backgroundColor: AppColor.mainAppColor,
                       textColor: Colors.white,
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 12),

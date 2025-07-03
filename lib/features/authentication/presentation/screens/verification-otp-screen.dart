@@ -9,7 +9,7 @@ import 'package:hawiah_client/features/authentication/presentation/screens/compa
 import 'package:hawiah_client/features/authentication/presentation/screens/personal-profile-completion-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/reset-password-screen.dart';
 import 'package:pinput/pinput.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
 
@@ -192,7 +192,7 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                             );
                           }
                         : null,
-                    backgroundColor: Color(0xff2D01FE),
+                    backgroundColor: AppColor.mainAppColor,
                     textColor: Colors.white,
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     borderRadius: BorderRadius.circular(20),
@@ -211,7 +211,7 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                       }
                     },
                     backgroundColor: Color(0xffEDEEFF),
-                    textColor: Color(0xff2D01FE),
+                    textColor: AppColor.mainAppColor,
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     borderRadius: BorderRadius.circular(20),
                     fixedWidth: 0.80, // 80% of the screen width

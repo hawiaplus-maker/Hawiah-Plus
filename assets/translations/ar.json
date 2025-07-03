@@ -1,4 +1,14 @@
 {
+   "validateName": "الرجاء كتابة اسمك",
+    "validateEmail": "الرجاء كتابة البريد الإلكتروني",
+    "validateEmailStructure": "الرجاء كتابة البريد الإلكتروني بشكل صحيح",
+    "validatePhone": "الرجاء كتابة رقم الجوال",
+    "validatePhoneStartWithZero": "يجب ألا يبدأ رقم الجوال بـ 0",
+    "validatePhoneContainTenNumbers": "رقم الجوال يجب أن يتكون من {} أرقام",
+    "validatePassword": "يرجى ادخال 6 احرف على الاقل",
+    "validateConfirmPassword": "الرجاء كتابة الرقم السري بشكل صحيح",
+    "validateEmpty": "هذا الحقل مطلوب",
+       "mustEnterCoupon": "عليك إدخال كوبون",
   "app_language": "لغة التطبيق",
   "app_language_desc": "قم بإختيار لغة التطبيق المفضلة لديك",
   "arabic": "العربية",
@@ -13,7 +23,7 @@
   "on_boarding_content_2": "بضع لحظات تفصلك عن أفضل خدمات مُختارة لك بفائق العناية .... لنبدأ الآن ",
   "on_boarding_title_3": "تمتع بأفضل إختيارات الحاويات والسطحات والنقل",
   "on_boarding_content_3": "بضع لحظات تفصلك عن أفضل خدمات مُختارة لك بفائق العناية .... لنبدأ الآن ",
-  "start_now": "لنبدأ الآن",
+  "start_now": "ابدأ الآن",
   "welcome": "أهلاً بك !",
   "steps_to_register": "لنتخذ بضع خطوات لتسجيل حسابك",
   "continue_with_phone": "المتابعة عن طريق رقم الجوال",
@@ -27,7 +37,7 @@
   "forgot_password": "نسيت كلمة المرور ؟",
   "login": "تسجيل دخول",
   "login_as_guest": "الدخول كزائر",
-  "no_account": "لا تملك حساب ؟",
+  "no_account": "لديك حساب بالفعل ؟",
   "new_subscription": "إشتراك جديد",
   "search_by_country_code": "البحث بكود الدولة",
   "enter_your_password": "ادخل كلمة المرور",
@@ -116,4 +126,5 @@
   "order_details": "تفاصيل الطلب",
   "cancel_order": "إلغاء الطلب",
   "back_order": "الرجوع للطلب"
+
 }

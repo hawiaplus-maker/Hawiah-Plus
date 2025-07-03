@@ -1,5 +1,6 @@
 // OnBoarding Page View
 import 'package:flutter/material.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 
 class OnBoardingPageView extends StatelessWidget {
   final List<String> onBoardingImages;
@@ -19,8 +20,8 @@ class OnBoardingPageView extends StatelessWidget {
       onPageChanged: onPageChanged,
       itemCount: onBoardingImages.length,
       itemBuilder: (context, index) {
-        return Image.network(
-          onBoardingImages[index],
+        return CustomNetworkImage(
+          imageUrl: onBoardingImages[index],
           fit: BoxFit.fill,
         );
       },

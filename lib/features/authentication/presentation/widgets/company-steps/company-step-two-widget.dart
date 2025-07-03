@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 class CompanyStepTwo extends StatelessWidget {
   final String commercialRegistrationNumber;
   final String taxNumber;
@@ -76,7 +76,7 @@ class CompanyStepTwo extends StatelessWidget {
 
 class AttachmentField extends StatelessWidget {
   final String label;
-  
+
   const AttachmentField({Key? key, required this.label}) : super(key: key);
 
   @override
@@ -97,7 +97,8 @@ class AttachmentField extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 10.w),
             height: 5,
             width: 5,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
           ),
           Text(
             label,
@@ -109,7 +110,7 @@ class AttachmentField extends StatelessWidget {
             child: Text(
               "attachment".tr(),
               style: TextStyle(
-                  color: Color(0xff2D01FE),
+                  color: AppColor.mainAppColor,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.bold),
             ),

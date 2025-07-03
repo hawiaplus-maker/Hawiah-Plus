@@ -147,7 +147,7 @@
 //                                     )));
 //                       },
 //                       backgroundColor: Color(0xffEDEEFF),
-//                       textColor: Color(0xff2D01FE),
+//                       textColor: AppColor.mainAppColor,
 //                       padding:
 //                           EdgeInsets.symmetric(horizontal: 20, vertical: 12),
 //                       borderRadius: BorderRadius.circular(20),

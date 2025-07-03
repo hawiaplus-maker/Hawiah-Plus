@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/features/home/presentation/screens/home-details-order-screen.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import '../controllers/explore-flow-cubit.dart';
 import '../controllers/explore-flow-state.dart';
 
@@ -289,7 +289,7 @@ class SubCategoryExploreScreen extends StatelessWidget {
                                     builder: (context) =>
                                         HomeDetailsOrderScreen()));
                           },
-                          backgroundColor: Color(0xff2D01FE),
+                          backgroundColor: AppColor.mainAppColor,
                           textColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                               horizontal: 20, vertical: 12),

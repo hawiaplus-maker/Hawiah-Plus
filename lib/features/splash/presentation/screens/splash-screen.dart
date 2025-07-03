@@ -1,9 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:hawiah_client/core/hive/hive_methods.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/features/app-language/presentation/screens/app-language-screen.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
+import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -18,20 +19,29 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initializeApp() async {
+    // Add slight delay to ensure context is available
     await Future.delayed(Duration.zero);
-    if (HiveMethods.getToken() != null) {
-      log("Navigation to LayoutScreen");
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LayoutScreen()),
-      );
-    } else {
-      log("Navigation to AppLanguageScreen");
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const AppLanguageScreen()),
-      );
-    }
+
+    final cubit = context.read<ProfileCubit>();
+
+    cubit.fetchProfile(
+      onSuccess: () {
+        log("Navigation to LayoutScreen");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  const LayoutScreen()), // replace with your next screen
+        );
+      },
+      onError: () {
+        log("Navigation to AppLanguageScreen");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const AppLanguageScreen()),
+        );
+      },
+    );
   }
 
   @override

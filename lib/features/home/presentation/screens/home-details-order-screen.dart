@@ -6,7 +6,7 @@ import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.
 import 'package:hawiah_client/features/home/presentation/screens/payment-screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/choose-location-screen.dart';
 import 'package:table_calendar/table_calendar.dart';
-
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import '../controllers/home-cubit/home-cubit.dart';
 import '../controllers/home-cubit/home-state.dart';
 
@@ -72,7 +72,7 @@ class HomeDetailsOrderScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  backgroundColor: Color(0xff2D01FE),
+                  backgroundColor: AppColor.mainAppColor,
                   textColor: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   borderRadius: BorderRadius.circular(10),
@@ -314,7 +314,7 @@ class HomeDetailsOrderScreen extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => PaymentScreen()));
                     },
-                    backgroundColor: Color(0xff2D01FE),
+                    backgroundColor: AppColor.mainAppColor,
                     textColor: Colors.white,
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     borderRadius: BorderRadius.circular(10),
