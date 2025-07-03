@@ -27,7 +27,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-   // final profile = context.read<ProfileCubit>().user;
+    // final profile = context.read<ProfileCubit>().user;
     return Scaffold(
       appBar: AppBar(
         title: Text("الملف الشخصي"),
@@ -64,12 +64,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                         " profile.name",
+                          context.read<ProfileCubit>().user.name,
                           style:
                               TextStyle(fontSize: 16.sp, color: Colors.black),
                         ),
                         Text(
-                          "profile.email",
+                          context.read<ProfileCubit>().user.email,
                           style: TextStyle(
                               fontSize: 12.sp, color: Color(0xffB5B5B5)),
                         ),

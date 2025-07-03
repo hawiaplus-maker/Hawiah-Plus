@@ -35,7 +35,7 @@ class _HomeNewOrderScreenState extends State<HomeNewOrderScreen> {
             if (homeCubit.showCategories == null) {
               return Center(child: CircularProgressIndicator(strokeWidth: 2));
             }
-            if (homeCubit.showCategories?.message.services.isEmpty ?? true) {
+            if (homeCubit.showCategories?.message?.services?.isEmpty ?? true) {
               return Center(child: Text("no_data".tr()));
             }
             return Container(
@@ -55,21 +55,9 @@ class _HomeNewOrderScreenState extends State<HomeNewOrderScreen> {
                                           title: homeCubit
                                                   .showCategories
                                                   ?.message
-                                                  .services[index]
+                                                  ?.services?[index]
                                                   .title ??
                                               "",
-                                          description: homeCubit
-                                                  .showCategories
-                                                  ?.message
-                                                  .services[index]
-                                                  .description ??
-                                              "",
-                                          finalDate: homeCubit
-                                                  .showCategories
-                                                  ?.message
-                                                  .services[index]
-                                                  .dailyPrice ??
-                                              0,
                                         )));
                           },
                           child: Card(
@@ -87,7 +75,7 @@ class _HomeNewOrderScreenState extends State<HomeNewOrderScreen> {
                                 children: [
                                   Image.network(
                                     homeCubit.showCategories?.message
-                                            .services[index].image ??
+                                            ?.services?[index].image ??
                                         "",
                                     height: 70.h,
                                     width: 70.w,
@@ -117,7 +105,7 @@ class _HomeNewOrderScreenState extends State<HomeNewOrderScreen> {
                                   SizedBox(width: 20.h),
                                   Text(
                                     homeCubit.showCategories?.message
-                                            .services[index].title ??
+                                            ?.services?[index].title ??
                                         "",
                                     style: TextStyle(
                                         fontSize: 14.sp,
@@ -131,7 +119,7 @@ class _HomeNewOrderScreenState extends State<HomeNewOrderScreen> {
                         );
                       },
                       itemCount:
-                          homeCubit.showCategories?.message.services.length ??
+                          homeCubit.showCategories?.message?.services?.length ??
                               0,
                     ),
                   )

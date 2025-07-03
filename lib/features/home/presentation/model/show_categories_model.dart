@@ -1,105 +1,75 @@
-// To parse this JSON data, do
-//
-//     final showCategoriesModel = showCategoriesModelFromJson(jsonString);
-
-import 'dart:convert';
-
-ShowCategoriesModel showCategoriesModelFromJson(String str) =>
-    ShowCategoriesModel.fromJson(json.decode(str));
-
-String showCategoriesModelToJson(ShowCategoriesModel data) =>
-    json.encode(data.toJson());
-
 class ShowCategoriesModel {
-  bool success;
-  Message message;
+  bool? success;
+  Message? message;
 
-  ShowCategoriesModel({
-    required this.success,
-    required this.message,
-  });
+  ShowCategoriesModel({this.success, this.message});
 
-  factory ShowCategoriesModel.fromJson(Map<String, dynamic> json) =>
-      ShowCategoriesModel(
-        success: json["success"],
-        message: Message.fromJson(json["message"]),
-      );
+  ShowCategoriesModel.fromJson(Map<String, dynamic> json) {
+    success = json['success'];
+    message =
+        json['message'] != null ? new Message.fromJson(json['message']) : null;
+  }
 
-  Map<String, dynamic> toJson() => {
-        "success": success,
-        "message": message.toJson(),
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['success'] = this.success;
+    if (this.message != null) {
+      data['message'] = this.message!.toJson();
+    }
+    return data;
+  }
 }
 
 class Message {
-  int id;
-  String title;
-  String image;
-  List<Service> services;
+  int? id;
+  String? title;
+  String? image;
+  List<Services>? services;
 
-  Message({
-    required this.id,
-    required this.title,
-    required this.image,
-    required this.services,
-  });
+  Message({this.id, this.title, this.image, this.services});
 
-  factory Message.fromJson(Map<String, dynamic> json) => Message(
-        id: json["id"],
-        title: json["title"],
-        image: json["image"],
-        services: List<Service>.from(
-            json["services"].map((x) => Service.fromJson(x))),
-      );
+  Message.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    image = json['image'];
+    if (json['services'] != null) {
+      services = <Services>[];
+      json['services'].forEach((v) {
+        services!.add(new Services.fromJson(v));
+      });
+    }
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "image": image,
-        "services": List<dynamic>.from(services.map((x) => x.toJson())),
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['image'] = this.image;
+    if (this.services != null) {
+      data['services'] = this.services!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }
 
-class Service {
-  int id;
-  String title;
-  String description;
-  int dailyPrice;
-  int weeklyPrice;
-  int monthlyPrice;
-  int yearlyPrice;
-  String image;
+class Services {
+  int? id;
+  String? title;
+  String? image;
 
-  Service({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.dailyPrice,
-    required this.weeklyPrice,
-    required this.monthlyPrice,
-    required this.yearlyPrice,
-    required this.image,
-  });
+  Services({this.id, this.title, this.image});
 
-  factory Service.fromJson(Map<String, dynamic> json) => Service(
-        id: json["id"],
-        title: json["title"],
-        description: json["description"],
-        dailyPrice: json["daily_price"],
-        weeklyPrice: json["weekly_price"],
-        monthlyPrice: json["monthly_price"],
-        yearlyPrice: json["yearly_price"],
-        image: json["image"],
-      );
+  Services.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    image = json['image'];
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "description": description,
-        "daily_price": dailyPrice,
-        "weekly_price": weeklyPrice,
-        "monthly_price": monthlyPrice,
-        "yearly_price": yearlyPrice,
-        "image": image,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['image'] = this.image;
+    return data;
+  }
 }

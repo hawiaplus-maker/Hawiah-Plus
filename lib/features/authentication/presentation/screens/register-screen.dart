@@ -36,7 +36,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         final accountTypes = authChange.accountTypes;
         final selectedAccountType = authChange.selectedAccountType;
         final checkedValueTerms = authChange.checkedValueTerms;
-        final selectedTypeValue = selectedAccountType == 0 ? 1 : 2;
+        final selectedTypeValue =
+            selectedAccountType == 0 ? 'individual' : 'company';
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 10.w),
           child: Form(

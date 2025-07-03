@@ -8,7 +8,7 @@ import 'package:hawiah_client/features/authentication/presentation/controllers/a
 
 class RegisterButtonWidget extends StatelessWidget {
   final GlobalKey<FormState> formKey;
-  final int type;
+  final String type;
   const RegisterButtonWidget(
       {Key? key, required this.formKey, required this.type})
       : super(key: key);

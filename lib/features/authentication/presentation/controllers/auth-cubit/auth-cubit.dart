@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -81,39 +80,53 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthChange());
   }
 
-  int remainingTime = 30; // Time remaining for re-send
+  // Flag to track timer completion
+  late Timer timer;
+  int remainingTime = 30;
+  bool isTimerCompleted = false;
+  bool showInvalidCodeMessage = false;
 
-  late Timer timer; // Timer instance
-  bool isTimerCompleted = false; // Flag to track timer completion
+  void resetInvalidCodeMessage() {
+    showInvalidCodeMessage = false;
+    emit(AuthChange());
+  }
 
   // Start the timer
   void startTimer() {
     isTimerCompleted = false;
+    showInvalidCodeMessage = false; // Reset message
+    remainingTime = 30;
+
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (remainingTime > 0) {
         remainingTime--;
-        emit(AuthChange());
+        emit(AuthTimerState(
+          remainingTime: remainingTime,
+          isTimerCompleted: false,
+        ));
       } else {
         isTimerCompleted = true;
+        showInvalidCodeMessage = true;
         timer.cancel();
+        emit(AuthTimerState(
+          remainingTime: 0,
+          isTimerCompleted: true,
+        ));
       }
     });
   }
 
   // Resend the code and reset the timer
-  resendCode(String phoneNumber) {
-    resendCodeToApi(
-      phoneNumber: phoneNumber,
-    );
-    remainingTime = 30; // Reset the timer
 
-    isTimerCompleted = false;
-    startTimer(); // Restart the timer
-    emit(AuthChange()); // Emit state to update UI
+  @override
+  Future<void> close() {
+    timer.cancel();
+    return super.close();
   }
 
   GlobalKey<FormState> formKeyCompleteProfile = GlobalKey<FormState>();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyRegister = GlobalKey<FormState>();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
@@ -212,7 +225,8 @@ class AuthCubit extends Cubit<AuthState> {
       hasToken: false,
     );
 
-    if (response.state == ResponseState.complete) {
+    if (response.state == ResponseState.complete &&
+        response.data['success'] == true) {
       final data = response.data['data'];
       final message = response.data['message'] ?? 'Login completed';
 
@@ -232,7 +246,7 @@ class AuthCubit extends Cubit<AuthState> {
     } else if (response.state == ResponseState.offline) {
       emit(AuthError("لا يوجد اتصال بالإنترنت"));
     } else {
-      emit(AuthError("حدث خطأ غير متوقع"));
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
@@ -240,7 +254,7 @@ class AuthCubit extends Cubit<AuthState> {
   ///
   Future<void> register({
     required String? phoneNumber,
-    required int? type,
+    required String? type,
   }) async {
     emit(AuthLoading());
 
@@ -255,7 +269,8 @@ class AuthCubit extends Cubit<AuthState> {
       hasToken: false,
     );
 
-    if (response.state == ResponseState.complete) {
+    if (response.state == ResponseState.complete &&
+        response.data['success'] == true) {
       final data = response.data['data'];
       final message = response.data['message'] ?? 'Login completed';
 
@@ -274,7 +289,7 @@ class AuthCubit extends Cubit<AuthState> {
     } else if (response.state == ResponseState.offline) {
       emit(AuthError("لا يوجد اتصال بالإنترنت"));
     } else {
-      emit(AuthError("حدث خطأ غير متوقع"));
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
@@ -296,7 +311,8 @@ class AuthCubit extends Cubit<AuthState> {
       hasToken: false,
     );
 
-    if (response.state == ResponseState.complete) {
+    if (response.state == ResponseState.complete &&
+        response.data['success'] == true) {
       final data = response.data['data'];
       final message = response.data['message'] ?? 'Login completed';
 
@@ -313,7 +329,7 @@ class AuthCubit extends Cubit<AuthState> {
     } else if (response.state == ResponseState.offline) {
       emit(AuthError("لا يوجد اتصال بالإنترنت"));
     } else {
-      emit(AuthError("حدث خطأ غير متوقع"));
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
@@ -321,7 +337,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> resendCodeToApi({
     required String? phoneNumber,
   }) async {
-    emit(AuthLoading());
+    emit(AuthCodeResentLoading());
 
     final body = FormData.fromMap({
       'mobile': phoneNumber,
@@ -333,7 +349,8 @@ class AuthCubit extends Cubit<AuthState> {
       hasToken: false,
     );
 
-    if (response.state == ResponseState.complete) {
+    if (response.state == ResponseState.complete &&
+        response.data['success'] == true) {
       final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
 
       Fluttertoast.showToast(
@@ -345,15 +362,17 @@ class AuthCubit extends Cubit<AuthState> {
         fontSize: 16.0,
       );
 
-      emit(AuthSuccess(message: message));
+      emit(AuthCodeResentSuccess(message: message));
     } else if (response.state == ResponseState.unauthorized) {
-      emit(AuthError(response.data['message'] ?? "بيانات غير صحيحة"));
+      emit(AuthCodeResentError(
+          message: response.data['message'] ?? "بيانات غير صحيحة"));
     } else if (response.state == ResponseState.error) {
-      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+      emit(AuthCodeResentError(
+          message: response.data['message'] ?? "حدث خطأ أثناء العملية"));
     } else if (response.state == ResponseState.offline) {
-      emit(AuthError("لا يوجد اتصال بالإنترنت"));
+      emit(AuthCodeResentError(message: "لا يوجد اتصال بالإنترنت"));
     } else {
-      emit(AuthError("حدث خطأ غير متوقع"));
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
@@ -373,7 +392,8 @@ class AuthCubit extends Cubit<AuthState> {
       hasToken: false,
     );
 
-    if (response.state == ResponseState.complete) {
+    if (response.state == ResponseState.complete &&
+        response.data['success'] == true) {
       final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
       final data = response.data['data'];
 
@@ -394,7 +414,7 @@ class AuthCubit extends Cubit<AuthState> {
     } else if (response.state == ResponseState.offline) {
       emit(AuthError("لا يوجد اتصال بالإنترنت"));
     } else {
-      emit(AuthError("حدث خطأ غير متوقع"));
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
@@ -417,7 +437,8 @@ class AuthCubit extends Cubit<AuthState> {
       body: body,
       hasToken: false,
     );
-    if (response.state == ResponseState.complete) {
+    if (response.state == ResponseState.complete &&
+        response.data['success'] == true) {
       final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
       Fluttertoast.showToast(
         msg: message,
@@ -436,7 +457,7 @@ class AuthCubit extends Cubit<AuthState> {
     } else if (response.state == ResponseState.offline) {
       emit(AuthError("لا يوجد اتصال بالإنترنت"));
     } else {
-      emit(AuthError("حدث خطأ غير متوقع"));
+      emit(AuthError(response.data['message'] ?? "بيانات غير صحيحة"));
     }
   }
 
@@ -464,54 +485,53 @@ class AuthCubit extends Cubit<AuthState> {
       } else if (response.state == ResponseState.offline) {
         emit(AuthError("لا يوجد اتصال بالإنترنت"));
       } else {
-        emit(AuthError("حدث خطأ غير متوقع"));
+        emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
       }
     }
   }
 
-  Future<void> updateProfile({
-    required String name,
-    required String email,
-    File? imageFile,
-    String? password,
-    String? password_confirmation,
+  ///*************complete profile************************** */
+  Future<void> completeRegister({
+    required String? phoneNumber,
+    required String? name,
+    required String? password,
+    required String? password_confirmation,
   }) async {
     emit(AuthLoading());
 
-    try {
-      final data = <String, dynamic>{
-        'name': name,
-        'email': email,
-        'password': password,
-        'password_confirmation': password_confirmation
-      };
+    final body = FormData.fromMap({
+      'name': name,
+      'mobile': phoneNumber,
+      'password': password,
+      "password_confirmation": password_confirmation
+    });
 
-      // لو فيه صورة، أضفها كـ MultipartFile
-      if (imageFile != null) {
-        data['image'] = await MultipartFile.fromFile(
-          imageFile.path,
-          filename: "profile.jpg",
-        );
-      }
+    final response = await ApiHelper.instance.post(
+      Urls.completeRegister,
+      body: body,
+      hasToken: false,
+    );
 
-      final formData = FormData.fromMap(data);
+    if (response.state == ResponseState.complete) {
+      final data = response.data['data'];
+      final message = response.data['message'] ?? 'Login completed';
 
-      final response = await ApiHelper.instance.post(
-        Urls.updateProfile,
-        body: formData,
-        hasToken: true,
-        isMultipart: true,
-      );
-
-      if (response.data != null && response.data['message'] != null) {
-        final message = response.data['message'];
-        print(response.data.toString());
-        emit(AuthSuccess(message: message));
+      if (data != null) {
+        emit(AuthSuccess(
+          message: message,
+          data: response.data['data'] as Map<String, dynamic>,
+        ));
       } else {
-        emit(AuthError(response.data['message']));
+        emit(AuthError(message));
       }
-    } catch (e) {
-      emit(AuthError("حدث خطأ أثناء التحديث: $e"));
+    } else if (response.state == ResponseState.unauthorized) {
+      emit(AuthError(response.data['message'] ?? "بيانات الدخول غير صحيحة"));
+    } else if (response.state == ResponseState.error) {
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+    } else if (response.state == ResponseState.offline) {
+      emit(AuthError("لا يوجد اتصال بالإنترنت"));
+    } else {
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 }

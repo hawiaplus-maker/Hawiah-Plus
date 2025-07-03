@@ -129,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: Card(
                       elevation: 5,
+                      color: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: Container(
