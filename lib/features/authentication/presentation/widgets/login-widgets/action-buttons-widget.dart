@@ -28,7 +28,8 @@ class ActionButtonsWidget extends StatelessWidget {
                             .phoneNumber
                             .replaceFirst('+966', '0');
                         AuthCubit.get(context).login(
-                            phoneNumber: cleanedPhone,
+                            phoneNumber:
+                                AuthCubit.get(context).PhoneController.text,
                             password: AuthCubit.get(context).passwordLogin);
                       }
 

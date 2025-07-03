@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
@@ -22,23 +25,17 @@ class PersonalProfileCompletionScreen extends StatefulWidget {
 class _PersonalProfileCompletionScreenState
     extends State<PersonalProfileCompletionScreen> {
   @override
+  File? selectedImage;
+  final ImagePicker picker = ImagePicker();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: BlocConsumer<AuthCubit, AuthState>(
         builder: (BuildContext context, AuthState state) {
           final authCubit = AuthCubit.get(context);
-          String nameCompleteProfile = authCubit.nameCompleteProfile;
-          String emailCompleteProfile = authCubit.emailCompleteProfile;
-          String usernameCompleteProfile = authCubit.usernameCompleteProfile;
-          String passwordCompleteProfile = authCubit.passwordCompleteProfile;
 
-          String confirmPasswordCompleteProfile =
-              authCubit.confirmPasswordCompleteProfile;
           bool passwordVisibleCompleteProfile =
               authCubit.passwordVisibleCompleteProfile;
-          List<String> genders = authCubit.genders;
-          String? selectedGender = authCubit.selectedGender;
 
           return Container(
             margin: EdgeInsets.symmetric(horizontal: 20.w),
@@ -49,41 +46,76 @@ class _PersonalProfileCompletionScreenState
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      "assets/icons/man_take_photo.png",
-                      height: 0.22.sh,
-                      width: 0.45.sw,
-                      fit: BoxFit.fill,
+                    Stack(
+                      children: [
+                        selectedImage != null
+                            ? CircleAvatar(
+                                radius: 70.r,
+                                child: Image.file(
+                                  selectedImage!,
+                                  height: 0.22.sh,
+                                  width: 0.45.sw,
+                                  fit: BoxFit.fill,
+                                ),
+                              )
+                            : CircleAvatar(
+                                radius: 70.r,
+                                child: Image.asset(
+                                  "assets/images/profileEmptyImage.png",
+                                  height: 0.22.sh,
+                                  width: 0.45.sw,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                        Positioned(
+                          bottom: 5.h,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: () async {
+                              final XFile? image = await picker.pickImage(
+                                  source: ImageSource.gallery);
+                              if (image != null) {
+                                setState(() {
+                                  selectedImage = File(image.path);
+                                });
+                              }
+                            },
+                            child: Align(
+                              alignment: Alignment.bottomRight,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: 15,
+                                child: Container(
+                                  height: 50,
+                                  width: 70,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Color(0xff2204AE),
+                                    border: Border.all(
+                                        color: Colors.black, width: .5),
+                                  ),
+                                  child: Icon(
+                                    Icons.camera_alt_outlined,
+                                    size: 18,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 50.h),
                     CustomTextField(
                       controller: authCubit.nameController,
                       labelText: "cream_name".tr(),
                       hintText: "cream_name".tr(),
                       onChanged: (value) {
-                        nameCompleteProfile = value;
+                        authCubit.nameController.text = value;
                       },
                     ),
-                    SizedBox(height: 20.h),
-                    CustomTextField(
-                      controller: authCubit.emailController,
-                      labelText: "email".tr(),
-                      hintText: "email".tr(),
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: (value) {
-                        emailCompleteProfile = value;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextField(
-                      controller: authCubit.usernameController,
-                      labelText: "username".tr(),
-                      hintText: "username".tr(),
-                      keyboardType: TextInputType.text,
-                      onChanged: (value) {
-                        usernameCompleteProfile = value;
-                      },
-                    ),
+
                     // DropdownButtonFormField<String>(
                     //   decoration: InputDecoration(labelText: "gender".tr()),
                     //   value: selectedGender ?? genders[0],
@@ -125,7 +157,7 @@ class _PersonalProfileCompletionScreenState
                       ),
                       onChanged: (value) {
                         setState(() {
-                          passwordCompleteProfile = value;
+                          authCubit.passwordController.text = value;
                         });
                       },
                     ),
@@ -152,11 +184,11 @@ class _PersonalProfileCompletionScreenState
                       ),
                       onChanged: (value) {
                         setState(() {
-                          confirmPasswordCompleteProfile = value;
+                          authCubit.confirmPasswordController.text = value;
                         });
                       },
                     ),
-                    SizedBox(height: 0.10.sh),
+                    SizedBox(height: 0.30.sh),
                     GlobalElevatedButton(
                       label: "continue".tr(),
                       onPressed: () {

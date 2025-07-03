@@ -47,7 +47,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(fontSize: 15.sp, color: Color(0xff979797)),
                   ),
                   SizedBox(height: 20.h),
-                  PhoneInputWidget(),
+                  PhoneInputWidget(
+                    controller:  AuthCubit.get(context).PhoneController,
+                  ),
                   SizedBox(height: 20.h),
                   PasswordInputWidget(),
                   SizedBox(height: 10.h),

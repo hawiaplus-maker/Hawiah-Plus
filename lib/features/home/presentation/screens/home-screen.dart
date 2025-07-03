@@ -106,8 +106,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  const HomeNewOrderScreen()));
+                              builder: (context) => HomeNewOrderScreen(
+                                    id: homeCubit
+                                            .categorieS?.message?[index].id ??
+                                        0,
+                                  )));
                     },
                     child: Card(
                       elevation: 5,
@@ -118,8 +121,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         margin: EdgeInsets.symmetric(
                             horizontal: 10.w, vertical: 10.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Image.network(
@@ -149,7 +152,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               },
                             ),
-                            SizedBox(height: 5.h),
+                            SizedBox(
+                              width: 20.h,
+                            ),
                             Text(
                               homeCubit.categorieS?.message?[index].title ?? "",
                               style: TextStyle(

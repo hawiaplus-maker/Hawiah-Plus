@@ -31,7 +31,7 @@ class AuthCubit extends Cubit<AuthState> {
   int selectedAccountType = 0; // Default to personal account
 
   // Terms and conditions check value
-  bool checkedValueTerms = false;
+  bool checkedValueTerms = true;
 
   // SMS or WhatsApp selection
   int selectedSmsOrWhatsApp = 1; // Default to SMS
@@ -123,6 +123,8 @@ class AuthCubit extends Cubit<AuthState> {
       TextEditingController();
   TextEditingController confirmPasswordControllerCompleteProfile =
       TextEditingController();
+  TextEditingController PhoneController = TextEditingController();
+  TextEditingController phoneControllerRegister = TextEditingController();
   String nameCompleteProfile = '';
   String emailCompleteProfile = '';
   String usernameCompleteProfile = '';

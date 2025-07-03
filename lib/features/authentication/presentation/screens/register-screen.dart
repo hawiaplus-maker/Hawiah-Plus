@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hawiah_client/features/authentication/presentation/screens/start-account-verification-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/verification-otp-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/phone-input-widget.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
@@ -59,14 +59,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   );
                 }),
+                SizedBox(height: 60.h),
+                PhoneInputWidget(
+                  controller: authChange.phoneControllerRegister,
+                ),
                 SizedBox(height: 40.h),
-                PhoneInputWidget(),
-                SizedBox(height: 50.h),
                 RegisterButtonWidget(
                   formKey: formKey,
                   type: selectedTypeValue,
                 ),
-                SizedBox(height: 35.h),
+                SizedBox(height: 40.h),
                 BlocProvider(
                   create: (context) => SettingCubit(),
                   child: TermsAndConditionsSection(
@@ -96,7 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) => StartAccountVerificationScreen(
+                builder: (_) => VerificationOtpScreen(
                       phoneNumber: state.data?['mobile'],
                       otp: state.data?['otp'],
                     )),

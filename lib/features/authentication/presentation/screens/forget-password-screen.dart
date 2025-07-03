@@ -7,6 +7,7 @@ import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.
 import 'package:hawiah_client/core/custom_widgets/global-phone-input-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/start-account-verification-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/verification-otp-screen.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 import '../controllers/auth-cubit/auth-cubit.dart';
@@ -112,7 +113,7 @@ class ForgetPasswordScreen extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => StartAccountVerificationScreen(
+                    builder: (context) => VerificationOtpScreen(
                           phoneNumber: state.data?['mobile'],
                           otp: state.data?['otp'],
                         )));
