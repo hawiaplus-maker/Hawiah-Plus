@@ -16,7 +16,7 @@ class DateMethods {
   static String formatToFullData(DateTime? dateTime) {
     return dateTime != null
         ? DateFormat(
-            'dd MMMM yyyy - hh:mm a',
+            'dd MMMM yyyy ',
             AppRouters.navigatorKey.currentContext?.locale.languageCode,
           ).format(dateTime)
         : "";
