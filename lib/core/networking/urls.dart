@@ -33,4 +33,5 @@ class Urls {
   static String showCategory(int id) => '${baseUrl}categories/$id';
   static const String completeRegister = '${baseUrl}complete-register';
   static const String onBoarding = '${baseUrl}on-boarding';
+  static const String orders = '${baseUrl}users/user-orders';
 }

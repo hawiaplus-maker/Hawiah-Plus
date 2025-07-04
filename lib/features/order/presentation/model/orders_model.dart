@@ -1,0 +1,101 @@
+class OrdersModel {
+  bool? success;
+  String? message;
+  List<Data>? data;
+
+  OrdersModel({this.success, this.message, this.data});
+
+  OrdersModel.fromJson(Map<String, dynamic> json) {
+    success = json['success'];
+    message = json['message'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['success'] = this.success;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Data {
+  int? id;
+  String? referenceNumber;
+  String? address;
+  String? latitude;
+  String? longitude;
+  int? orderStatus;
+  String? status;
+  int? priceId;
+  String? totalPrice;
+  int? discount;
+  int? discountValue;
+  String? createdAt;
+  String? product;
+  String? driver;
+  String? driverMobile;
+
+  Data(
+      {this.id,
+      this.referenceNumber,
+      this.address,
+      this.latitude,
+      this.longitude,
+      this.orderStatus,
+      this.status,
+      this.priceId,
+      this.totalPrice,
+      this.discount,
+      this.discountValue,
+      this.createdAt,
+      this.product,
+      this.driver,
+      this.driverMobile});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    referenceNumber = json['reference_number'];
+    address = json['address'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+    orderStatus = json['order status'];
+    status = json['status'];
+    priceId = json['price_id'];
+    totalPrice = json['total_price'];
+    discount = json['discount'];
+    discountValue = json['discount_value'];
+    createdAt = json['created_at'];
+    product = json['product'];
+    driver = json['driver'];
+    driverMobile = json['driver mobile'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['reference_number'] = this.referenceNumber;
+    data['address'] = this.address;
+    data['latitude'] = this.latitude;
+    data['longitude'] = this.longitude;
+    data['order status'] = this.orderStatus;
+    data['status'] = this.status;
+    data['price_id'] = this.priceId;
+    data['total_price'] = this.totalPrice;
+    data['discount'] = this.discount;
+    data['discount_value'] = this.discountValue;
+    data['created_at'] = this.createdAt;
+    data['product'] = this.product;
+    data['driver'] = this.driver;
+    data['driver mobile'] = this.driverMobile;
+    return data;
+  }
+}

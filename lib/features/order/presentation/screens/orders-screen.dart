@@ -2,14 +2,26 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/order/presentation/screens/current-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/old-order-screen.dart';
-import 'package:hawiah_client/core/theme/app_colors.dart';
+
 import '../controllers/order-cubit/order-cubit.dart';
 import '../controllers/order-cubit/order-state.dart';
 
-class OrdersScreen extends StatelessWidget {
+class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
+
+  @override
+  State<OrdersScreen> createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  @override
+  void initState() {
+    OrderCubit.get(context).getOrders(1);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +115,7 @@ class OrdersScreen extends StatelessWidget {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: orderCubit.orderList.length,
+                  itemCount: orderCubit.orders?.data?.length,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {

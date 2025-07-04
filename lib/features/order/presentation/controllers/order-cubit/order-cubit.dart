@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:hawiah_client/core/networking/api_helper.dart';
+import 'package:hawiah_client/core/networking/urls.dart';
+import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'order-state.dart';
@@ -14,44 +16,7 @@ class OrderCubit extends Cubit<OrderState> {
     emit(OrderChange());
   }
 
-  List<OrderModel> orderList = [
-    OrderModel(
-      date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
-      size: "صغير",
-      title: "حاوية طبية",
-      logo: "assets/images/car_image.png",
-    ),
-    OrderModel(
-      date: DateFormat('yyyy-MM-dd')
-          .format(DateTime.now().subtract(Duration(days: 1))),
-      size: "متوسط",
-      title: "حاوية صناعية",
-      logo: "assets/images/car_image.png",
-    ),
-    OrderModel(
-      date: DateFormat('yyyy-MM-dd')
-          .format(DateTime.now().subtract(Duration(days: 2))),
-      size: "كبير",
-      title: "حاوية منزلية",
-      logo: "assets/images/car_image.png",
-    ),
-    OrderModel(
-      date: DateFormat('yyyy-MM-dd')
-          .format(DateTime.now().subtract(Duration(days: 3))),
-      size: "صغير",
-      title: "حاوية طبية",
-      logo: "assets/images/car_image.png",
-    ),
-    OrderModel(
-      date: DateFormat('yyyy-MM-dd')
-          .format(DateTime.now().subtract(Duration(days: 4))),
-      size: "متوسط",
-      title: "حاوية تجارية",
-      logo: "assets/images/car_image.png",
-    ),
-  ];
   bool isOrderCurrent = true;
-
   void changeOrderCurrent() {
     isOrderCurrent = !isOrderCurrent;
     emit(OrderChange());
@@ -63,18 +28,42 @@ class OrderCubit extends Cubit<OrderState> {
   DateTime? selectedDay;
   DateTime? rangeStart;
   DateTime? rangeEnd;
-}
+  void initialOrders() {
+    _ordersResponse = ApiResponse(
+      state: ResponseState.sleep,
+      data: null,
+    );
+    _orders = null;
+    emit(OrderChange());
+  }
 
-class OrderModel {
-  String title;
-  String logo;
-  String size;
-  String date;
+  ApiResponse _ordersResponse = ApiResponse(
+    state: ResponseState.sleep,
+    data: null,
+  );
+  ApiResponse get ordersResponse => _ordersResponse;
 
-  OrderModel({
-    required this.title,
-    required this.logo,
-    required this.size,
-    required this.date,
-  });
+  OrdersModel? _orders;
+  OrdersModel? get orders => _orders;
+
+  Future<void> getOrders(int orderStatus) async {
+    emit(OrderLoading());
+    _ordersResponse = ApiResponse(
+      state: ResponseState.loading,
+      data: null,
+    );
+    _orders = null;
+    emit(OrderChange());
+    _ordersResponse =
+        await ApiHelper.instance.get("${Urls.orders}", queryParameters: {
+      "order_status": orderStatus,
+    });
+    emit(OrderChange());
+    if (_ordersResponse.state == ResponseState.complete) {
+      _orders = OrdersModel.fromJson(_ordersResponse.data['data']);
+      emit(OrderSuccess());
+    } else if (_ordersResponse.state == ResponseState.unauthorized) {
+      emit(OrderError());
+    }
+  }
 }

@@ -119,7 +119,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ? [
                 BoxShadow(
                   offset: const Offset(0, 3),
-                  color: Colors.black.withValues(alpha: 0.16),
+                  color: Colors.black.withOpacity(0.16),
                   blurRadius: 6,
                 ),
               ]
