@@ -6,8 +6,8 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/order/presentation/screens/current-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/old-order-screen.dart';
 
-import '../controllers/order-cubit/order-cubit.dart';
-import '../controllers/order-cubit/order-state.dart';
+import '../order-cubit/order-cubit.dart';
+import '../order-cubit/order-state.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});

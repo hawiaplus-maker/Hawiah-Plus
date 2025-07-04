@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/chat-screen.dart';
-import 'package:hawiah_client/features/location/presentation/screens/choose-location-screen.dart';
+import 'package:hawiah_client/features/location/presentation/screens/all_addresses_screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/orders-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/faq-screen.dart';
@@ -16,7 +18,7 @@ import 'package:hawiah_client/features/profile/presentation/screens/privacy-poli
 import 'package:hawiah_client/features/profile/presentation/screens/setting-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/terms-and-conditions.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
-import 'package:hawiah_client/core/theme/app_colors.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -168,13 +170,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   title: "العناوين",
                   logo: "assets/icons/personal_location_icon.png",
                   onTap: () {
-                    Navigator.push<void>(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (BuildContext context) =>
-                            const ChooseLocationScreen(),
-                      ),
-                    );
+                    NavigatorMethods.pushNamed(
+                        context, AllAddressesScreen.routeName);
                   }),
               PersonProfileListTile(
                   title: "كوبونات الخصم",

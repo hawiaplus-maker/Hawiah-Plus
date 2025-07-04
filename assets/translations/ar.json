@@ -128,7 +128,14 @@
   "back_order": "الرجوع للطلب",
   "city":"المدينة",
   "neighborhood":"الحي",
-  "address":"العنوان"
+  "address":"العنوان",
+  "addresses":"العناوين",
+  "add_address":"اضافة عنوان",
+  "edit_address":"تعديل العنوان",
+  "delete_address":"حذف العنوان",
+  "delete":"حذف",
+  "confirm":"تاكيد",
+  "currentAddress": "العنوان الحالي"
  
 
 }

@@ -3,19 +3,50 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
-import 'package:hawiah_client/features/home/presentation/screens/payment-screen.dart';
-import 'package:hawiah_client/features/location/presentation/screens/choose-location-screen.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
+import 'package:hawiah_client/features/location/presentation/screens/choose-location-screen.dart';
+import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
+import 'package:table_calendar/table_calendar.dart';
+
 import '../controllers/home-cubit/home-cubit.dart';
 import '../controllers/home-cubit/home-state.dart';
 
-class HomeDetailsOrderScreen extends StatelessWidget {
-  const HomeDetailsOrderScreen(
-      {super.key, this.title, this.description, this.finalDate});
-  final String? title;
-  final String? description;
-  final int? finalDate;
+class HomeDetailesOrderScreenArgs {
+  final int catigoryId;
+  final int serviceProviderId;
+  final int addressId;
+
+  HomeDetailesOrderScreenArgs(
+      {required this.catigoryId,
+      required this.serviceProviderId,
+      required this.addressId});
+}
+
+class HomeDetailsOrderScreen extends StatefulWidget {
+  static const routeName = '/home-details-order-screen';
+  final HomeDetailesOrderScreenArgs args;
+  const HomeDetailsOrderScreen({
+    super.key,
+    required this.args,
+  });
+
+  @override
+  State<HomeDetailsOrderScreen> createState() => _HomeDetailsOrderScreenState();
+}
+
+class _HomeDetailsOrderScreenState extends State<HomeDetailsOrderScreen> {
+  @override
+  void initState() {
+    context.read<OrderCubit>().getNearbyProviders(
+        catigoryId: widget.args.catigoryId,
+        addressId: widget.args.addressId,
+        onSuccess: () {});
+    super.initState();
+  }
+
+  // final String? title;
   void _showCalendarModal(BuildContext context, HomeCubit homeCubit) {
     showModalBottomSheet(
       context: context,
@@ -46,7 +77,7 @@ class HomeDetailsOrderScreen extends StatelessWidget {
                     },
                     onDaySelected: (selectedDay, focusedDay) {
                       mystate(() {
-                        homeCubit.setRangeStart(selectedDay, finalDate ?? 1);
+                        // homeCubit.setRangeStart(selectedDay, finalDate ?? 1);
                       });
                       Navigator.pop(context);
                     },
@@ -88,12 +119,12 @@ class HomeDetailsOrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dimensions = extractDimensions(description);
+    // final dimensions = extractDimensions(description);
 
-    final dimensionText = [
-      if (dimensions.containsKey('الطول')) 'الطول: ${dimensions['الطول']}',
-      if (dimensions.containsKey('العرض')) 'العرض: ${dimensions['العرض']}',
-    ].join('، ');
+    // final dimensionText = [
+    //   if (dimensions.containsKey('الطول')) 'الطول: ${dimensions['الطول']}',
+    //   if (dimensions.containsKey('العرض')) 'العرض: ${dimensions['العرض']}',
+    // ].join('، ');
     return Scaffold(
       appBar: AppBar(
         title: Text("request_hawaia".tr()),
@@ -112,7 +143,12 @@ class HomeDetailsOrderScreen extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ChooseLocationScreen()));
+                            builder: (context) => ChooseLocationScreen(
+                                  args: ChoooseLocationScreenArgs(
+                                    catigoryId: 1,
+                                    serviceProviderId: 1,
+                                  ),
+                                )));
                   },
                   child: Container(
                     padding:
@@ -170,7 +206,7 @@ class HomeDetailsOrderScreen extends StatelessWidget {
                       ),
                       SizedBox(width: 10.w),
                       Text(
-                        title ?? "",
+                        "title",
                         style: TextStyle(
                             fontSize: 16.sp,
                             color: Colors.black,
@@ -211,9 +247,7 @@ class HomeDetailsOrderScreen extends StatelessWidget {
                       ),
                       SizedBox(width: 10.w),
                       Text(
-                        dimensionText.isNotEmpty
-                            ? dimensionText
-                            : "لا يوجد تفاصيل",
+                        "لا يوجد تفاصيل",
                         style: TextStyle(
                           fontSize: 16.sp,
                           color: Colors.black,
@@ -309,10 +343,25 @@ class HomeDetailsOrderScreen extends StatelessWidget {
                   child: GlobalElevatedButton(
                     label: "continue_payment".tr(),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PaymentScreen()));
+                      context.read<OrderCubit>().createOrder(
+                          catigoryId: widget.args.catigoryId,
+                          serviceProviderId: widget.args.serviceProviderId,
+                          priceId: 10,
+                          addressId: widget.args.addressId,
+                          fromDate: "2025-07-01",
+                          totalPrice: 20.5,
+                          price: 200.0,
+                          vatValue: 1.5,
+                          onSuccess: () {
+                            NavigatorMethods.pushReplacementNamed(
+                              context,
+                              LayoutScreen.routeName,
+                            );
+                          });
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => PaymentScreen()));
                     },
                     backgroundColor: AppColor.mainAppColor,
                     textColor: Colors.white,

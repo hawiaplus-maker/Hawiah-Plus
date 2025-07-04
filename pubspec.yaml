@@ -60,6 +60,7 @@ dependencies:
   gap: ^3.0.1
   internet_connection_checker: ^1.0.0+1
   timeago: ^3.7.0
+  defer_pointer: ^0.0.2
 
   
 dev_dependencies:

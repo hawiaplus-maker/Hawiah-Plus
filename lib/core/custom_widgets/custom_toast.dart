@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 
-
-
 enum ToastType { success, error, offline, warning, help }
 
 class CustomToast extends StatelessWidget {
@@ -93,7 +91,7 @@ class CustomToast extends StatelessWidget {
   Color _backgroundColor() {
     switch (type) {
       case ToastType.success:
-        return const Color(0xff957427);
+        return const Color(0xff5FB95F);
       case ToastType.error:
         return const Color(0xffff3333);
       case ToastType.offline:

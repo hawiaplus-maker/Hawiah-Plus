@@ -18,6 +18,31 @@ class AppRouters {
             args: args,
           ),
         );
+      case AllAddressesScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => AllAddressesScreen(),
+        );
+      case AddNewLocationScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => AddNewLocationScreen(),
+        );
+      case LocationScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => LocationScreen(
+            args: args,
+          ),
+        );
+      case ChooseLocationScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => ChooseLocationScreen(
+            args: args,
+          ),
+        );  case HomeDetailsOrderScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => HomeDetailsOrderScreen(
+            args: args,
+          ),
+        );
 
       default:
         return MaterialPageRoute(

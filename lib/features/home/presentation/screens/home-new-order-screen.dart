@@ -2,7 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hawiah_client/features/home/presentation/screens/home-details-order-screen.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/location/presentation/screens/choose-location-screen.dart';
 
 import '../controllers/home-cubit/home-cubit.dart';
 import '../controllers/home-cubit/home-state.dart';
@@ -47,18 +48,26 @@ class _HomeNewOrderScreenState extends State<HomeNewOrderScreen> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        HomeDetailsOrderScreen(
-                                          title: homeCubit
-                                                  .showCategories
-                                                  ?.message
-                                                  ?.services?[index]
-                                                  .title ??
-                                              "",
-                                        )));
+                            NavigatorMethods.pushNamed(
+                                context, ChooseLocationScreen.routeName,
+                                arguments: ChoooseLocationScreenArgs(
+                                  catigoryId: widget.id,
+                                  serviceProviderId: homeCubit.showCategories
+                                          ?.message?.services?[index].id ??
+                                      0,
+                                ));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) =>
+                            //             HomeDetailsOrderScreen(
+                            //               title: homeCubit
+                            //                       .showCategories
+                            //                       ?.message
+                            //                       ?.services?[index]
+                            //                       .title ??
+                            //                   "",
+                            //             )));
                           },
                           child: Card(
                             elevation: 5,

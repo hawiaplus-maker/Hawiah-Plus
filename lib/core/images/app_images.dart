@@ -24,5 +24,7 @@ class AppImages {
   static const String noDataImage = 'assets/images/noDataImage.png';
   static const String exceptionImage = 'assets/images/exceptionImage.png';
   static const String addAddressImage = 'assets/images/addAddressImage.png';
-  static const String addressLocationIcon = 'assets/svg/addressLocationIcon.svg';
+  static const String addressLocationIcon =
+      'assets/svg/addressLocationIcon.svg';
+  static const String locationMapIcon = 'assets/icons/location_map_icon.png';
 }

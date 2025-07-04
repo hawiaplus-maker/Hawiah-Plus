@@ -4,8 +4,6 @@ import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 
-
-
 class CustomButton extends StatelessWidget {
   final double radius;
   final double? width;
@@ -27,7 +25,7 @@ class CustomButton extends StatelessWidget {
   final List<BoxShadow>? boxShadow;
   const CustomButton({
     super.key,
-    this.radius = 23.5,
+    this.radius = 12,
     this.width,
     this.height = 47,
     this.style,
@@ -61,7 +59,6 @@ class CustomButton extends StatelessWidget {
                   (isMainColor
                       ? AppColor.mainAppColor
                       : AppColor.secondAppColor),
-          
               borderRadius: borderRadius ?? BorderRadius.circular(radius),
               border: Border.all(color: borderColor ?? Colors.transparent),
               boxShadow: boxShadow ??
@@ -91,8 +88,7 @@ class CustomButton extends StatelessWidget {
                               Text(
                                 text ?? "",
                                 textAlign: TextAlign.center,
-                                style:
-                                    style ?? AppTextStyle.buttonStyle,
+                                style: style ?? AppTextStyle.buttonStyle,
                               ),
                         ),
                         if (suffixIcon != null) ...{

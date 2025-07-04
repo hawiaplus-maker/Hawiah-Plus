@@ -164,7 +164,9 @@ class ExploreScreen extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  ChooseLocationScreen()));
+                                                  ChooseLocationScreen(
+                                                    args: ChoooseLocationScreenArgs(catigoryId: 1, serviceProviderId: 1),
+                                                  )));
                                     },
                                     child: Text("تغيير",
                                         style: TextStyle(color: Colors.blue)),

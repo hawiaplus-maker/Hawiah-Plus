@@ -7,14 +7,26 @@ import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/home/presentation/screens/home-details-order-screen.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/location-item-widget.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_state.dart';
 import 'package:hawiah_client/features/location/presentation/model/address_model.dart';
 import 'package:hawiah_client/features/location/presentation/screens/add-new-location-screen.dart';
 
+class ChoooseLocationScreenArgs {
+  final int catigoryId;
+  final int serviceProviderId;
+
+  ChoooseLocationScreenArgs(
+      {required this.catigoryId, required this.serviceProviderId});
+}
+
 class ChooseLocationScreen extends StatefulWidget {
-  const ChooseLocationScreen({super.key});
+  static const String routeName = "choose-location-screen";
+  final ChoooseLocationScreenArgs args;
+  const ChooseLocationScreen({super.key, required this.args});
 
   @override
   State<ChooseLocationScreen> createState() => _ChooseLocationScreenState();
@@ -93,7 +105,14 @@ class _ChooseLocationScreenState extends State<ChooseLocationScreen> {
                     child: GlobalElevatedButton(
                       label: "confirm_address".tr(),
                       onPressed: () {
-                        Navigator.pop(context);
+                        NavigatorMethods.pushNamed(
+                          context,
+                          HomeDetailsOrderScreen.routeName,
+                          arguments: HomeDetailesOrderScreenArgs(
+                              catigoryId: widget.args.catigoryId,
+                              serviceProviderId: widget.args.serviceProviderId,
+                              addressId: address?.id ?? 0),
+                        );
                       },
                       backgroundColor: AppColor.mainAppColor,
                       textColor: Colors.white,

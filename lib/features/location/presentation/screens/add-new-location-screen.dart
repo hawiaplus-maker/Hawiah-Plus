@@ -11,6 +11,7 @@ import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart'
 import 'package:hawiah_client/core/custom_widgets/custom_select/custom_select_item.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_select/custom_single_select.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
@@ -79,8 +80,8 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
       create: (BuildContext context) => AddressCubit()..getcitys(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "إضافة عنوان جديد",
+          title: Text(
+            AppLocaleKey.addNewAddress.tr(),
             style: TextStyle(color: Colors.black),
           ),
           centerTitle: true,
@@ -94,7 +95,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "العنوان الحالي",
+                    AppLocaleKey.currentAddress.tr(),
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 15.sp,
@@ -105,7 +106,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
                   SizedBox(height: 10.h),
                   CustomTextField(
                     controller: titleController,
-                    labelText: "العنوان",
+                    labelText: AppLocaleKey.address.tr(),
                     onChanged: (String value) => {},
                   ),
                   SizedBox(height: 20.h),
@@ -135,7 +136,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            "assets/icons/location_map_icon.png",
+            AppImages.locationMapIcon,
             height: 20,
             width: 20,
           ),
@@ -218,34 +219,37 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   }
 
   Widget _buildMapSection() {
-    return SizedBox(
-      height: 300.h,
-      child: GoogleMap(
-        onMapCreated: (GoogleMapController controller) {
-          mapController.complete(controller);
-        },
-        onTap: (LatLng argument) async {
-          NavigatorMethods.pushNamed(context, MapScreen.routeName,
-              arguments: MapScreenArgs(
-            onLocationSelected: (lat, lng, locality) {
-              safeLocationSelected(lat, lng, locality);
-            },
-          ));
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: SizedBox(
+        height: 300.h,
+        child: GoogleMap(
+          onMapCreated: (GoogleMapController controller) {
+            mapController.complete(controller);
+          },
+          onTap: (LatLng argument) async {
+            NavigatorMethods.pushNamed(context, MapScreen.routeName,
+                arguments: MapScreenArgs(
+              onLocationSelected: (lat, lng, locality) {
+                safeLocationSelected(lat, lng, locality);
+              },
+            ));
 
-          _updateCameraPosition();
-        },
-        initialCameraPosition: CameraPosition(
-          target: currentPosition ?? const LatLng(24.7136, 46.6753),
-          zoom: 12,
+            _updateCameraPosition();
+          },
+          initialCameraPosition: CameraPosition(
+            target: currentPosition ?? const LatLng(24.7136, 46.6753),
+            zoom: 12,
+          ),
+          markers: currentPosition != null
+              ? <Marker>{
+                  Marker(
+                    markerId: const MarkerId("currentLocation"),
+                    position: currentPosition!,
+                  ),
+                }
+              : <Marker>{},
         ),
-        markers: currentPosition != null
-            ? <Marker>{
-                Marker(
-                  markerId: const MarkerId("currentLocation"),
-                  position: currentPosition!,
-                ),
-              }
-            : <Marker>{},
       ),
     );
   }

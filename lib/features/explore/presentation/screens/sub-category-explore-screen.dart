@@ -287,7 +287,9 @@ class SubCategoryExploreScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        HomeDetailsOrderScreen()));
+                                        HomeDetailsOrderScreen(
+                                          args: HomeDetailesOrderScreenArgs(catigoryId: 1, serviceProviderId: 1, addressId: 1),
+                                        )));
                           },
                           backgroundColor: AppColor.mainAppColor,
                           textColor: Colors.white,

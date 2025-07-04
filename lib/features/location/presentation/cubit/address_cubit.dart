@@ -127,6 +127,41 @@ class AddressCubit extends Cubit<AddressState> {
     }
   }
 
+  //*===================================== update address ====================
+  Future<void> updateAddress(
+      {required String title,
+      required double latitude,
+      required double longitude,
+      required int neighborhoodId,
+      required int addressId,
+      required VoidCallback onSuccess}) async {
+    NavigatorMethods.loading();
+    FormData body = FormData.fromMap({
+      'title': title,
+      'latitude': latitude,
+      'longitude': longitude,
+      'neighborhood_id': neighborhoodId
+    });
+    final response = await ApiHelper.instance.put(
+      Urls.updateAddress(addressId),
+      body: body,
+    );
+    NavigatorMethods.loadingOff();
+    if (response.state == ResponseState.complete) {
+      CommonMethods.showToast(message: 'تم حفظ العنوان بنجاح');
+      onSuccess.call();
+    } else if (response.state == ResponseState.unauthorized) {
+      CommonMethods.showAlertDialog(
+        message: tr(AppLocaleKey.youMustLogInFirst),
+      );
+    } else {
+      CommonMethods.showError(
+        message: response.data['message'] ?? 'حدث خطاء',
+        apiResponse: response,
+      );
+    }
+  }
+
   //*===================================== Get All Address ===================
   void initialaddresses() {
     _addressesResponse = ApiResponse(
