@@ -33,9 +33,12 @@ class Urls {
   static String showCategory(int id) => '${baseUrl}categories/$id';
   static const String completeRegister = '${baseUrl}complete-register';
   static const String onBoarding = '${baseUrl}on-boarding';
+  static String orders(int id) =>
+      '${baseUrl}users/user-orders?order_status=$id';
   static const String cities = '${baseUrl}cities';
   static const String addresses = '${baseUrl}user-addresses';
   static const String storeAddress = '${baseUrl}user-addresses';
    static String neighborhoodsByCity(int id) => '${baseUrl}neighborhoods/$id';
 
+ 
 }

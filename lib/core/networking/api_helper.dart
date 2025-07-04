@@ -162,7 +162,8 @@ class ApiHelper {
     void Function()? onFinish,
     void Function(int, int)? onReceiveProgress,
     void Function(int, int)? onSendProgress,
-    bool hasToken = true,  bool ?isMultipart,
+    bool hasToken = true,
+    bool? isMultipart,
   }) async {
     ApiResponse responseJson;
 

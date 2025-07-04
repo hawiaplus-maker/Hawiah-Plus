@@ -149,6 +149,11 @@ class AppColor {
         light: const Color(0xff2196F3),
         dark: const Color(0xff2196F3),
       );
+  static Color get selectedLightBlueColor => AppTheme.getByTheme(
+        light: const Color(0xffE5EBFB),
+        dark: const Color(0xffE5EBFB),
+      );
+
   static Color get purpleColor => AppTheme.getByTheme(
         light: const Color(0xff9C27B0),
         dark: const Color(0xff9C27B0),
