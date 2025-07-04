@@ -4,6 +4,7 @@ import 'package:hawiah_client/features/authentication/authentication-injection.d
 import 'package:hawiah_client/features/explore/explore-injection.dart';
 import 'package:hawiah_client/features/home/home-injection.dart';
 import 'package:hawiah_client/features/layout/layout-injection.dart';
+import 'package:hawiah_client/features/location/location_injection.dart';
 import 'package:hawiah_client/features/on-boarding/on-boarding-injection.dart';
 import 'package:hawiah_client/features/profile/presentation/Profile_user_injection.dart';
 import 'package:hawiah_client/features/setting/setting_injection.dart';
@@ -23,5 +24,6 @@ class AppInjector {
     OrderInjection.init();
     SettingInjection.init();
     ProfileInjection.init();
+    AddressInjection.init();
   }
 }

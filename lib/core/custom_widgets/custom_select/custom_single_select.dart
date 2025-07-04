@@ -54,7 +54,7 @@ class CustomSingleSelect extends StatefulWidget {
     this.maxLines = 1,
     this.prefixIcon,
     this.suffixIcon,
-    this.radius = 28.5,
+    this.radius = 12,
     this.fillColor,
     this.focusColor,
     this.unFocusColor,

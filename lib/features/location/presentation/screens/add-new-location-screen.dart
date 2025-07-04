@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,7 @@ import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart'
 import 'package:hawiah_client/core/custom_widgets/custom_select/custom_select_item.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_select/custom_single_select.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
@@ -101,7 +103,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
                       child: Column(
                         children: [
                           CustomSingleSelect(
-                            hintText: "city",
+                            hintText: AppLocaleKey.city.tr(),
                             value: selectedCity,
                             items: address.citys
                                 .map((e) => CustomSelectItem(
@@ -120,7 +122,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
                           ),
                           SizedBox(height: 20.h),
                           CustomSingleSelect(
-                            hintText: "neighborhood",
+                            hintText: AppLocaleKey.neighborhood.tr(),
                             apiResponse: address.neighborhoodsResponse,
                             value: selectedNeighborhood,
                             items: address.neighborhoods

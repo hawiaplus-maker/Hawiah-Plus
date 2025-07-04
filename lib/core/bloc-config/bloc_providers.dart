@@ -3,6 +3,7 @@ import 'package:hawiah_client/features/app-language/presentation/controllers/app
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/explore/presentation/controllers/explore-flow-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
+import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-cubit.dart';
 import 'package:hawiah_client/features/order/presentation/controllers/order-cubit/order-cubit.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
@@ -34,7 +35,8 @@ class BlocProviders {
         create: (context) => sl<OrderCubit>(),
       ),
       BlocProvider<SettingCubit>(create: (context) => sl<SettingCubit>()),
-      BlocProvider<ProfileCubit>(create: (context) => sl<ProfileCubit>())
+      BlocProvider<ProfileCubit>(create: (context) => sl<ProfileCubit>()),
+      BlocProvider<AddressCubit>(create: (context) => sl<AddressCubit>()),
     ];
   }
 }
