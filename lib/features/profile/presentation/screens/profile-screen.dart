@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
-import 'package:hawiah_client/features/chat/presentation/screens/chat-screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/all_addresses_screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/orders-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
@@ -114,48 +114,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(
                 height: 10.h,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 40.w,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    PersonProfileTap(
-                        title: "الطلبات",
-                        logo: "assets/icons/box_icon.png",
-                        onTap: () {
-                          Navigator.push<void>(
-                              context,
-                              MaterialPageRoute<void>(
-                                builder: (BuildContext context) =>
-                                    const OrdersScreen(),
-                              ));
-                        }),
-                    PersonProfileTap(
-                        title: "العقود",
-                        logo: "assets/icons/order_icon.png",
-                        onTap: () {}),
-                    PersonProfileTap(
-                        title: "المحادثات",
-                        logo: "assets/icons/chat_icon.png",
-                        onTap: () {
-                          Navigator.push<void>(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (BuildContext context) => ChatScreen(),
-                            ),
-                          );
-                        }),
-                    PersonProfileTap(
-                        title: "المفضلة",
-                        logo: "assets/icons/favorite_icon.png",
-                        color: Color(0xffEA4335),
-                        onTap: () {},
-                        isLastItem: true),
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(
+              //     horizontal: 40.w,
+              //   ),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //     children: [
+              //       PersonProfileTap(
+              //           title: "الطلبات",
+              //           logo: "assets/icons/box_icon.png",
+              //           onTap: () {
+              //             Navigator.push<void>(
+              //                 context,
+              //                 MaterialPageRoute<void>(
+              //                   builder: (BuildContext context) =>
+              //                       const OrdersScreen(),
+              //                 ));
+              //           }),
+              //       PersonProfileTap(
+              //           title: "العقود",
+              //           logo: "assets/icons/order_icon.png",
+              //           onTap: () {}),
+              //       PersonProfileTap(
+              //           title: "المحادثات",
+              //           logo: "assets/icons/chat_icon.png",
+              //           onTap: () {
+              //             Navigator.push<void>(
+              //               context,
+              //               MaterialPageRoute<void>(
+              //                 builder: (BuildContext context) => ChatScreen(),
+              //               ),
+              //             );
+              //           }),
+              //       PersonProfileTap(
+              //           title: "المفضلة",
+              //           logo: "assets/icons/favorite_icon.png",
+              //           color: Color(0xffEA4335),
+              //           onTap: () {},
+              //           isLastItem: true),
+              //     ],
+              //   ),
+              // ),
+
               SizedBox(
                 height: 10.h,
               ),
@@ -166,6 +167,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(
                 height: 10.h,
               ),
+              PersonProfileListTile(
+                  title: "الطلبات",
+                  logo: AppImages.orderIcon,
+                  onTap: () {
+                    Navigator.push<void>(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) =>
+                              const OrdersScreen(),
+                        ));
+                  }),
               PersonProfileListTile(
                   title: "العناوين",
                   logo: "assets/icons/personal_location_icon.png",
@@ -180,23 +192,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               PersonProfileListTile(
                   title: "دعوة صديق",
                   logo: "assets/icons/person_invite_icon.png",
-                  isHaveLine: false,
                   onTap: () {}),
-              SizedBox(
-                height: 10.h,
-              ),
-              Container(
-                color: Color(0xffF9F9F9),
-                height: 15.h,
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
+
               PersonProfileListTile(
                   title: "الدعم",
                   logo: "assets/icons/call_us_icon.png",
                   onTap: () {}),
               PersonProfileListTile(
+                  isHaveLine: true,
                   title: "الأسئلة الشائعة",
                   logo: "assets/icons/qestions_icon.png",
                   onTap: () {
@@ -381,7 +384,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       required VoidCallback onTap,
       Widget? trailing,
       bool isHaveLine = true}) {
-    return GestureDetector(
+    return InkWell(
         onTap: onTap,
         child: Column(
           children: [
@@ -390,7 +393,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Row(children: [
                 Row(
                   children: [
-                    Image.asset(logo, height: 30.h, width: 30.w),
+                    Image.asset(
+                      logo,
+                      height: 30.h,
+                      width: 30.w,
+                      color: AppColor.mainAppColor,
+                    ),
                     SizedBox(
                       width: 10.w,
                     ),

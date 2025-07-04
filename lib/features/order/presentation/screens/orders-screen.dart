@@ -32,7 +32,7 @@ class _OrdersScreenState extends State<OrdersScreen>
     _tabController.addListener(_handleTabChange);
 
     // مبدئيًا نعتبر أنه في تبويب "حالية"
-    orderCubit.changeOrderCurrent(true);
+    orderCubit.changeOrderCurrent();
     orderCubit.getOrders(1);
   }
 
@@ -42,7 +42,7 @@ class _OrdersScreenState extends State<OrdersScreen>
     final isCurrent = _tabController.index == 0;
     final status = isCurrent ? 1 : 0;
 
-    orderCubit.changeOrderCurrent(isCurrent);
+    orderCubit.changeOrderCurrent();
     orderCubit.getOrders(status); // يجلب فقط إذا كانت غير موجودة
   }
 

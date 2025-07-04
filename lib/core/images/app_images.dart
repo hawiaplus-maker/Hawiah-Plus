@@ -32,4 +32,5 @@ class AppImages {
   static const String phone = 'assets/images/phone.png';
   static const String support = 'assets/images/support.png';
   static const String send = 'assets/images/send.png';
+  static const String orderIcon = 'assets/icons/orders_icon.png';
 }
