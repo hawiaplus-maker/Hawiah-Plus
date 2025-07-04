@@ -53,7 +53,7 @@ class OrderCubit extends Cubit<OrderState> {
       data: null,
     );
     _orders = null;
-    emit(OrderChange());
+    emit(OrderLoading());
     _ordersResponse = await ApiHelper.instance.get(
       Urls.orders(orderStatus),
     );
