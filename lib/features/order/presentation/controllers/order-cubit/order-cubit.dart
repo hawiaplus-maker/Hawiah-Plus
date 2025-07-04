@@ -12,15 +12,13 @@ class OrderCubit extends Cubit<OrderState> {
 
   OrderCubit() : super(OrderInitial());
 
-  changeRebuild() {
-    emit(OrderChange());
-  }
-
   bool isOrderCurrent = true;
-  void changeOrderCurrent() {
-    isOrderCurrent = !isOrderCurrent;
-    emit(OrderChange());
-  }
+
+  OrdersModel? _currentOrders;
+  OrdersModel? _oldOrders;
+
+  OrdersModel? _orders;
+  OrdersModel? get orders => _orders;
 
   CalendarFormat calendarFormat = CalendarFormat.month;
   RangeSelectionMode rangeSelectionMode = RangeSelectionMode.toggledOn;
@@ -28,41 +26,49 @@ class OrderCubit extends Cubit<OrderState> {
   DateTime? selectedDay;
   DateTime? rangeStart;
   DateTime? rangeEnd;
+
+  void changeRebuild() => emit(OrderChange());
+
+  void changeOrderCurrent(bool value) {
+    isOrderCurrent = value;
+    _orders = isOrderCurrent ? _currentOrders : _oldOrders;
+    emit(OrderChange());
+  }
+
   void initialOrders() {
-    _ordersResponse = ApiResponse(
-      state: ResponseState.sleep,
-      data: null,
-    );
+    _currentOrders = null;
+    _oldOrders = null;
     _orders = null;
     emit(OrderChange());
   }
 
-  ApiResponse _ordersResponse = ApiResponse(
-    state: ResponseState.sleep,
-    data: null,
-  );
-  ApiResponse get ordersResponse => _ordersResponse;
-
-  OrdersModel? _orders;
-  OrdersModel? get orders => _orders;
-
   Future<void> getOrders(int orderStatus) async {
-    emit(OrderLoading());
-    _ordersResponse = ApiResponse(
-      state: ResponseState.loading,
-      data: null,
-    );
-    _orders = null;
-    emit(OrderLoading());
-    _ordersResponse = await ApiHelper.instance.get(
-      Urls.orders(orderStatus),
-    );
-    emit(OrderChange());
+    if (orderStatus == 1 && _currentOrders != null) {
+      _orders = _currentOrders;
+      emit(OrderSuccess(ordersModel: _orders!));
+      return;
+    } else if (orderStatus == 0 && _oldOrders != null) {
+      _orders = _oldOrders;
+      emit(OrderSuccess(ordersModel: _orders!));
+      return;
+    }
 
-    if (_ordersResponse.state == ResponseState.complete) {
-      _orders = OrdersModel.fromJson(_ordersResponse.data);
-      emit(OrderSuccess(ordersModel: _orders));
-    } else if (_ordersResponse.state == ResponseState.unauthorized) {
+    emit(OrderLoading());
+
+    final response = await ApiHelper.instance.get(Urls.orders(orderStatus));
+
+    if (response.state == ResponseState.complete) {
+      final result = OrdersModel.fromJson(response.data);
+      _orders = result;
+
+      if (orderStatus == 1) {
+        _currentOrders = result;
+      } else {
+        _oldOrders = result;
+      }
+
+      emit(OrderSuccess(ordersModel: result));
+    } else {
       emit(OrderError());
     }
   }

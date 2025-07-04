@@ -19,7 +19,7 @@ class GlobalElevatedButton extends StatelessWidget {
     this.textColor = Colors.white,
     this.icon,
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-    this.borderRadius = const BorderRadius.all(Radius.circular(20)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(10)),
     this.fixedWidth = 0.80,
     this.isLoading = false, // 80% width of the screen
   }) : super(key: key);

@@ -24,5 +24,11 @@ class AppImages {
   static const String noDataImage = 'assets/images/noDataImage.png';
   static const String exceptionImage = 'assets/images/exceptionImage.png';
   static const String addAddressImage = 'assets/images/addAddressImage.png';
-  static const String addressLocationIcon = 'assets/svg/addressLocationIcon.svg';
+  static const String addressLocationIcon =
+      'assets/svg/addressLocationIcon.svg';
+  static const String refreshCw = 'assets/images/refresh-cw-03.png';
+  static const String trendDown = 'assets/images/trend_down.png';
+  static const String phone = 'assets/images/phone.png';
+  static const String support = 'assets/images/support.png';
+  static const String send = 'assets/images/send.png';
 }

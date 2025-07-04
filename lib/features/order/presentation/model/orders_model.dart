@@ -42,6 +42,7 @@ class Data {
   int? discountValue;
   String? createdAt;
   String? product;
+  String? image;
   String? driver;
   String? driverMobile;
 
@@ -60,6 +61,7 @@ class Data {
       this.discountValue,
       this.createdAt,
       this.product,
+      this.image,
       this.driver,
       this.driverMobile});
 
@@ -78,6 +80,7 @@ class Data {
     discountValue = json['discount_value'];
     createdAt = json['created_at'];
     product = json['product'];
+    image = json['image'];
     driver = json['driver'];
     driverMobile = json['driver mobile'];
   }
@@ -98,6 +101,7 @@ class Data {
     data['discount_value'] = this.discountValue;
     data['created_at'] = this.createdAt;
     data['product'] = this.product;
+    data['image'] = this.image;
     data['driver'] = this.driver;
     data['driver mobile'] = this.driverMobile;
     return data;

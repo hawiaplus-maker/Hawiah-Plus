@@ -1,8 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/date_methods.dart';
 import 'package:hawiah_client/features/order/presentation/screens/current-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/old-order-screen.dart';
 
@@ -27,14 +30,20 @@ class _OrdersScreenState extends State<OrdersScreen>
     orderCubit = OrderCubit.get(context);
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(_handleTabChange);
+
+    // مبدئيًا نعتبر أنه في تبويب "حالية"
+    orderCubit.changeOrderCurrent(true);
     orderCubit.getOrders(1);
   }
 
   void _handleTabChange() {
     if (_tabController.indexIsChanging) return;
-    final status = _tabController.index == 0 ? 1 : 0;
-    orderCubit.changeOrderCurrent();
-    orderCubit.getOrders(status);
+
+    final isCurrent = _tabController.index == 0;
+    final status = isCurrent ? 1 : 0;
+
+    orderCubit.changeOrderCurrent(isCurrent);
+    orderCubit.getOrders(status); // يجلب فقط إذا كانت غير موجودة
   }
 
   @override
@@ -83,7 +92,7 @@ class _OrdersScreenState extends State<OrdersScreen>
           Expanded(
             child: BlocBuilder<OrderCubit, OrderState>(
               builder: (context, state) {
-                if (state is OrderLoading) {
+                if (state is OrderLoading && orderCubit.orders == null) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
@@ -92,18 +101,19 @@ class _OrdersScreenState extends State<OrdersScreen>
                       child: Text("حدث خطأ أثناء تحميل الطلبات"));
                 }
 
-                if (state is OrderEmpty) {
-                  return const Center(
-                      child: Text("لا توجد طلبات في هذا القسم"));
-                }
-
                 final orders = orderCubit.orders?.data ?? [];
 
                 return TabBarView(
                   controller: _tabController,
                   children: [
-                    _buildOrderList(orders, isCurrent: true),
-                    _buildOrderList(orders, isCurrent: false),
+                    _buildOrderList(
+                      orderCubit.orders?.data ?? [],
+                      isCurrent: true,
+                    ),
+                    _buildOrderList(
+                      orderCubit.orders?.data ?? [],
+                      isCurrent: false,
+                    ),
                   ],
                 );
               },
@@ -115,6 +125,10 @@ class _OrdersScreenState extends State<OrdersScreen>
   }
 
   Widget _buildOrderList(List<dynamic> orders, {required bool isCurrent}) {
+    if (orders.isEmpty) {
+      return const Center(child: Text("لا توجد طلبات في هذا القسم"));
+    }
+
     return ListView.builder(
       itemCount: orders.length,
       padding: const EdgeInsets.all(16),
@@ -125,8 +139,9 @@ class _OrdersScreenState extends State<OrdersScreen>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) =>
-                    isCurrent ? CurrentOrderScreen() : OldOrderScreen(),
+                builder: (_) => isCurrent
+                    ? CurrentOrderScreen(ordersDate: order)
+                    : OldOrderScreen(ordersDate: order),
               ),
             );
           },
@@ -148,10 +163,10 @@ class _OrdersScreenState extends State<OrdersScreen>
                 children: [
                   Row(
                     children: [
-                      Image.asset(
-                        'assets/images/car_image.png',
-                        width: 60,
-                        height: 60,
+                      CustomNetworkImage(
+                        imageUrl: order.image ?? "",
+                        height: 70.h,
+                        width: 70.h,
                       ),
                       const SizedBox(width: 10),
                       Column(
@@ -160,21 +175,38 @@ class _OrdersScreenState extends State<OrdersScreen>
                           Text(
                             order.product ?? '---',
                             style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            order.createdAt ?? '' ?? '',
+                            DateMethods.formatToFullData(
+                              DateTime.tryParse(order.createdAt ?? "") ??
+                                  DateTime.now(),
+                            ),
                             style: const TextStyle(
-                                color: Colors.black54, fontSize: 14),
+                              color: Colors.black54,
+                              fontSize: 14,
+                            ),
                           ),
                           const SizedBox(height: 5),
-                          Text(
-                            order.status ?? '',
-                            style: const TextStyle(
-                                color: Colors.grey, fontSize: 13),
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'حالة:',
+                                  style: AppTextStyle.text16_600,
+                                ),
+                                TextSpan(
+                                  text: order.status ?? '',
+                                  style: AppTextStyle.text16_500.copyWith(
+                                    color: AppColor.mainAppColor,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

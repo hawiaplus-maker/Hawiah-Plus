@@ -1,17 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hawiah_client/features/home/presentation/screens/qr-code-order-screen.dart';
-import 'package:hawiah_client/features/order/presentation/screens/extend-time-order-screen.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/date_methods.dart';
+import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
+import 'package:hawiah_client/features/order/presentation/screens/extend-time-order-screen.dart';
+import 'package:hawiah_client/features/order/presentation/widget/custom_list_item.dart';
+
 import '../../../../core/custom_widgets/global-elevated-button-widget.dart';
 
 class CurrentOrderScreen extends StatelessWidget {
+  const CurrentOrderScreen({
+    Key? key,
+    required this.ordersDate,
+  }) : super(key: key);
+  final Data ordersDate;
   @override
   Widget build(BuildContext context) {
+    final double totalPrice =
+        double.tryParse(ordersDate.totalPrice ?? "0") ?? 0;
+    final double vat = totalPrice * 0.15;
+    final double netTotal = totalPrice + vat;
     return Scaffold(
       appBar: AppBar(
-        title: Text('تفاصيل الطلب'),
+        title: Text(
+          'تفاصيل الطلب',
+          style: AppTextStyle.text20_700,
+        ),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_sharp,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -20,7 +47,6 @@ class CurrentOrderScreen extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.grey.shade50,
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Column(
@@ -33,42 +59,54 @@ class CurrentOrderScreen extends StatelessWidget {
                           child: Row(
                             children: [
                               // Vehicle Image
-                              Image.asset(
-                                'assets/images/car_image.png', // Replace with your image path
-                                width: 60,
-                                height: 60,
+                              CustomNetworkImage(
+                                imageUrl: ordersDate.image ?? "",
+                                fit: BoxFit.fill,
+                                height: 60.h,
+                                width: 60.w,
                               ),
                               SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "حاوية طبية",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
+                                    ordersDate.product ?? "",
+                                    style: AppTextStyle.text16_700,
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: ' طلب رقم:',
+                                          style:
+                                              AppTextStyle.text16_600.copyWith(
+                                            color: AppColor.blackColor
+                                                .withValues(alpha: 0.7),
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              ordersDate.referenceNumber ?? '',
+                                          style:
+                                              AppTextStyle.text16_500.copyWith(
+                                            color: AppColor.blackColor
+                                                .withValues(alpha: 0.7),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
+                                  SizedBox(height: 5.h),
                                   Text(
-                                    "صغيرة",
-                                    style: TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 14,
+                                    DateMethods.formatToFullData(
+                                      DateTime.tryParse(
+                                              ordersDate.createdAt ?? "") ??
+                                          DateTime.now(),
                                     ),
-                                  ),
-                                  Text(
-                                    'طلب رقم: 123652145',
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                  Text(
-                                    "12 نوفمبر, 2024",
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 13,
+                                    style: AppTextStyle.text16_600.copyWith(
+                                      color: AppColor.blackColor
+                                          .withValues(alpha: 0.3),
                                     ),
                                   ),
                                 ],
@@ -76,23 +114,19 @@ class CurrentOrderScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const QrCodeOrderScreen(),
-                              ),
-                            );
-                          },
-                          child: Column(
-                            children: [
-                              Image.asset("assets/icons/qr_example.png",
-                                  height: 40.0, width: 40.0),
-                              SizedBox(height: 4.0),
-                              Text('باركود الطلب',
-                                  style: TextStyle(fontSize: 13.0)),
-                            ],
+                        Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          child: Container(
+                            height: 50.h,
+                            width: 90.w,
+                            decoration: BoxDecoration(
+                              color: AppColor.whiteColor,
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: Text('', style: TextStyle(fontSize: 13.0)),
                           ),
                         ),
                       ],
@@ -102,15 +136,15 @@ class CurrentOrderScreen extends StatelessWidget {
                     margin:
                         EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GlobalElevatedButton(
                           icon: Image.asset(
-                            "assets/icons/twenty_four_icon.png",
+                            AppImages.refreshCw,
                             height: 20.0,
                             width: 20.0,
+                            color: Colors.white,
                           ),
-                          label: "تمديد المدة",
+                          label: 'إعادة الطلب ',
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -127,22 +161,21 @@ class CurrentOrderScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                           fixedWidth: 0.40, // 80% of the screen width
                         ),
-                        GlobalElevatedButton(
-                          icon: Image.asset(
-                            "assets/icons/unlink_svgrepo_icon.png",
-                            height: 20.0,
-                            width: 20.0,
-                            color: Colors.red,
-                          ),
-                          label: "إفراغ الحاوية",
-                          onPressed: () {},
-                          backgroundColor: Colors.white,
-                          textColor: Colors.red,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
-                          borderRadius: BorderRadius.circular(20),
-                          fixedWidth: 0.40, // 80% of the screen width
+                        Spacer(),
+                        Image.asset(
+                          AppImages.trendDown,
+                          height: 20.0,
+                          width: 20.0,
+                          color: Colors.red,
                         ),
+                        SizedBox(width: 10.0.w),
+                        Text(
+                          'إفراغ الحاوية',
+                          style: AppTextStyle.text16_600.copyWith(
+                            color: AppColor.redColor,
+                          ),
+                        ),
+                        Spacer(),
                       ],
                     ),
                   )
@@ -151,76 +184,77 @@ class CurrentOrderScreen extends StatelessWidget {
             ),
             SizedBox(height: 16.0),
             Container(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12.0),
               decoration: BoxDecoration(
                 color: Colors.grey.shade50,
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(12.0),
               ),
-              child: Row(
+              child: Column(
                 children: [
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "عبدالله علي",
-                          style: TextStyle(
-                              fontSize: 15.sp, color: Color(0xff545454)),
-                        ),
-                        Text(
-                          "س ل س - 2 5 1 7",
-                          style:
-                              TextStyle(fontSize: 18.sp, color: Colors.black),
-                        ),
-                        Text(
-                          "مرسيدس بنز أكتروس",
-                          style: TextStyle(
-                              fontSize: 15.sp, color: Color(0xff545454)),
-                        ),
-                        Row(
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(height: 10.h),
                             Text(
-                              "5.0",
-                              style: TextStyle(
-                                  fontSize: 15.sp, color: Color(0xff35363F)),
+                              ordersDate.driver ?? "",
+                              style: AppTextStyle.text16_700,
                             ),
-                            Icon(
-                              Icons.star,
-                              color: Color(0xffFCAF23),
-                              size: 15,
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Text(
+                              "س ل س - 2 5 1 7",
+                              style: AppTextStyle.text16_700,
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Text(
+                              "مرسيدس بنز أكتروس",
+                              style: AppTextStyle.text14_600
+                                  .copyWith(color: Color(0xff545454)),
                             ),
                           ],
+                        ),
+                      ),
+                      Image.asset(
+                        "assets/images/driver_image.PNG",
+                        height: 0.2.sh,
+                        width: 0.35.sw,
+                      )
+                    ],
+                  ),
+                  Container(
+                    height: 50.h,
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Color(0xffEEEEEE),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "إرسال رسالة ....",
+                          style: AppTextStyle.text14_500,
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Image.asset(
+                          AppImages.send,
+                          height: 30.h,
+                          width: 30.w,
                         )
                       ],
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/driver_image.PNG",
-                    height: 0.2.sh,
-                    width: 0.35.sw,
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: Color(0xffEEEEEE),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text("إرسال رسالة ...."),
-                  Image.asset(
-                    "assets/icons/send_message_icon.png",
-                    height: 30.h,
-                    width: 30.w,
-                  )
+                  SizedBox(height: 10.h),
                 ],
               ),
             ),
@@ -236,17 +270,17 @@ class CurrentOrderScreen extends StatelessWidget {
                       margin: EdgeInsets.symmetric(horizontal: 10),
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: Color(0xffEEEEEE),
+                        color: Color(0xffD9D9D9),
                         shape: BoxShape.circle,
                       ),
                       child: Image.asset(
-                        "assets/icons/call_us_icon.png",
+                        AppImages.phone,
                         height: 30.h,
                         width: 30.w,
                       ),
                     ),
                     SizedBox(height: 5),
-                    Text("تواصل مع الدعم", style: TextStyle(fontSize: 12.sp))
+                    Text("تواصل مع السائق", style: TextStyle(fontSize: 12.sp))
                   ],
                 ),
                 Column(
@@ -255,83 +289,62 @@ class CurrentOrderScreen extends StatelessWidget {
                       margin: EdgeInsets.symmetric(horizontal: 10),
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: Color(0xffEEEEEE),
+                        color: Color(0xffD9D9D9),
                         shape: BoxShape.circle,
                       ),
                       child: Image.asset(
-                        "assets/icons/phone_driver_icon.png",
+                        AppImages.support,
                         height: 30.h,
                         width: 30.w,
                       ),
                     ),
                     SizedBox(height: 5),
-                    Text("تواصل مع السائق", style: TextStyle(fontSize: 12.sp))
+                    Text("تواصل مع الدعم", style: TextStyle(fontSize: 12.sp))
                   ],
                 )
               ],
             ),
-            SizedBox(height: 16.0),
-            Divider(),
+            SizedBox(height: 60.0),
             Container(
-              decoration: BoxDecoration(
-                color: Colors.grey.shade50,
-                borderRadius: BorderRadius.circular(8.0),
-              ),
               child: Column(
                 children: [
-                  ListTile(
-                    title: Text('سعر الطلب'),
-                    trailing: Text('1000 ريال'),
+                  CustomListItem(
+                    title: 'سعر الطلب',
+                    subtitle: "${totalPrice.toStringAsFixed(2)} ريال",
                   ),
-                  ListTile(
-                    title: Text('مصاريف التوصيل'),
-                    trailing: Text('100 ريال'),
+                  SizedBox(height: 20),
+                  CustomListItem(
+                    title: 'ضريبة القيمة المضافة (15%)',
+                    subtitle: "${vat.toStringAsFixed(2)} ريال",
                   ),
-                  ListTile(
-                    title: Text('ضريبة القيمة المضافة (15%)'),
-                    trailing: Text('150 ريال'),
-                  ),
+                  SizedBox(height: 10),
                   Divider(),
-                  ListTile(
-                    title: Text(
-                      'الإجمالي الصافي',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    trailing: Text(
-                      '1250 ريال',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                  SizedBox(height: 10),
+                  CustomListItem(
+                    title: 'الإجمالي الصافي',
+                    subtitle: "${netTotal.toStringAsFixed(2)} ريال",
                   ),
-                  SizedBox(height: 16.0),
+                  SizedBox(height: 50.0),
                   Container(
                     alignment: Alignment.bottomCenter,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     child: GlobalElevatedButton(
                       label: "تحميل الفاتورة PDF",
                       onPressed: () {},
-                      backgroundColor: AppColor.mainAppColor,
+                      backgroundColor: Color(0xff1A3C98),
                       textColor: Colors.white,
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(10),
                       fixedWidth: 0.80, // 80% of the screen width
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 8.0),
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: GlobalElevatedButton(
-                label: "إلغاء الطلب",
-                onPressed: () {},
-                backgroundColor: Colors.white,
-                textColor: Colors.red,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                borderRadius: BorderRadius.circular(20),
-                fixedWidth: 0.80, // 80% of the screen width
-              ),
-            ),
+            SizedBox(height: 10.0),
           ],
         ),
       ),
