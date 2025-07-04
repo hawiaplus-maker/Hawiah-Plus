@@ -8,9 +8,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:hawiah_client/core/theme/app_colors.dart';
+
 import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
 
@@ -145,20 +146,7 @@ class _PersonalProfileCompletionScreenState
                           hintText: 'enter_your_password'.tr(),
                           // obscureText: !passwordVisibleCompleteProfile,
                           // hasSuffixIcon: true,
-                          suffixIcon: IconButton(
-                            icon: Image.asset(
-                              passwordVisibleCompleteProfile
-                                  ? 'assets/icons/eye_password_icon.png'
-                                  : 'assets/icons/eye_hide_password_icon.png',
-                              color: Theme.of(context).primaryColorDark,
-                              height: 24.0,
-                              width: 24.0,
-                            ),
-                            onPressed: () {
-                              authCubit
-                                  .togglePasswordVisibilityCompleteProfile();
-                            },
-                          ),
+                          isPassword: true,
                           onChanged: (value) {
                             setState(() {
                               authCubit.passwordController.text = value;
@@ -173,20 +161,7 @@ class _PersonalProfileCompletionScreenState
                           hintText: 'enter_your_password'.tr(),
                           // obscureText: !passwordVisibleCompleteProfile,
                           // hasSuffixIcon: true,
-                          suffixIcon: IconButton(
-                            icon: Image.asset(
-                              passwordVisibleCompleteProfile
-                                  ? 'assets/icons/eye_password_icon.png'
-                                  : 'assets/icons/eye_hide_password_icon.png',
-                              color: Theme.of(context).primaryColorDark,
-                              height: 24.0,
-                              width: 24.0,
-                            ),
-                            onPressed: () {
-                              authCubit
-                                  .togglePasswordVisibilityCompleteProfile();
-                            },
-                          ),
+                          isPassword: true,
                           onChanged: (value) {
                             setState(() {
                               authCubit.confirmPasswordController.text = value;
@@ -209,11 +184,11 @@ class _PersonalProfileCompletionScreenState
                                   );
                             }
                           },
-                          backgroundColor: AppColor.mainAppColor,
-                          textColor: Colors.white,
+                          backgroundColor: AppColor.selectedLightBlueColor,
+                          textColor: AppColor.mainAppColor,
                           padding: EdgeInsets.symmetric(
                               horizontal: 20, vertical: 12),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(12),
                           fixedWidth: 0.80, // 80% width of the screen
                         ),
                         SizedBox(height: 20.h),
@@ -236,28 +211,27 @@ class _PersonalProfileCompletionScreenState
               fontSize: 16.0,
             );
             AwesomeDialog(
-                context: context,
-                dialogType: DialogType.noHeader,
-                animType: AnimType.rightSlide,
-                customHeader: Image.asset(
-                  'assets/images/complete_register.png',
-                  height: 80,
-                  width: 80,
-                ),
-                title: "account_created_successfully".tr(),
-                desc: "can_now_browse_services".tr(),
-                btnOkOnPress: () {
-                  Navigator.pushAndRemoveUntil<void>(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) => const LoginScreen(),
-                    ),
-                    (route) => false,
-                  );
-                },
-                btnOkText: "continue_to_homepage".tr(),
-                btnOkColor: AppColor.mainAppColor)
-              ..show();
+              context: context,
+              dialogType: DialogType.noHeader,
+              animType: AnimType.rightSlide,
+              customHeader: Image.asset(
+                'assets/images/complete_register.png',
+                height: 80,
+                width: 80,
+              ),
+              title: "account_created_successfully".tr(),
+              desc: "can_now_browse_services".tr(),
+              btnOkOnPress: () {
+                Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const LoginScreen(),
+                  ),
+                  (route) => false,
+                );
+              },
+              btnOkText: "continue_to_homepage".tr(),
+              btnOkColor: Color(0xff2204AE), 
+            )..show();
           }
           if (state is AuthError) {
             Fluttertoast.showToast(

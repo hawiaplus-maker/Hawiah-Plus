@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 
@@ -49,8 +50,8 @@ class RegisterButtonWidget extends StatelessWidget {
                     );
                   }
                 },
-          backgroundColor: Color.fromARGB(255, 183, 201, 250).withOpacity(.7),
-          textColor: Color(0xff1A3C98),
+          backgroundColor: AppColor.selectedLightBlueColor,
+          textColor: AppColor.mainAppColor,
           padding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
           borderRadius: BorderRadius.circular(10),
           fixedWidth: 0.9,
