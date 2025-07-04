@@ -23,4 +23,5 @@ class AppLocaleKey {
   static const String language = 'language';
   static const String city = 'city';
   static const String neighborhood = 'neighborhood';
+  static const String youMustLogInFirst = 'youMustLogInFirst';
 }

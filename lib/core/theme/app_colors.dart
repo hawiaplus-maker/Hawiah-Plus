@@ -31,10 +31,10 @@ class AppColor {
         light: const Color(0xffFAFAFA),
         dark: const Color(0xffFAFAFA),
       );
-  // static Color get appBarColor => AppTheme.getByTheme(
-  //   light: const Color(0xffFEC23C),
-  //   dark: const Color(0xffFEC23C),
-  // );
+  static Color get cardColor => AppTheme.getByTheme(
+    light: const Color(0xffE5E7FE),
+    dark: const Color(0xffE5E7FE),
+  );
   static Color get bottomNavColor => AppTheme.getByTheme(
         light: const Color(0xff2204AE),
         dark: const Color(0xff2204AE),
@@ -103,8 +103,8 @@ class AppColor {
       );
 
   static Color get greenColor => AppTheme.getByTheme(
-        light: const Color(0xff64AF30),
-        dark: const Color(0xff64AF30),
+        light: const Color(0xff5FB95F),
+        dark: const Color(0xff5FB95F),
       );
 
   static Color get blackColor => AppTheme.getByTheme(

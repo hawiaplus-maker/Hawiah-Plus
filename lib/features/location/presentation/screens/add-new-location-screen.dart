@@ -1,3 +1,6 @@
+// add_new_location_screen.dart
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,8 +17,12 @@ import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_state.dart';
 import 'package:hawiah_client/features/location/presentation/screens/map_screen.dart';
+import 'package:hawiah_client/features/location/service/location_service.dart';
+import 'package:location/location.dart';
 
 class AddNewLocationScreen extends StatefulWidget {
+  static const String routeName = '/addNewLocation';
+
   const AddNewLocationScreen({super.key});
 
   @override
@@ -23,185 +30,301 @@ class AddNewLocationScreen extends StatefulWidget {
 }
 
 class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController titleController = TextEditingController();
+  final LocationService locationService = LocationService();
+  final Completer<GoogleMapController> mapController = Completer();
+
   int? selectedCity;
   int? selectedNeighborhood;
-  double? latitude;
-  double? longitude;
-  String? address;
+  LatLng? currentPosition;
+  String currentAddress = "Getting location...";
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeLocation();
+  }
+
+  Future<void> _initializeLocation() async {
+    final LocationData? location = await locationService.getCurrentLocation();
+    if (location != null && mounted) {
+      setState(() {
+        currentPosition = LatLng(location.latitude!, location.longitude!);
+        currentAddress = "${location.latitude}, ${location.longitude}";
+      });
+      _updateCameraPosition();
+    }
+  }
+
+  Future<void> _updateCameraPosition() async {
+    if (currentPosition != null) {
+      final GoogleMapController controller = await mapController.future;
+      controller.animateCamera(
+        CameraUpdate.newLatLng(currentPosition!),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    locationService.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => AddressCubit()..getcitys(),
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              "إضافة عنوان جديد",
-              style: TextStyle(color: Colors.black),
-            ),
-            centerTitle: true,
+      create: (BuildContext context) => AddressCubit()..getcitys(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "إضافة عنوان جديد",
+            style: TextStyle(color: Colors.black),
           ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: SingleChildScrollView(
+          centerTitle: true,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: SingleChildScrollView(
+            child: Form(
+              key: formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "العنوان الحالي",
-                    style: TextStyle(color: Colors.black, fontSize: 15.sp),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15.sp,
+                    ),
                   ),
                   SizedBox(height: 10.h),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Color(0xffF9F9F9),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color(0xffF9F9F9)),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/icons/location_map_icon.png",
-                          height: 20,
-                          width: 20,
-                        ),
-                        SizedBox(width: 10.w),
-                        Expanded(
-                          child: Text(
-                            "شارع الملك عمر بن عبد العزيز, RUQA 1523",
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 15.sp),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _buildCurrentAddress(),
                   SizedBox(height: 10.h),
                   CustomTextField(
+                    controller: titleController,
                     labelText: "العنوان",
-                    hintText: "العنوان",
-                    initialValue: "",
-                    onChanged: (value) => {},
+                    onChanged: (String value) => {},
                   ),
                   SizedBox(height: 20.h),
-                  BlocConsumer<AddressCubit, AddressState>(
-                      listener: (context, state) {
-                    if (state is AddressError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.message)),
-                      );
-                    }
-                  }, builder: (context, state) {
-                    final address = BlocProvider.of<AddressCubit>(context);
-                    return ApiResponseWidget(
-                      loadingWidget: SizedBox(),
-                      apiResponse: address.citysResponse,
-                      onReload: () => address.getcitys(),
-                      isEmpty: address.citys.isEmpty,
-                      child: Column(
-                        children: [
-                          CustomSingleSelect(
-                            hintText: AppLocaleKey.city.tr(),
-                            value: selectedCity,
-                            items: address.citys
-                                .map((e) => CustomSelectItem(
-                                      name: e.title ?? "",
-                                      value: e.id,
-                                    ))
-                                .toList(),
-                            onChanged: (v) {
-                              context.read<AddressCubit>().getneighborhoods(v);
-                              setState(() {
-                                selectedCity = v;
-                                selectedNeighborhood =
-                                    null; // Reset neighborhood selection
-                              });
-                            },
-                          ),
-                          SizedBox(height: 20.h),
-                          CustomSingleSelect(
-                            hintText: AppLocaleKey.neighborhood.tr(),
-                            apiResponse: address.neighborhoodsResponse,
-                            value: selectedNeighborhood,
-                            items: address.neighborhoods
-                                .map((e) => CustomSelectItem(
-                                      name: e.title ?? "",
-                                      value: e.id,
-                                    ))
-                                .toList(),
-                            onChanged: (v) {
-                              setState(() {
-                                selectedNeighborhood = v;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
+                  _buildLocationSelectors(),
                   SizedBox(height: 20.h),
-                  Container(
-                    height: 300.h,
-                    child: GoogleMap(
-                      onTap: (argument) {
-                        NavigatorMethods.pushNamed(context, MapScreen.routeName,
-                            arguments: MapScreenArgs(
-                              onLocationSelected: (lat, lng, locality) {},
-                            ));
-                      },
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(24.7136, 46.6753),
-                        zoom: 12,
-                      ),
-                      markers: Set<Marker>.of([
-                        Marker(
-                          markerId: MarkerId("1"),
-                          position: LatLng(24.7136, 46.6753),
-                        ),
-                      ]),
-                    ),
-                  ),
+                  _buildMapSection(),
                 ],
               ),
             ),
           ),
-          bottomNavigationBar: Column(
-            mainAxisSize: MainAxisSize.min,
+        ),
+        bottomNavigationBar: _buildBottomActions(),
+      ),
+    );
+  }
+
+  Widget _buildCurrentAddress() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+        color: const Color(0xffF9F9F9),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xffF9F9F9)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            "assets/icons/location_map_icon.png",
+            height: 20,
+            width: 20,
+          ),
+          SizedBox(width: 10.w),
+          Expanded(
+            child: Text(
+              currentAddress,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15.sp,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLocationSelectors() {
+    return BlocConsumer<AddressCubit, AddressState>(
+      listener: (BuildContext context, AddressState state) {
+        if (state is AddressError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      builder: (BuildContext context, AddressState state) {
+        final AddressCubit addressCubit = context.read<AddressCubit>();
+        return ApiResponseWidget(
+          loadingWidget: const SizedBox(),
+          apiResponse: addressCubit.citysResponse,
+          onReload: () => addressCubit.getcitys(),
+          isEmpty: addressCubit.citys.isEmpty,
+          child: Column(
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/icons/check_icon.png",
-                    height: 20,
-                    width: 20,
-                  ),
-                  SizedBox(width: 10.w),
-                  Text(
-                    "جعل هذا العنوان عنواني الإفتراضي",
-                    style: TextStyle(color: Colors.black, fontSize: 15.sp),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-              GlobalElevatedButton(
-                label: "إضافة العنوان",
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+              CustomSingleSelect(
+                hintText: AppLocaleKey.city.tr(),
+                value: selectedCity,
+                items: addressCubit.citys
+                    .map((e) => CustomSelectItem(
+                          name: e.title ?? "",
+                          value: e.id,
+                        ))
+                    .toList(),
+                onChanged: (v) {
+                  if (v != null) {
+                    context.read<AddressCubit>().getneighborhoods(v);
+                    setState(() {
+                      selectedCity = v;
+                      selectedNeighborhood = null;
+                    });
+                  }
                 },
-                backgroundColor: AppColor.mainAppColor,
-                textColor: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                borderRadius: BorderRadius.circular(10),
-                fixedWidth: 0.80, // 80% of the screen width
               ),
               SizedBox(height: 20.h),
+              CustomSingleSelect(
+                hintText: AppLocaleKey.neighborhood.tr(),
+                apiResponse: addressCubit.neighborhoodsResponse,
+                value: selectedNeighborhood,
+                items: addressCubit.neighborhoods
+                    .map((e) => CustomSelectItem(
+                          name: e.title ?? "",
+                          value: e.id,
+                        ))
+                    .toList(),
+                onChanged: (v) {
+                  if (v != null) {
+                    setState(() {
+                      selectedNeighborhood = v;
+                    });
+                  }
+                },
+              ),
             ],
           ),
-        ));
+        );
+      },
+    );
+  }
+
+  Widget _buildMapSection() {
+    return SizedBox(
+      height: 300.h,
+      child: GoogleMap(
+        onMapCreated: (GoogleMapController controller) {
+          mapController.complete(controller);
+        },
+        onTap: (LatLng argument) async {
+          NavigatorMethods.pushNamed(context, MapScreen.routeName,
+              arguments: MapScreenArgs(
+            onLocationSelected: (lat, lng, locality) {
+              safeLocationSelected(lat, lng, locality);
+            },
+          ));
+
+          _updateCameraPosition();
+        },
+        initialCameraPosition: CameraPosition(
+          target: currentPosition ?? const LatLng(24.7136, 46.6753),
+          zoom: 12,
+        ),
+        markers: currentPosition != null
+            ? <Marker>{
+                Marker(
+                  markerId: const MarkerId("currentLocation"),
+                  position: currentPosition!,
+                ),
+              }
+            : <Marker>{},
+      ),
+    );
+  }
+
+  Widget _buildBottomActions() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/icons/check_icon.png",
+              height: 20,
+              width: 20,
+            ),
+            SizedBox(width: 10.w),
+            Text(
+              "جعل هذا العنوان عنواني الإفتراضي",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15.sp,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 20.h),
+        GlobalElevatedButton(
+          label: "إضافة العنوان",
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              _saveAddress();
+            }
+          },
+          backgroundColor: AppColor.mainAppColor,
+          textColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          borderRadius: BorderRadius.circular(10),
+          fixedWidth: 0.80,
+        ),
+        SizedBox(height: 20.h),
+      ],
+    );
+  }
+
+  void _saveAddress() {
+    if (currentPosition == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please select a location on the map")),
+      );
+      return;
+    }
+
+    if (selectedNeighborhood == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please select a neighborhood")),
+      );
+      return;
+    }
+
+    context.read<AddressCubit>().storeAddress(
+          title: titleController.text,
+          latitude: currentPosition!.latitude,
+          longitude: currentPosition!.longitude,
+          neighborhoodId: selectedNeighborhood!,
+          onSuccess: () => Navigator.pop(context),
+        );
+  }
+
+  void safeLocationSelected(double lat, double lng, String locality) {
+    if (!mounted) return;
+
+    setState(() {
+      currentPosition = LatLng(lat, lng); // Create new instance
+      currentAddress = locality;
+      _updateCameraPosition();
+    });
   }
 }
+
+// Additional strongly typed models

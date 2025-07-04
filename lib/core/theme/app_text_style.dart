@@ -6,8 +6,8 @@ import 'app_colors.dart';
 
 class AppTextStyle {
   static TextStyle get appBarStyle => TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
+        fontSize: 24,
+        fontWeight: FontWeight.w700,
         color: AppColor.appBarTextColor,
         fontFamily: genContext.fontFamily(),
       );
