@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/order/presentation/screens/current-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/old-order-screen.dart';
 
@@ -18,8 +19,9 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   @override
+  int? orderStatus;
   void initState() {
-    OrderCubit.get(context).getOrders(1);
+    OrderCubit.get(context).getOrders(orderStatus ?? 1);
     super.initState();
   }
 
@@ -27,31 +29,33 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("الطلبات".tr()),
+        title: Text("الطلبات".tr(), style: AppTextStyle.text20_700),
         centerTitle: true,
       ),
       body: BlocConsumer<OrderCubit, OrderState>(
         builder: (BuildContext context, OrderState state) {
           final orderCubit = OrderCubit.get(context);
           bool isActive = orderCubit.isOrderCurrent;
+          orderStatus = isActive ? 1 : 0;
           return Column(
             children: [
               Center(
                 child: GestureDetector(
                   onTap: () {
                     orderCubit.changeOrderCurrent();
+                    orderStatus = orderCubit.isOrderCurrent ? 1 : 0;
+                    orderCubit.getOrders(orderStatus!);
                   },
                   child: AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
-                    width: 0.8.sw,
+                    duration: Duration(milliseconds: 100),
+                    width: 0.9.sw,
                     height: 50.h,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(30),
+                      color: AppColor.selectedLightBlueColor,
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Stack(
                       children: [
-                        // "انتهت" Text
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(

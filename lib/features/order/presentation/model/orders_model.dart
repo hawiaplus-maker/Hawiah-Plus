@@ -36,6 +36,7 @@ class Data {
   int? orderStatus;
   String? status;
   int? priceId;
+  int? duration;
   String? totalPrice;
   int? discount;
   int? discountValue;
@@ -53,6 +54,7 @@ class Data {
       this.orderStatus,
       this.status,
       this.priceId,
+      this.duration,
       this.totalPrice,
       this.discount,
       this.discountValue,
@@ -67,9 +69,10 @@ class Data {
     address = json['address'];
     latitude = json['latitude'];
     longitude = json['longitude'];
-    orderStatus = json['order status'];
+    orderStatus = json['order_status'];
     status = json['status'];
     priceId = json['price_id'];
+    duration = json['duration'];
     totalPrice = json['total_price'];
     discount = json['discount'];
     discountValue = json['discount_value'];
@@ -86,9 +89,10 @@ class Data {
     data['address'] = this.address;
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
-    data['order status'] = this.orderStatus;
+    data['order_status'] = this.orderStatus;
     data['status'] = this.status;
     data['price_id'] = this.priceId;
+    data['duration'] = this.duration;
     data['total_price'] = this.totalPrice;
     data['discount'] = this.discount;
     data['discount_value'] = this.discountValue;

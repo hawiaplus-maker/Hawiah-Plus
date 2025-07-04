@@ -54,14 +54,14 @@ class OrderCubit extends Cubit<OrderState> {
     );
     _orders = null;
     emit(OrderChange());
-    _ordersResponse =
-        await ApiHelper.instance.get("${Urls.orders}", queryParameters: {
-      "order_status": orderStatus,
-    });
+    _ordersResponse = await ApiHelper.instance.get(
+      Urls.orders(orderStatus),
+    );
     emit(OrderChange());
+
     if (_ordersResponse.state == ResponseState.complete) {
-      _orders = OrdersModel.fromJson(_ordersResponse.data['data']);
-      emit(OrderSuccess());
+      _orders = OrdersModel.fromJson(_ordersResponse.data);
+      emit(OrderSuccess(ordersModel: _orders));
     } else if (_ordersResponse.state == ResponseState.unauthorized) {
       emit(OrderError());
     }
