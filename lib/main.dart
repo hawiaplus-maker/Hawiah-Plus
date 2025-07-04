@@ -10,7 +10,6 @@ import 'package:hawiah_client/core/bloc-config/bloc_providers.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/routes/app_routers_import.dart';
 import 'package:hawiah_client/core/theme/cubit/app_theme_cubit.dart';
-import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/features/splash/presentation/screens/splash-screen.dart';
 import 'package:hawiah_client/injection_container.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -69,7 +68,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    genContext = CommonMethods.navigatorKey.currentContext ?? context;
+    genContext = AppRouters.navigatorKey.currentContext ?? context;
     //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
     return ScreenUtilInit(
       designSize: const Size(381, 828),

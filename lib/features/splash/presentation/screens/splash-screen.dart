@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/app-language/presentation/screens/app-language-screen.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
@@ -27,11 +28,9 @@ class _SplashScreenState extends State<SplashScreen> {
     cubit.fetchProfile(
       onSuccess: () {
         log("Navigation to LayoutScreen");
-        Navigator.pushReplacement(
+        NavigatorMethods.pushReplacementNamed(
           context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  const LayoutScreen()), // replace with your next screen
+          LayoutScreen.routeName,
         );
       },
       onError: () {
