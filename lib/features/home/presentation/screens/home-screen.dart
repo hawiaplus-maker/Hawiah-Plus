@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_shimmer.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/home/presentation/screens/home-new-order-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
@@ -20,13 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    // Fetch categories and profile early
-    context.read<HomeCubit>().getCategories();
-    context.read<ProfileCubit>().fetchProfile();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +92,11 @@ class _HomeScreenState extends State<HomeScreen> {
               child: SizedBox(
                 height: 40.h,
                 width: 40.w,
-                child: CircularProgressIndicator(),
+                child: CustomShimmer(
+                  height: 10.h,
+                  width: 50.w,
+                  shimmerColor: AppColor.lightGreyColor,
+                ),
               ),
             );
           },
@@ -139,28 +139,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Image.network(
-                              homeCubit.categorieS?.message?[index].image ?? '',
+                            CustomNetworkImage(
                               height: 70.h,
                               width: 70.w,
-                              fit: BoxFit.fill,
-                              loadingBuilder: (ctx, child, progress) {
-                                if (progress == null) return child;
-                                return SizedBox(
-                                  height: 70.h,
-                                  width: 70.w,
-                                  child: Center(
-                                      child: CircularProgressIndicator(
-                                          strokeWidth: 2)),
-                                );
-                              },
-                              errorBuilder: (ctx, err, st) => Container(
-                                height: 70.h,
-                                width: 70.w,
-                                color: Colors.grey[100],
-                                child: Icon(Icons.broken_image,
-                                    color: Colors.grey),
-                              ),
+                              imageUrl:
+                                  homeCubit.categorieS?.message?[index].image ??
+                                      '',
+                              fit: BoxFit.contain,
                             ),
                             SizedBox(
                               width: 20.h,
@@ -195,11 +180,7 @@ class SliderWidgets extends StatefulWidget {
 }
 
 class _SliderWidgetsState extends State<SliderWidgets> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<SettingCubit>().getsetting();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -207,8 +188,10 @@ class _SliderWidgetsState extends State<SliderWidgets> {
     final imagePath = langCode == 'ar'
         ? context.read<SettingCubit>().setting?.sliderImage?.ar
         : context.read<SettingCubit>().setting?.sliderImage?.en;
-    final fullImageUrl = 'https://hawia-sa.com/$imagePath';
     return BlocBuilder<SettingCubit, SettingState>(builder: (context, state) {
+      final fullImageUrl2 =
+          "https://hawia-sa.com/${SettingCubit.get(context).setting?.sliderImage?.en}";
+
       return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -217,7 +200,7 @@ class _SliderWidgetsState extends State<SliderWidgets> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: CustomNetworkImage(
-            imageUrl: fullImageUrl,
+            imageUrl: fullImageUrl2,
             height: 200.h,
             width: double.infinity,
           ),

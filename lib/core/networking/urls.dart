@@ -34,4 +34,6 @@ class Urls {
   static const String completeRegister = '${baseUrl}complete-register';
   static const String onBoarding = '${baseUrl}on-boarding';
   static const String orders = '${baseUrl}users/user-orders';
+  static const String cities = '${baseUrl}cities';
+  static String neighborhoodsByCity(int id) => '${baseUrl}neighborhoods/$id';
 }

@@ -125,6 +125,10 @@
   "confirm_address": "تأكيد العنوان",
   "order_details": "تفاصيل الطلب",
   "cancel_order": "إلغاء الطلب",
-  "back_order": "الرجوع للطلب"
+  "back_order": "الرجوع للطلب",
+  "city":"المدينة",
+  "neighborhood":"الحي",
+  "address":"العنوان"
+ 
 
 }

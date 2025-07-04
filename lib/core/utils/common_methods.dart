@@ -1,36 +1,347 @@
-import 'dart:async';
-
+import 'package:bot_toast/bot_toast.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:gap/gap.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_select/custom_select_item.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_toast.dart';
+import 'package:hawiah_client/core/routes/app_routers_import.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+
+
+import '../../main.dart';
+
+import '../extension/context_extension.dart';
+import '../hive/hive_methods.dart';
+import '../locale/app_locale_key.dart';
+import '../networking/api_helper.dart';
+
+import '../theme/app_colors.dart';
 
 class CommonMethods {
-   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static void showAlertDialog({
+    String? title,
+    required String message,
+  }) {
+    showCupertinoDialog(
+      context: AppRouters.navigatorKey.currentContext!,
+      builder: (context) => CupertinoAlertDialog(
+        title: title != null
+            ? Text(
+                title,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: context.fontFamily(),
+                ),
+              )
+            : null,
+        content: Text(
+          message,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            fontFamily: context.fontFamily(),
+          ),
+        ),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: Text(
+              tr(AppLocaleKey.ok),
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                fontFamily: context.fontFamily(),
+              ),
+            ),
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static void showChooseDialog(
+    BuildContext context, {
+    String? title,
+    required String message,
+    required VoidCallback onPressed,
+    Widget? child,
+  }) {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: title != null
+            ? Text(
+                title,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: context.fontFamily(),
+                ),
+              )
+            : null,
+        content: Column(
+          children: [
+            Text(
+              message,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                fontFamily: context.fontFamily(),
+              ),
+            ),
+            if (child != null) ...{
+              const Gap(10),
+              child,
+            }
+          ],
+        ),
+        actions: [
+          CupertinoDialogAction(
+            child: Text(
+              tr(AppLocaleKey.no),
+              style: TextStyle(
+                color: AppColor.textPrimaryColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                fontFamily: context.fontFamily(),
+              ),
+            ),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          CupertinoDialogAction(
+            onPressed: onPressed,
+            child: Text(
+              tr(AppLocaleKey.yes),
+              style: TextStyle(
+                color: AppColor.textPrimaryColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                fontFamily: context.fontFamily(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static void showLoginFirstDialog(
+    BuildContext context, {
+    required VoidCallback onPressed,
+  }) {
+    if (HiveMethods.getToken() != null) {
+      onPressed.call();
+    } else {
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          content: Text(
+            tr(AppLocaleKey.pleaseLoginFirst),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              fontFamily: context.fontFamily(),
+            ),
+          ),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(
+                tr(AppLocaleKey.cancel),
+                style: TextStyle(
+                  color: AppColor.textPrimaryColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: context.fontFamily(),
+                ),
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            CupertinoDialogAction(
+              onPressed: () {
+                // NavigatorMethods.pushNamedAndRemoveUntil(
+                //   context,
+                //   LoginScreen.routeName,
+                // );
+              },
+              child: Text(
+                tr(AppLocaleKey.login),
+                style: TextStyle(
+                  color: AppColor.textPrimaryColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: context.fontFamily(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  static void showToast({
+    required String message,
+    String? title,
+    String? icon,
+    ToastType type = ToastType.success,
+    Color? backgroundColor,
+    Color? textColor,
+    int seconds = 3,
+  }) {
+    BotToast.showCustomText(
+      duration: Duration(seconds: seconds),
+      toastBuilder: (cancelFunc) => CustomToast(
+        type: type,
+        title: title,
+        message: message,
+        backgroundColor: backgroundColor,
+        icon: icon,
+        textColor: textColor,
+      ),
+    );
+  }
+
+  static void showError({
+    ApiResponse? apiResponse,
+    required String message,
+    String? title,
+    String? icon,
+    Color? backgroundColor,
+    Color? textColor,
+    int seconds = 3,
+  }) {
+    BotToast.showCustomText(
+      duration: Duration(seconds: seconds),
+      toastBuilder: (context) => CustomToast(
+        title: title,
+        message: message,
+        type: apiResponse?.state == ResponseState.offline
+            ? ToastType.offline
+            : ToastType.error,
+        backgroundColor: backgroundColor,
+        icon: icon,
+        textColor: textColor,
+      ),
+    );
+  }
+
+ 
 
   static Future<bool> hasConnection() async {
-    // Check for an active internet connection
-    bool result = await InternetConnection().hasInternetAccess;
-
-    if (!result) {
-      // Subscribe to changes and wait for a reconnection
-      final completer = Completer<bool>();
-      final subscription = InternetConnection().onStatusChange.listen((status) {
-        if (status == InternetStatus.connected) {
-          completer.complete(true); // Internet is now connected
-        }
-      });
-
-      // Add a timeout to prevent indefinite waiting
-      Future.delayed(const Duration(seconds: 5), () {
-        if (!completer.isCompleted) {
-          completer.complete(false); // No internet after timeout
-        }
-        subscription.cancel(); // Clean up the listener
-      });
-
-      // Return the result after either timeout or reconnection
-      result = await completer.future;
+    bool isConnected = await InternetConnectionChecker().hasConnection;
+    if (isConnected) {
+      return true;
+    } else {
+      return false;
     }
+  }
 
-    return result;
+  static List<CustomSelectItem> dropdownMenuItems = [
+    ...List.generate(
+      20,
+      (index) => {
+        'id': index,
+        'value': AppRouters.navigatorKey.currentContext!.apiTr(
+          ar: 'العنصر ${index + 1}',
+          en: 'Item ${index + 1}',
+        ),
+      },
+    ),
+  ]
+      .map(
+        (e) => CustomSelectItem(
+          value: int.tryParse(e['id'].toString()),
+          name: e['value']?.toString() ?? "",
+        ),
+      )
+      .toList();
+
+  static void changeLanguage(
+    BuildContext context, {
+    required VoidCallback onTap,
+  }) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: Text(
+          tr(AppLocaleKey.language),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            fontFamily: context.fontFamily(),
+          ),
+        ),
+        actions: [
+          CupertinoActionSheetAction(
+            isDefaultAction: true,
+            onPressed: () {
+              HiveMethods.updateLang(const Locale('ar'));
+              context.setLocale(const Locale('ar'));
+              onTap.call();
+              MyApp.setMyAppState(context);
+              Navigator.pop(context);
+            },
+            child: Text(
+              'العربية',
+              style: TextStyle(
+                fontFamily: context.fontFamilyAr(),
+                color: context.locale == const Locale('ar')
+                    ? AppColor.mainAppColor
+                    : AppColor.textPrimaryColor,
+              ),
+            ),
+          ),
+          CupertinoActionSheetAction(
+            isDefaultAction: true,
+            onPressed: () {
+              HiveMethods.updateLang(const Locale('en'));
+              context.setLocale(const Locale('en'));
+              onTap.call();
+              MyApp.setMyAppState(context);
+              Navigator.pop(context);
+            },
+            child: Text(
+              'English',
+              style: TextStyle(
+                fontFamily: context.fontFamilyEn(),
+                color: context.locale == const Locale('en')
+                    ? AppColor.mainAppColor
+                    : AppColor.textPrimaryColor,
+              ),
+            ),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          child: Text(
+            tr(AppLocaleKey.cancel),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              fontFamily: context.fontFamily(),
+            ),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+    );
+  }
+
+  static bool endScroll(ScrollEndNotification t, VoidCallback onEnd) {
+    if (t.metrics.pixels > 0 && t.metrics.atEdge) {
+      onEnd.call();
+    }
+    return true;
   }
 }

@@ -21,4 +21,6 @@ class AppImages {
   static const String onboarding1 = 'assets/icons/onboarding1.png';
   static const String supportIcon = 'assets/svg/support_icon.svg';
   static const String langIcon = 'assets/svg/langIcon.svg';
+  static const String noDataImage = 'assets/images/noDataImage.png';
+  static const String exceptionImage = 'assets/images/exceptionImage.png';
 }

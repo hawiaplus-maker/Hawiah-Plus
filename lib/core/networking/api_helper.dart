@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
+import 'package:hawiah_client/core/routes/app_routers_import.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
@@ -93,7 +94,7 @@ class ApiHelper {
 
   Map<String, String> _offlineMessage() {
     return {
-      'message': CommonMethods.navigatorKey.currentContext!.apiTr(
+      'message': AppRouters.navigatorKey.currentContext!.apiTr(
         ar: "تأكد من الاتصال بالإنترنت",
         en: "Make sure you are connected to the internet",
       ),
@@ -102,7 +103,7 @@ class ApiHelper {
 
   Map<String, String> _errorMessage() {
     return {
-      'message': CommonMethods.navigatorKey.currentContext!.apiTr(
+      'message': AppRouters.navigatorKey.currentContext!.apiTr(
         ar: "حدث خطأ",
         en: "An error occurred",
       ),

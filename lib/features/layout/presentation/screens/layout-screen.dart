@@ -1,13 +1,17 @@
-import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/features/explore/presentation/screens/explore-screen.dart';
+import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/screens/home-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/orders-screen.dart';
+import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/profile-screen.dart';
+import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 
 class LayoutScreen extends StatefulWidget {
+  static const routeName = '/layout-screen';
   const LayoutScreen({super.key});
 
   @override
@@ -15,6 +19,17 @@ class LayoutScreen extends StatefulWidget {
 }
 
 class _LayoutScreenState extends State<LayoutScreen> {
+  @override
+  void initState() {
+    Future.wait([
+      context.read<HomeCubit>().getCategories(),
+      context.read<ProfileCubit>().fetchProfile(),
+      context.read<SettingCubit>().getsetting()
+    ]);
+
+    super.initState();
+  }
+
   int selectedIndex = 0;
 
   final List<Widget> _screens = [
@@ -25,12 +40,6 @@ class _LayoutScreenState extends State<LayoutScreen> {
   ];
   @override
   Widget build(BuildContext context) {
-    const items = <TabItem>[
-      TabItem(icon: Icons.home),
-      TabItem(icon: Icons.location_on),
-      TabItem(icon: Icons.receipt_long),
-      TabItem(icon: Icons.person),
-    ];
     return Scaffold(
       extendBody: true,
       body: _screens[selectedIndex],

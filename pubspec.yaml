@@ -57,7 +57,8 @@ dependencies:
   geocoding: ^3.0.0
   location: ^7.0.0
   country_picker: ^2.0.26
-  
+  gap: ^3.0.1
+  internet_connection_checker: ^1.0.0+1
 dev_dependencies:
   flutter_test:
     sdk: flutter

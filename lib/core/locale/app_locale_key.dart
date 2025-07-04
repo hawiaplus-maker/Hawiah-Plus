@@ -14,5 +14,13 @@ class AppLocaleKey {
   static const String validateEmpty = 'validateEmpty';
   static const String mustEnterCoupon = 'mustEnterCoupon';
   static const String search = 'search';
-
+  static const String ok = 'ok';
+  static const String no = 'no';
+  static const String yes = 'yes';
+  static const String pleaseLoginFirst = 'pleaseLoginFirst';
+  static const String cancel = 'cancel';
+  static const String login = 'login';
+  static const String language = 'language';
+  static const String city = 'city';
+  static const String neighborhood = 'neighborhood';
 }
