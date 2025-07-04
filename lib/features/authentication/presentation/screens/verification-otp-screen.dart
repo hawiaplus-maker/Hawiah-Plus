@@ -5,11 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/company-profile-completion-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/personal-profile-completion-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/reset-password-screen.dart';
 import 'package:pinput/pinput.dart';
-import 'package:hawiah_client/core/theme/app_colors.dart';
+
 import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
 
@@ -63,45 +64,27 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
           final isResetPassword = authCubit.isResetPassword;
           return SafeArea(
             child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 15.w),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 20),
-                  isTimerCompleted
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "enterVerificationCode".tr(),
-                              style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              "verificationCodeSentResetPassword".tr(),
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.grey),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "enterVerificationCode".tr(),
-                              style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              "verificationCodeSent".tr(),
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.grey),
-                            ),
-                          ],
-                        ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "enterVerificationCode".tr(),
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "verificationCodeSentResetPassword".tr(),
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    ],
+                  ),
                   SizedBox(height: 30),
                   Directionality(
                     textDirection: context.locale.languageCode == 'ar'
@@ -126,95 +109,107 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                     ),
                   ),
                   SizedBox(height: 30),
-                  Pinput(
-                    controller: otpController,
-                    length: 5,
-                    onChanged: (value) {
-                      setState(() {
-                        isOtpValid = value.length == 5;
-                      });
-                    },
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    defaultPinTheme: PinTheme(
-                      width: 56,
-                      height: 56,
-                      textStyle: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: isOtpValid ? Colors.green : Colors.red,
-                          width: 2,
+                  Center(
+                    child: Pinput(
+                      controller: otpController,
+                      length: 5,
+                      onChanged: (value) {
+                        setState(() {
+                          isOtpValid = value.length == 5;
+                        });
+                      },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      defaultPinTheme: PinTheme(
+                        width: 56,
+                        height: 56,
+                        textStyle: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: isOtpValid ? Colors.green : Colors.red,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(height: 20),
                   authCubit.showInvalidCodeMessage
-                      ? Text(
-                          'كود غير صحيح، الرجاء المحاولة مرة أخرى',
-                          style: TextStyle(fontSize: 16, color: Colors.red),
+                      ? Center(
+                          child: Text(
+                            'كود غير صحيح، الرجاء المحاولة مرة أخرى',
+                            style: TextStyle(fontSize: 16, color: Colors.red),
+                          ),
                         )
-                      : Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'لم يصلك الرمز؟ إعادة الإرسال بعد ',
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.black),
-                              ),
-                              TextSpan(
-                                text:
-                                    '${authCubit.remainingTime < 10 ? "00:0${authCubit.remainingTime}" : "00:${authCubit.remainingTime}"}',
-                                style:
-                                    TextStyle(fontSize: 16, color: Colors.blue),
-                              ),
-                            ],
+                      : Center(
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'لم يصلك الرمز؟ إعادة الإرسال بعد ',
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black),
+                                ),
+                                TextSpan(
+                                  text:
+                                      '${authCubit.remainingTime < 10 ? "00:0${authCubit.remainingTime}" : "00:${authCubit.remainingTime}"}',
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.blue),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                   SizedBox(height: 20),
                   Spacer(),
-                  GlobalElevatedButton(
-                    label: "resend_code".tr(),
-                    onPressed: authCubit.isTimerCompleted
-                        ? () {
-                            authCubit.resetInvalidCodeMessage();
-                            authCubit.startTimer();
-                            otpController.clear();
-                            authCubit.resendCodeToApi(
-                              phoneNumber: widget.phoneNumber ?? "",
-                            );
-                          }
-                        : null,
-                    backgroundColor: AppColor.mainAppColor,
-                    textColor: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    borderRadius: BorderRadius.circular(20),
-                    fixedWidth: 0.80,
+                  Center(
+                    child: GlobalElevatedButton(
+                      label: "resend_code".tr(),
+                      onPressed: authCubit.isTimerCompleted
+                          ? () {
+                              authCubit.resetInvalidCodeMessage();
+                              authCubit.startTimer();
+                              otpController.clear();
+                              authCubit.resendCodeToApi(
+                                phoneNumber: widget.phoneNumber ?? "",
+                              );
+                            }
+                          : null,
+                      backgroundColor: AppColor.mainAppColor,
+                      textColor: Colors.white,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      borderRadius: BorderRadius.circular(20),
+                      fixedWidth: 0.80,
+                    ),
                   ),
                   SizedBox(height: 20),
-                  GlobalElevatedButton(
-                    label: "continue".tr(),
-                    onPressed: () {
-                      final otpText = otpController.text;
-                      if (otpText.length == 5) {
-                        AuthCubit.get(context).otp(
-                          phoneNumber: widget.phoneNumber!,
-                          otp: int.parse(otpText),
-                        );
-                      }
-                    },
-                    backgroundColor: Color(0xffEDEEFF),
-                    textColor: AppColor.mainAppColor,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    borderRadius: BorderRadius.circular(20),
-                    fixedWidth: 0.80, // 80% of the screen width
+                  Center(
+                    child: GlobalElevatedButton(
+                      label: "continue".tr(),
+                      onPressed: () {
+                        final otpText = otpController.text;
+                        if (otpText.length == 5) {
+                          AuthCubit.get(context).otp(
+                            phoneNumber: widget.phoneNumber!,
+                            otp: int.parse(otpText),
+                          );
+                        }
+                      },
+                      backgroundColor: Color(0xffEDEEFF),
+                      textColor: AppColor.mainAppColor,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      borderRadius: BorderRadius.circular(20),
+                      fixedWidth: 0.80, // 80% of the screen width
+                    ),
                   ),
                   SizedBox(height: 40),
                 ],

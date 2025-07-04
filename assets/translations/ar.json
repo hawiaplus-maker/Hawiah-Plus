@@ -90,7 +90,7 @@
   "setPasswordMessage": "لا تقلق أدخل جوالك لتعيين كلمة المرور",
   "setPassword": "تعيين كلمة المرور",
   "chooseVerificationMethod": "الرجاء إختيار طريقة ارسال كود التحقق",
-  "verificationCodeSentResetPassword": "لقد ارسلنا كود التحقق لتعيين كلمة المرور الخاصة بك عبر الجوال",
+  "verificationCodeSentResetPassword": "من فضلك ادخل رقم التحقق  المرسل الي هاتفك",
   "createNewPassword": "إنشاء كلمة مرور جديدة",
   "enterSecurePassword": "أدخل كلمة مرور آمنة وقوية لحماية حسابك",
   "contains8Characters": "يحتوي على 8 أحرف",
