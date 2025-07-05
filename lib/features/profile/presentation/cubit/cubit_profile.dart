@@ -44,7 +44,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> updateProfile({
     required String name,
-    required String username,
     String? mobile,
     required String email,
     File? imageFile,
@@ -56,7 +55,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       final data = <String, dynamic>{
         'name': name,
-        'username': username,
         'mobile': mobile,
         'email': email,
         'password': password,

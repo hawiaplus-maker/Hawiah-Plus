@@ -33,4 +33,9 @@ class AppImages {
   static const String support = 'assets/images/support.png';
   static const String send = 'assets/images/send.png';
   static const String orderIcon = 'assets/icons/orders_icon.png';
+  static const String facebookIcon = 'assets/images/facebook.png';
+  static const String instagram = 'assets/images/instagram.png';
+  static const String linkedin = 'assets/images/linkedin.png';
+  static const String twitter = 'assets/images/twitter.png';
+  static const String whatsapp = 'assets/images/whatsapp.png';
 }

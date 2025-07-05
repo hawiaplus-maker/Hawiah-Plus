@@ -16,11 +16,11 @@ class OrderCubit extends Cubit<OrderState> {
   static OrderCubit get(BuildContext context) => BlocProvider.of(context);
 
   OrderCubit() : super(OrderInitial());
-
   changeRebuild() {
     emit(OrderChange());
   }
 
+  // =================== UI Helpers ====================
   bool isOrderCurrent = true;
   void changeOrderCurrent() {
     isOrderCurrent = !isOrderCurrent;
@@ -33,50 +33,80 @@ class OrderCubit extends Cubit<OrderState> {
   DateTime? selectedDay;
   DateTime? rangeStart;
   DateTime? rangeEnd;
-  void initialOrders() {
-    _ordersResponse = ApiResponse(
-      state: ResponseState.sleep,
-      data: null,
-    );
-    _orders = null;
-    emit(OrderChange());
-  }
+
+  // =================== Orders ====================
+  OrdersModel? _orders;
+  OrdersModel? get orders => _orders;
+
+  List<Data>? currentOrders;
+  List<Data>? oldOrders;
 
   ApiResponse _ordersResponse = ApiResponse(
     state: ResponseState.sleep,
     data: null,
   );
-  ApiResponse get ordersResponse => _ordersResponse;
 
-  OrdersModel? _orders;
-  OrdersModel? get orders => _orders;
+  ApiResponse get ordersResponse => _ordersResponse;
 
   Future<void> getOrders(int orderStatus) async {
     emit(OrderLoading());
+
+    // ✅ لا تجلب البيانات من الـ API إن كانت موجودة مسبقاً
+    if (orderStatus == 1 && currentOrders != null) {
+      _orders = OrdersModel(data: currentOrders);
+      emit(OrderSuccess(ordersModel: _orders));
+      return;
+    }
+
+    if (orderStatus == 0 && oldOrders != null) {
+      _orders = OrdersModel(data: oldOrders);
+      emit(OrderSuccess(ordersModel: _orders));
+      return;
+    }
+
     _ordersResponse = ApiResponse(
       state: ResponseState.loading,
       data: null,
     );
-    _orders = null;
+
     emit(OrderLoading());
+
     _ordersResponse = await ApiHelper.instance.get(
       Urls.orders(orderStatus),
     );
+
     emit(OrderChange());
 
     if (_ordersResponse.state == ResponseState.complete) {
-      _orders = OrdersModel.fromJson(_ordersResponse.data);
-      emit(OrderSuccess(ordersModel: _orders));
+      final result = OrdersModel.fromJson(_ordersResponse.data);
+      _orders = result;
+
+      if (orderStatus == 1) {
+        currentOrders = result.data ?? [];
+      } else {
+        oldOrders = result.data ?? [];
+      }
+
+      emit(OrderSuccess(ordersModel: result));
     } else if (_ordersResponse.state == ResponseState.unauthorized) {
       emit(OrderError());
     }
   }
-  //================== get nearby provider ====================
 
-  Future<void> getNearbyProviders(
-      {required int catigoryId,
-      required int addressId,
-      required VoidCallback onSuccess}) async {
+  void initialOrders() {
+    _ordersResponse = ApiResponse(state: ResponseState.sleep, data: null);
+    _orders = null;
+    currentOrders = null;
+    oldOrders = null;
+    emit(OrderChange());
+  }
+
+  // =================== Nearby Providers ====================
+  Future<void> getNearbyProviders({
+    required int catigoryId,
+    required int addressId,
+    required VoidCallback onSuccess,
+  }) async {
     NavigatorMethods.loading();
     FormData body =
         FormData.fromMap({'product_id': catigoryId, 'address_id': addressId});
@@ -93,23 +123,24 @@ class OrderCubit extends Cubit<OrderState> {
       );
     } else {
       CommonMethods.showError(
-        message: response.data['message'] ?? 'حدث خطاء',
+        message: response.data['message'] ?? 'حدث خطأ',
         apiResponse: response,
       );
     }
   }
-  //?================== create order ====================
 
-  Future<void> createOrder(
-      {required int catigoryId,
-      required int serviceProviderId,
-      required int priceId,
-      required int addressId,
-      required String fromDate,
-      required double totalPrice,
-      required double price,
-      required double vatValue,
-      required VoidCallback onSuccess}) async {
+  // =================== Create Order ====================
+  Future<void> createOrder({
+    required int catigoryId,
+    required int serviceProviderId,
+    required int priceId,
+    required int addressId,
+    required String fromDate,
+    required double totalPrice,
+    required double price,
+    required double vatValue,
+    required VoidCallback onSuccess,
+  }) async {
     NavigatorMethods.loading();
     FormData body = FormData.fromMap({
       'product_id': catigoryId,
@@ -134,7 +165,7 @@ class OrderCubit extends Cubit<OrderState> {
       );
     } else {
       CommonMethods.showError(
-        message: response.data['message'] ?? 'حدث خطاء',
+        message: response.data['message'] ?? 'حدث خطأ',
         apiResponse: response,
       );
     }
