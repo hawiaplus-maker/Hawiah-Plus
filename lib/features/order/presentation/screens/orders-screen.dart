@@ -196,11 +196,13 @@ class _OrdersScreenState extends State<OrdersScreen>
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: 'حالة:',
+                                  text: 'حالة: ',
                                   style: AppTextStyle.text16_600,
                                 ),
                                 TextSpan(
-                                  text: order.status ?? '',
+                                  text: context.locale.languageCode == 'ar'
+                                      ? (order.status?.ar ?? '')
+                                      : (order.status?.en ?? ''),
                                   style: AppTextStyle.text16_500.copyWith(
                                     color: AppColor.mainAppColor,
                                   ),

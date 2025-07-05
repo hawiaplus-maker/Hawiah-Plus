@@ -34,10 +34,12 @@ class Data {
   String? latitude;
   String? longitude;
   int? orderStatus;
-  String? status;
+  Status? status;
   int? priceId;
   int? duration;
   String? totalPrice;
+  String? fromDate;
+  String? toDate;
   int? discount;
   int? discountValue;
   String? createdAt;
@@ -45,6 +47,7 @@ class Data {
   String? image;
   String? driver;
   String? driverMobile;
+  String? otp;
 
   Data(
       {this.id,
@@ -57,13 +60,16 @@ class Data {
       this.priceId,
       this.duration,
       this.totalPrice,
+      this.fromDate,
+      this.toDate,
       this.discount,
       this.discountValue,
       this.createdAt,
       this.product,
       this.image,
       this.driver,
-      this.driverMobile});
+      this.driverMobile,
+      this.otp});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -72,10 +78,13 @@ class Data {
     latitude = json['latitude'];
     longitude = json['longitude'];
     orderStatus = json['order_status'];
-    status = json['status'];
+    status =
+        json['status'] != null ? new Status.fromJson(json['status']) : null;
     priceId = json['price_id'];
     duration = json['duration'];
     totalPrice = json['total_price'];
+    fromDate = json['from_date'];
+    toDate = json['to_date'];
     discount = json['discount'];
     discountValue = json['discount_value'];
     createdAt = json['created_at'];
@@ -83,6 +92,7 @@ class Data {
     image = json['image'];
     driver = json['driver'];
     driverMobile = json['driver mobile'];
+    otp = json['otp'];
   }
 
   Map<String, dynamic> toJson() {
@@ -93,10 +103,14 @@ class Data {
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
     data['order_status'] = this.orderStatus;
-    data['status'] = this.status;
+    if (this.status != null) {
+      data['status'] = this.status!.toJson();
+    }
     data['price_id'] = this.priceId;
     data['duration'] = this.duration;
     data['total_price'] = this.totalPrice;
+    data['from_date'] = this.fromDate;
+    data['to_date'] = this.toDate;
     data['discount'] = this.discount;
     data['discount_value'] = this.discountValue;
     data['created_at'] = this.createdAt;
@@ -104,6 +118,26 @@ class Data {
     data['image'] = this.image;
     data['driver'] = this.driver;
     data['driver mobile'] = this.driverMobile;
+    data['otp'] = this.otp;
+    return data;
+  }
+}
+
+class Status {
+  String? en;
+  String? ar;
+
+  Status({this.en, this.ar});
+
+  Status.fromJson(Map<String, dynamic> json) {
+    en = json['en'];
+    ar = json['ar'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['en'] = this.en;
+    data['ar'] = this.ar;
     return data;
   }
 }

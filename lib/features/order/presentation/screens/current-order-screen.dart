@@ -126,7 +126,13 @@ class CurrentOrderScreen extends StatelessWidget {
                               color: AppColor.whiteColor,
                               borderRadius: BorderRadius.circular(20.0),
                             ),
-                            child: Text('', style: TextStyle(fontSize: 13.0)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(ordersDate.otp.toString(),
+                                    style: AppTextStyle.text18_700),
+                              ],
+                            ),
                           ),
                         ),
                       ],
