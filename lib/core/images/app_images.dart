@@ -16,7 +16,7 @@ class AppImages {
   static const String pickImgIcon = 'assets/svg/pickImgIcon.svg';
 
   static const String closeIcon = 'assets/svg/closeIcon.svg';
-  static const String logoIcon = 'assets/icons/app_icon.png';
+  static const String logoIcon = 'assets/images/play_store.png';
   static const String profileEmptyImage = 'assets/images/profileEmptyImage.png';
   static const String onboarding1 = 'assets/icons/onboarding1.png';
   static const String supportIcon = 'assets/svg/support_icon.svg';
