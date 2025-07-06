@@ -2,9 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/home/presentation/screens/category_detailes_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
@@ -27,8 +31,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       extendBody: true,
       appBar: CustomAppBar(
+        height: 80,
         context,
-
+        leadingWidth: 0,
         title: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
             if (state is ProfileUnAuthorized) {
@@ -54,12 +59,18 @@ class _HomeScreenState extends State<HomeScreen> {
               final user = state.user;
               return Row(
                 children: [
-                  CustomNetworkImage(
-                    radius: 30,
-                    fit: BoxFit.fill,
-                    imageUrl: user.image,
-                    height: 40.h,
-                    width: 40.w,
+                  Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            color: AppColor.mainAppColor, width: 1.5)),
+                    child: CustomNetworkImage(
+                      radius: 30,
+                      fit: BoxFit.fill,
+                      imageUrl: user.image,
+                      height: 45.h,
+                      width: 45.w,
+                    ),
                   ),
                   SizedBox(width: 10.w),
                   Column(
@@ -67,57 +78,46 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Text(
                         'welcome_2'.tr(),
-                        style: TextStyle(
-                            fontSize: 12.sp, color: Color(0xffA9A9AA)),
+                        style: AppTextStyle.text16_700,
                       ),
                       Text(
                         user.name,
-                        style: TextStyle(
-                            fontSize: 14.sp, color: Color(0xff19104E)),
+                        style: AppTextStyle.text16_500
+                            .copyWith(color: AppColor.greyColor),
                       ),
                     ],
                   ),
                   Spacer(),
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Color(0xffF5F5FF), width: 1),
-                    ),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Icon(Icons.notifications, size: 26, color: Colors.blue),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
+                  Card(
+                    color: AppColor.whiteColor,
+                    shape: CircleBorder(),
+                    elevation: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SvgPicture.asset(AppImages.bellIcon),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                  )
                 ],
               );
             }
-            // Loading or error
-            return Center(
-              child: SizedBox(
-                  // height: 40.h,
-                  // width: 40.w,
-                  // child: CustomShimmer(
-                  //   height: 10.h,
-                  //   width: 50.w,
-                  //   shimmerColor: AppColor.lightGreyColor,
-                  // ),
-                  ),
-            );
+            return SizedBox();
           },
         ),
       ),
@@ -171,8 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Text(
                               homeCubit.categorieS?.message?[index].title ?? '',
-                              style: TextStyle(
-                                  fontSize: 14.sp, color: Color(0xff3A3A3A)),
+                              style: AppTextStyle.text18_700,
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -209,13 +208,10 @@ class _SliderWidgetsState extends State<SliderWidgets> {
       final fullImageUrl2 =
           "https://hawia-sa.com/${SettingCubit.get(context).setting?.sliderImage?.en}";
 
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey, width: 1),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Card(
+          color: AppColor.whiteColor,
           child: CustomNetworkImage(
             imageUrl: fullImageUrl2,
             height: 200.h,

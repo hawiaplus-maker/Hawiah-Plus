@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/theme/cubit/app_theme_cubit.dart';
 import 'package:hawiah_client/core/theme/theme_enum.dart';
 
@@ -18,8 +19,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final isLightMode = appThemeCubit.theme == ThemeEnum.light;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('الإعدادات'),
+      appBar: CustomAppBar(
+        context,
+        titleText: 'الإعدادات',
+      
         centerTitle: true,
       ),
       body: Padding(

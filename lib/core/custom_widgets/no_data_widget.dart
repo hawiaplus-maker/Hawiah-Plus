@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/extension/context_extension.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
-import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_theme.dart';
-
 
 class NoDataWidget extends StatelessWidget {
   final Axis axis;
@@ -23,7 +22,7 @@ class NoDataWidget extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           decoration: BoxDecoration(
-            color: AppColor.mainAppColor.withValues(alpha: 0),
+            // color: AppColor.mainAppColor.withValues(alpha: 0),
             borderRadius: BorderRadius.circular(7),
           ),
           child: IntrinsicHeight(
@@ -31,7 +30,6 @@ class NoDataWidget extends StatelessWidget {
               children: [
                 Image.asset(
                   assetImage ?? AppImages.noDataImage,
-
                   width: 100,
                   height: 100,
                   fit: BoxFit.contain,
@@ -68,7 +66,7 @@ class NoDataWidget extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           decoration: BoxDecoration(
-            color: AppColor.mainAppColor.withOpacity(0.2),
+            //    color: AppColor.mainAppColor.withOpacity(0.2),
             borderRadius: BorderRadius.circular(7),
           ),
           child: Column(
@@ -76,9 +74,8 @@ class NoDataWidget extends StatelessWidget {
             children: [
               Image.asset(
                 AppImages.noDataImage,
-
-                width: 100,
-                height: 100,
+                width: 200.h,
+                height: 200.h,
                 fit: BoxFit.contain,
               ),
               const SizedBox(height: 10),
@@ -90,8 +87,8 @@ class NoDataWidget extends StatelessWidget {
                     light: Colors.black,
                     dark: Colors.white,
                   ),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w700,
                 ),
                 textAlign: TextAlign.center,
               ),

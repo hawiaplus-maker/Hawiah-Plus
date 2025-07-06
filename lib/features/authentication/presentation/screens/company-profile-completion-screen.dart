@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/company-steps/company-navigation-buttons.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/company-steps/company-step-one-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/company-steps/company-step-three-widget.dart';
@@ -24,7 +25,9 @@ class _CompanyProfileCompletionScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(),
+      appBar: CustomAppBar(
+        context
+      ),
       body: BlocProvider<AuthCubit>(
         create: (BuildContext context) => AuthCubit(),
         child: BlocConsumer<AuthCubit, AuthState>(

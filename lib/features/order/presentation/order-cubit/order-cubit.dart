@@ -53,13 +53,13 @@ class OrderCubit extends Cubit<OrderState> {
     emit(OrderLoading());
 
     // ✅ لا تجلب البيانات من الـ API إن كانت موجودة مسبقاً
-    if (orderStatus == 1 && currentOrders != null) {
+    if (orderStatus == 0 && currentOrders != null) {
       _orders = OrdersModel(data: currentOrders);
       emit(OrderSuccess(ordersModel: _orders));
       return;
     }
 
-    if (orderStatus == 0 && oldOrders != null) {
+    if (orderStatus == 1 && oldOrders != null) {
       _orders = OrdersModel(data: oldOrders);
       emit(OrderSuccess(ordersModel: _orders));
       return;
@@ -72,9 +72,8 @@ class OrderCubit extends Cubit<OrderState> {
 
     emit(OrderLoading());
 
-    _ordersResponse = await ApiHelper.instance.get(
-      Urls.orders(orderStatus),
-    );
+    _ordersResponse = await ApiHelper.instance.get(Urls.orders(orderStatus),
+        queryParameters: {"order_status": orderStatus});
 
     emit(OrderChange());
 
@@ -82,7 +81,7 @@ class OrderCubit extends Cubit<OrderState> {
       final result = OrdersModel.fromJson(_ordersResponse.data);
       _orders = result;
 
-      if (orderStatus == 1) {
+      if (orderStatus == 0) {
         currentOrders = result.data ?? [];
       } else {
         oldOrders = result.data ?? [];
@@ -93,7 +92,6 @@ class OrderCubit extends Cubit<OrderState> {
       emit(OrderError());
     }
   }
-
 
   //================== get nearby provider ====================
   void initialNearbyServiceProvider() {
@@ -121,7 +119,7 @@ class OrderCubit extends Cubit<OrderState> {
     required int serviceProviderId,
     required int addressId,
     VoidCallback? onBadRequest,
- }) async {
+  }) async {
     NavigatorMethods.loading();
     FormData body = FormData.fromMap(
         {'product_id': serviceProviderId, 'address_id': addressId});
@@ -157,26 +155,18 @@ class OrderCubit extends Cubit<OrderState> {
 
   // =================== Create Order ====================
   Future<void> createOrder({
-    required int catigoryId,
     required int serviceProviderId,
     required int priceId,
     required int addressId,
     required String fromDate,
-    required double totalPrice,
-    required double price,
-    required double vatValue,
     required VoidCallback onSuccess,
   }) async {
     NavigatorMethods.loading();
     FormData body = FormData.fromMap({
-      'product_id': catigoryId,
-      'address_id': addressId,
-      "service_provider_id": serviceProviderId,
+      'product_id': serviceProviderId,
       "price_id": priceId,
+      'address_id': addressId,
       "from_date": fromDate,
-      "total_price": totalPrice,
-      "price": price,
-      "vat_value": vatValue
     });
     final response = await ApiHelper.instance.post(
       Urls.createOrder,

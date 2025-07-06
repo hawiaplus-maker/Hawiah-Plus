@@ -28,7 +28,7 @@ class ExploreScreen extends StatelessWidget {
               ),
               // Align(
               //   alignment: Alignment.topCenter,
-              //   child: AppBar(
+              //   child: CustomAppBar
               //     backgroundColor: Colors.transparent,
               //     actions: [
               //       IconButton(

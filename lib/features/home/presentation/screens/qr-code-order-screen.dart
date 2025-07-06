@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/features/home/presentation/screens/driver-details-order-screen.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
@@ -11,8 +12,9 @@ class QrCodeOrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("order_details".tr()), // Translated title
+      appBar: CustomAppBar(
+        context,
+        titleText: "order_details".tr(),
         centerTitle: true,
       ),
       body: Container(
@@ -52,7 +54,10 @@ class QrCodeOrderScreen extends StatelessWidget {
                     color: Colors.black54,
                   ),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>  DriverDetailsOrderScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DriverDetailsOrderScreen()));
                   },
                 ),
                 Divider(
@@ -81,12 +86,12 @@ class QrCodeOrderScreen extends StatelessWidget {
                 label: "cancel_order".tr(),
                 onPressed: () {
                   Navigator.pushAndRemoveUntil<void>(
-                context,
-                MaterialPageRoute<void>(
-                  builder: (BuildContext context) => const LayoutScreen(),
-                ),
-                (route) => false,
-              );
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => const LayoutScreen(),
+                    ),
+                    (route) => false,
+                  );
                 },
                 backgroundColor: Colors.white,
                 textColor: Colors.red,

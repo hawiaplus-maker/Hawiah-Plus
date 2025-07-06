@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
@@ -23,21 +24,9 @@ class OldOrderScreen extends StatelessWidget {
     final double vat = totalPrice * 0.15;
     final double netTotal = totalPrice + vat;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'تفاصيل الطلب',
-          style: AppTextStyle.text20_700,
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_sharp,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+      appBar: CustomAppBar(
+        context,
+        titleText: 'تفاصيل الطلب',
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 
 class GlobalElevatedButton extends StatelessWidget {
   final String label;
@@ -32,7 +33,7 @@ class GlobalElevatedButton extends StatelessWidget {
       onPressed: onPressed, // Disable if not enabled
       icon: icon != null ? icon : SizedBox.shrink(),
       label: isLoading
-          ? CircularProgressIndicator()
+          ? CustomLoading()
           : Text(
               label,
               style: TextStyle(

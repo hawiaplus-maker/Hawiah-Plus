@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/features/home/presentation/screens/payment-screen.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
@@ -91,8 +92,8 @@ class ExtendTimeOrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("request_hawaia".tr()),
+      appBar: CustomAppBar(context,
+        titleText: "request_hawaia".tr(),
         centerTitle: true,
       ),
       body: BlocConsumer<OrderCubit, OrderState>(

@@ -36,7 +36,7 @@ class Urls {
   static const String createOrder = '${baseUrl}users/orders';
   static const String onBoarding = '${baseUrl}on-boarding';
   static String orders(int id) =>
-      '${baseUrl}users/user-orders?order_status=$id';
+      '${baseUrl}users/user-orders';
   static const String cities = '${baseUrl}cities';
   static const String addresses = '${baseUrl}user-addresses';
   static const String storeAddress = '${baseUrl}user-addresses';

@@ -15,7 +15,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
-//       appBar: AppBar(
+//       appBar: CustomAppBar
 //         backgroundColor: Colors.white,
 //         elevation: 0,
 //         leading: IconButton(

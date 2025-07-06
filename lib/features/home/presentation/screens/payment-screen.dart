@@ -129,14 +129,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
             text: "continue_payment".tr(),
             onPressed: () {
               context.read<OrderCubit>().createOrder(
-                  catigoryId: widget.args.catigoryId,
                   serviceProviderId: widget.args.serviceProviderId,
                   priceId: widget.args.priceId,
                   addressId: widget.args.addressId,
                   fromDate: widget.args.fromDate,
-                  totalPrice: widget.args.totalPrice,
-                  price: widget.args.price,
-                  vatValue: widget.args.vatValue,
                   onSuccess: () {
                     NavigatorMethods.pushNamedAndRemoveUntil(
                       context,
@@ -144,9 +140,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     );
                   });
             }),
-      ),
+      ),    
     );
-  }
+  }    
 
   Widget buildSummaryRow(String title, String value,
       {bool isBold = false, double fontSize = 16}) {

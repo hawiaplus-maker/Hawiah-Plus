@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/features/app-language/presentation/screens/app-language-screen.dart';
+import 'package:hawiah_client/features/profile/presentation/screens/support_screen.dart';
 
 class AppBarAuthWidget extends StatelessWidget implements PreferredSizeWidget {
   const AppBarAuthWidget({
@@ -22,11 +23,21 @@ class AppBarAuthWidget extends StatelessWidget implements PreferredSizeWidget {
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Row(
             children: [
-              SvgPicture.asset(
-                AppImages.supportIcon,
-                height: 25.h,
-                width: 25.w,
-                fit: BoxFit.fill,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const SupportScreen(),
+                    ),
+                  );
+                },
+                child: SvgPicture.asset(
+                  AppImages.supportIcon,
+                  height: 25.h,
+                  width: 25.w,
+                  fit: BoxFit.fill,
+                ),
               ),
               SizedBox(width: 10.w),
               GestureDetector(
