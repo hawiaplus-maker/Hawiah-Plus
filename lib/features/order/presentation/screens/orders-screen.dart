@@ -32,9 +32,10 @@ class _OrdersScreenState extends State<OrdersScreen>
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(_handleTabChange);
 
-    // مبدئيًا نعتبر أنه في تبويب "حالية"
-    orderCubit.changeOrderCurrent();
-    orderCubit.getOrders(1);
+   
+    if (orderCubit.currentOrders == null) {
+      orderCubit.getOrders(1);
+    }
   }
 
   void _handleTabChange() {
@@ -44,7 +45,12 @@ class _OrdersScreenState extends State<OrdersScreen>
     final status = isCurrent ? 1 : 0;
 
     orderCubit.changeOrderCurrent();
-    orderCubit.getOrders(status); // يجلب فقط إذا كانت غير موجودة
+
+    if (isCurrent && orderCubit.currentOrders == null) {
+      orderCubit.getOrders(status);
+    } else if (!isCurrent && orderCubit.oldOrders == null) {
+      orderCubit.getOrders(status);
+    }
   }
 
   @override
@@ -93,7 +99,9 @@ class _OrdersScreenState extends State<OrdersScreen>
           Expanded(
             child: BlocBuilder<OrderCubit, OrderState>(
               builder: (context, state) {
-                if (state is OrderLoading && orderCubit.orders == null) {
+                if (state is OrderLoading &&
+                    orderCubit.currentOrders == null &&
+                    orderCubit.oldOrders == null) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
@@ -102,17 +110,15 @@ class _OrdersScreenState extends State<OrdersScreen>
                       child: Text("حدث خطأ أثناء تحميل الطلبات"));
                 }
 
-                final orders = orderCubit.orders?.data ?? [];
-
                 return TabBarView(
                   controller: _tabController,
                   children: [
                     _buildOrderList(
-                      orderCubit.orders?.data ?? [],
+                      orderCubit.currentOrders ?? [],
                       isCurrent: true,
                     ),
                     _buildOrderList(
-                      orderCubit.orders?.data ?? [],
+                      orderCubit.oldOrders ?? [],
                       isCurrent: false,
                     ),
                   ],
@@ -197,11 +203,13 @@ class _OrdersScreenState extends State<OrdersScreen>
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: 'حالة:',
+                                  text: 'حالة: ',
                                   style: AppTextStyle.text16_600,
                                 ),
                                 TextSpan(
-                                  text: order.status ?? '',
+                                  text: context.locale.languageCode == 'ar'
+                                      ? (order.status?.ar ?? '')
+                                      : (order.status?.en ?? ''),
                                   style: AppTextStyle.text16_500.copyWith(
                                     color: AppColor.mainAppColor,
                                   ),

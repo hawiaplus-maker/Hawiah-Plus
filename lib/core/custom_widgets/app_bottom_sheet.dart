@@ -6,10 +6,12 @@ class AppBottomSheet extends StatelessWidget {
       {super.key,
       required this.title,
       required this.children,
-      this.isDark = false});
+      this.isDark = false,
+      this.isLine = false});
   final String title;
   final List<Widget> children;
   final bool? isDark;
+  final bool? isLine;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -31,16 +33,18 @@ class AppBottomSheet extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 15),
-                Container(
-                  height: 5,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: isDark == true
-                        ? AppColor.hintColor
-                        : AppColor.darkGreyColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
+                isLine == true
+                    ? SizedBox()
+                    : Container(
+                        height: 5,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: isDark == true
+                              ? AppColor.hintColor
+                              : AppColor.darkGreyColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                 const SizedBox(height: 15),
                 ...children
               ],

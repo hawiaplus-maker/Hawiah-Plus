@@ -4,12 +4,14 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:hawiah_client/core/custom_widgets/app_bottom_sheet.dart';
 
 class PrivacyBottomSheet extends StatelessWidget {
-  const PrivacyBottomSheet({super.key, required this.privacy});
+  const PrivacyBottomSheet({super.key, required this.privacy, this.isLine});
   final String privacy;
+  final bool? isLine;
   @override
   Widget build(BuildContext context) {
     return AppBottomSheet(
-      title:"privacy_policy_text".tr(),
+      isLine: isLine,
+      title: "privacy_policy_text".tr(),
       children: [
         HtmlWidget(privacy),
       ],

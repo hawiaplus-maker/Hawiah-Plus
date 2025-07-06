@@ -22,6 +22,7 @@ import 'package:hawiah_client/features/profile/presentation/screens/faq-screen.d
 import 'package:hawiah_client/features/profile/presentation/screens/language-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/privacy-policy-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/setting-screen.dart';
+import 'package:hawiah_client/features/profile/presentation/screens/support_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/terms-and-conditions.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
 import 'package:hawiah_client/main.dart';
@@ -221,7 +222,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               PersonProfileListTile(
                   title: "الدعم",
                   logo: "assets/icons/call_us_icon.png",
-                  onTap: () {}),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            const SupportScreen(),
+                      ),
+                    );
+                  }),
               PersonProfileListTile(
                   isHaveLine: true,
                   title: "الأسئلة الشائعة",

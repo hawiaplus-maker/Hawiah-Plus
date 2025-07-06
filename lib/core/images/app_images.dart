@@ -39,4 +39,9 @@ class AppImages {
   static const String timeIcon = 'assets/svg/timeIcon.svg';
   static const String arrowDownIcon = 'assets/svg/arrowDownIcon.svg';
   static const String truckImage = 'assets/images/truckImage.png';
+  static const String facebookIcon = 'assets/images/facebook.png';
+  static const String instagram = 'assets/images/instagram.png';
+  static const String linkedin = 'assets/images/linkedin.png';
+  static const String twitter = 'assets/images/twitter.png';
+  static const String whatsapp = 'assets/images/whatsapp.png';
 }
