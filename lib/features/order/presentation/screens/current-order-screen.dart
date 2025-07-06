@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
@@ -8,6 +9,7 @@ import 'package:hawiah_client/core/utils/date_methods.dart';
 import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
 import 'package:hawiah_client/features/order/presentation/screens/extend-time-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/widget/custom_list_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/custom_widgets/global-elevated-button-widget.dart';
 
@@ -213,15 +215,16 @@ class CurrentOrderScreen extends StatelessWidget {
                             SizedBox(
                               height: 10.h,
                             ),
-                            Text(
-                              "س ل س - 2 5 1 7",
-                              style: AppTextStyle.text16_700,
-                            ),
+                            if ((ordersDate.vehicles?.isNotEmpty ?? false))
+                              Text(
+                                " ${ordersDate.vehicles!.first.plateLetters} ${ordersDate.vehicles!.first.plateNumbers}",
+                                style: AppTextStyle.text16_700,
+                              ),
                             SizedBox(
                               height: 10.h,
                             ),
                             Text(
-                              "مرسيدس بنز أكتروس",
+                              "${ordersDate.vehicles!.first.carModel} ${ordersDate.vehicles!.first.carType} ${ordersDate.vehicles!.first.carBrand}",
                               style: AppTextStyle.text14_600
                                   .copyWith(color: Color(0xff545454)),
                             ),
@@ -338,22 +341,117 @@ class CurrentOrderScreen extends StatelessWidget {
                     ),
                     child: GlobalElevatedButton(
                       label: "تحميل الفاتورة PDF",
-                      onPressed: () {},
+                      onPressed: () {
+                        final invoiceUrl = ordersDate.invoice;
+                        if (invoiceUrl != null) {
+                          _showPdfOptionsBottomSheet(invoiceUrl,
+                              context: context);
+                        } else {
+                          Fluttertoast.showToast(msg: 'الفاتورة غير متوفرة');
+                        }
+                      },
                       backgroundColor: Color(0xff1A3C98),
                       textColor: Colors.white,
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                       borderRadius: BorderRadius.circular(10),
-                      fixedWidth: 0.80, // 80% of the screen width
+                      fixedWidth: 0.80,
                     ),
                   ),
                 ],
               ),
             ),
             SizedBox(height: 10.0),
+            Container(
+              alignment: Alignment.bottomCenter,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: GlobalElevatedButton(
+                label: "تحميل العقد PDF",
+                onPressed: () {
+                  final invoiceUrl = ordersDate.contract;
+                  if (invoiceUrl != null) {
+                    _showPdfOptionsBottomSheet(invoiceUrl, context: context);
+                  } else {
+                    Fluttertoast.showToast(msg: 'الفاتورة غير متوفرة');
+                  }
+                },
+                backgroundColor: Colors.white,
+                textColor: Color(0xff1A3C98),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                borderRadius: BorderRadius.circular(10),
+                fixedWidth: 0.80,
+                side: BorderSide(color: Color(0xff1A3C98)),
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  void _showPdfOptionsBottomSheet(String pdfUrl,
+      {required BuildContext context}) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'اختر الإجراء',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 20),
+              ListTile(
+                leading: Icon(Icons.remove_red_eye),
+                title: Text('عرض الفاتورة'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  if (await canLaunchUrl(Uri.parse(pdfUrl))) {
+                    await launchUrl(
+                      Uri.parse(pdfUrl),
+                      mode: LaunchMode.inAppWebView,
+                      webViewConfiguration: WebViewConfiguration(
+                        enableJavaScript: true,
+                      ),
+                    );
+                  } else {
+                    Fluttertoast.showToast(msg: 'لا يمكن عرض الفاتورة');
+                  }
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: Icon(Icons.download),
+                title: Text('تحميل الفاتورة'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  if (await canLaunchUrl(Uri.parse(pdfUrl))) {
+                    await launchUrl(
+                      Uri.parse(pdfUrl),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  } else {
+                    Fluttertoast.showToast(msg: 'لا يمكن تحميل الفاتورة');
+                  }
+                },
+              ),
+              SizedBox(height: 10),
+              TextButton(
+                child: Text('إلغاء'),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

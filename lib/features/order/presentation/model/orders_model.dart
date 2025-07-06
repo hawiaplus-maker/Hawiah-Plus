@@ -47,7 +47,12 @@ class Data {
   String? image;
   String? driver;
   String? driverMobile;
+  List<Vehicles>? vehicles;
   String? otp;
+  String? user;
+  String? userMobile;
+  String? contract;
+  String? invoice;
 
   Data(
       {this.id,
@@ -69,7 +74,12 @@ class Data {
       this.image,
       this.driver,
       this.driverMobile,
-      this.otp});
+      this.vehicles,
+      this.otp,
+      this.user,
+      this.userMobile,
+      this.contract,
+      this.invoice});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -91,8 +101,18 @@ class Data {
     product = json['product'];
     image = json['image'];
     driver = json['driver'];
-    driverMobile = json['driver mobile'];
+    driverMobile = json['driver_mobile'];
+    if (json['vehicles'] != null) {
+      vehicles = <Vehicles>[];
+      json['vehicles'].forEach((v) {
+        vehicles!.add(new Vehicles.fromJson(v));
+      });
+    }
     otp = json['otp'];
+    user = json['user'];
+    userMobile = json['user_mobile'];
+    contract = json['contract'];
+    invoice = json['invoice'];
   }
 
   Map<String, dynamic> toJson() {
@@ -117,8 +137,15 @@ class Data {
     data['product'] = this.product;
     data['image'] = this.image;
     data['driver'] = this.driver;
-    data['driver mobile'] = this.driverMobile;
+    data['driver_mobile'] = this.driverMobile;
+    if (this.vehicles != null) {
+      data['vehicles'] = this.vehicles!.map((v) => v.toJson()).toList();
+    }
     data['otp'] = this.otp;
+    data['user'] = this.user;
+    data['user_mobile'] = this.userMobile;
+    data['contract'] = this.contract;
+    data['invoice'] = this.invoice;
     return data;
   }
 }
@@ -138,6 +165,43 @@ class Status {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['en'] = this.en;
     data['ar'] = this.ar;
+    return data;
+  }
+}
+
+class Vehicles {
+  String? plateLetters;
+  String? plateNumbers;
+  String? carType;
+  String? carBrand;
+  String? carModel;
+  String? carYear;
+
+  Vehicles(
+      {this.plateLetters,
+      this.plateNumbers,
+      this.carType,
+      this.carBrand,
+      this.carModel,
+      this.carYear});
+
+  Vehicles.fromJson(Map<String, dynamic> json) {
+    plateLetters = json['plate_letters'];
+    plateNumbers = json['plate_numbers'];
+    carType = json['car_type'];
+    carBrand = json['car_brand'];
+    carModel = json['car_model'];
+    carYear = json['car_year'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['plate_letters'] = this.plateLetters;
+    data['plate_numbers'] = this.plateNumbers;
+    data['car_type'] = this.carType;
+    data['car_brand'] = this.carBrand;
+    data['car_model'] = this.carModel;
+    data['car_year'] = this.carYear;
     return data;
   }
 }

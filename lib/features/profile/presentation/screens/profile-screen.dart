@@ -196,6 +196,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: () {}),
 
               PersonProfileListTile(
+                  isHaveLine: true,
                   title: "الدعم",
                   logo: "assets/icons/call_us_icon.png",
                   onTap: () {
@@ -207,6 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     );
                   }),
+
               PersonProfileListTile(
                   isHaveLine: true,
                   title: "الأسئلة الشائعة",
