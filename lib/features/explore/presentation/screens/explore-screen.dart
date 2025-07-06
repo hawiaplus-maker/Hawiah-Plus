@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
-import 'package:hawiah_client/features/explore/presentation/screens/sub-category-explore-screen.dart';
-import 'package:hawiah_client/features/location/presentation/screens/choose-location-screen.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/features/explore/presentation/screens/sub-category-explore-screen.dart';
+
 import '../controllers/explore-flow-cubit.dart';
 import '../controllers/explore-flow-state.dart';
 
@@ -26,32 +26,32 @@ class ExploreScreen extends StatelessWidget {
                   fit: BoxFit.fill,
                 ),
               ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: AppBar(
-                  backgroundColor: Colors.transparent,
-                  actions: [
-                    IconButton(
-                      icon: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.black,
-                          size: 16,
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    )
-                  ],
-                ),
-              ),
+              // Align(
+              //   alignment: Alignment.topCenter,
+              //   child: AppBar(
+              //     backgroundColor: Colors.transparent,
+              //     actions: [
+              //       IconButton(
+              //         icon: Container(
+              //           margin: EdgeInsets.symmetric(horizontal: 10),
+              //           padding: EdgeInsets.all(10),
+              //           decoration: BoxDecoration(
+              //             color: Colors.white,
+              //             shape: BoxShape.circle,
+              //           ),
+              //           child: Icon(
+              //             Icons.arrow_forward_ios,
+              //             color: Colors.black,
+              //             size: 16,
+              //           ),
+              //         ),
+              //         onPressed: () {
+              //           Navigator.pop(context);
+              //         },
+              //       )
+              //     ],
+              //   ),
+              // ),
 
               // Bottom Sheet
               Align(
@@ -159,15 +159,7 @@ class ExploreScreen extends StatelessWidget {
                                     ),
                                   ),
                                   TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ChooseLocationScreen(
-                                                    args: ChoooseLocationScreenArgs(catigoryId: 1, serviceProviderId: 1),
-                                                  )));
-                                    },
+                                    onPressed: () {},
                                     child: Text("تغيير",
                                         style: TextStyle(color: Colors.blue)),
                                   ),

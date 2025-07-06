@@ -57,7 +57,7 @@ class CustomButton extends StatelessWidget {
             decoration: BoxDecoration(
               color: color ??
                   (isMainColor
-                      ? AppColor.mainAppColor
+                      ? AppColor.darkMainAppColor
                       : AppColor.secondAppColor),
               borderRadius: borderRadius ?? BorderRadius.circular(radius),
               border: Border.all(color: borderColor ?? Colors.transparent),

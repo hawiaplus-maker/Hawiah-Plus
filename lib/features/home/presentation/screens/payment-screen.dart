@@ -1,22 +1,58 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
-import 'package:hawiah_client/features/home/presentation/screens/qr-code-order-screen.dart';
-import 'package:hawiah_client/core/theme/app_colors.dart';
-class PaymentScreen extends StatelessWidget {
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
+import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
+
+class PaymentScreenArgs {
+  final int catigoryId;
+  final int serviceProviderId;
+  final int priceId;
+  final int addressId;
+  final String fromDate;
+  final double totalPrice;
+  final double price;
+  final double vatValue;
+
+  PaymentScreenArgs(
+      {required this.catigoryId,
+      required this.serviceProviderId,
+      required this.priceId,
+      required this.addressId,
+      required this.fromDate,
+      required this.totalPrice,
+      required this.price,
+      required this.vatValue});
+}
+
+class PaymentScreen extends StatefulWidget {
+  static const routeName = '/payment-screen';
+  final PaymentScreenArgs args;
+  const PaymentScreen({Key? key, required this.args}) : super(key: key);
+
+  @override
+  State<PaymentScreen> createState() => _PaymentScreenState();
+}
+
+class _PaymentScreenState extends State<PaymentScreen> {
+  String? selectedPaymentOption;
+  @override
+  void initState() {
+    super.initState();
+
+    selectedPaymentOption = "دفع إلكتروني";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: Icon(Icons.arrow_back, color: Colors.black),
-        title: Text(
-          "وسيلة الدفع",
-          style: TextStyle(color: Colors.black, fontSize: 20),
-        ),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        context,
+        titleText: AppLocaleKey.paymentMethod.tr(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -32,15 +68,24 @@ class PaymentScreen extends StatelessWidget {
               padding: EdgeInsets.all(16),
               child: Column(
                 children: [
-                  buildSummaryRow("سعر الطلب", "1000 ريال",
+                  buildSummaryRow("سعر الطلب",
+                      AppLocaleKey.sar.tr(args: [widget.args.price.toString()]),
                       isBold: false, fontSize: 13),
-                  buildSummaryRow("مصاريف التوصيل", "100 ريال",
+                  buildSummaryRow("مصاريف التوصيل", "0 ريال",
                       isBold: false, fontSize: 13),
-                  buildSummaryRow("ضريبة القيمة المضافة (15%)", "150 ريال",
-                      isBold: false, fontSize: 13),
+                  buildSummaryRow(
+                      "ضريبة القيمة المضافة (15%)",
+                      AppLocaleKey.sar
+                          .tr(args: [widget.args.vatValue.toString()]),
+                      isBold: false,
+                      fontSize: 13),
                   Divider(),
-                  buildSummaryRow("الإجمالي الصافي", "1250 ريال",
-                      isBold: true, fontSize: 14),
+                  buildSummaryRow(
+                      "الإجمالي الصافي",
+                      AppLocaleKey.sar
+                          .tr(args: [widget.args.totalPrice.toString()]),
+                      isBold: true,
+                      fontSize: 14),
                 ],
               ),
             ),
@@ -61,7 +106,6 @@ class PaymentScreen extends StatelessWidget {
                   Image.asset('assets/icons/visa_logo.png', height: 24),
                 ],
               ),
-              isSelected: true,
             ),
             buildPaymentOption(
               context,
@@ -74,28 +118,32 @@ class PaymentScreen extends StatelessWidget {
               title: "آبل باي",
               icon: Image.asset('assets/icons/apple_pay_logo.png', height: 24),
             ),
-            Spacer(),
+
             // Continue Button
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
-              alignment: Alignment.topCenter,
-              child: GlobalElevatedButton(
-                label: "continue_payment".tr(),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => QrCodeOrderScreen()));
-                },
-                backgroundColor: AppColor.mainAppColor,
-                textColor: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                borderRadius: BorderRadius.circular(10),
-                fixedWidth: 0.80.sw, // 80% of the screen width
-              ),
-            ),
           ],
         ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: CustomButton(
+            text: "continue_payment".tr(),
+            onPressed: () {
+              context.read<OrderCubit>().createOrder(
+                  catigoryId: widget.args.catigoryId,
+                  serviceProviderId: widget.args.serviceProviderId,
+                  priceId: widget.args.priceId,
+                  addressId: widget.args.addressId,
+                  fromDate: widget.args.fromDate,
+                  totalPrice: widget.args.totalPrice,
+                  price: widget.args.price,
+                  vatValue: widget.args.vatValue,
+                  onSuccess: () {
+                    NavigatorMethods.pushNamedAndRemoveUntil(
+                      context,
+                      LayoutScreen.routeName,
+                    );
+                  });
+            }),
       ),
     );
   }
@@ -126,33 +174,46 @@ class PaymentScreen extends StatelessWidget {
     );
   }
 
-  Widget buildPaymentOption(BuildContext context,
-      {required String title, required Widget icon, bool isSelected = false}) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-      decoration: BoxDecoration(
-        color: isSelected ? Colors.green.shade50 : Colors.white,
-        border: Border.all(
-          color: isSelected ? Colors.green : Colors.grey.shade300,
-        ),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          if (isSelected)
-            Icon(
-              Icons.check_circle,
-              color: Color(0xff5FFF9F),
-            ),
-          SizedBox(width: 16),
-          Text(
-            title,
-            style: TextStyle(fontSize: 16),
+  Widget buildPaymentOption(
+    BuildContext context, {
+    required String title,
+    required Widget icon,
+  }) {
+    final isSelected = selectedPaymentOption == title;
+
+    return GestureDetector(
+      onTap: () => setState(() => selectedPaymentOption = title),
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.green.shade50 : Colors.white,
+          border: Border.all(
+            color: isSelected ? Colors.green : Colors.grey.shade300,
+            width: isSelected ? 2 : 1,
           ),
-          Spacer(),
-          icon,
-        ],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            if (isSelected)
+              Icon(
+                Icons.check_circle,
+                color: Color(0xff5FFF9F),
+                size: 24,
+              ),
+            SizedBox(width: isSelected ? 16 : 40),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+            Spacer(),
+            icon,
+          ],
+        ),
       ),
     );
   }

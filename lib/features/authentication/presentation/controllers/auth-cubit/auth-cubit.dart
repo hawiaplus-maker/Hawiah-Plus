@@ -475,6 +475,7 @@ class AuthCubit extends Cubit<AuthState> {
       final message = response.data['message'] ?? 'Logout completed';
 
       if (response.state == ResponseState.complete) {
+        HiveMethods.deleteToken();
         emit(AuthSuccess(
           message: message,
         ));

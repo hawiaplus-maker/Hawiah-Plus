@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hawiah_client/core/custom_widgets/api_response_widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_select/custom_select_item.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_select/custom_single_select.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
@@ -15,6 +16,7 @@ import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/core/utils/validation_methods.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_state.dart';
 import 'package:hawiah_client/features/location/presentation/screens/map_screen.dart';
@@ -79,12 +81,9 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
     return BlocProvider(
       create: (BuildContext context) => AddressCubit()..getcitys(),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            AppLocaleKey.addNewAddress.tr(),
-            style: TextStyle(color: Colors.black),
-          ),
-          centerTitle: true,
+        appBar: CustomAppBar(
+          context,
+          titleText: AppLocaleKey.addNewAddress.tr(),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -105,6 +104,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
                   _buildCurrentAddress(),
                   SizedBox(height: 10.h),
                   CustomTextField(
+                    validator: ValidationMethods.validateEmptyField,
                     controller: titleController,
                     labelText: AppLocaleKey.address.tr(),
                     onChanged: (String value) => {},
@@ -258,25 +258,25 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/icons/check_icon.png",
-              height: 20,
-              width: 20,
-            ),
-            SizedBox(width: 10.w),
-            Text(
-              "جعل هذا العنوان عنواني الإفتراضي",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.sp,
-              ),
-            ),
-          ],
-        ),
+        // Row(
+        //   crossAxisAlignment: CrossAxisAlignment.center,
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     Image.asset(
+        //       "assets/icons/check_icon.png",
+        //       height: 20,
+        //       width: 20,
+        //     ),
+        //     SizedBox(width: 10.w),
+        //     Text(
+        //       "جعل هذا العنوان عنواني الإفتراضي",
+        //       style: TextStyle(
+        //         color: Colors.black,
+        //         fontSize: 15.sp,
+        //       ),
+        //     ),
+        //   ],
+        // ),
         SizedBox(height: 20.h),
         GlobalElevatedButton(
           label: "إضافة العنوان",

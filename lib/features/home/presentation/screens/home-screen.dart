@@ -2,10 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_shimmer.dart';
-import 'package:hawiah_client/core/theme/app_colors.dart';
-import 'package:hawiah_client/features/home/presentation/screens/home-new-order-screen.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/features/home/presentation/screens/category_detailes_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
@@ -22,15 +22,34 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      appBar: AppBar(
+      appBar: CustomAppBar(
+        context,
+
         title: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
+            if (state is ProfileUnAuthorized) {
+              return ListTile(
+                leading: CustomNetworkImage(
+                  radius: 30,
+                  fit: BoxFit.fill,
+                  imageUrl: '',
+                  height: 40.h,
+                  width: 40.w,
+                ),
+                title: Text(
+                  'welcome_2'.tr(),
+                  style: TextStyle(fontSize: 14.sp, color: Color(0xff19104E)),
+                ),
+                subtitle: Text(
+                  AppLocaleKey.guest.tr(),
+                  style: TextStyle(fontSize: 14.sp, color: Color(0xff19104E)),
+                ),
+              );
+            }
             if (state is ProfileLoaded) {
               final user = state.user;
               return Row(
@@ -90,14 +109,14 @@ class _HomeScreenState extends State<HomeScreen> {
             // Loading or error
             return Center(
               child: SizedBox(
-                height: 40.h,
-                width: 40.w,
-                child: CustomShimmer(
-                  height: 10.h,
-                  width: 50.w,
-                  shimmerColor: AppColor.lightGreyColor,
-                ),
-              ),
+                  // height: 40.h,
+                  // width: 40.w,
+                  // child: CustomShimmer(
+                  //   height: 10.h,
+                  //   width: 50.w,
+                  //   shimmerColor: AppColor.lightGreyColor,
+                  // ),
+                  ),
             );
           },
         ),
@@ -121,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HomeNewOrderScreen(
+                              builder: (context) => CategoryDetailesScreen(
                                     id: homeCubit
                                             .categorieS?.message?[index].id ??
                                         0,
@@ -180,8 +199,6 @@ class SliderWidgets extends StatefulWidget {
 }
 
 class _SliderWidgetsState extends State<SliderWidgets> {
-
-
   @override
   Widget build(BuildContext context) {
     final langCode = context.locale.languageCode;

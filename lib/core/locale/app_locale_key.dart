@@ -28,4 +28,11 @@ class AppLocaleKey {
   static const String address = 'address';
   static const String addNewAddress = 'add_new_address';
   static const String currentAddress = 'currentAddress';
+  static const String days = 'days';
+  static const String sar = 'sar';
+  static const String chooseServiceProvider = 'chooseServiceProvider';
+  static const String youHaveToChooseAddress = 'youHaveToChooseAddress';
+  static const String paymentMethod = 'paymentMethod';
+  static const String youHaveToChooseStartDate = 'youHaveToChooseStartDate';
+  static const String guest = 'guest';
 }

@@ -73,7 +73,7 @@ class ApiResponseWidget extends StatelessWidget {
           return child;
         }
       case ResponseState.error:
-     
+     case ResponseState.badRequest:
         return errorWidget ??
             Center(
               child: ExceptionWidget(

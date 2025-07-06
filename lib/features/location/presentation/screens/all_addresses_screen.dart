@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hawiah_client/core/custom_widgets/api_response_widget.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
-import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/location-item-widget.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
@@ -25,18 +25,9 @@ class AllAddressesScreen extends StatelessWidget {
         ..initialaddresses()
         ..getaddresses(),
       child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(
-              Icons.arrow_back_ios,
-            ),
-          ),
-          title: Text(
-            AppLocaleKey.addresses.tr(),
-            style: AppTextStyle.appBarStyle,
-          ),
-          centerTitle: true,
+        appBar: CustomAppBar(
+          context,
+          titleText: AppLocaleKey.addresses.tr(),
         ),
         body: BlocBuilder<AddressCubit, AddressState>(
           builder: (BuildContext context, state) {

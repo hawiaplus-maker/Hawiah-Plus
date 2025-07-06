@@ -12,6 +12,7 @@ class ProfileLoaded extends ProfileState {
 }
 
 class ProfileUpdating extends ProfileState {}
+class ProfileUnAuthorized extends ProfileState {}
 
 class ProfileUpdateSuccess extends ProfileState {
   final String message;

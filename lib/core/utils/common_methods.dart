@@ -8,14 +8,11 @@ import 'package:hawiah_client/core/custom_widgets/custom_toast.dart';
 import 'package:hawiah_client/core/routes/app_routers_import.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
-
 import '../../main.dart';
-
 import '../extension/context_extension.dart';
 import '../hive/hive_methods.dart';
 import '../locale/app_locale_key.dart';
 import '../networking/api_helper.dart';
-
 import '../theme/app_colors.dart';
 
 class CommonMethods {
@@ -166,10 +163,7 @@ class CommonMethods {
             ),
             CupertinoDialogAction(
               onPressed: () {
-                // NavigatorMethods.pushNamedAndRemoveUntil(
-                //   context,
-                //   LoginScreen.routeName,
-                // );
+                onPressed.call();
               },
               child: Text(
                 tr(AppLocaleKey.login),
@@ -232,8 +226,6 @@ class CommonMethods {
       ),
     );
   }
-
- 
 
   static Future<bool> hasConnection() async {
     bool isConnected = await InternetConnectionChecker().hasConnection;

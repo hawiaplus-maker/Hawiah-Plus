@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 
 class FaqScreen extends StatelessWidget {
   const FaqScreen({super.key});
@@ -6,14 +7,10 @@ class FaqScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'الاسئلة الشائعة',
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        context,
+        titleText: 'الاسئلة الشائعة',
       ),
-    
     );
   }
 }

@@ -2,21 +2,24 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/location/presentation/screens/choose-location-screen.dart';
+import 'package:hawiah_client/features/location/presentation/screens/choose_address_screen.dart';
 
 import '../controllers/home-cubit/home-cubit.dart';
 import '../controllers/home-cubit/home-state.dart';
 
-class HomeNewOrderScreen extends StatefulWidget {
-  const HomeNewOrderScreen({super.key, required this.id});
+class CategoryDetailesScreen extends StatefulWidget {
+  const CategoryDetailesScreen({super.key, required this.id});
   final int id;
 
   @override
-  State<HomeNewOrderScreen> createState() => _HomeNewOrderScreenState();
+  State<CategoryDetailesScreen> createState() => _CategoryDetailesScreenState();
 }
 
-class _HomeNewOrderScreenState extends State<HomeNewOrderScreen> {
+class _CategoryDetailesScreenState extends State<CategoryDetailesScreen> {
   @override
   void initState() {
     context.read<HomeCubit>().getshowCategories(widget.id);
@@ -26,15 +29,15 @@ class _HomeNewOrderScreenState extends State<HomeNewOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("new_request".tr()),
-          centerTitle: true,
+        appBar: CustomAppBar(
+          context,
+          titleText: "new_request".tr(),
         ),
         body: BlocConsumer<HomeCubit, HomeState>(
           builder: (BuildContext context, HomeState state) {
             final homeCubit = HomeCubit.get(context);
             if (homeCubit.showCategories == null) {
-              return Center(child: CircularProgressIndicator(strokeWidth: 2));
+              return Center(child: CustomLoading());
             }
             if (homeCubit.showCategories?.message?.services?.isEmpty ?? true) {
               return Center(child: Text("no_data".tr()));
@@ -49,8 +52,9 @@ class _HomeNewOrderScreenState extends State<HomeNewOrderScreen> {
                         return GestureDetector(
                           onTap: () {
                             NavigatorMethods.pushNamed(
-                                context, ChooseLocationScreen.routeName,
-                                arguments: ChoooseLocationScreenArgs(
+                                context, ChooseAddressScreen.routeName,
+                                arguments: ChoooseAddressScreenArgs(
+                                  showCategoriesModel:homeCubit.showCategories! ,
                                   catigoryId: widget.id,
                                   serviceProviderId: homeCubit.showCategories
                                           ?.message?.services?[index].id ??
@@ -82,34 +86,13 @@ class _HomeNewOrderScreenState extends State<HomeNewOrderScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Image.network(
-                                    homeCubit.showCategories?.message
+                                  CustomNetworkImage(
+                                    imageUrl: homeCubit.showCategories?.message
                                             ?.services?[index].image ??
                                         "",
                                     height: 70.h,
                                     width: 70.w,
                                     fit: BoxFit.fill,
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return SizedBox(
-                                        height: 70.h,
-                                        width: 70.w,
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                              strokeWidth: 2),
-                                        ),
-                                      );
-                                    },
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        height: 70.h,
-                                        width: 70.w,
-                                        color: Colors.grey[100],
-                                        child: Icon(Icons.broken_image,
-                                            color: Colors.grey),
-                                      );
-                                    },
                                   ),
                                   SizedBox(width: 20.h),
                                   Text(
