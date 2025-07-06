@@ -10,6 +10,7 @@ class GlobalElevatedButton extends StatelessWidget {
   final BorderRadiusGeometry borderRadius;
   final double? fixedWidth;
   final bool isLoading;
+  final BorderSide? side;
 
   const GlobalElevatedButton({
     Key? key,
@@ -21,7 +22,8 @@ class GlobalElevatedButton extends StatelessWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
     this.fixedWidth = 0.80,
-    this.isLoading = false, // 80% width of the screen
+    this.isLoading = false,
+    this.side, // 80% width of the screen
   }) : super(key: key);
 
   @override
@@ -42,7 +44,10 @@ class GlobalElevatedButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
         padding: padding,
-        shape: RoundedRectangleBorder(borderRadius: borderRadius),
+        shape: RoundedRectangleBorder(
+          borderRadius: borderRadius,
+          side: side ?? BorderSide.none,
+        ),
         fixedSize:
             Size.fromWidth(fixedWidth! * MediaQuery.of(context).size.width),
       ),
