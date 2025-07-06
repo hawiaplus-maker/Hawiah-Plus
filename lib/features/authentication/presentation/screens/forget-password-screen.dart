@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/global-phone-input-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
@@ -19,10 +20,8 @@ class ForgetPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          automaticallyImplyLeading: false,
+      appBar: CustomAppBar(
+          context,
           actions: [
             IconButton(
               icon: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),

@@ -211,7 +211,8 @@ class _OrdersScreenState extends State<OrdersScreen>
                                     ? (order.status?.ar ?? '')
                                     : (order.status?.en ?? ''),
                                 style: AppTextStyle.text16_700.copyWith(
-                                  color: AppColor.mainAppColor,
+                                  color: gtOrderStatusColor(
+                                      order.status?.en ?? ''),
                                 ),
                               )
                             ],
@@ -239,5 +240,18 @@ class _OrdersScreenState extends State<OrdersScreen>
         );
       },
     );
+  }
+
+  Color gtOrderStatusColor(String status) {
+    switch (status) {
+      case "Delivered":
+        return AppColor.mainAppColor;
+      case "Processing":
+        return AppColor.greenColor;
+      case "New order":
+        return AppColor.greyColor;
+      default:
+        return AppColor.blackColor;
+    }
   }
 }

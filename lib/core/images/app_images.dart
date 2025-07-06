@@ -45,4 +45,5 @@ class AppImages {
   static const String twitter = 'assets/images/twitter.png';
   static const String whatsapp = 'assets/images/whatsapp.png';
   static const String loginImage = 'assets/images/loginImage.png';
+  static const String bellIcon = 'assets/svg/bellIcon.svg';
 }

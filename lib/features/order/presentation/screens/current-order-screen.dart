@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
@@ -26,21 +28,10 @@ class CurrentOrderScreen extends StatelessWidget {
     final double vat = totalPrice * 0.15;
     final double netTotal = totalPrice + vat;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'تفاصيل الطلب',
-          style: AppTextStyle.text20_700,
-        ),
+      appBar: CustomAppBar(
+        context,
+        titleText: 'تفاصيل الطلب',
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_sharp,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -117,24 +108,16 @@ class CurrentOrderScreen extends StatelessWidget {
                           ),
                         ),
                         Card(
+                          color: AppColor.whiteColor,
                           elevation: 5,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(12.0),
                           ),
-                          child: Container(
-                            height: 50.h,
-                            width: 90.w,
-                            decoration: BoxDecoration(
-                              color: AppColor.whiteColor,
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(ordersDate.otp.toString(),
-                                    style: AppTextStyle.text18_700),
-                              ],
-                            ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 5),
+                            child: Text(ordersDate.otp.toString(),
+                                style: AppTextStyle.text18_700),
                           ),
                         ),
                       ],
@@ -145,45 +128,45 @@ class CurrentOrderScreen extends StatelessWidget {
                         EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
                     child: Row(
                       children: [
-                        GlobalElevatedButton(
-                          icon: Image.asset(
-                            AppImages.refreshCw,
-                            height: 20.0,
-                            width: 20.0,
-                            color: Colors.white,
+                        Flexible(
+                          child: CustomButton(
+                            prefixIcon: Image.asset(
+                              AppImages.refreshCw,
+                              height: 20.0,
+                              width: 20.0,
+                              color: Colors.white,
+                            ),
+                            color: AppColor.mainAppColor,
+                            text: 'إعادة الطلب ',
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ExtendTimeOrderScreen(),
+                                ),
+                              );
+                            },
                           ),
-                          label: 'إعادة الطلب ',
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const ExtendTimeOrderScreen(),
+                        ),
+                        const SizedBox(width: 30),
+                        Flexible(
+                          child: CustomButton(
+                            color: Colors.transparent,
+                            prefixIcon: Image.asset(
+                              AppImages.trendDown,
+                              height: 20.0,
+                              width: 20.0,
+                              color: Colors.red,
+                            ),
+                            child: Text(
+                              'إفراغ الحاوية',
+                              style: AppTextStyle.text16_600.copyWith(
+                                color: AppColor.redColor,
                               ),
-                            );
-                          },
-                          backgroundColor: AppColor.mainAppColor,
-                          textColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
-                          borderRadius: BorderRadius.circular(20),
-                          fixedWidth: 0.40, // 80% of the screen width
-                        ),
-                        Spacer(),
-                        Image.asset(
-                          AppImages.trendDown,
-                          height: 20.0,
-                          width: 20.0,
-                          color: Colors.red,
-                        ),
-                        SizedBox(width: 10.0.w),
-                        Text(
-                          'إفراغ الحاوية',
-                          style: AppTextStyle.text16_600.copyWith(
-                            color: AppColor.redColor,
+                            ),
                           ),
                         ),
-                        Spacer(),
                       ],
                     ),
                   )
@@ -223,11 +206,12 @@ class CurrentOrderScreen extends StatelessWidget {
                             SizedBox(
                               height: 10.h,
                             ),
-                            Text(
-                              "${ordersDate.vehicles!.first.carModel} ${ordersDate.vehicles!.first.carType} ${ordersDate.vehicles!.first.carBrand}",
-                              style: AppTextStyle.text14_600
-                                  .copyWith(color: Color(0xff545454)),
-                            ),
+                            if (ordersDate.vehicles?.isNotEmpty == true)
+                              Text(
+                                "${ordersDate.vehicles!.first.carModel} ${ordersDate.vehicles!.first.carType} ${ordersDate.vehicles!.first.carBrand}",
+                                style: AppTextStyle.text14_600
+                                    .copyWith(color: Color(0xff545454)),
+                              ),
                           ],
                         ),
                       ),
@@ -334,57 +318,59 @@ class CurrentOrderScreen extends StatelessWidget {
                     subtitle: "${netTotal.toStringAsFixed(2)} ريال",
                   ),
                   SizedBox(height: 50.0),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
+                  if (ordersDate.invoice != null)
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: GlobalElevatedButton(
+                        label: "تحميل الفاتورة PDF",
+                        onPressed: () {
+                          final invoiceUrl = ordersDate.invoice;
+                          if (invoiceUrl != null) {
+                            _showPdfOptionsBottomSheet(invoiceUrl,
+                                context: context);
+                          } else {
+                            Fluttertoast.showToast(msg: 'الفاتورة غير متوفرة');
+                          }
+                        },
+                        backgroundColor: Color(0xff1A3C98),
+                        textColor: Colors.white,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        borderRadius: BorderRadius.circular(10),
+                        fixedWidth: 0.80,
+                      ),
                     ),
-                    child: GlobalElevatedButton(
-                      label: "تحميل الفاتورة PDF",
-                      onPressed: () {
-                        final invoiceUrl = ordersDate.invoice;
-                        if (invoiceUrl != null) {
-                          _showPdfOptionsBottomSheet(invoiceUrl,
-                              context: context);
-                        } else {
-                          Fluttertoast.showToast(msg: 'الفاتورة غير متوفرة');
-                        }
-                      },
-                      backgroundColor: Color(0xff1A3C98),
-                      textColor: Colors.white,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      borderRadius: BorderRadius.circular(10),
-                      fixedWidth: 0.80,
-                    ),
-                  ),
                 ],
               ),
             ),
             SizedBox(height: 10.0),
-            Container(
-              alignment: Alignment.bottomCenter,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
+            if (ordersDate.contract != null)
+              Container(
+                alignment: Alignment.bottomCenter,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: GlobalElevatedButton(
+                  label: "تحميل العقد PDF",
+                  onPressed: () {
+                    final invoiceUrl = ordersDate.contract;
+                    if (invoiceUrl != null) {
+                      _showPdfOptionsBottomSheet(invoiceUrl, context: context);
+                    } else {
+                      Fluttertoast.showToast(msg: 'الفاتورة غير متوفرة');
+                    }
+                  },
+                  backgroundColor: Colors.white,
+                  textColor: Color(0xff1A3C98),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  borderRadius: BorderRadius.circular(10),
+                  fixedWidth: 0.80,
+                  side: BorderSide(color: Color(0xff1A3C98)),
+                ),
               ),
-              child: GlobalElevatedButton(
-                label: "تحميل العقد PDF",
-                onPressed: () {
-                  final invoiceUrl = ordersDate.contract;
-                  if (invoiceUrl != null) {
-                    _showPdfOptionsBottomSheet(invoiceUrl, context: context);
-                  } else {
-                    Fluttertoast.showToast(msg: 'الفاتورة غير متوفرة');
-                  }
-                },
-                backgroundColor: Colors.white,
-                textColor: Color(0xff1A3C98),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                borderRadius: BorderRadius.circular(10),
-                fixedWidth: 0.80,
-                side: BorderSide(color: Color(0xff1A3C98)),
-              ),
-            ),
           ],
         ),
       ),

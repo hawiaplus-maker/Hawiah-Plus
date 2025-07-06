@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/features/authentication/presentation/bottom_sheet/privacy_bottom_sheet.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
@@ -24,12 +25,9 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'الشروط والأحكام',
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        context,
+        titleText: 'الشروط والأحكام',
       ),
       body: BlocBuilder<SettingCubit, SettingState>(builder: (context, state) {
         final setting = context.read<SettingCubit>().setting;

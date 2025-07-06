@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
@@ -169,7 +170,7 @@ class _UserProfileState extends State<UserProfile> {
               ),
             );
           } else if (state is ProfileLoading) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CustomLoading());
           } else
             return Container(
               color: Colors.red,

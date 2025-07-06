@@ -2,14 +2,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
@@ -24,7 +27,6 @@ import 'package:hawiah_client/features/profile/presentation/screens/privacy-poli
 import 'package:hawiah_client/features/profile/presentation/screens/support_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/terms-and-conditions.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
-import 'package:hawiah_client/main.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -36,6 +38,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final isGuest = HiveMethods.getToken() == null;
+    final user = context.read<ProfileCubit>().user;
     return Scaffold(
       appBar: CustomAppBar(
         context,
@@ -43,10 +47,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Image.asset(
-              "assets/icons/notfication_icon.png",
-            ),
-            constraints: BoxConstraints(maxWidth: 40.w, maxHeight: 40.h),
+            icon: Card(
+                shape: CircleBorder(),
+                color: AppColor.whiteColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset(AppImages.bellIcon),
+                )),
           )
         ],
       ),
@@ -58,12 +65,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
                   children: [
-                    CustomNetworkImage(
-                      imageUrl: "profile.image",
-                      height: 70.h,
-                      width: 70.w,
-                      radius: 45,
-                      fit: BoxFit.contain,
+                    Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                              color: AppColor.mainAppColor, width: 1.5)),
+                      child: CustomNetworkImage(
+                        radius: 50.r,
+                        fit: BoxFit.fill,
+                        imageUrl: user.image,
+                        height: 70.h,
+                        width: 70.w,
+                      ),
                     ),
                     SizedBox(
                       width: 10.w,
@@ -75,8 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           isGuest
                               ? AppLocaleKey.guest.tr()
                               : context.read<ProfileCubit>().user.name,
-                          style:
-                              TextStyle(fontSize: 16.sp, color: Colors.black),
+                          style: AppTextStyle.text16_700,
                         ),
                         Text(
                           isGuest
@@ -111,6 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               "assets/icons/edit_icon.png",
                               height: 15.h,
                               width: 15.w,
+                              color: AppColor.mainAppColor,
                             ),
                             SizedBox(
                               width: 5.w,
@@ -178,10 +191,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(
                 height: 10.h,
               ),
-              Container(
-                color: Color(0xffF9F9F9),
-                height: 15.h,
-              ),
+              // Container(
+              //   color: Color(0xffF9F9F9),
+              //   height: 15.h,
+              // ),
               SizedBox(
                 height: 10.h,
               ),
@@ -459,7 +472,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ? Icon(
                         Icons.arrow_forward_ios,
                         size: 20.sp,
-                        color: Color(0xffA6A6A6),
+                        color: AppColor.blackColor,
                       )
                     : trailing,
               ]),
