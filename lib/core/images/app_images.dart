@@ -44,4 +44,5 @@ class AppImages {
   static const String linkedin = 'assets/images/linkedin.png';
   static const String twitter = 'assets/images/twitter.png';
   static const String whatsapp = 'assets/images/whatsapp.png';
+  static const String loginImage = 'assets/images/loginImage.png';
 }

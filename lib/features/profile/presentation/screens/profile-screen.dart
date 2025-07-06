@@ -21,7 +21,6 @@ import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.
 import 'package:hawiah_client/features/profile/presentation/screens/faq-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/language-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/privacy-policy-screen.dart';
-import 'package:hawiah_client/features/profile/presentation/screens/setting-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/support_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/terms-and-conditions.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
@@ -267,17 +266,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     );
                   }),
-              PersonProfileListTile(
-                  title: "الإعدادات",
-                  logo: "assets/icons/setting_icon.png",
-                  onTap: () {
-                    Navigator.push<void>(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (BuildContext context) => SettingsScreen(),
-                      ),
-                    );
-                  }),
+              // PersonProfileListTile(
+              //     title: "الإعدادات",
+              //     logo: "assets/icons/setting_icon.png",
+              //     onTap: () {
+              //       Navigator.push<void>(
+              //         context,
+              //         MaterialPageRoute<void>(
+              //           builder: (BuildContext context) => SettingsScreen(),
+              //         ),
+              //       );
+              //     }),
               PersonProfileListTile(
                   title: "سياسة الخصوصية",
                   logo: "assets/icons/shield_keyhole_icon.png",
@@ -302,72 +301,81 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     );
                   }),
-              BlocConsumer<AuthCubit, AuthState>(
-                builder: (context, state) {
-                  return InkWell(
-                    onTap: () {
-                      AuthCubit.get(context).logout();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20.w, vertical: 10.h),
-                      child: Row(children: [
-                        Image.asset("assets/icons/sign_out_icon.png",
-                            height: 30.h, width: 30.w),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        Text(
-                          "تسجيل خروج",
-                          style:
-                              TextStyle(fontSize: 14.sp, color: Colors.black),
-                        ),
-                      ]),
+              isGuest
+                  ? PersonProfileListTile(
+                      title: AppLocaleKey.login.tr(),
+                      logo: AppImages.loginImage,
+                      onTap: () {
+                        NavigatorMethods.pushNamedAndRemoveUntil(
+                            context, LoginScreen.routeName);
+                      })
+                  : BlocConsumer<AuthCubit, AuthState>(
+                      builder: (context, state) {
+                        return InkWell(
+                          onTap: () {
+                            AuthCubit.get(context).logout();
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20.w, vertical: 10.h),
+                            child: Row(children: [
+                              Image.asset("assets/icons/sign_out_icon.png",
+                                  height: 30.h, width: 30.w),
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                              Text(
+                                "تسجيل خروج",
+                                style: TextStyle(
+                                    fontSize: 14.sp, color: Colors.black),
+                              ),
+                            ]),
+                          ),
+                        );
+                      },
+                      listener: (BuildContext context, state) {
+                        if (state is AuthError) {
+                          Fluttertoast.showToast(
+                            msg: state.message,
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.redAccent,
+                            textColor: Colors.black,
+                            fontSize: 16.0,
+                          );
+                        }
+                        if (state is AuthLoading) {
+                          CustomLoading();
+                        }
+                        if (state is AuthSuccess) {
+                          Fluttertoast.showToast(
+                            msg: state.message,
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.green,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+                          Navigator.pushAndRemoveUntil<void>(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) =>
+                                  const LoginScreen(),
+                            ),
+                            (route) => false,
+                          );
+                        } else if (state is AuthError) {
+                          Fluttertoast.showToast(
+                            msg: state.message,
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.redAccent,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+                        }
+                      },
                     ),
-                  );
-                },
-                listener: (BuildContext context, state) {
-                  if (state is AuthError) {
-                    Fluttertoast.showToast(
-                      msg: state.message,
-                      toastLength: Toast.LENGTH_LONG,
-                      gravity: ToastGravity.BOTTOM,
-                      backgroundColor: Colors.redAccent,
-                      textColor: Colors.black,
-                      fontSize: 16.0,
-                    );
-                  }
-                  if (state is AuthLoading) {
-                    CustomLoading();
-                  }
-                  if (state is AuthSuccess) {
-                    Fluttertoast.showToast(
-                      msg: state.message,
-                      toastLength: Toast.LENGTH_LONG,
-                      gravity: ToastGravity.BOTTOM,
-                      backgroundColor: Colors.green,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
-                    Navigator.pushAndRemoveUntil<void>(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (BuildContext context) => const LoginScreen(),
-                      ),
-                      (route) => false,
-                    );
-                  } else if (state is AuthError) {
-                    Fluttertoast.showToast(
-                      msg: state.message,
-                      toastLength: Toast.LENGTH_LONG,
-                      gravity: ToastGravity.BOTTOM,
-                      backgroundColor: Colors.redAccent,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
-                  }
-                },
-              ),
               SizedBox(
                 height: 100.h,
               ),

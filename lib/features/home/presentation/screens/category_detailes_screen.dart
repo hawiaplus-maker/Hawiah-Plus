@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
+import 'package:hawiah_client/core/custom_widgets/no_data_widget.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/location/presentation/screens/choose_address_screen.dart';
 
@@ -40,7 +41,7 @@ class _CategoryDetailesScreenState extends State<CategoryDetailesScreen> {
               return Center(child: CustomLoading());
             }
             if (homeCubit.showCategories?.message?.services?.isEmpty ?? true) {
-              return Center(child: Text("no_data".tr()));
+              return Center(child: NoDataWidget());
             }
             return Container(
               margin: EdgeInsets.symmetric(horizontal: 20.w),
