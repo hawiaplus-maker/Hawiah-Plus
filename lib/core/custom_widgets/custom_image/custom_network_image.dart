@@ -14,6 +14,7 @@ class CustomNetworkImage extends StatelessWidget {
   final bool hasZoom;
   final bool hasShadow;
   final Color? color;
+  final String? imagePlaceHolder;
 
   const CustomNetworkImage({
     super.key,
@@ -25,6 +26,7 @@ class CustomNetworkImage extends StatelessWidget {
     this.hasZoom = false,
     this.hasShadow = false,
     this.color,
+    this.imagePlaceHolder,
   });
 
   @override
@@ -62,7 +64,7 @@ class CustomNetworkImage extends StatelessWidget {
 
   Widget _buildErrorWidget() {
     return Image.asset(
-      AppImages.logoIcon,
+      imagePlaceHolder ?? AppImages.logoIcon,
       width: width,
       height: height,
       fit: fit ?? BoxFit.contain,

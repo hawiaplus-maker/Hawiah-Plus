@@ -21,6 +21,7 @@ enum ResponseState {
   complete,
   error,
   unauthorized,
+  badRequest
 }
 
 class ApiResponse {
@@ -438,6 +439,12 @@ class ApiHelper {
         var responseJson = response.data;
         return ApiResponse(
           state: ResponseState.error,
+          data: responseJson,
+        );
+      case 404:
+        var responseJson = response.data;
+        return ApiResponse(
+          state: ResponseState.badRequest,
           data: responseJson,
         );
       case 500:

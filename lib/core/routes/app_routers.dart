@@ -18,6 +18,10 @@ class AppRouters {
             args: args,
           ),
         );
+      case LoginScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => LoginScreen(),
+        );
       case AllAddressesScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => AllAddressesScreen(),
@@ -32,18 +36,34 @@ class AppRouters {
             args: args,
           ),
         );
-      case ChooseLocationScreen.routeName:
+      case ChooseAddressScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => ChooseLocationScreen(
-            args: args,
-          ),
-        );  case HomeDetailsOrderScreen.routeName:
-        return MaterialPageRoute(
-          builder: (_) => HomeDetailsOrderScreen(
+          builder: (_) => ChooseAddressScreen(
             args: args,
           ),
         );
-
+      case RequistHawiaScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => RequistHawiaScreen(
+            args: args,
+          ),
+        );
+      case NearbyServiceProviderScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => NearbyServiceProviderScreen(
+            args: args,
+          ),
+        );
+      case PaymentScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => PaymentScreen(
+            args: args,
+          ),
+        );
+      case LayoutScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => LayoutScreen(),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const LayoutScreen(),

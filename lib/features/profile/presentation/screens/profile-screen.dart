@@ -1,10 +1,16 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gap/gap.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
@@ -18,6 +24,7 @@ import 'package:hawiah_client/features/profile/presentation/screens/privacy-poli
 import 'package:hawiah_client/features/profile/presentation/screens/setting-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/terms-and-conditions.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
+import 'package:hawiah_client/main.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -29,11 +36,10 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    // final profile = context.read<ProfileCubit>().user;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("الملف الشخصي"),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        context,
+        titleText: "الملف الشخصي",
         actions: [
           IconButton(
             onPressed: () {},
@@ -66,12 +72,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          context.read<ProfileCubit>().user.name,
+                          isGuest
+                              ? AppLocaleKey.guest.tr()
+                              : context.read<ProfileCubit>().user.name,
                           style:
                               TextStyle(fontSize: 16.sp, color: Colors.black),
                         ),
                         Text(
-                          context.read<ProfileCubit>().user.email,
+                          isGuest
+                              ? ""
+                              : context.read<ProfileCubit>().user.email,
                           style: TextStyle(
                               fontSize: 12.sp, color: Color(0xffB5B5B5)),
                         ),
@@ -80,11 +90,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Spacer(),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push<void>(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (BuildContext context) => UserProfile(),
-                            ));
+                        isGuest
+                            ? CommonMethods.showLoginFirstDialog(context,
+                                onPressed: () {
+                                Navigator.pop(context);
+                                NavigatorMethods.pushNamedAndRemoveUntil(
+                                    context, LoginScreen.routeName);
+                              })
+                            : Navigator.push<void>(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder: (BuildContext context) =>
+                                      UserProfile(),
+                                ));
                       },
                       child: Container(
                         child: Row(
@@ -167,28 +185,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(
                 height: 10.h,
               ),
-              PersonProfileListTile(
-                  title: "الطلبات",
-                  logo: AppImages.orderIcon,
-                  onTap: () {
-                    Navigator.push<void>(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (BuildContext context) =>
-                              const OrdersScreen(),
-                        ));
-                  }),
-              PersonProfileListTile(
-                  title: "العناوين",
-                  logo: "assets/icons/personal_location_icon.png",
-                  onTap: () {
-                    NavigatorMethods.pushNamed(
-                        context, AllAddressesScreen.routeName);
-                  }),
-              PersonProfileListTile(
-                  title: "كوبونات الخصم",
-                  logo: "assets/icons/coupon_icon.png",
-                  onTap: () {}),
+              isGuest
+                  ? Gap(0)
+                  : PersonProfileListTile(
+                      title: "الطلبات",
+                      logo: AppImages.orderIcon,
+                      onTap: () {
+                        Navigator.push<void>(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) =>
+                                  const OrdersScreen(),
+                            ));
+                      }),
+              isGuest
+                  ? Gap(0)
+                  : PersonProfileListTile(
+                      title: "العناوين",
+                      logo: "assets/icons/personal_location_icon.png",
+                      onTap: () {
+                        NavigatorMethods.pushNamed(
+                            context, AllAddressesScreen.routeName);
+                      }),
+              isGuest
+                  ? Gap(0)
+                  : PersonProfileListTile(
+                      title: "كوبونات الخصم",
+                      logo: "assets/icons/coupon_icon.png",
+                      onTap: () {}),
               PersonProfileListTile(
                   title: "دعوة صديق",
                   logo: "assets/icons/person_invite_icon.png",
@@ -304,6 +328,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       fontSize: 16.0,
                     );
                   }
+                  if (state is AuthLoading) {
+                    CustomLoading();
+                  }
                   if (state is AuthSuccess) {
                     Fluttertoast.showToast(
                       msg: state.message,
@@ -333,7 +360,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
               ),
               SizedBox(
-                height: 70.h,
+                height: 100.h,
               ),
             ],
           ),

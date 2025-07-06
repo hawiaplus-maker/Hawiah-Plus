@@ -2,50 +2,53 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
-import 'package:hawiah_client/features/location/presentation/screens/choose-location-screen.dart';
-import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
+import 'package:hawiah_client/features/home/presentation/model/nearby_service-provider_model.dart';
+import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
+import 'package:hawiah_client/features/home/presentation/screens/payment-screen.dart';
+import 'package:hawiah_client/features/location/presentation/model/address_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../controllers/home-cubit/home-cubit.dart';
 import '../controllers/home-cubit/home-state.dart';
 
-class HomeDetailesOrderScreenArgs {
+class RequistHawiaScreenArgs {
   final int catigoryId;
   final int serviceProviderId;
-  final int addressId;
+  final AddressModel address;
+  final NearbyServiceProviderModel nearbyServiceProviderModel;
+  final ShowCategoriesModel showCategoriesModel;
 
-  HomeDetailesOrderScreenArgs(
-      {required this.catigoryId,
-      required this.serviceProviderId,
-      required this.addressId});
+  RequistHawiaScreenArgs({
+    required this.catigoryId,
+    required this.serviceProviderId,
+    required this.address,
+    required this.nearbyServiceProviderModel,
+    required this.showCategoriesModel,
+  });
 }
 
-class HomeDetailsOrderScreen extends StatefulWidget {
+class RequistHawiaScreen extends StatefulWidget {
   static const routeName = '/home-details-order-screen';
-  final HomeDetailesOrderScreenArgs args;
-  const HomeDetailsOrderScreen({
+  final RequistHawiaScreenArgs args;
+  const RequistHawiaScreen({
     super.key,
     required this.args,
   });
 
   @override
-  State<HomeDetailsOrderScreen> createState() => _HomeDetailsOrderScreenState();
+  State<RequistHawiaScreen> createState() => _RequistHawiaScreenState();
 }
 
-class _HomeDetailsOrderScreenState extends State<HomeDetailsOrderScreen> {
-  @override
-  void initState() {
-    context.read<OrderCubit>().getNearbyProviders(
-        catigoryId: widget.args.catigoryId,
-        addressId: widget.args.addressId,
-        onSuccess: () {});
-    super.initState();
-  }
-
+class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
   // final String? title;
   void _showCalendarModal(BuildContext context, HomeCubit homeCubit) {
     showModalBottomSheet(
@@ -119,16 +122,10 @@ class _HomeDetailsOrderScreenState extends State<HomeDetailsOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final dimensions = extractDimensions(description);
-
-    // final dimensionText = [
-    //   if (dimensions.containsKey('الطول')) 'الطول: ${dimensions['الطول']}',
-    //   if (dimensions.containsKey('العرض')) 'العرض: ${dimensions['العرض']}',
-    // ].join('، ');
     return Scaffold(
-      appBar: AppBar(
-        title: Text("request_hawaia".tr()),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        context,
+        titleText: "request_hawaia".tr(),
       ),
       body: BlocConsumer<HomeCubit, HomeState>(
         builder: (BuildContext context, HomeState state) {
@@ -138,18 +135,9 @@ class _HomeDetailsOrderScreenState extends State<HomeDetailsOrderScreen> {
             margin: EdgeInsets.symmetric(horizontal: 20.w),
             child: Column(
               children: [
+                SizedBox(height: 20.h),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ChooseLocationScreen(
-                                  args: ChoooseLocationScreenArgs(
-                                    catigoryId: 1,
-                                    serviceProviderId: 1,
-                                  ),
-                                )));
-                  },
+                  onTap: () {},
                   child: Container(
                     padding:
                         EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
@@ -159,26 +147,18 @@ class _HomeDetailsOrderScreenState extends State<HomeDetailsOrderScreen> {
                     ),
                     child: Row(
                       children: [
-                        Image.asset(
-                          "assets/icons/hawiah_location_icon.png",
+                        SvgPicture.asset(
+                          AppImages.locationIcon,
                           height: 25.h,
                           width: 25.w,
                         ),
                         SizedBox(width: 10.w),
-                        Text(
-                          "home_delivery".tr(),
-                          style: TextStyle(fontSize: 14.sp),
-                        ),
-                        Spacer(),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 5.w),
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xffEDEEFF),
+                        Flexible(
+                          child: Text(
+                            "${widget.args.address.title ?? ""}- ${widget.args.address.city ?? ""} - ${widget.args.address.neighborhood ?? ""}",
+                            style: TextStyle(fontSize: 14.sp),
                           ),
-                          child: Icon(Icons.arrow_drop_down),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -199,28 +179,23 @@ class _HomeDetailsOrderScreenState extends State<HomeDetailsOrderScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        "assets/icons/hawiah_icon.png",
+                      SvgPicture.asset(
+                        AppImages.containerIcon,
                         width: 30.w,
                         height: 30.h,
                       ),
                       SizedBox(width: 10.w),
                       Text(
-                        "title",
+                        widget.args.showCategoriesModel.message?.title ?? "",
                         style: TextStyle(
                             fontSize: 16.sp,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
                       ),
                       Spacer(),
-                      Container(
-                        padding: EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xffEDEEFF),
-                        ),
-                        child: Icon(Icons.arrow_drop_down),
-                      ),
+                      SvgPicture.asset(
+                        AppImages.arrowDownIcon,
+                      )
                     ],
                   ),
                 ),
@@ -240,14 +215,19 @@ class _HomeDetailsOrderScreenState extends State<HomeDetailsOrderScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        "assets/icons/hawiah_size_icon.png",
+                      SvgPicture.asset(
+                        AppImages.hawiaDetailesIcon,
                         width: 30.w,
                         height: 30.h,
                       ),
                       SizedBox(width: 10.w),
                       Text(
-                        "لا يوجد تفاصيل",
+                        widget.args.showCategoriesModel.message?.services
+                                ?.where((element) =>
+                                    element.id == widget.args.serviceProviderId)
+                                .first
+                                .title ??
+                            "",
                         style: TextStyle(
                           fontSize: 16.sp,
                           color: Colors.black,
@@ -255,14 +235,9 @@ class _HomeDetailsOrderScreenState extends State<HomeDetailsOrderScreen> {
                         ),
                       ),
                       Spacer(),
-                      Container(
-                        padding: EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xffEDEEFF),
-                        ),
-                        child: Icon(Icons.arrow_drop_down),
-                      ),
+                      SvgPicture.asset(
+                        AppImages.arrowDownIcon,
+                      )
                     ],
                   ),
                 ),
@@ -280,7 +255,7 @@ class _HomeDetailsOrderScreenState extends State<HomeDetailsOrderScreen> {
                     ),
                     child: Row(
                       children: [
-                        Image.asset("assets/icons/hawiah_date_icon.png",
+                        SvgPicture.asset(AppImages.timeIcon,
                             height: 25.h, width: 25.w),
                         SizedBox(width: 10.w),
                         Text(
@@ -291,14 +266,9 @@ class _HomeDetailsOrderScreenState extends State<HomeDetailsOrderScreen> {
                           style: TextStyle(fontSize: 14.sp),
                         ),
                         Spacer(),
-                        Container(
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xffEDEEFF),
-                          ),
-                          child: Icon(Icons.arrow_drop_down),
-                        ),
+                        SvgPicture.asset(
+                          AppImages.arrowDownIcon,
+                        )
                       ],
                     ),
                   ),
@@ -313,63 +283,30 @@ class _HomeDetailsOrderScreenState extends State<HomeDetailsOrderScreen> {
                   ),
                   child: Row(
                     children: [
-                      Image.asset("assets/icons/hawiah_date_icon.png",
+                      SvgPicture.asset(AppImages.timeIcon,
                           height: 25.h, width: 25.w),
                       SizedBox(width: 10.w),
                       Text(
-                        homeCubit.rangeEnd != null
-                            ? DateFormat('yyyy-MM-dd')
-                                .format(homeCubit.rangeEnd!)
+                        homeCubit.rangeStart != null
+                            ? DateFormat('yyyy-MM-dd').format(
+                                (homeCubit.rangeStart?.add(Duration(
+                                        days: widget
+                                                .args
+                                                .nearbyServiceProviderModel
+                                                .duration ??
+                                            0))) ??
+                                    DateTime.now())
                             : "date_end".tr(),
                         style: TextStyle(fontSize: 14.sp),
                       ),
                       Spacer(),
-                      Container(
-                        padding: EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xffEDEEFF),
-                        ),
-                        child: Icon(Icons.arrow_drop_down),
-                      ),
+                      SvgPicture.asset(
+                        AppImages.arrowDownIcon,
+                      )
                     ],
                   ),
                 ),
                 SizedBox(height: 10.h),
-                Spacer(),
-                Container(
-                  margin: EdgeInsets.only(top: 20.h),
-                  alignment: Alignment.topCenter,
-                  child: GlobalElevatedButton(
-                    label: "continue_payment".tr(),
-                    onPressed: () {
-                      context.read<OrderCubit>().createOrder(
-                          catigoryId: widget.args.catigoryId,
-                          serviceProviderId: widget.args.serviceProviderId,
-                          priceId: 10,
-                          addressId: widget.args.addressId,
-                          fromDate: "2025-07-01",
-                          totalPrice: 20.5,
-                          price: 200.0,
-                          vatValue: 1.5,
-                          onSuccess: () {
-                            NavigatorMethods.pushReplacementNamed(
-                              context,
-                              LayoutScreen.routeName,
-                            );
-                          });
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => PaymentScreen()));
-                    },
-                    backgroundColor: AppColor.mainAppColor,
-                    textColor: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    borderRadius: BorderRadius.circular(10),
-                    fixedWidth: 0.80, // 80% of the screen width
-                  ),
-                ),
                 SizedBox(height: 20.h),
               ],
             ),
@@ -377,32 +314,48 @@ class _HomeDetailsOrderScreenState extends State<HomeDetailsOrderScreen> {
         },
         listener: (BuildContext context, HomeState state) {},
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: CustomButton(
+          text: "continue_payment".tr(),
+          onPressed: () {
+            double calculateVat(double price) {
+              const double vatRate = 0.15; // 15% VAT
+              return price * vatRate;
+            }
+
+            double calculatetotal(double price) {
+              const double vatRate = 0.15; // 15% VAT
+              double vatValue = price * vatRate;
+              return price + vatValue;
+            }
+
+            final homeCubit = HomeCubit.get(context);
+            if (homeCubit.rangeStart == null) {
+              CommonMethods.showError(
+                  message: AppLocaleKey.youHaveToChooseStartDate.tr());
+            } else if (homeCubit.rangeStart != null) {
+              NavigatorMethods.pushNamed(context, PaymentScreen.routeName,
+                  arguments: PaymentScreenArgs(
+                      addressId: widget.args.address.id!,
+                      catigoryId: widget.args.catigoryId,
+                      serviceProviderId: widget.args.serviceProviderId,
+                      totalPrice: calculatetotal(double.tryParse(widget
+                                  .args.nearbyServiceProviderModel.dailyPrice ??
+                              "0.0") ??
+                          0.0),
+                      price: double.tryParse(widget
+                                  .args.nearbyServiceProviderModel.dailyPrice ??
+                              "0.0") ??
+                          0.0,
+                      vatValue: calculateVat(
+                          double.tryParse(widget.args.nearbyServiceProviderModel.dailyPrice ?? "0.0") ?? 0.0),
+                      fromDate: DateFormat('yyyy-MM-dd').format(homeCubit.rangeStart!),
+                      priceId: widget.args.nearbyServiceProviderModel.id!));
+            }
+          },
+        ),
+      ),
     );
-  }
-
-  Map<String, String> extractDimensions(String? description) {
-    if (description == null || description.isEmpty) return {};
-
-    final result = <String, String>{};
-
-    final sizeMatch = RegExp(r'الحجم[:：]?\s*(\d+\.?\d*)\s*ياردة مكعبة')
-        .firstMatch(description);
-    if (sizeMatch != null) {
-      result['الحجم'] = '${sizeMatch.group(1)} ياردة مكعبة';
-    }
-
-    final lengthMatch =
-        RegExp(r'طول الحاوية[:：]?\s*(\d+\.?\d*)\s*م').firstMatch(description);
-    if (lengthMatch != null) {
-      result['الطول'] = '${lengthMatch.group(1)} م';
-    }
-
-    final widthMatch =
-        RegExp(r'عرض الحاوية[:：]?\s*(\d+\.?\d*)\s*م').firstMatch(description);
-    if (widthMatch != null) {
-      result['العرض'] = '${widthMatch.group(1)} م';
-    }
-
-    return result;
   }
 }

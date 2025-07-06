@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
+import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 
 class ActionButtonsWidget extends StatelessWidget {
   ActionButtonsWidget({Key? key, required this.formKey}) : super(key: key);
@@ -53,7 +55,9 @@ class ActionButtonsWidget extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: GlobalElevatedButton(
               label: "login_as_guest".tr(),
-              onPressed: () {},
+              onPressed: () {
+                NavigatorMethods.pushNamed(context, LayoutScreen.routeName);
+              },
               backgroundColor: AppColor.mainAppColor,
               textColor: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),

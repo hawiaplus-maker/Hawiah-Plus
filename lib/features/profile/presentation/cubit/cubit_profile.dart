@@ -31,8 +31,10 @@ class ProfileCubit extends Cubit<ProfileState> {
       } else if (response.state == ResponseState.error ||
           response.state == ResponseState.unauthorized) {
         log("Profile fetch failed: ${response.data}");
+
         emit(ProfileError(
             response.data['message'] ?? "Failed to fetch profile"));
+        emit(ProfileUnAuthorized());
         onError?.call(); // Call error callback after state emission
       }
     } catch (e) {

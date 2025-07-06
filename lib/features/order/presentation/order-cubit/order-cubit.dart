@@ -7,6 +7,7 @@ import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/home/presentation/model/nearby_service-provider_model.dart';
 import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -71,30 +72,63 @@ class OrderCubit extends Cubit<OrderState> {
       emit(OrderError());
     }
   }
-  //================== get nearby provider ====================
 
-  Future<void> getNearbyProviders(
-      {required int catigoryId,
-      required int addressId,
-      required VoidCallback onSuccess}) async {
+  //================== get nearby provider ====================
+  void initialNearbyServiceProvider() {
+    _nearbyServiceProviderResponse = ApiResponse(
+      state: ResponseState.sleep,
+      data: null,
+    );
+    _nearbyServiceProvider = [];
+    emit(OrderChange());
+  }
+
+  ApiResponse _nearbyServiceProviderResponse = ApiResponse(
+    state: ResponseState.sleep,
+    data: null,
+  );
+  ApiResponse get nearbyServiceProviderResponse =>
+      _nearbyServiceProviderResponse;
+
+  List<NearbyServiceProviderModel> _nearbyServiceProvider = [];
+
+  List<NearbyServiceProviderModel> get nearbyServiceProvider =>
+      _nearbyServiceProvider;
+
+  Future<void> getNearbyProviders({
+    required int serviceProviderId,
+    required int addressId,
+    VoidCallback? onBadRequest,
+  }) async {
     NavigatorMethods.loading();
-    FormData body =
-        FormData.fromMap({'product_id': catigoryId, 'address_id': addressId});
-    final response = await ApiHelper.instance.post(
+    FormData body = FormData.fromMap(
+        {'product_id': serviceProviderId, 'address_id': addressId});
+    _nearbyServiceProviderResponse = await ApiHelper.instance.post(
       Urls.getNearbyProviders,
       body: body,
     );
     NavigatorMethods.loadingOff();
-    if (response.state == ResponseState.complete) {
-      onSuccess.call();
-    } else if (response.state == ResponseState.unauthorized) {
+    if (_nearbyServiceProviderResponse.state == ResponseState.complete) {
+      Iterable iterable = _nearbyServiceProviderResponse.data['data'];
+      _nearbyServiceProvider =
+          iterable.map((e) => NearbyServiceProviderModel.fromJson(e)).toList();
+      emit(OrderChange());
+    } else if (_nearbyServiceProviderResponse.state ==
+        ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(
         message: tr(AppLocaleKey.youMustLogInFirst),
       );
+    } else if (_nearbyServiceProviderResponse.state ==
+        ResponseState.badRequest) {
+      CommonMethods.showError(
+        message: _nearbyServiceProviderResponse.data['message'] ?? 'حدث خطاء',
+        apiResponse: _nearbyServiceProviderResponse,
+      );
+      onBadRequest?.call();
     } else {
       CommonMethods.showError(
-        message: response.data['message'] ?? 'حدث خطاء',
-        apiResponse: response,
+        message: _nearbyServiceProviderResponse.data['message'] ?? 'حدث خطاء',
+        apiResponse: _nearbyServiceProviderResponse,
       );
     }
   }
@@ -127,6 +161,9 @@ class OrderCubit extends Cubit<OrderState> {
     );
     NavigatorMethods.loadingOff();
     if (response.state == ResponseState.complete) {
+      CommonMethods.showToast(
+        message: response.data['message'] ?? "تم انشاء الطلب بنجاح",
+      );
       onSuccess.call();
     } else if (response.state == ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(

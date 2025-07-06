@@ -33,4 +33,10 @@ class AppImages {
   static const String support = 'assets/images/support.png';
   static const String send = 'assets/images/send.png';
   static const String orderIcon = 'assets/icons/orders_icon.png';
+  static const String hawiaDetailesIcon = 'assets/svg/hawiaDetailesIcon.svg';
+  static const String locationIcon = 'assets/svg/locationIcon.svg';
+  static const String containerIcon = 'assets/svg/renameIcon.svg';
+  static const String timeIcon = 'assets/svg/timeIcon.svg';
+  static const String arrowDownIcon = 'assets/svg/arrowDownIcon.svg';
+  static const String truckImage = 'assets/images/truckImage.png';
 }

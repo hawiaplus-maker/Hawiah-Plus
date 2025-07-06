@@ -135,7 +135,16 @@
   "delete_address":"حذف العنوان",
   "delete":"حذف",
   "confirm":"تاكيد",
-  "currentAddress": "العنوان الحالي"
+  "currentAddress": "العنوان الحالي",
+  "days":"{} أيام ",
+  "sar":"{} ريال ",
+  "chooseServiceProvider":"اختر مزود الخدمة",
+  "youHaveToChooseAddress":"عليك إختيار عنوان أولا",
+  "paymentMethod":"وسيلة الدفع",
+  "youHaveToChooseStartDate":"عليك اختيار تاريخ البداية",
+  "pleaseLoginFirst":"عليك تسجيل الدخول أولاً",
+  "guest":"زائر",
+  "cancel":"الغاء"
  
 
 }

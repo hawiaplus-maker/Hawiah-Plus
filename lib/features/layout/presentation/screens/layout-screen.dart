@@ -91,9 +91,11 @@ class _LayoutScreenState extends State<LayoutScreen> {
         // indexSelected: selectedIndex,
         backgroundColor: Colors.white,
 
-        onTap: (int index) => setState(() {
-          selectedIndex = index;
-        }),
+        onTap: (int index) {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
         // top: -25,
         // animated: true,
         // itemStyle: ItemStyle.circle,

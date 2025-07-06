@@ -16,6 +16,7 @@ import 'package:hawiah_client/features/authentication/presentation/widgets/login
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 
 class LoginScreen extends StatefulWidget {
+  static const String routeName = '/login-screen';
   const LoginScreen({super.key});
 
   @override

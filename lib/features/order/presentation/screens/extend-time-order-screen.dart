@@ -196,10 +196,10 @@ class ExtendTimeOrderScreen extends StatelessWidget {
                   child: GlobalElevatedButton(
                     label: "continue_payment".tr(),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PaymentScreen()));
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => PaymentScreen()));
                     },
                     backgroundColor: AppColor.mainAppColor,
                     textColor: Colors.white,
