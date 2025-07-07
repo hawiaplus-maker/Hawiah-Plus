@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -222,6 +223,7 @@ class _PersonalProfileCompletionScreenState
               title: "account_created_successfully".tr(),
               desc: "can_now_browse_services".tr(),
               btnOkOnPress: () {
+                 HiveMethods.updateIsVisitor(false);
                 Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
                   MaterialPageRoute<void>(
                     builder: (_) => const LayoutScreen(),

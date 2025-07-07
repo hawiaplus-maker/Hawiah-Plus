@@ -14,12 +14,12 @@ class PrivacyPolicyScreen extends StatefulWidget {
 }
 
 class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
-  @override
-  void initState() {
-    context.read<SettingCubit>().initialSetting();
-    context.read<SettingCubit>().getsetting();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   context.read<SettingCubit>().initialSetting();
+  //   context.read<SettingCubit>().getsetting();
+  //   super.initState();
+  // }
 
   Widget build(BuildContext context) {
     return Scaffold(

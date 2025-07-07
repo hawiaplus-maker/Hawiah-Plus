@@ -8,9 +8,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
 
-typedef OnLocationSelected = void Function(double lat, double lng, String locality);
+typedef OnLocationSelected = void Function(
+    double lat, double lng, String locality);
 
 @immutable
 class LocationState {
@@ -130,11 +132,9 @@ class _MapScreenState extends State<MapScreen> {
         final placemarks = await placemarkFromCoordinates(lat, lng);
         if (placemarks.isNotEmpty) {
           final place = placemarks.first;
-          locality = [
-            place.street,
-            place.locality,
-            place.postalCode
-          ].where((e) => e?.isNotEmpty == true).join(', ');
+          locality = [place.street, place.locality, place.postalCode]
+              .where((e) => e?.isNotEmpty == true)
+              .join(', ');
         }
       } catch (e) {
         log("Placemark error: $e");
@@ -192,10 +192,14 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: AppColor.mainAppColor,
         onPressed: _resumeLocationTracking,
-        child: const Icon(Icons.my_location),
+        child: Icon(
+          Icons.my_location,
+          color: AppColor.whiteColor,
+        ),
       ),
       body: _buildBody(),
       bottomNavigationBar: _buildBottomPanel(),
@@ -213,37 +217,38 @@ class _MapScreenState extends State<MapScreen> {
       );
     }
 
-    return GoogleMap(
-      onTap: _onMapTap,
-      markers: {
-        Marker(
-          markerId: const MarkerId("selectedLocation"),
-          position: _locationState.latLng,
-        )
-      },
-      zoomControlsEnabled: false,
-      onMapCreated: (controller) {
-        _mapController = controller;
-        _mapController?.animateCamera(
-          CameraUpdate.newLatLng(_locationState.latLng),
-        );
-      },
-      initialCameraPosition: CameraPosition(
-        target: _locationState.latLng,
-        zoom: _initialZoom,
-      ),
-    );
-  }
-
-  Widget _buildBottomPanel() {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (_locationState.locality != null)
-              Card(
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: GoogleMap(
+            onTap: _onMapTap,
+            markers: {
+              Marker(
+                markerId: const MarkerId("selectedLocation"),
+                position: _locationState.latLng,
+              )
+            },
+            zoomControlsEnabled: false,
+            onMapCreated: (controller) {
+              _mapController = controller;
+              _mapController?.animateCamera(
+                CameraUpdate.newLatLng(_locationState.latLng),
+              );
+            },
+            initialCameraPosition: CameraPosition(
+              target: _locationState.latLng,
+              zoom: _initialZoom,
+            ),
+          ),
+        ),
+        if (_locationState.locality != null)
+          Positioned(
+            top: 10,
+            left: 20,
+            right: 20,
+            child: SafeArea(
+              top: true,
+              child: Card(
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Text(
@@ -252,21 +257,28 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                 ),
               ),
-            const SizedBox(height: 8),
-            CustomButton(
-              text: AppLocaleKey.confirm.tr(),
-              onPressed: () {
-                if (_locationState.hasValidCoordinates) {
-                  widget.args.safeLocationSelected(
-                    _locationState.latitude!,
-                    _locationState.longitude!,
-                    _locationState.locality ?? 'Unknown Location',
-                  );
-                }
-                Navigator.pop(context);
-              },
             ),
-          ],
+          ),
+      ],
+    );
+  }
+
+  Widget _buildBottomPanel() {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: CustomButton(
+          text: AppLocaleKey.confirm.tr(),
+          onPressed: () {
+            if (_locationState.hasValidCoordinates) {
+              widget.args.safeLocationSelected(
+                _locationState.latitude!,
+                _locationState.longitude!,
+                _locationState.locality ?? 'Unknown Location',
+              );
+            }
+            Navigator.pop(context);
+          },
         ),
       ),
     );

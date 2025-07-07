@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/screens/home-screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/all_addresses_screen.dart';
@@ -23,7 +24,8 @@ class _LayoutScreenState extends State<LayoutScreen> {
   void initState() {
     Future.wait([
       context.read<HomeCubit>().getCategories(),
-      context.read<ProfileCubit>().fetchProfile(),
+      if (HiveMethods.isVisitor() == false)
+        context.read<ProfileCubit>().fetchProfile(),
       context.read<SettingCubit>().getsetting()
     ]);
 
@@ -89,7 +91,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
         // color: Color(0xff929292),
         // colorSelected: Colors.white,
         // indexSelected: selectedIndex,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
 
         onTap: (int index) {
           setState(() {

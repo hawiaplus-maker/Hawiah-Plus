@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/routes/app_routers_import.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
@@ -418,11 +419,12 @@ class ApiHelper {
       case 401:
         var responseJson = response.data;
         Future.delayed(Duration.zero, () {
+          HiveMethods.deleteToken();
           if (HiveMethods.isVisitor() == false) {
-            // AppRouters.navigatorKey.currentState?.pushNamedAndRemoveUntil(
-            //   LoginScreen.routeName,
-            //   (route) => false,
-            // );
+            AppRouters.navigatorKey.currentState?.pushNamedAndRemoveUntil(
+              LoginScreen.routeName,
+              (route) => false,
+            );
           }
         });
         return ApiResponse(

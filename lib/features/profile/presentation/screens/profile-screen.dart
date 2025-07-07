@@ -22,6 +22,7 @@ import 'package:hawiah_client/features/order/presentation/screens/orders-screen.
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/faq-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/language-screen.dart';
+import 'package:hawiah_client/features/profile/presentation/screens/model/user_profile_model.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/privacy-policy-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/support_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/terms-and-conditions.dart';
@@ -38,7 +39,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final isGuest = HiveMethods.getToken() == null;
-    final user = context.read<ProfileCubit>().user;
+    final user;
+    if (isGuest == true) {
+      user = UserProfileModel(
+        name: AppLocaleKey.guest.tr(),
+        email: "",
+        mobile: "",
+        username: "",
+        image: "",
+        walletLimit: "0",
+        nationalId: "",
+        city: "",
+        id: 0,
+      );
+    } else {
+      user = context.read<ProfileCubit>().user;
+    }
     return Scaffold(
       appBar: CustomAppBar(
         context,

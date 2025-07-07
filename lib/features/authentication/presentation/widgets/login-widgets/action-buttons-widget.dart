@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
@@ -27,6 +28,7 @@ class ActionButtonsWidget extends StatelessWidget {
               onPressed: isLoading
                   ? null
                   : () async {
+                      HiveMethods.updateIsVisitor(false);
                       if (formKey.currentState!.validate()) {
                         final cleanedPhone = AuthCubit.get(context)
                             .phoneNumber
@@ -56,6 +58,7 @@ class ActionButtonsWidget extends StatelessWidget {
             child: GlobalElevatedButton(
               label: "login_as_guest".tr(),
               onPressed: () {
+                HiveMethods.updateIsVisitor(true);
                 NavigatorMethods.pushNamed(context, LayoutScreen.routeName);
               },
               backgroundColor: Color(0xffEDEEFF),

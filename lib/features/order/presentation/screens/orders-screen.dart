@@ -139,7 +139,7 @@ class _OrdersScreenState extends State<OrdersScreen>
 
   Widget _buildOrderList(List<dynamic> orders, {required bool isCurrent}) {
     if (orders.isEmpty) {
-      return const Center(child: Text("لا توجد طلبات في هذا القسم"));
+      return Center(child: const NoDataWidget());
     }
 
     return ListView.builder(

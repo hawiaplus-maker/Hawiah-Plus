@@ -23,10 +23,17 @@ import 'package:hawiah_client/features/location/presentation/screens/map_screen.
 import 'package:hawiah_client/features/location/service/location_service.dart';
 import 'package:location/location.dart';
 
+class AddNewLocationScreenArgs {
+  final void Function() onAddressAdded;
+
+  AddNewLocationScreenArgs({required this.onAddressAdded});
+}
+
 class AddNewLocationScreen extends StatefulWidget {
   static const String routeName = '/addNewLocation';
+  final AddNewLocationScreenArgs args;
 
-  const AddNewLocationScreen({super.key});
+  const AddNewLocationScreen({super.key, required this.args});
 
   @override
   State<AddNewLocationScreen> createState() => _AddNewLocationScreenState();
@@ -316,7 +323,10 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
           latitude: currentPosition!.latitude,
           longitude: currentPosition!.longitude,
           neighborhoodId: selectedNeighborhood!,
-          onSuccess: () => Navigator.pop(context),
+          onSuccess: () {
+            Navigator.pop(context);
+            widget.args.onAddressAdded();
+          },
         );
   }
 

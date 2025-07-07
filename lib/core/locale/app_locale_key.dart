@@ -35,4 +35,5 @@ class AppLocaleKey {
   static const String paymentMethod = 'paymentMethod';
   static const String youHaveToChooseStartDate = 'youHaveToChooseStartDate';
   static const String guest = 'guest';
+  static const String noAddresses = 'noAddresses';
 }

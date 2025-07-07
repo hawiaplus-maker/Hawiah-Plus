@@ -19,6 +19,7 @@ class PhoneInputWidget extends StatelessWidget {
       validator: (v) => ValidationMethods.validatePhone(v, country: _country),
       controller: controller,
       labelText: "phone_number".tr(),
+      keyboardType: TextInputType.phone,
       // hintText: "phone_number".tr(),
       onChanged: (value) {
         authCubit.PhoneController.text = value;

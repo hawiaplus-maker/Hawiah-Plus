@@ -28,7 +28,9 @@ class AppRouters {
         );
       case AddNewLocationScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => AddNewLocationScreen(),
+          builder: (_) => AddNewLocationScreen(
+            args: args,
+          ),
         );
       case LocationScreen.routeName:
         return MaterialPageRoute(
