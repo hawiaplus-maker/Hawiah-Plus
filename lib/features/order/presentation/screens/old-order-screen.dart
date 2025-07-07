@@ -43,11 +43,16 @@ class OldOrderScreen extends StatelessWidget {
                   Row(
                     children: [
                       // Vehicle Image
-                      CustomNetworkImage(
-                        imageUrl: ordersDate.image ?? "",
-                        fit: BoxFit.fill,
-                        height: 60.h,
-                        width: 60.w,
+                      Flexible(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15.0),
+                          child: CustomNetworkImage(
+                            imageUrl: ordersDate.image ?? "",
+                            fit: BoxFit.fill,
+                            height: 60.h,
+                            width: 60.w,
+                          ),
+                        ),
                       ),
                       SizedBox(width: 10),
                       Column(
@@ -141,11 +146,12 @@ class OldOrderScreen extends StatelessWidget {
                             SizedBox(
                               height: 10.h,
                             ),
-                            Text(
-                              "${ordersDate.vehicles!.first.carModel} ${ordersDate.vehicles!.first.carType} ${ordersDate.vehicles!.first.carBrand}",
-                              style: AppTextStyle.text14_600
-                                  .copyWith(color: Color(0xff545454)),
-                            ),
+                            if (ordersDate.vehicles?.isNotEmpty == true)
+                              Text(
+                                "${ordersDate.vehicles!.first.carModel} ${ordersDate.vehicles!.first.carType} ${ordersDate.vehicles!.first.carBrand}",
+                                style: AppTextStyle.text14_600
+                                    .copyWith(color: Color(0xff545454)),
+                              ),
                           ],
                         ),
                       ),

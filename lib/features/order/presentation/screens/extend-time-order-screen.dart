@@ -2,16 +2,20 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
-import 'package:hawiah_client/features/home/presentation/screens/payment-screen.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-state.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:hawiah_client/core/theme/app_colors.dart';
-class ExtendTimeOrderScreen extends StatelessWidget {
-  const ExtendTimeOrderScreen({super.key});
 
+class ExtendTimeOrderScreen extends StatelessWidget {
+  const ExtendTimeOrderScreen(
+      {super.key, required this.orderId, required this.duration});
+  final int orderId;
+  final int duration;
   void _showCalendarModal(BuildContext context, OrderCubit orderCubit) {
     showModalBottomSheet(
       context: context,
@@ -92,7 +96,8 @@ class ExtendTimeOrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(context,
+      appBar: CustomAppBar(
+        context,
         titleText: "request_hawaia".tr(),
         centerTitle: true,
       ),
@@ -117,28 +122,19 @@ class ExtendTimeOrderScreen extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Image.asset(
-                          "assets/icons/hawiah_date_icon.png",
-                          height: 25.h,
-                          width: 25.w,
-                        ),
+                        SvgPicture.asset(AppImages.timeIcon,
+                            height: 25.h, width: 25.w),
                         SizedBox(width: 10.w),
                         Text(
                           orderCubit.rangeStart != null
-                              ? DateFormat('yyyy-MM-dd')
+                              ? DateFormat('yyyy-MM-dd', 'en')
                                   .format(orderCubit.rangeStart!)
                               : "date_start".tr(),
                           style: TextStyle(fontSize: 14.sp),
                         ),
                         Spacer(),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 5.w),
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xffEDEEFF),
-                          ),
-                          child: Icon(Icons.arrow_drop_down),
+                        SvgPicture.asset(
+                          AppImages.arrowDownIcon,
                         )
                       ],
                     ),
@@ -150,44 +146,32 @@ class ExtendTimeOrderScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14.sp,
                         ))),
-                GestureDetector(
-                  onTap: () {
-                    _showCalendarModal(context, orderCubit);
-                  },
-                  child: Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color(0xffDADADA)),
-                    ),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          "assets/icons/hawiah_date_icon.png",
-                          height: 25.h,
-                          width: 25.w,
-                        ),
-                        SizedBox(width: 10.w),
-                        Text(
-                          orderCubit.rangeEnd != null
-                              ? DateFormat('yyyy-MM-dd')
-                                  .format(orderCubit.rangeEnd!)
-                              : "date_end".tr(),
-                          style: TextStyle(fontSize: 14.sp),
-                        ),
-                        Spacer(),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 5.w),
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xffEDEEFF),
-                          ),
-                          child: Icon(Icons.arrow_drop_down),
-                        )
-                      ],
-                    ),
+                Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Color(0xffDADADA)),
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(AppImages.timeIcon,
+                          height: 25.h, width: 25.w),
+                      SizedBox(width: 10.w),
+                      Text(
+                        orderCubit.rangeStart != null
+                            ? DateFormat('yyyy-MM-dd', 'en').format((orderCubit
+                                    .rangeStart
+                                    ?.add(Duration(days: duration ?? 0))) ??
+                                DateTime.now())
+                            : "date_end".tr(),
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
+                      Spacer(),
+                      SvgPicture.asset(
+                        AppImages.arrowDownIcon,
+                      )
+                    ],
                   ),
                 ),
                 Spacer(),
@@ -197,10 +181,16 @@ class ExtendTimeOrderScreen extends StatelessWidget {
                   child: GlobalElevatedButton(
                     label: "continue_payment".tr(),
                     onPressed: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => PaymentScreen()));
+                      orderCubit.repeatOrder(
+                          orderId: orderId,
+                          fromDate: DateFormat('yyyy-MM-dd', 'en')
+                              .format(orderCubit.rangeStart!),
+                          onSuccess: () {
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => PaymentScreen()));
+                          });
                     },
                     backgroundColor: AppColor.mainAppColor,
                     textColor: Colors.white,

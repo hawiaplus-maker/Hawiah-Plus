@@ -112,7 +112,7 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                   Center(
                     child: Directionality(
                       textDirection: context.locale.languageCode == 'ar'
-                          ? TextDirection.rtl
+                          ? TextDirection.ltr
                           : TextDirection.ltr,
                       child: Pinput(
                         controller: otpController,

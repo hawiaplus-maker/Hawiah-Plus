@@ -35,11 +35,11 @@ class Urls {
   static const String getNearbyProviders = '${baseUrl}get-nearby-providers';
   static const String createOrder = '${baseUrl}users/orders';
   static const String onBoarding = '${baseUrl}on-boarding';
-  static String orders(int id) =>
-      '${baseUrl}users/user-orders';
+  static String orders(int id) => '${baseUrl}users/user-orders';
   static const String cities = '${baseUrl}cities';
   static const String addresses = '${baseUrl}user-addresses';
   static const String storeAddress = '${baseUrl}user-addresses';
+  static String repeateOrder = '${baseUrl}users/orders/repeate-order';
   static String neighborhoodsByCity(int id) => '${baseUrl}neighborhoods/$id';
   static String updateAddress(int id) => '${baseUrl}user-addresses/$id';
 }

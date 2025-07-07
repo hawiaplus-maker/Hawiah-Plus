@@ -50,6 +50,8 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   }
 
   Future<void> getOnboarding() async {
+    if (onboarding != null) return;
+
     emit(OnBoardingLoading());
     _onboardingResponse = await ApiHelper.instance.get(Urls.onBoarding);
 

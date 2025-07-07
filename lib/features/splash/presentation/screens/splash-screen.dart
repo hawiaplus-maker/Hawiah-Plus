@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/app-language/presentation/screens/app-language-screen.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
+import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-cubit.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _initializeApp();
+    OnBoardingCubit.get(context).getOnboarding();
   }
 
   Future<void> _initializeApp() async {
@@ -51,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
           'assets/images/play_store.png',
           width: double.infinity,
           height: double.infinity,
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
         ),
       ),
     );

@@ -9,7 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
-import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
+import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../controllers/auth-cubit/auth-cubit.dart';
@@ -224,7 +224,7 @@ class _PersonalProfileCompletionScreenState
               btnOkOnPress: () {
                 Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
                   MaterialPageRoute<void>(
-                    builder: (_) => const LoginScreen(),
+                    builder: (_) => const LayoutScreen(),
                   ),
                   (route) => false,
                 );

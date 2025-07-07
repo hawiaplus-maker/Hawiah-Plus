@@ -52,11 +52,16 @@ class CurrentOrderScreen extends StatelessWidget {
                           child: Row(
                             children: [
                               // Vehicle Image
-                              CustomNetworkImage(
-                                imageUrl: ordersDate.image ?? "",
-                                fit: BoxFit.fill,
-                                height: 60.h,
-                                width: 60.w,
+                              Flexible(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  child: CustomNetworkImage(
+                                    imageUrl: ordersDate.image ?? "",
+                                    fit: BoxFit.fill,
+                                    height: 60.h,
+                                    width: 60.w,
+                                  ),
+                                ),
                               ),
                               SizedBox(width: 10),
                               Column(
@@ -142,8 +147,10 @@ class CurrentOrderScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ExtendTimeOrderScreen(),
+                                  builder: (context) => ExtendTimeOrderScreen(
+                                    orderId: ordersDate.id ?? 0,
+                                    duration: ordersDate.duration ?? 0,
+                                  ),
                                 ),
                               );
                             },

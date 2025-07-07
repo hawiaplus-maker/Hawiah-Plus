@@ -189,4 +189,38 @@ class OrderCubit extends Cubit<OrderState> {
       );
     }
   }
+
+  // =================== repeat Order ====================
+ 
+  Future<void> repeatOrder({
+    required int orderId,
+    required String fromDate,
+    required VoidCallback onSuccess,
+  }) async {
+    NavigatorMethods.loading();
+    FormData body = FormData.fromMap({
+      'order_id': orderId,
+      "from_date": fromDate,
+    });
+    final response = await ApiHelper.instance.post(
+      Urls.repeateOrder,
+      body: body,
+    );
+    NavigatorMethods.loadingOff();
+    if (response.state == ResponseState.complete) {
+      CommonMethods.showToast(
+        message: response.data['message'] ?? "تم انشاء الطلب بنجاح",
+      );
+      onSuccess.call();
+    } else if (response.state == ResponseState.unauthorized) {
+      CommonMethods.showAlertDialog(
+        message: tr(AppLocaleKey.youMustLogInFirst),
+      );
+    } else {
+      CommonMethods.showError(
+        message: response.data['message'] ?? 'حدث خطأ',
+        apiResponse: response,
+      );
+    }
+  }
 }

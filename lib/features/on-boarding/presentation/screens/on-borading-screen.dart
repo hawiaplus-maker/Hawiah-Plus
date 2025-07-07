@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
-import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/widgets/on-boarding-appBar-widget.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/widgets/on-boarding-content-widget.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/widgets/on-boarding-page-view-widget.dart';
@@ -22,7 +20,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   void initState() {
     HiveMethods.updateFirstTime();
     super.initState();
-    Future.microtask(() => OnBoardingCubit.get(context).getOnboarding());
   }
 
   @override
@@ -32,19 +29,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         listener: (context, state) {},
         builder: (context, state) {
           final cubit = OnBoardingCubit.get(context);
-
-          if (state is OnBoardingLoading) {
-            return Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                image: AssetImage(AppImages.onboarding1),
-                fit: BoxFit.cover,
-              )),
-              child: Center(child: CustomLoading()),
-            );
-          }
 
           if (state is OnBoardingError || cubit.onBoardingList.isEmpty) {
             return const Center(child: Text("حدث خطأ أثناء تحميل البيانات."));
