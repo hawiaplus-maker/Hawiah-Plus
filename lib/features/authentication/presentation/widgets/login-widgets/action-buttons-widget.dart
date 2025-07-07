@@ -43,11 +43,11 @@ class ActionButtonsWidget extends StatelessWidget {
                       //         builder: (context) =>
                       //             const PersonalProfileCompletionScreen()));
                     },
-              backgroundColor: Color(0xffEDEEFF),
-              textColor: AppColor.darkMainAppColor,
+              backgroundColor: AppColor.mainAppColor,
+              textColor: AppColor.whiteColor,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               borderRadius: BorderRadius.circular(10),
-              fixedWidth: 0.80, // 80% of the screen width
+              fixedWidth: 0.90, // 80% of the screen width
             ),
           ),
           SizedBox(height: 20.h),
@@ -58,11 +58,11 @@ class ActionButtonsWidget extends StatelessWidget {
               onPressed: () {
                 NavigatorMethods.pushNamed(context, LayoutScreen.routeName);
               },
-              backgroundColor: AppColor.mainAppColor,
-              textColor: Colors.white,
+              backgroundColor: Color(0xffEDEEFF),
+              textColor: AppColor.mainAppColor,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               borderRadius: BorderRadius.circular(10),
-              fixedWidth: 0.80, // 80% of the screen width
+              fixedWidth: 0.90, // 80% of the screen width
             ),
           ),
         ],

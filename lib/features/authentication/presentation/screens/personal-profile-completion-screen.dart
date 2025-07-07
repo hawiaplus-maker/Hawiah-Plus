@@ -184,8 +184,8 @@ class _PersonalProfileCompletionScreenState
                                   );
                             }
                           },
-                          backgroundColor: AppColor.selectedLightBlueColor,
-                          textColor: AppColor.mainAppColor,
+                          backgroundColor: AppColor.mainAppColor,
+                          textColor: AppColor.whiteColor,
                           padding: EdgeInsets.symmetric(
                               horizontal: 20, vertical: 12),
                           borderRadius: BorderRadius.circular(12),
@@ -230,7 +230,7 @@ class _PersonalProfileCompletionScreenState
                 );
               },
               btnOkText: "continue_to_homepage".tr(),
-              btnOkColor: Color(0xff2204AE), 
+              btnOkColor: Color(0xff2204AE),
             )..show();
           }
           if (state is AuthError) {

@@ -260,7 +260,7 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                         SizedBox(width: 10.w),
                         Text(
                           homeCubit.rangeStart != null
-                              ? DateFormat('yyyy-MM-dd')
+                              ? DateFormat('yyyy-MM-dd', 'en')
                                   .format(homeCubit.rangeStart!)
                               : "date_start".tr(),
                           style: TextStyle(fontSize: 14.sp),
@@ -288,7 +288,7 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                       SizedBox(width: 10.w),
                       Text(
                         homeCubit.rangeStart != null
-                            ? DateFormat('yyyy-MM-dd').format(
+                            ? DateFormat('yyyy-MM-dd', 'en').format(
                                 (homeCubit.rangeStart?.add(Duration(
                                         days: widget
                                                 .args
@@ -350,7 +350,7 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                           0.0,
                       vatValue: calculateVat(
                           double.tryParse(widget.args.nearbyServiceProviderModel.dailyPrice ?? "0.0") ?? 0.0),
-                      fromDate: DateFormat('yyyy-MM-dd').format(homeCubit.rangeStart!),
+                      fromDate: DateFormat('yyyy-MM-dd', 'en').format(homeCubit.rangeStart!),
                       priceId: widget.args.nearbyServiceProviderModel.id!));
             }
           },

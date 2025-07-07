@@ -31,9 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       extendBody: true,
       appBar: CustomAppBar(
-        height: 80,
         context,
+        height: 80,
         leadingWidth: 0,
+        leading: SizedBox.shrink(),
         title: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
             if (state is ProfileUnAuthorized) {

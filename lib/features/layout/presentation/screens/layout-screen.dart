@@ -2,9 +2,9 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hawiah_client/features/explore/presentation/screens/explore-screen.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/screens/home-screen.dart';
+import 'package:hawiah_client/features/location/presentation/screens/all_addresses_screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/orders-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/profile-screen.dart';
@@ -34,7 +34,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
 
   final List<Widget> _screens = [
     HomeScreen(),
-    ExploreScreen(),
+    AllAddressesScreen(),
     OrdersScreen(),
     ProfileScreen(),
   ];

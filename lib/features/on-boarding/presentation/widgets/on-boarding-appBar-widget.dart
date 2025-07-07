@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../controllers/on-boarding-cubit/on-boarding-cubit.dart';
+
 class OnBoardingAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class OnBoardingAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
-            "assets/icons/app_icon_2.png",
+            "assets/images/play_store.png",
             height: 30,
             width: 40,
             fit: BoxFit.contain,
@@ -23,14 +24,15 @@ class OnBoardingAppBar extends StatelessWidget {
             onPressed: () {
               context.read<OnBoardingCubit>().skipPage();
             },
-            child: Text(
-              "skip".tr(),
-              style: TextStyle(color: Colors.white),
-            ),
+            child: context.read<OnBoardingCubit>().currentIndex == 2
+                ? SizedBox()
+                : Text(
+                    "skip".tr(),
+                    style: TextStyle(color: Colors.white),
+                  ),
           ),
         ],
       ),
     );
   }
 }
-
