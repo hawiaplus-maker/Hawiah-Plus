@@ -12,9 +12,7 @@ class AppImages {
   static const String cameraIcon = 'assets/global_icon/camera.svg';
   static const String eyeHideIcon = 'assets/global_icon/eyeHideIcon.svg';
   static const String eyeShowIcon = 'assets/global_icon/eyeShowIcon.svg';
-
   static const String pickImgIcon = 'assets/svg/pickImgIcon.svg';
-
   static const String closeIcon = 'assets/svg/closeIcon.svg';
   static const String logoIcon = 'assets/images/play_store.png';
   static const String profileEmptyImage = 'assets/images/profileEmptyImage.png';

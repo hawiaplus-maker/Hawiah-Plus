@@ -31,9 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       extendBody: true,
       appBar: CustomAppBar(
-        height: 80,
         context,
+        height: 80,
         leadingWidth: 0,
+        leading: SizedBox.shrink(),
         title: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
             if (state is ProfileUnAuthorized) {
@@ -210,13 +211,11 @@ class _SliderWidgetsState extends State<SliderWidgets> {
 
       return ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: Card(
-          color: AppColor.whiteColor,
-          child: CustomNetworkImage(
-            imageUrl: fullImageUrl2,
-            height: 200.h,
-            width: double.infinity,
-          ),
+        child: CustomNetworkImage(
+          imageUrl: fullImageUrl2,
+          height: 200.h,
+          width: double.infinity,
+          fit: BoxFit.fill,
         ),
       );
     });

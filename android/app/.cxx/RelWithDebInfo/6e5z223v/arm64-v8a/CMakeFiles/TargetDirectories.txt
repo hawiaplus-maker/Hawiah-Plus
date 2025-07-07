@@ -1,0 +1,2 @@
+D:/freelance_work/hawya/android/app/.cxx/RelWithDebInfo/6e5z223v/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/freelance_work/hawya/android/app/.cxx/RelWithDebInfo/6e5z223v/arm64-v8a/CMakeFiles/rebuild_cache.dir

@@ -114,8 +114,8 @@ flutter:
           weight: 900    
 
 flutter_native_splash:
-  image: assets/gifs/splash_animation.gif
-  color: "#2b2b2b"
+  image: 'assets/images/play_store.png'
+  color: "FFFFFF"
   android: true
   ios: true
 

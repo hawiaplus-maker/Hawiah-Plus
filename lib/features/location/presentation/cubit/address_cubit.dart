@@ -194,6 +194,7 @@ class AddressCubit extends Cubit<AddressState> {
     if (_addressesResponse.state == ResponseState.complete) {
       Iterable iterable = _addressesResponse.data['message'];
       _addresses = iterable.map((e) => AddressModel.fromJson(e)).toList();
+      
       emit(AddressUpdate());
     }
   }

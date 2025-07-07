@@ -110,32 +110,37 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                   ),
                   SizedBox(height: 30),
                   Center(
-                    child: Pinput(
-                      controller: otpController,
-                      length: 5,
-                      onChanged: (value) {
-                        setState(() {
-                          isOtpValid = value.length == 5;
-                        });
-                      },
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      defaultPinTheme: PinTheme(
-                        width: 56,
-                        height: 56,
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: isOtpValid ? Colors.green : Colors.red,
-                            width: 2,
+                    child: Directionality(
+                      textDirection: context.locale.languageCode == 'ar'
+                          ? TextDirection.ltr
+                          : TextDirection.ltr,
+                      child: Pinput(
+                        controller: otpController,
+                        length: 5,
+                        onChanged: (value) {
+                          setState(() {
+                            isOtpValid = value.length == 5;
+                          });
+                        },
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        defaultPinTheme: PinTheme(
+                          width: 56,
+                          height: 56,
+                          textStyle: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
                           ),
-                          borderRadius: BorderRadius.circular(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: isOtpValid ? Colors.green : Colors.red,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
                       ),
                     ),
@@ -168,7 +173,6 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                           ),
                         ),
                   SizedBox(height: 20),
-                  Spacer(),
                   Center(
                     child: GlobalElevatedButton(
                       label: "resend_code".tr(),
@@ -182,14 +186,15 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                               );
                             }
                           : null,
-                      backgroundColor: AppColor.mainAppColor,
-                      textColor: Colors.white,
+                      backgroundColor: Color(0xffEDEEFF),
+                      textColor: AppColor.mainAppColor,
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                       borderRadius: BorderRadius.circular(20),
-                      fixedWidth: 0.80,
+                      fixedWidth: 0.40,
                     ),
                   ),
+                  Spacer(),
                   SizedBox(height: 20),
                   Center(
                     child: GlobalElevatedButton(
@@ -203,8 +208,8 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                           );
                         }
                       },
-                      backgroundColor: Color(0xffEDEEFF),
-                      textColor: AppColor.mainAppColor,
+                      backgroundColor: AppColor.mainAppColor,
+                      textColor: AppColor.whiteColor,
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                       borderRadius: BorderRadius.circular(20),

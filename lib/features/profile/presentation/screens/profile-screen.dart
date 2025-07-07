@@ -18,7 +18,6 @@ import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
-import 'package:hawiah_client/features/location/presentation/screens/all_addresses_screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/orders-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/faq-screen.dart';
@@ -211,15 +210,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   const OrdersScreen(),
                             ));
                       }),
-              isGuest
-                  ? Gap(0)
-                  : PersonProfileListTile(
-                      title: "العناوين",
-                      logo: "assets/icons/personal_location_icon.png",
-                      onTap: () {
-                        NavigatorMethods.pushNamed(
-                            context, AllAddressesScreen.routeName);
-                      }),
+              // isGuest
+              //     ? Gap(0)
+              //     : PersonProfileListTile(
+              //         title: "العناوين",
+              //         logo: "assets/icons/personal_location_icon.png",
+              //         onTap: () {
+              //           NavigatorMethods.pushNamed(
+              //               context, AllAddressesScreen.routeName);
+              //         }),
               isGuest
                   ? Gap(0)
                   : PersonProfileListTile(

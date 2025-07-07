@@ -8,6 +8,7 @@ import 'package:hawiah_client/features/app-language/presentation/widgets/languag
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/features/app-language/presentation/widgets/language-description-widget.dart';
 import 'package:hawiah_client/features/app-language/presentation/widgets/floating-action-button-widget.dart';
+import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-cubit.dart';
 
 import '../controllers/app-language-cubit/app-language-state.dart';
 
@@ -27,6 +28,7 @@ class _AppLanguageScreenState extends State<AppLanguageScreen> {
       context.read<AppLanguageCubit>().changeLanguage(
           language: currentLocale == 'en' ? "english" : "arabic");
     });
+    
   }
 
   @override
