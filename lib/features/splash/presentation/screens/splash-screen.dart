@@ -50,9 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Center(
         child: Image.asset(
-          'assets/images/play_store.png',
-          width: double.infinity,
-          height: double.infinity,
+          'assets/images/splash.png',
           fit: BoxFit.cover,
         ),
       ),
