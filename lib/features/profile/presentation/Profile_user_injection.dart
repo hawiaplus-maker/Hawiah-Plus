@@ -1,16 +1,13 @@
+import 'package:get_it/get_it.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
-import 'package:hawiah_client/injection_container.dart';
 
 class ProfileInjection {
   static void init() {
-    //cubit
+    final sl = GetIt.instance;
 
-    sl.registerFactory(() => ProfileCubit());
+    // Register ProfileCubit
+    sl.registerFactory<ProfileCubit>(() => ProfileCubit());
 
-    //use cases
-
-    //repository
-
-    //data sources
+    // Add other registrations as needed...
   }
 }

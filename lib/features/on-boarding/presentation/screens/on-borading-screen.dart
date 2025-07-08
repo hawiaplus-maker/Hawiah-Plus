@@ -41,9 +41,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           final onBoardingImages =
               cubit.onBoardingList.map((e) => e.image ?? "").toList();
           final onboardingTitles =
-              cubit.onBoardingList.map((e) => e.title?.ar ?? "").toList();
+              cubit.onBoardingList.map((e) => e.title ?? "").toList();
           final onboardingContents =
-              cubit.onBoardingList.map((e) => e.about?.ar ?? "").toList();
+              cubit.onBoardingList.map((e) => e.about ?? "").toList();
           final onboardingIcons = List.generate(
             cubit.onBoardingList.length,
             (index) => "",

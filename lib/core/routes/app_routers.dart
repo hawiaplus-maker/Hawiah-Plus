@@ -66,6 +66,12 @@ class AppRouters {
         return MaterialPageRoute(
           builder: (_) => LayoutScreen(),
         );
+      case SingleChatScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => SingleChatScreen(
+            args: args,
+          ),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const LayoutScreen(),

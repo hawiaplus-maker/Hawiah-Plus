@@ -22,9 +22,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initializeApp() async {
+     if (!context.mounted) return;
     // Add slight delay to ensure context is available
-    await Future.delayed(Duration.zero);
-
+  
     final cubit = context.read<ProfileCubit>();
 
     cubit.fetchProfile(

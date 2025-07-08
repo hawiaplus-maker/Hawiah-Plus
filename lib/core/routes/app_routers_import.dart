@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/zoom_image_screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
+import 'package:hawiah_client/features/chat/presentation/screens/chat-screen.dart';
+import 'package:hawiah_client/features/chat/presentation/screens/single-chat-screen.dart';
 import 'package:hawiah_client/features/home/presentation/screens/payment-screen.dart';
 import 'package:hawiah_client/features/home/presentation/screens/request_hawia_screen.dart';
 import 'package:hawiah_client/features/home/presentation/screens/nearby_service_provider_screen.dart';

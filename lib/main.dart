@@ -12,6 +12,7 @@ import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/routes/app_routers_import.dart';
 import 'package:hawiah_client/core/theme/cubit/app_theme_cubit.dart';
 import 'package:hawiah_client/features/splash/presentation/screens/splash-screen.dart';
+import 'package:hawiah_client/injection_container.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'firebase_options.dart';
@@ -20,6 +21,7 @@ late BuildContext genContext;
 final bool isGuest = HiveMethods.getToken() == null;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AppInjector.init();
   await EasyLocalization.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
   await Firebase.initializeApp(

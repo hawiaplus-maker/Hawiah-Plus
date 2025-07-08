@@ -36,4 +36,7 @@ class AppLocaleKey {
   static const String youHaveToChooseStartDate = 'youHaveToChooseStartDate';
   static const String guest = 'guest';
   static const String noAddresses = 'noAddresses';
+  static const String today = 'today';
+  static const String tomorrow = 'tomorrow';
+  static const String message = 'message';
 }

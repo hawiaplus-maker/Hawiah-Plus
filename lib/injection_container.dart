@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:hawiah_client/features/app-language/app-language-injection.dart';
 import 'package:hawiah_client/features/authentication/authentication-injection.dart';
+import 'package:hawiah_client/features/chat/chat_injection.dart';
 import 'package:hawiah_client/features/explore/explore-injection.dart';
 import 'package:hawiah_client/features/home/home-injection.dart';
 import 'package:hawiah_client/features/layout/layout-injection.dart';
@@ -25,5 +26,6 @@ class AppInjector {
     SettingInjection.init();
     ProfileInjection.init();
     AddressInjection.init();
+    ChatInjection.init();
   }
 }

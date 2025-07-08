@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
-import 'package:hawiah_client/features/chat/presentation/screens/single-chat-screen.dart';
 
-class ChatScreen extends StatelessWidget {
+class AllChatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +68,7 @@ class ChatScreen extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SingleChatScreen()));
+                              builder: (context) => AllChatsScreen()));
                     }, // Replace with real image URL
                   ),
                   ChatItem(
@@ -81,7 +80,7 @@ class ChatScreen extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SingleChatScreen()));
+                              builder: (context) => AllChatsScreen()));
                     },
                     imageUrl:
                         'assets/images/person_chat_image.png', // Replace with real image URL

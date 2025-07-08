@@ -145,7 +145,11 @@
   "pleaseLoginFirst":"عليك تسجيل الدخول أولاً",
   "guest":"زائر",
   "cancel":"الغاء",
-  "noAddresses":"لاتوجد عناوين"
+  "noAddresses":"لاتوجد عناوين",
+  "today":"اليوم",
+  "tomorrow":"الغد",
+  "message":"الرسائل"
+
  
 
 }

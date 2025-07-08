@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/features/app-language/presentation/controllers/app-language-cubit/app-language-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
+import 'package:hawiah_client/features/chat/cubit/chat_cubit.dart';
 import 'package:hawiah_client/features/explore/presentation/controllers/explore-flow-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
@@ -31,12 +32,10 @@ class BlocProviders {
       BlocProvider<OrderCubit>(
         create: (context) => sl<OrderCubit>(),
       ),
-      BlocProvider<OrderCubit>(
-        create: (context) => sl<OrderCubit>(),
-      ),
       BlocProvider<SettingCubit>(create: (context) => sl<SettingCubit>()),
       BlocProvider<ProfileCubit>(create: (context) => sl<ProfileCubit>()),
       BlocProvider<AddressCubit>(create: (context) => sl<AddressCubit>()),
+      BlocProvider<ChatCubit>(create: (context) => sl<ChatCubit>()),
     ];
   }
 }
