@@ -63,7 +63,9 @@ dependencies:
   defer_pointer: ^0.0.2
   url_launcher:
   rename: ^3.1.0
-   
+  firebase_core:
+  firebase_messaging: 
+ 
   
 
   
@@ -78,7 +80,7 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/images/play_store.png"
   min_sdk_android: 21
- 
+  
   
 
 flutter:
