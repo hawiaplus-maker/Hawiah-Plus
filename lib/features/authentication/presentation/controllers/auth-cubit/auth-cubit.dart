@@ -211,12 +211,14 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> login({
     required String? phoneNumber,
     required String? password,
+    required String? fcmToken,
   }) async {
     emit(AuthLoading());
 
     final body = FormData.fromMap({
       'password': password,
       'mobile': phoneNumber,
+      'fcm_token': fcmToken,
     });
 
     final response = await ApiHelper.instance.post(

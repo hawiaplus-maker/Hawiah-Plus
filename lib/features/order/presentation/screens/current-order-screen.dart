@@ -6,6 +6,7 @@ import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
@@ -238,6 +239,8 @@ class CurrentOrderScreen extends StatelessWidget {
                       NavigatorMethods.pushNamed(
                           context, SingleChatScreen.routeName,
                           arguments: SingleChatScreenArgs(
+                              reciverName: "محمد",
+                              reciverImage: Urls.testUserImage,
                               senderId: context
                                   .read<ProfileCubit>()
                                   .user

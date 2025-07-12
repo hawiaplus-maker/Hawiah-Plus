@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
@@ -7,8 +6,6 @@ import 'package:hawiah_client/features/chat/model/chat_model.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:provider/provider.dart';
 
-
-
 class MessageWidget extends StatelessWidget {
   const MessageWidget({super.key, required this.message});
   final ChatMessageModel message;
@@ -16,11 +13,10 @@ class MessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection:
-          int.tryParse(message.senderId.toString()) ==
-                  context.read<ProfileCubit>().user.id
-              ? TextDirection.rtl
-              : TextDirection.ltr,
+      textDirection: int.tryParse(message.senderId.toString()) ==
+              context.read<ProfileCubit>().user.id
+          ? TextDirection.rtl
+          : TextDirection.ltr,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -30,94 +26,99 @@ class MessageWidget extends StatelessWidget {
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  int.tryParse(message.senderId.toString()) ==
-                          context.read<ProfileCubit>().user.id
-                      ? Positioned(
-                        bottom: 0,
-                        right: -14,
-                        child: CustomPaint(
-                          size: const Size(14, 15),
-                          painter: MeTrianglePainter(
-                            color: AppColor.greyColor.withOpacity(.100),
-                          ),
-                        ),
-                      )
-                      : Positioned(
-                        bottom: 0,
-                        left: -14,
-                        child: CustomPaint(
-                          size: const Size(14, 15),
-                          painter: TrianglePainter(
-                            color: AppColor.mainAppColor.withOpacity(.100),
-                          ),
-                        ),
-                      ),
+                  // int.tryParse(message.senderId.toString()) ==
+                  //         context.read<ProfileCubit>().user.id
+                  //     ? Positioned(
+                  //       bottom: 0,
+                  //       right: -14,
+                  //       child: CustomPaint(
+                  //         size: const Size(14, 15),
+                  //         painter: MeTrianglePainter(
+                  //           color: AppColor.greyColor.withOpacity(.100),
+                  //         ),
+                  //       ),
+                  //     )
+                  //     : Positioned(
+                  //       bottom: 0,
+                  //       left: -14,
+                  //       child: CustomPaint(
+                  //         size: const Size(14, 15),
+                  //         painter: TrianglePainter(
+                  //           color: AppColor.mainAppColor.withOpacity(.100),
+                  //         ),
+                  //       ),
+                  //     ),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       vertical: 12,
                       horizontal: 15,
                     ),
                     decoration: BoxDecoration(
-                      color:
-                          int.tryParse(message.senderId.toString()) ==
-                                 context.read<ProfileCubit>().user.id
-                              ? AppColor.greyColor.withOpacity(.10)
-                              : AppColor.mainAppColor.withOpacity(.100),
-                      borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(20),
-                        topRight: const Radius.circular(20),
-                        bottomLeft: Radius.circular(
+                        color: int.tryParse(message.senderId.toString()) ==
+                                context.read<ProfileCubit>().user.id
+                            ? AppColor.blueColor
+                            : AppColor.whiteColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: const Radius.circular(20),
+                          topRight: const Radius.circular(20),
+                          bottomLeft: Radius.circular(
+                            int.tryParse(message.senderId.toString()) ==
+                                    context.read<ProfileCubit>().user.id
+                                ? 20
+                                : 0,
+                          ),
+                          bottomRight: Radius.circular(
+                            int.tryParse(message.senderId.toString()) ==
+                                    context.read<ProfileCubit>().user.id
+                                ? 0
+                                : 20,
+                          ),
+                        ),
+                        boxShadow: [
                           int.tryParse(message.senderId.toString()) ==
                                   context.read<ProfileCubit>().user.id
-                              ? 20
-                              : 0,
-                        ),
-                        bottomRight: Radius.circular(
-                          int.tryParse(message.senderId.toString()) ==
-                                 context.read<ProfileCubit>().user.id
-                              ? 0
-                              : 20,
-                        ),
-                      ),
-                    ),
+                              ? BoxShadow()
+                              : BoxShadow(
+                                  color: AppColor.lightGreyColor,
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: const Offset(0, 3),
+                                ),
+                        ]),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           message.message ?? "",
                           maxLines: 5,
-                          style:
-                              int.tryParse(message.senderId.toString()) ==
-                                      context.read<ProfileCubit>().user.id
-                                  ? AppTextStyle.text14_500
-                                  : AppTextStyle.text14_500,
+                          style: int.tryParse(message.senderId.toString()) ==
+                                  context.read<ProfileCubit>().user.id
+                              ? AppTextStyle.text14_500
+                                  .copyWith(color: AppColor.whiteColor)
+                              : AppTextStyle.text14_500,
                         ),
                         Text(
                           DateMethods.formatToTime(message.timeStamp),
-                          style:
-                              int.tryParse(message.senderId.toString()) ==
-                                      context.read<ProfileCubit>().user.id
-                                  ? AppTextStyle.text10_400.copyWith(
-                                    color: AppColor.textSecondaryColor,
-                                  )
-                                  : AppTextStyle.text10_400.copyWith(
-                                    color: AppColor.textSecondaryColor,
-                                  ),
+                          style: int.tryParse(message.senderId.toString()) ==
+                                  context.read<ProfileCubit>().user.id
+                              ? AppTextStyle.text10_400
+                                  .copyWith(color: AppColor.whiteColor)
+                              : AppTextStyle.text10_400.copyWith(
+                                  color: AppColor.textSecondaryColor,
+                                ),
                         ),
                       ],
                     ),
                   ),
                   Positioned(
-                    left:
-                        int.tryParse(message.senderId.toString()) ==
-                               context.read<ProfileCubit>().user.id
-                            ? 0
-                            : -20,
-                    right:
-                        int.tryParse(message.senderId.toString()) ==
-                               context.read<ProfileCubit>().user.id
-                            ? -20
-                            : 0,
+                    left: int.tryParse(message.senderId.toString()) ==
+                            context.read<ProfileCubit>().user.id
+                        ? 0
+                        : -20,
+                    right: int.tryParse(message.senderId.toString()) ==
+                            context.read<ProfileCubit>().user.id
+                        ? -20
+                        : 0,
                     bottom: -30,
                     child: const Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -138,13 +139,9 @@ class TrianglePainter extends CustomPainter {
   final Color? color;
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint =
-        Paint()
-          ..color =
-              color ??
-              Colors
-                  .white // Change color as needed
-          ..style = PaintingStyle.fill;
+    final Paint paint = Paint()
+      ..color = color ?? Colors.white // Change color as needed
+      ..style = PaintingStyle.fill;
 
     final path = Path();
     path.moveTo(0, size.height);
@@ -166,13 +163,9 @@ class MeTrianglePainter extends CustomPainter {
   final Color? color;
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint =
-        Paint()
-          ..color =
-              color ??
-              Colors
-                  .white // Change color as needed
-          ..style = PaintingStyle.fill;
+    final Paint paint = Paint()
+      ..color = color ?? Colors.white // Change color as needed
+      ..style = PaintingStyle.fill;
 
     final path = Path();
     path.moveTo(0, 0);

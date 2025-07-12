@@ -1,10 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
@@ -14,6 +17,8 @@ import 'package:hawiah_client/features/chat/presentation/widget/message_widget.d
 
 class SingleChatScreenArgs {
   final String senderId;
+  final String reciverImage;
+  final String reciverName;
   final String senderType;
   final String orderId;
 
@@ -21,6 +26,8 @@ class SingleChatScreenArgs {
     required this.senderId,
     required this.senderType,
     required this.orderId,
+    required this.reciverImage,
+    required this.reciverName,
   });
 }
 
@@ -56,7 +63,31 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
     return BlocProvider(
       create: (context) => _chatCubit,
       child: Scaffold(
-        appBar: CustomAppBar(context, title: Text("message".tr())),
+        appBar: CustomAppBar(
+          context,
+          titleText: widget.args.reciverName,
+          centerTitle: false,
+          leadingWidth: 70,
+          actions: [
+            IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: RotatedBox(
+                    quarterTurns: 90,
+                    child: Icon(
+                      Icons.arrow_back_ios_new,
+                    ))),
+          ],
+          leading: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: CustomNetworkImage(
+              imageUrl: widget.args.reciverImage,
+              height: 40,
+              width: 40,
+              radius: 30,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
         body: Column(
           children: [
             Expanded(
@@ -109,7 +140,11 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
               padding: const EdgeInsets.all(20),
               child: Row(
                 children: [
-                  Expanded(child: CustomTextField(controller: _messageEC)),
+                  Expanded(
+                      child: CustomTextField(
+                          unFocusColor: AppColor.grayBlueColor.withAlpha(100),
+                          fillColor: AppColor.grayBlueColor,
+                          controller: _messageEC)),
                   IconButton(
                     onPressed: () {
                       final txt = _messageEC.text;
@@ -122,10 +157,7 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                       }
                       _messageEC.clear();
                     },
-                    icon: Icon(
-                      Icons.send_rounded,
-                      color: AppColor.mainAppColor,
-                    ),
+                    icon: SvgPicture.asset(AppImages.sendIcon),
                   ),
                 ],
               ),

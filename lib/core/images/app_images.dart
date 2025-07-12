@@ -44,4 +44,5 @@ class AppImages {
   static const String whatsapp = 'assets/images/whatsapp.png';
   static const String loginImage = 'assets/images/loginImage.png';
   static const String bellIcon = 'assets/svg/bellIcon.svg';
+  static const String sendIcon = 'assets/svg/sendIcon.svg';
 }

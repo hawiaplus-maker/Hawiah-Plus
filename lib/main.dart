@@ -3,12 +3,14 @@ import 'dart:developer';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/bloc-config/bloc_observer.dart';
 import 'package:hawiah_client/core/bloc-config/bloc_providers.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
+import 'package:hawiah_client/core/notifications/messaging_config.dart';
 import 'package:hawiah_client/core/routes/app_routers_import.dart';
 import 'package:hawiah_client/core/theme/cubit/app_theme_cubit.dart';
 import 'package:hawiah_client/features/splash/presentation/screens/splash-screen.dart';
@@ -32,6 +34,8 @@ void main() async {
   await Hive.openBox('app');
 
   Bloc.observer = MyBlocObserver();
+
+  final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('ar'), Locale('en')],
@@ -40,13 +44,16 @@ void main() async {
           const Locale('en'), // Add a fallback locale if you haven't
       child: BlocProvider(
           create: (context) => AppThemeCubit()..initial(),
-          child: const MyApp()), // Wrap MyApp instead of PetCareHomeScreen
+          child: MyApp(
+              initialMessage:
+                  initialMessage)), // Wrap MyApp instead of PetCareHomeScreen
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final RemoteMessage? initialMessage;
+  const MyApp({super.key, this.initialMessage});
 
   static void setMyAppState(BuildContext context) async {
     _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
@@ -60,12 +67,46 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
+    _initializeMessaging();
     _appToken();
     super.initState();
+    _handleInitialNotification();
   }
 
   void setMyAppState() {
     setState(() {});
+  }
+
+  void _initializeMessaging() async {
+    await MessagingService.init(navKey: navigatorKey);
+  }
+
+  void _handleInitialNotification() {
+    if (widget.initialMessage != null) {
+      log('Handling initial notification from terminated state');
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _navigateFromNotification(widget.initialMessage!.data);
+      });
+    }
+  }
+
+  void _navigateFromNotification(Map<String, dynamic> data) {
+    try {
+      final context = navigatorKey.currentContext;
+      if (context != null && context.mounted) {
+        log('Navigating from initial notification with data: $data');
+        handleNotificationTap(data);
+      } else {
+        log('Context not available for initial navigation');
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          if (navigatorKey.currentContext?.mounted ?? false) {
+            handleNotificationTap(data);
+          }
+        });
+      }
+    } catch (e) {
+      log('Error handling initial notification: $e');
+    }
   }
 
   void _appToken() async {

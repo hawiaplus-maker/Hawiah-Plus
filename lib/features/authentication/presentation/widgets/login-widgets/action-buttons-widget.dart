@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,9 +11,25 @@ import 'package:hawiah_client/features/authentication/presentation/controllers/a
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 
-class ActionButtonsWidget extends StatelessWidget {
+class ActionButtonsWidget extends StatefulWidget {
   ActionButtonsWidget({Key? key, required this.formKey}) : super(key: key);
   final GlobalKey<FormState> formKey;
+
+  @override
+  State<ActionButtonsWidget> createState() => _ActionButtonsWidgetState();
+}
+
+class _ActionButtonsWidgetState extends State<ActionButtonsWidget> {
+  @override
+  void initState() {
+    super.initState();
+    _getFcm();
+  }
+
+   String fcm = '';
+  void _getFcm() async {
+    fcm = await FirebaseMessaging.instance.getToken() ?? "";
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
@@ -29,11 +46,12 @@ class ActionButtonsWidget extends StatelessWidget {
                   ? null
                   : () async {
                       HiveMethods.updateIsVisitor(false);
-                      if (formKey.currentState!.validate()) {
+                      if (widget.formKey.currentState!.validate()) {
                         final cleanedPhone = AuthCubit.get(context)
                             .phoneNumber
                             .replaceFirst('+966', '0');
                         AuthCubit.get(context).login(
+                          fcmToken: fcm,
                             phoneNumber:
                                 AuthCubit.get(context).PhoneController.text,
                             password: AuthCubit.get(context).passwordLogin);

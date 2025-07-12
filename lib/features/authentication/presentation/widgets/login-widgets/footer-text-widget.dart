@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart' as es;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/register-screen.dart';
 
@@ -19,6 +20,7 @@ class FooterTextWidget extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
+            HiveMethods.updateIsVisitor(true);
             Navigator.push(
                 context,
                 MaterialPageRoute(

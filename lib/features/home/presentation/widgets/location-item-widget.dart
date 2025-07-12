@@ -51,28 +51,25 @@ class LocationItemWidget extends StatelessWidget {
                 fit: BoxFit.fill,
               ),
             Gap(10.w),
-            Container(
-              width: 0.5.sw, // This takes half the screen width
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
                   ),
-                  SizedBox(height: 4),
-                  Text(
-                    address,
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: Colors.black54,
-                    ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  address,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: Colors.black54,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             Spacer(),
             isSelected
