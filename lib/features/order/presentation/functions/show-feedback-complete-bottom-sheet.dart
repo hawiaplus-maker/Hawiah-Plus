@@ -1,6 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+
 void showThankYouBottomSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
@@ -21,7 +24,7 @@ void showThankYouBottomSheet(BuildContext context) {
             ),
             SizedBox(height: 16),
             Text(
-              'شكراً لوقتك الثمين',
+              AppLocaleKey.sharingYour.tr(),
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -29,7 +32,7 @@ void showThankYouBottomSheet(BuildContext context) {
             ),
             SizedBox(height: 8),
             Text(
-              'نحن نحرص بعناية دائماً تحسين مستوى خدمات تطبيق هاوية. نتمنى لك تجربة سعيدة. هل تود ظهور التقييم مرة أخرى؟',
+              AppLocaleKey.carefullyImproving.tr(),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -38,7 +41,7 @@ void showThankYouBottomSheet(BuildContext context) {
             ),
             SizedBox(height: 24),
             GlobalElevatedButton(
-              label: 'بالتأكيد !',
+              label: AppLocaleKey.confirm.tr(),
               onPressed: () {},
               backgroundColor: AppColor.mainAppColor,
               textColor: Colors.white,
@@ -48,7 +51,7 @@ void showThankYouBottomSheet(BuildContext context) {
             ),
             SizedBox(height: 16),
             GlobalElevatedButton(
-              label: 'لا تسألني مجدداً',
+              label: AppLocaleKey.askMeAgain.tr(),
               onPressed: () {},
               backgroundColor: Colors.white,
               textColor: Colors.red.shade300,

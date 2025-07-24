@@ -286,7 +286,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
         // ),
         SizedBox(height: 20.h),
         GlobalElevatedButton(
-          label: "إضافة العنوان",
+          label: AppLocaleKey.addtitle.tr(),
           onPressed: () {
             if (formKey.currentState!.validate()) {
               _saveAddress();

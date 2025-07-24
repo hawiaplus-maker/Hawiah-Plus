@@ -95,18 +95,18 @@ class NearbyServiceProviderScreen extends StatelessWidget {
           ),
           title: Text(
             prviders.nearbyServiceProvider[index].serviceProviderName ?? "",
-            style: AppTextStyle.text16_600,
+            style: AppTextStyle.text14_600,
           ),
           subtitle: Text(
             AppLocaleKey.days.tr(args: [
               prviders.nearbyServiceProvider[index].duration.toString(),
             ]),
-            style: AppTextStyle.text16_400,
+            style: AppTextStyle.text14_400,
           ),
           trailing: Text(
             AppLocaleKey.sar.tr(
                 args: [prviders.nearbyServiceProvider[index].dailyPrice ?? ""]),
-            style: AppTextStyle.text16_400,
+            style: AppTextStyle.text14_400,
           ),
         ),
       ),

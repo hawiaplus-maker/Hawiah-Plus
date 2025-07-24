@@ -5,6 +5,7 @@ import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-state.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/model/on_boarding_model.dart';
 
+
 class OnBoardingCubit extends Cubit<OnBoardingState> {
   static OnBoardingCubit get(BuildContext context) => BlocProvider.of(context);
 
@@ -50,8 +51,6 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   }
 
   Future<void> getOnboarding() async {
-    if (onboarding != null) return;
-
     emit(OnBoardingLoading());
     _onboardingResponse = await ApiHelper.instance.get(Urls.onBoarding);
 

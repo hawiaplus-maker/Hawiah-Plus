@@ -1,0 +1,2 @@
+D:/freelance_work/hawya/android/app/.cxx/Debug/5j1z6k36/x86/CMakeFiles/edit_cache.dir
+D:/freelance_work/hawya/android/app/.cxx/Debug/5j1z6k36/x86/CMakeFiles/rebuild_cache.dir

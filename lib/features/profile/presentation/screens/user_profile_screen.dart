@@ -1,12 +1,15 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
 import 'package:image_picker/image_picker.dart'; // إضافة المكتبة
@@ -44,13 +47,20 @@ class _UserProfileState extends State<UserProfile> {
         _pickedImage = File(pickedFile.path);
       });
 
-      Fluttertoast.showToast(msg: "تم اختيار الصورة");
+      Fluttertoast.showToast(msg: AppLocaleKey.imageSelected.tr());
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          AppLocaleKey.profileFile.tr(),
+          style: AppTextStyle.text20_700,
+        ),
+        centerTitle: true,
+      ),
       resizeToAvoidBottomInset: false,
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
@@ -160,7 +170,7 @@ class _UserProfileState extends State<UserProfile> {
                         );
                       },
                       child: Text(
-                        'المتابعة',
+                        AppLocaleKey.tracking.tr(),
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),

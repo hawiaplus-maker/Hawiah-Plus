@@ -46,5 +46,5 @@ class Data {
     data['about'] = this.about;
     data['image'] = this.image;
     return data;
-}
+  }
 }

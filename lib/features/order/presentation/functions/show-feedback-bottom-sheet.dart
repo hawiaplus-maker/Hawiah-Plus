@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji_feedback/flutter_emoji_feedback.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/features/order/presentation/functions/show-feedback-bad-bottom-sheet.dart';
 import 'package:hawiah_client/features/order/presentation/functions/show-feedback-complete-bottom-sheet.dart';
 
@@ -20,12 +22,12 @@ void showFeedbackBottomSheet(BuildContext context) {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'كيف كانت تجربتك؟',
+                  AppLocaleKey.experience.tr(),
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'يساعدنا تقييمك على تحسين خدماتنا',
+                  AppLocaleKey.improveOurServices.tr(),
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
                 SizedBox(height: 16),

@@ -18,15 +18,6 @@ class AppBarAuthWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back_ios,
-          color: Colors.black,
-        ),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
       actions: [
         Container(
           padding: EdgeInsets.symmetric(horizontal: 20.w),

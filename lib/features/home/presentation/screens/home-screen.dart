@@ -10,8 +10,10 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/home/presentation/screens/category_detailes_screen.dart';
+import 'package:hawiah_client/features/notifications/presentation/screen/notifications_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
+import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_state.dart';
 
@@ -60,17 +62,25 @@ class _HomeScreenState extends State<HomeScreen> {
               final user = state.user;
               return Row(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                            color: AppColor.mainAppColor, width: 1.5)),
-                    child: CustomNetworkImage(
-                      radius: 30,
-                      fit: BoxFit.fill,
-                      imageUrl: user.image,
-                      height: 45.h,
-                      width: 45.w,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return UserProfile();
+                      }));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                              color: AppColor.mainAppColor, width: 1.5)),
+                      child: CustomNetworkImage(
+                        radius: 30,
+                        fit: BoxFit.fill,
+                        imageUrl: user.image,
+                        height: 45.h,
+                        width: 45.w,
+                      ),
                     ),
                   ),
                   SizedBox(width: 10.w),
@@ -89,29 +99,37 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   Spacer(),
-                  Card(
-                    color: AppColor.whiteColor,
-                    shape: CircleBorder(),
-                    elevation: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          SvgPicture.asset(AppImages.bellIcon),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const NotificationsScreen();
+                      }));
+                    },
+                    child: Card(
+                      color: AppColor.whiteColor,
+                      shape: CircleBorder(),
+                      elevation: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SvgPicture.asset(AppImages.bellIcon),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   )

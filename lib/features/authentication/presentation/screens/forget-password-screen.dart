@@ -5,11 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
-import 'package:hawiah_client/core/custom_widgets/global-phone-input-widget.dart';
-import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
-import 'package:hawiah_client/features/authentication/presentation/screens/verification-otp-screen.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/verification-otp-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/widgets/common/phone-input-widget.dart';
+
 import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
 
@@ -21,26 +20,13 @@ class ForgetPasswordScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
-          context,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
-              onPressed: () {
-                Navigator.pushAndRemoveUntil<void>(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) => const LoginScreen(),
-                  ),
-                  (route) => false,
-                );
-              },
-            ),
-          ]),
+        context,
+      ),
       body: BlocConsumer<AuthCubit, AuthState>(
         builder: (BuildContext context, AuthState state) {
           final authCubit = AuthCubit.get(context);
           final fullNumberResetPassword = authCubit.fullNumberResetPassword;
-
+          final authChange = AuthCubit.get(context);
           return Container(
             padding: EdgeInsets.all(10.w),
             child: Form(
@@ -69,25 +55,25 @@ class ForgetPasswordScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 20.h),
-                  GlobalPhoneInputWidget(
-                    onPhoneNumberChange: (PhoneNumber number) {
-                      authCubit.onPhoneNumberChange(number: number);
-                    },
-
-                    initialValue: fullNumberResetPassword,
-                    isRtl: context.locale.languageCode == 'ar',
-                    // Customizable hint text
+                  PhoneInputWidget(
+                    controller: authChange.forgotPhoneController,
                   ),
+                  // GlobalPhoneInputWidget(
+                  //   onPhoneNumberChange: (PhoneNumber number) {
+                  //     authCubit.onPhoneNumberChange(number: number);
+                  //   },
+
+                  //   initialValue: fullNumberResetPassword,
+                  //   isRtl: context.locale.languageCode == 'ar',
+                  //   // Customizable hint text
+                  // ),
                   Spacer(),
                   GlobalElevatedButton(
                     label: "continue".tr(),
                     onPressed: () {
                       if (authCubit.formKeyRegister.currentState!.validate()) {
-                        final cleanedPhone = AuthCubit.get(context)
-                            .phoneNumber
-                            .replaceFirst('+966', '0');
                         AuthCubit.get(context).forgotPassword(
-                          phoneNumber: cleanedPhone,
+                          phoneNumber: authCubit.forgotPhoneController.text,
                         );
                       }
                     },

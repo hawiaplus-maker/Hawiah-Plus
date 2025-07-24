@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_state.dart';
@@ -26,7 +28,7 @@ class _SupportScreenState extends State<SupportScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         context,
-        titleText: 'الدعم',
+        titleText: AppLocaleKey.support.tr(),
       ),
       body: Container(
         margin: const EdgeInsets.all(16),
@@ -39,7 +41,7 @@ class _SupportScreenState extends State<SupportScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'يمكنك الان التواصل معنا من خلال',
+                AppLocaleKey.canContactUs.tr(),
                 style: AppTextStyle.text16_700,
               ),
             ),
@@ -47,7 +49,7 @@ class _SupportScreenState extends State<SupportScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'البريد الالكتروني',
+                "email".tr(),
                 style: AppTextStyle.text18_700,
               ),
             ),
@@ -85,7 +87,7 @@ class _SupportScreenState extends State<SupportScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'وسائل التواصل الاجتماعي',
+                        AppLocaleKey.socialMedia.tr(),
                         style: AppTextStyle.text18_700,
                       ),
                     ),
@@ -128,7 +130,7 @@ class _SupportScreenState extends State<SupportScreen> {
                     const SizedBox(height: 16),
                     Center(
                       child: Text(
-                        ' سعداء لتواصل معكم والرد علي جميع \n رسائكم',
+                        AppLocaleKey.communicateWith.tr(),
                         style: AppTextStyle.text16_700,
                         textAlign: TextAlign.center,
                       ),
@@ -138,7 +140,7 @@ class _SupportScreenState extends State<SupportScreen> {
                     ),
                     Center(
                       child: Text(
-                        'يوميا علي مدار الل 24 ساعة',
+                        AppLocaleKey.twentyFourHoursADay.tr(),
                         style: AppTextStyle.text16_700,
                         textAlign: TextAlign.center,
                       ),
