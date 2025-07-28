@@ -226,6 +226,12 @@
  "sarr":"ريال",
   "Notifications":"الاشعارات",
   "noNotifications":"لاتوجد اشعارات",
-  "nocompany":"تسجيل الشركات غير متاح حالياً"
+  "nocompany":"تسجيل الشركات غير متاح حالياً",
+  "orderdetails":"تفاصيل الطلب",
+  "Payby":"الدفع بواسطة",
+  "Electronicpayment":"دفع إلكتروني",
+  "Howfarisit?":"مدى باي",
+  "ApplePay":"آبل باي"
+ 
  
 }

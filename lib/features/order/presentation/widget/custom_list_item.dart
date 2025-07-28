@@ -18,11 +18,11 @@ class CustomListItem extends StatelessWidget {
         children: [
           Text(
             title,
-            style: AppTextStyle.text18_600,
+            style: AppTextStyle.text16_700,
           ),
           Text(
             subtitle,
-            style: AppTextStyle.text18_600,
+            style: AppTextStyle.text16_400,
           )
         ],
       ),

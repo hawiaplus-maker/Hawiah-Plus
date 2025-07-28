@@ -95,7 +95,7 @@ class NearbyServiceProviderScreen extends StatelessWidget {
           ),
           title: Text(
             prviders.nearbyServiceProvider[index].serviceProviderName ?? "",
-            style: AppTextStyle.text14_600,
+            style: AppTextStyle.text16_700,
           ),
           subtitle: Text(
             AppLocaleKey.days.tr(args: [

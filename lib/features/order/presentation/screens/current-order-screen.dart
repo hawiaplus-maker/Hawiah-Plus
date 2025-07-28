@@ -18,20 +18,29 @@ import 'package:hawiah_client/features/order/presentation/model/orders_model.dar
 import 'package:hawiah_client/features/order/presentation/screens/extend-time-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/widget/custom_list_item.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
+import 'package:hawiah_client/features/profile/presentation/screens/support_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/custom_widgets/global-elevated-button-widget.dart';
 
-class CurrentOrderScreen extends StatelessWidget {
+class CurrentOrderScreen extends StatefulWidget {
   const CurrentOrderScreen({
     Key? key,
     required this.ordersDate,
   }) : super(key: key);
   final Data ordersDate;
+
+  @override
+  State<CurrentOrderScreen> createState() => _CurrentOrderScreenState();
+}
+
+class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
   @override
   Widget build(BuildContext context) {
-    final double totalPrice =
-        double.tryParse(ordersDate.totalPrice ?? "0") ?? 0;
+    final double totalPrice = double.tryParse(
+          widget.ordersDate.totalPrice?.replaceAll(",", "") ?? "0",
+        ) ??
+        0;
     final double vat = totalPrice * 0.15;
     final double netTotal = totalPrice + vat;
     return Scaffold(
@@ -63,7 +72,7 @@ class CurrentOrderScreen extends StatelessWidget {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(15.0),
                                   child: CustomNetworkImage(
-                                    imageUrl: ordersDate.image ?? "",
+                                    imageUrl: widget.ordersDate.image ?? "",
                                     fit: BoxFit.fill,
                                     height: 60.h,
                                     width: 60.w,
@@ -75,7 +84,7 @@ class CurrentOrderScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    ordersDate.product ?? "",
+                                    widget.ordersDate.product ?? "",
                                     style: AppTextStyle.text16_700,
                                   ),
                                   SizedBox(height: 5.h),
@@ -85,16 +94,17 @@ class CurrentOrderScreen extends StatelessWidget {
                                         TextSpan(
                                           text: AppLocaleKey.orderNumber.tr(),
                                           style:
-                                              AppTextStyle.text16_600.copyWith(
+                                              AppTextStyle.text14_500.copyWith(
                                             color: AppColor.blackColor
                                                 .withValues(alpha: 0.7),
                                           ),
                                         ),
                                         TextSpan(
-                                          text:
-                                              ordersDate.referenceNumber ?? '',
+                                          text: widget
+                                                  .ordersDate.referenceNumber ??
+                                              '',
                                           style:
-                                              AppTextStyle.text16_500.copyWith(
+                                              AppTextStyle.text14_500.copyWith(
                                             color: AppColor.blackColor
                                                 .withValues(alpha: 0.7),
                                           ),
@@ -106,10 +116,11 @@ class CurrentOrderScreen extends StatelessWidget {
                                   Text(
                                     DateMethods.formatToFullData(
                                       DateTime.tryParse(
-                                              ordersDate.createdAt ?? "") ??
+                                              widget.ordersDate.createdAt ??
+                                                  "") ??
                                           DateTime.now(),
                                     ),
-                                    style: AppTextStyle.text16_600.copyWith(
+                                    style: AppTextStyle.text14_400.copyWith(
                                       color: AppColor.blackColor
                                           .withValues(alpha: 0.3),
                                     ),
@@ -128,7 +139,7 @@ class CurrentOrderScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 5),
-                            child: Text(ordersDate.otp.toString(),
+                            child: Text(widget.ordersDate.otp.toString(),
                                 style: AppTextStyle.text18_700),
                           ),
                         ),
@@ -155,8 +166,8 @@ class CurrentOrderScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ExtendTimeOrderScreen(
-                                    orderId: ordersDate.id ?? 0,
-                                    duration: ordersDate.duration ?? 0,
+                                    orderId: widget.ordersDate.id ?? 0,
+                                    duration: widget.ordersDate.duration ?? 0,
                                   ),
                                 ),
                               );
@@ -206,23 +217,24 @@ class CurrentOrderScreen extends StatelessWidget {
                           children: [
                             SizedBox(height: 10.h),
                             Text(
-                              ordersDate.driver ?? "",
+                              widget.ordersDate.driver ?? "",
                               style: AppTextStyle.text16_700,
                             ),
                             SizedBox(
                               height: 10.h,
                             ),
-                            if ((ordersDate.vehicles?.isNotEmpty ?? false))
+                            if ((widget.ordersDate.vehicles?.isNotEmpty ??
+                                false))
                               Text(
-                                " ${ordersDate.vehicles!.first.plateLetters} ${ordersDate.vehicles!.first.plateNumbers}",
+                                " ${widget.ordersDate.vehicles!.first.plateLetters} ${widget.ordersDate.vehicles!.first.plateNumbers}",
                                 style: AppTextStyle.text16_700,
                               ),
                             SizedBox(
                               height: 10.h,
                             ),
-                            if (ordersDate.vehicles?.isNotEmpty == true)
+                            if (widget.ordersDate.vehicles?.isNotEmpty == true)
                               Text(
-                                "${ordersDate.vehicles!.first.carModel} ${ordersDate.vehicles!.first.carType} ${ordersDate.vehicles!.first.carBrand}",
+                                "${widget.ordersDate.vehicles!.first.carModel} ${widget.ordersDate.vehicles!.first.carType} ${widget.ordersDate.vehicles!.first.carBrand}",
                                 style: AppTextStyle.text14_600
                                     .copyWith(color: Color(0xff545454)),
                               ),
@@ -241,7 +253,7 @@ class CurrentOrderScreen extends StatelessWidget {
                       NavigatorMethods.pushNamed(
                           context, SingleChatScreen.routeName,
                           arguments: SingleChatScreenArgs(
-                              reciverName: "محمد",
+                              reciverName: widget.ordersDate.driver ?? "",
                               reciverImage: Urls.testUserImage,
                               senderId: context
                                   .read<ProfileCubit>()
@@ -249,7 +261,7 @@ class CurrentOrderScreen extends StatelessWidget {
                                   .id
                                   .toString(),
                               senderType: "user",
-                              orderId: ordersDate.id.toString()));
+                              orderId: widget.ordersDate.id.toString()));
                     },
                     child: Container(
                       height: 50.h,
@@ -288,45 +300,60 @@ class CurrentOrderScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Color(0xffD9D9D9),
-                        shape: BoxShape.circle,
+                InkWell(
+                  onTap: () {
+                    launchURL(
+                      widget.ordersDate.driverMobile ?? "",
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Color(0xffD9D9D9),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Image.asset(
+                          AppImages.phone,
+                          height: 30.h,
+                          width: 30.w,
+                        ),
                       ),
-                      child: Image.asset(
-                        AppImages.phone,
-                        height: 30.h,
-                        width: 30.w,
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Text(AppLocaleKey.contactTheDriver.tr(),
-                        style: TextStyle(fontSize: 12.sp))
-                  ],
+                      SizedBox(height: 5),
+                      Text(AppLocaleKey.contactTheDriver.tr(),
+                          style: TextStyle(fontSize: 12.sp))
+                    ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Color(0xffD9D9D9),
-                        shape: BoxShape.circle,
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SupportScreen()),
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Color(0xffD9D9D9),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Image.asset(
+                          AppImages.support,
+                          height: 30.h,
+                          width: 30.w,
+                        ),
                       ),
-                      child: Image.asset(
-                        AppImages.support,
-                        height: 30.h,
-                        width: 30.w,
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Text(AppLocaleKey.contactSupport.tr(),
-                        style: TextStyle(fontSize: 12.sp))
-                  ],
+                      SizedBox(height: 5),
+                      Text(AppLocaleKey.contactSupport.tr(),
+                          style: TextStyle(fontSize: 12.sp))
+                    ],
+                  ),
                 )
               ],
             ),
@@ -336,8 +363,7 @@ class CurrentOrderScreen extends StatelessWidget {
                 children: [
                   CustomListItem(
                     title: AppLocaleKey.askPrice.tr(),
-                    subtitle:
-                        "${totalPrice.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
+                    subtitle: "${totalPrice} ${AppLocaleKey.sarr.tr()}",
                   ),
                   SizedBox(height: 20),
                   CustomListItem(
@@ -354,7 +380,7 @@ class CurrentOrderScreen extends StatelessWidget {
                         "${netTotal.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
                   ),
                   SizedBox(height: 50.0),
-                  if (ordersDate.invoice != null)
+                  if (widget.ordersDate.invoice != null)
                     Container(
                       alignment: Alignment.bottomCenter,
                       decoration: BoxDecoration(
@@ -363,7 +389,7 @@ class CurrentOrderScreen extends StatelessWidget {
                       child: GlobalElevatedButton(
                         label: AppLocaleKey.downloadPDF.tr(),
                         onPressed: () {
-                          final invoiceUrl = ordersDate.invoice;
+                          final invoiceUrl = widget.ordersDate.invoice;
                           if (invoiceUrl != null) {
                             _showPdfOptionsBottomSheet(invoiceUrl,
                                 context: context);
@@ -385,7 +411,7 @@ class CurrentOrderScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10.0),
-            if (ordersDate.contract != null)
+            if (widget.ordersDate.contract != null)
               Container(
                 alignment: Alignment.bottomCenter,
                 decoration: BoxDecoration(
@@ -394,7 +420,7 @@ class CurrentOrderScreen extends StatelessWidget {
                 child: GlobalElevatedButton(
                   label: AppLocaleKey.downloadThePDFContract.tr(),
                   onPressed: () {
-                    final invoiceUrl = ordersDate.contract;
+                    final invoiceUrl = widget.ordersDate.contract;
                     if (invoiceUrl != null) {
                       _showPdfOptionsBottomSheet(invoiceUrl, context: context);
                     } else {
@@ -483,5 +509,25 @@ class CurrentOrderScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> launchURL(String? url,
+      {bool isWhatsapp = false, bool isEmail = false}) async {
+    if (url == null || url.isEmpty) return;
+
+    Uri uri;
+
+    if (isWhatsapp) {
+      uri = Uri.parse(
+          "https://wa.me/${url.replaceAll('+', '').replaceAll(' ', '')}");
+    } else if (isEmail) {
+      uri = Uri.parse("mailto:$url");
+    } else {
+      uri = Uri.parse("tel:$url");
+    }
+
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      Fluttertoast.showToast(msg: "لا يمكن فتح الرابط: $url");
+    }
   }
 }

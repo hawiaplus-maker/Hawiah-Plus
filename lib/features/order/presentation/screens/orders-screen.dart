@@ -179,8 +179,8 @@ class _OrdersScreenState extends State<OrdersScreen>
                     children: [
                       CustomNetworkImage(
                         imageUrl: order.image ?? "",
-                        height: 70.h,
-                        width: 70.h,
+                        height: 60.h,
+                        width: 60.h,
                       ),
                       const SizedBox(width: 10),
                       Column(
@@ -188,7 +188,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                         children: [
                           Text(
                             order.product ?? '---',
-                            style: AppTextStyle.text16_600,
+                            style: AppTextStyle.text16_700,
                           ),
                           const SizedBox(height: 5),
                           Text(
@@ -196,7 +196,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                               DateTime.tryParse(order.createdAt ?? "") ??
                                   DateTime.now(),
                             ),
-                            style: AppTextStyle.text16_500
+                            style: AppTextStyle.text14_500
                                 .copyWith(color: AppColor.darkGreyColor),
                           ),
                           const SizedBox(height: 5),
@@ -204,7 +204,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                AppLocaleKey.state.tr(),
+                                AppLocaleKey.states.tr(),
                                 style: AppTextStyle.text16_600,
                               ),
                               const SizedBox(width: 5),
@@ -227,12 +227,12 @@ class _OrdersScreenState extends State<OrdersScreen>
                     children: [
                       Text(
                         AppLocaleKey.orderDetails.tr(),
-                        style: AppTextStyle.text16_700
+                        style: AppTextStyle.text14_600
                             .copyWith(color: AppColor.mainAppColor),
                       ),
                       const SizedBox(width: 5),
                       Icon(Icons.arrow_forward_ios,
-                          color: AppColor.mainAppColor, size: 20),
+                          color: AppColor.mainAppColor, size: 15),
                     ],
                   ),
                 ],

@@ -4,9 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
-import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
+import 'package:hawiah_client/features/order/presentation/screens/orders-screen.dart';
 
 class PaymentScreenArgs {
   final int catigoryId;
@@ -68,20 +67,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
               padding: EdgeInsets.all(16),
               child: Column(
                 children: [
-                  buildSummaryRow("سعر الطلب",
+                  buildSummaryRow(AppLocaleKey.askPrice.tr(),
                       AppLocaleKey.sar.tr(args: [widget.args.price.toString()]),
                       isBold: false, fontSize: 13),
-                  buildSummaryRow("مصاريف التوصيل", "0 ريال",
-                      isBold: false, fontSize: 13),
                   buildSummaryRow(
-                      "ضريبة القيمة المضافة (15%)",
+                      AppLocaleKey.valueAdded.tr(),
                       AppLocaleKey.sar
                           .tr(args: [widget.args.vatValue.toString()]),
                       isBold: false,
                       fontSize: 13),
                   Divider(),
                   buildSummaryRow(
-                      "الإجمالي الصافي",
+                      AppLocaleKey.netTotal.tr(),
                       AppLocaleKey.sar
                           .tr(args: [widget.args.totalPrice.toString()]),
                       isBold: true,
@@ -92,13 +89,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
             SizedBox(height: 24),
             // Payment Methods Section
             Text(
-              "الدفع بواسطة",
+              AppLocaleKey.payby.tr(),
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
             buildPaymentOption(
               context,
-              title: "دفع إلكتروني",
+              title: AppLocaleKey.electronicpayment.tr(),
               icon: Row(
                 children: [
                   Image.asset('assets/icons/mastercard_logo.png', height: 24),
@@ -109,13 +106,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
             buildPaymentOption(
               context,
-              title: "مدى باي",
+              title: AppLocaleKey.howfarisit.tr(),
               icon:
                   Image.asset('assets/icons/mada_payment_logo.png', height: 24),
             ),
             buildPaymentOption(
               context,
-              title: "آبل باي",
+              title: AppLocaleKey.applepay.tr(),
               icon: Image.asset('assets/icons/apple_pay_logo.png', height: 24),
             ),
 
@@ -134,15 +131,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   addressId: widget.args.addressId,
                   fromDate: widget.args.fromDate,
                   onSuccess: () {
-                    NavigatorMethods.pushNamedAndRemoveUntil(
-                      context,
-                      LayoutScreen.routeName,
-                    );
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrdersScreen(),
+                        ),
+                        (route) => false);
                   });
             }),
-      ),    
+      ),
     );
-  }    
+  }
 
   Widget buildSummaryRow(String title, String value,
       {bool isBold = false, double fontSize = 16}) {

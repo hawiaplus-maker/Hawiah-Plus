@@ -120,4 +120,8 @@ class AppLocaleKey {
   static const String notifications = "Notifications";
   static const String noNotifications = "noNotifications";
   static const String nocompany = "nocompany";
+  static const String payby = "Payby";
+  static const String electronicpayment = "Electronicpayment";
+  static const String howfarisit = "Howfarisit?";
+  static const String applepay = "ApplePay";
 }

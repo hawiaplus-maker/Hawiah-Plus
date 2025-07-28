@@ -38,7 +38,7 @@
   "login": "Login",
   "login_as_guest": "Login as guest",
   "no_account": "Already have an account?",
-  "new_subscription": "New subscription",
+  "new_subscription": "New Register",
   "search_by_country_code": "Search by country code",
   "enter_your_password": "Enter your password",
   "steps_to_register_new_account": "Let's take a few steps to register a new account",
@@ -226,5 +226,10 @@
   "sarr":"sar",
    "Notifications": "Notifications",
   "noNotifications":"NoNotifications",
-  "nocompany":"Company registration is currently unavailable"
+  "nocompany":"Company registration is currently unavailable",
+  "orderdetails":"order details",
+  "Payby":"Pay by",
+"Electronicpayment":"Electronic payment",
+"Howfarisit?":"MadaPay",
+"ApplePay":"Apple Pay"
 }
