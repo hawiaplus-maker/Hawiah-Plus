@@ -18,7 +18,7 @@ import 'package:hawiah_client/features/order/presentation/model/orders_model.dar
 import 'package:hawiah_client/features/order/presentation/screens/extend-time-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/widget/custom_list_item.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
-import 'package:hawiah_client/features/profile/presentation/screens/support_screen.dart';
+import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/custom_widgets/global-elevated-button-widget.dart';
@@ -329,9 +329,8 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SupportScreen()),
+                    launchURL(
+                      context.read<SettingCubit>().setting?.phone ?? "",
                     );
                   },
                   child: Column(
