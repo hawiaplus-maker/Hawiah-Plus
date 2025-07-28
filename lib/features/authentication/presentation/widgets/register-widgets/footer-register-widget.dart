@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 
 class FooterRegisterWidget extends StatelessWidget {
   @override
@@ -16,9 +17,17 @@ class FooterRegisterWidget extends StatelessWidget {
         SizedBox(
           width: 5.w,
         ),
-        Text(
-          "login".tr(),
-          style: TextStyle(color: AppColor.mainAppColor, fontSize: 16.sp),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+                (route) => false);
+          },
+          child: Text(
+            "login".tr(),
+            style: TextStyle(color: AppColor.mainAppColor, fontSize: 16.sp),
+          ),
         ),
       ],
     );

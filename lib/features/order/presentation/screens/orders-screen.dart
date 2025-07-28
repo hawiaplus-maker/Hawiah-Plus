@@ -6,6 +6,7 @@ import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/custom_widgets/no_data_widget.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
@@ -69,7 +70,7 @@ class _OrdersScreenState extends State<OrdersScreen>
         return Scaffold(
           appBar: CustomAppBar(
             context,
-            titleText: "الطلبات".tr(),
+            titleText: AppLocaleKey.orders.tr(),
           ),
           body: Column(
             children: [
@@ -94,8 +95,8 @@ class _OrdersScreenState extends State<OrdersScreen>
                     dividerHeight: 0,
                     indicatorSize: TabBarIndicatorSize.tab,
                     tabs: [
-                      Tab(text: "حالية".tr()),
-                      Tab(text: "إنتهت".tr()),
+                      Tab(text: AppLocaleKey.current.tr()),
+                      Tab(text: AppLocaleKey.end.tr()),
                     ],
                   ),
                 ),
@@ -178,8 +179,8 @@ class _OrdersScreenState extends State<OrdersScreen>
                     children: [
                       CustomNetworkImage(
                         imageUrl: order.image ?? "",
-                        height: 70.h,
-                        width: 70.h,
+                        height: 60.h,
+                        width: 60.h,
                       ),
                       const SizedBox(width: 10),
                       Column(
@@ -187,7 +188,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                         children: [
                           Text(
                             order.product ?? '---',
-                            style: AppTextStyle.text16_600,
+                            style: AppTextStyle.text16_700,
                           ),
                           const SizedBox(height: 5),
                           Text(
@@ -195,7 +196,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                               DateTime.tryParse(order.createdAt ?? "") ??
                                   DateTime.now(),
                             ),
-                            style: AppTextStyle.text16_500
+                            style: AppTextStyle.text14_500
                                 .copyWith(color: AppColor.darkGreyColor),
                           ),
                           const SizedBox(height: 5),
@@ -203,9 +204,10 @@ class _OrdersScreenState extends State<OrdersScreen>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'حالة: ',
+                                AppLocaleKey.states.tr(),
                                 style: AppTextStyle.text16_600,
                               ),
+                              const SizedBox(width: 5),
                               Text(
                                 context.locale.languageCode == 'ar'
                                     ? (order.status?.ar ?? '')
@@ -224,13 +226,13 @@ class _OrdersScreenState extends State<OrdersScreen>
                   Row(
                     children: [
                       Text(
-                        "تفاصيل الطلب",
-                        style: AppTextStyle.text16_700
+                        AppLocaleKey.orderDetails.tr(),
+                        style: AppTextStyle.text14_600
                             .copyWith(color: AppColor.mainAppColor),
                       ),
                       const SizedBox(width: 5),
                       Icon(Icons.arrow_forward_ios,
-                          color: AppColor.mainAppColor, size: 20),
+                          color: AppColor.mainAppColor, size: 15),
                     ],
                   ),
                 ],

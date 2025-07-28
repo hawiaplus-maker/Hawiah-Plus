@@ -192,10 +192,6 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
                       ),
-                      Spacer(),
-                      SvgPicture.asset(
-                        AppImages.arrowDownIcon,
-                      )
                     ],
                   ),
                 ),
@@ -234,10 +230,6 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
-                      SvgPicture.asset(
-                        AppImages.arrowDownIcon,
-                      )
                     ],
                   ),
                 ),
@@ -265,10 +257,6 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                               : "date_start".tr(),
                           style: TextStyle(fontSize: 14.sp),
                         ),
-                        Spacer(),
-                        SvgPicture.asset(
-                          AppImages.arrowDownIcon,
-                        )
                       ],
                     ),
                   ),
@@ -299,10 +287,6 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                             : "date_end".tr(),
                         style: TextStyle(fontSize: 14.sp),
                       ),
-                      Spacer(),
-                      SvgPicture.asset(
-                        AppImages.arrowDownIcon,
-                      )
                     ],
                   ),
                 ),

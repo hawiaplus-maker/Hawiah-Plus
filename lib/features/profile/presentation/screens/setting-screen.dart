@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/cubit/app_theme_cubit.dart';
 import 'package:hawiah_client/core/theme/theme_enum.dart';
 
@@ -21,8 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         context,
-        titleText: 'الإعدادات',
-      
+        titleText: AppLocaleKey.settings.tr(),
         centerTitle: true,
       ),
       body: Padding(
@@ -38,7 +39,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 fit: BoxFit.fill,
               ),
               title: Text(
-                'التنبيهات',
+                AppLocaleKey.alerts.tr(),
                 style: TextStyle(fontSize: 18),
               ),
               trailing: Switch(
@@ -57,9 +58,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Divider(),
             ListTile(
               onTap: () {
-                appThemeCubit.theme = isLightMode
-                    ? ThemeEnum.dark
-                    : ThemeEnum.light; 
+                appThemeCubit.theme =
+                    isLightMode ? ThemeEnum.dark : ThemeEnum.light;
               },
               contentPadding: EdgeInsets.zero,
               leading: Image.asset(
@@ -69,7 +69,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 fit: BoxFit.fill,
               ),
               title: Text(
-                isLightMode ? 'الوضع النهاري' : 'الوضع الليلي',
+                isLightMode
+                    ? AppLocaleKey.nightMode.tr()
+                    : AppLocaleKey.dayMode.tr(),
                 style: TextStyle(fontSize: 18),
               ),
               trailing: SizedBox(
@@ -78,7 +80,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      'الليلي',
+                      AppLocaleKey.dayMode.tr(),
                       style: TextStyle(fontSize: 14),
                     ),
                     SizedBox(width: 8),

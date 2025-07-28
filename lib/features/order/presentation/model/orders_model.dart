@@ -53,6 +53,7 @@ class Data {
   String? userMobile;
   String? contract;
   String? invoice;
+  
 
   Data(
       {this.id,
@@ -79,6 +80,7 @@ class Data {
       this.user,
       this.userMobile,
       this.contract,
+      
       this.invoice});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -101,6 +103,7 @@ class Data {
     product = json['product'];
     image = json['image'];
     driver = json['driver'];
+    
     driverMobile = json['driver_mobile'];
     if (json['vehicles'] != null) {
       vehicles = <Vehicles>[];

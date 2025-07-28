@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/widgets/on-boarding-appBar-widget.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/widgets/on-boarding-content-widget.dart';
@@ -19,6 +20,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   void initState() {
     HiveMethods.updateFirstTime();
+    OnBoardingCubit.get(context).getOnboarding();
     super.initState();
   }
 
@@ -30,8 +32,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         builder: (context, state) {
           final cubit = OnBoardingCubit.get(context);
 
+          if (state is OnBoardingLoading) {
+            return Center(child: CustomLoading());
+          }
+
           if (state is OnBoardingError || cubit.onBoardingList.isEmpty) {
-            return const Center(child: Text("حدث خطأ أثناء تحميل البيانات."));
+            return const Center(child: Text('لا يوجد بيانات'));
           }
 
           final currentIndex = cubit.currentIndex;

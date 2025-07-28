@@ -43,11 +43,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Text(
                     "welcome".tr(),
-                    style: AppTextStyle.text20_700,
+                    style: AppTextStyle.text24_700,
                   ),
+                  const SizedBox(height: 5),
                   Text(
                     "welcome_back".tr(),
-                    style: TextStyle(fontSize: 15.sp, color: Color(0xff979797)),
+                    style: AppTextStyle.text16_400,
                   ),
                   SizedBox(height: 20.h),
                   PhoneInputWidget(

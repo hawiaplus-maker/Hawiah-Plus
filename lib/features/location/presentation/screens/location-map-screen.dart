@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
 
 class LocationScreenArgs {
@@ -175,7 +176,7 @@ class _LocationScreenState extends State<LocationScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "تأكيد الموقع الحالي",
+                            AppLocaleKey.confirmcurrentlocation.tr(),
                             style: TextStyle(
                               color: const Color(0xff979797),
                               fontSize: 12.sp,
@@ -183,7 +184,7 @@ class _LocationScreenState extends State<LocationScreen> {
                           ),
                           SizedBox(height: 10.h),
                           Text(
-                            "العنوان الحالي",
+                           AppLocaleKey.currentaddress.tr(),
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 15.sp,

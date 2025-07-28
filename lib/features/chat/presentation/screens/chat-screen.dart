@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 
 class AllChatsScreen extends StatelessWidget {
@@ -10,7 +12,7 @@ class AllChatsScreen extends StatelessWidget {
       appBar: CustomAppBar(
         context,
         title: Text(
-          'المحادثات',
+          AppLocaleKey.chat.tr(),
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,

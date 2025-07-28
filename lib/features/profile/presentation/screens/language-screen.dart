@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/features/app-language/presentation/controllers/app-language-cubit/app-language-cubit.dart';
 import 'package:hawiah_client/main.dart';
 
@@ -16,12 +17,12 @@ class LanguageScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         context,
-        titleText: 'لغة التطبيق',
+        titleText: AppLocaleKey.langApp.tr(),
       ),
       body: Column(
         children: [
           languageItem(
-            title: 'العربية',
+            title: AppLocaleKey.arabic.tr(),
             logo: 'assets/icons/flag_saudi_arabia_icon.png',
             onTap: () async {
               appLanguageCubit.changeLanguage(language: "arabic");
@@ -31,7 +32,7 @@ class LanguageScreen extends StatelessWidget {
             },
           ),
           languageItem(
-            title: 'English',
+            title: AppLocaleKey.english.tr(),
             logo: 'assets/icons/flag_united_kingdom_icon.png',
             onTap: () async {
               appLanguageCubit.changeLanguage(language: "english");

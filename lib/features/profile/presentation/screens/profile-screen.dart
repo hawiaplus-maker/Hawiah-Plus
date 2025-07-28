@@ -18,6 +18,7 @@ import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
+import 'package:hawiah_client/features/notifications/presentation/screen/notifications_screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/orders-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/faq-screen.dart';
@@ -58,10 +59,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         context,
-        titleText: "الملف الشخصي",
+        titleText: AppLocaleKey.profileFile.tr(),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const NotificationsScreen();
+              }));
+            },
             icon: Card(
                 shape: CircleBorder(),
                 color: AppColor.whiteColor,
@@ -144,7 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               width: 5.w,
                             ),
                             Text(
-                              "تعديل",
+                              AppLocaleKey.edit.tr(),
                               style: TextStyle(
                                   fontSize: 16.sp,
                                   color: AppColor.mainAppColor,
@@ -216,7 +221,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               isGuest
                   ? Gap(0)
                   : PersonProfileListTile(
-                      title: "الطلبات",
+                      title: AppLocaleKey.orders.tr(),
                       logo: AppImages.orderIcon,
                       onTap: () {
                         Navigator.push<void>(
@@ -238,17 +243,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               isGuest
                   ? Gap(0)
                   : PersonProfileListTile(
-                      title: "كوبونات الخصم",
+                      title: AppLocaleKey.discountCoupons.tr(),
                       logo: "assets/icons/coupon_icon.png",
                       onTap: () {}),
               PersonProfileListTile(
-                  title: "دعوة صديق",
+                  title: AppLocaleKey.inviteaFriend.tr(),
                   logo: "assets/icons/person_invite_icon.png",
                   onTap: () {}),
 
               PersonProfileListTile(
                   isHaveLine: true,
-                  title: "الدعم",
+                  title: AppLocaleKey.support.tr(),
                   logo: "assets/icons/call_us_icon.png",
                   onTap: () {
                     Navigator.push(
@@ -262,7 +267,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               PersonProfileListTile(
                   isHaveLine: true,
-                  title: "الأسئلة الشائعة",
+                  title: AppLocaleKey.frequentlyAskedQuestions.tr(),
                   logo: "assets/icons/qestions_icon.png",
                   onTap: () {
                     Navigator.push<void>(
@@ -273,18 +278,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   }),
               PersonProfileListTile(
-                  title: "لغة التطبيق",
+                  title: AppLocaleKey.langApp.tr(),
                   logo: "assets/icons/language_icon.png",
                   trailing: Row(
                     children: [
                       Text(
-                        "العربية",
+                        getLanguageName(context.locale),
+                        style: TextStyle(fontSize: 14.sp, color: Colors.black),
                       ),
                       SizedBox(
                         width: 5.w,
                       ),
-                      Image.asset("assets/icons/flag_saudi_arabia_icon.png",
-                          height: 25.h, width: 25.w),
+                      Image.asset(
+                        getLanguageFlag(context.locale),
+                        height: 25.h,
+                        width: 25.w,
+                      ),
                     ],
                   ),
                   onTap: () {
@@ -308,7 +317,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               //       );
               //     }),
               PersonProfileListTile(
-                  title: "سياسة الخصوصية",
+                  title: AppLocaleKey.privacyPolicy.tr(),
                   logo: "assets/icons/shield_keyhole_icon.png",
                   onTap: () {
                     Navigator.push<void>(
@@ -320,7 +329,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   }),
               PersonProfileListTile(
-                  title: "الشروط والأحكام",
+                  title: AppLocaleKey.termsAndConditions.tr(),
                   logo: "assets/icons/shield_check_icon.png",
                   onTap: () {
                     Navigator.push<void>(
@@ -355,7 +364,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 width: 10.w,
                               ),
                               Text(
-                                "تسجيل خروج",
+                                AppLocaleKey.logout.tr(),
                                 style: TextStyle(
                                     fontSize: 14.sp, color: Colors.black),
                               ),
@@ -500,5 +509,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 : SizedBox.shrink()
           ],
         ));
+  }
+
+  String getLanguageName(Locale locale) {
+    switch (locale.languageCode) {
+      case 'ar':
+        return 'العربية';
+      case 'en':
+        return 'English';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  String getLanguageFlag(Locale locale) {
+    switch (locale.languageCode) {
+      case 'ar':
+        return "assets/icons/flag_saudi_arabia_icon.png";
+      case 'en':
+        return "assets/icons/flag_united_kingdom_icon.png";
+
+      default:
+        return "assets/icons/default_flag.png";
+    }
   }
 }

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 
+
 class OnBoardingPageView extends StatelessWidget {
   final List<String> onBoardingImages;
   final PageController pageController;

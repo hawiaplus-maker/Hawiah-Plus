@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
@@ -26,7 +28,7 @@ class OldOrderScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         context,
-        titleText: 'تفاصيل الطلب',
+        titleText: AppLocaleKey.orderDetails.tr(),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -68,7 +70,7 @@ class OldOrderScreen extends StatelessWidget {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: ' طلب رقم:',
+                                  text: AppLocaleKey.orderNumber.tr(),
                                   style: AppTextStyle.text16_600.copyWith(
                                     color: AppColor.blackColor
                                         .withValues(alpha: 0.7),
@@ -109,7 +111,7 @@ class OldOrderScreen extends StatelessWidget {
                         width: 20.0,
                         color: Colors.white,
                       ),
-                      label: "إعادة الطلب",
+                      label: AppLocaleKey.reOrder.tr(),
                       onPressed: () {},
                       backgroundColor: AppColor.mainAppColor,
                       textColor: Colors.white,
@@ -175,7 +177,7 @@ class OldOrderScreen extends StatelessWidget {
                         ),
                         SizedBox(width: 8.0),
                         Text(
-                          "تقييم المندوب",
+                          AppLocaleKey.delegateEvaluation.tr(),
                           style: AppTextStyle.text16_600.copyWith(
                             color: Color(0xff1A3C98),
                           ),
@@ -191,20 +193,23 @@ class OldOrderScreen extends StatelessWidget {
               child: Column(
                 children: [
                   CustomListItem(
-                    title: 'سعر الطلب',
-                    subtitle: "${totalPrice.toStringAsFixed(2)} ريال",
+                    title: AppLocaleKey.askPrice.tr(),
+                    subtitle:
+                        "${totalPrice.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
                   ),
                   SizedBox(height: 20),
                   CustomListItem(
-                    title: 'ضريبة القيمة المضافة (15%)',
-                    subtitle: "${vat.toStringAsFixed(2)} ريال",
+                    title: AppLocaleKey.valueAdded.tr(),
+                    subtitle:
+                        "${vat.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
                   ),
                   SizedBox(height: 10),
                   Divider(),
                   SizedBox(height: 10),
                   CustomListItem(
-                    title: 'الإجمالي الصافي',
-                    subtitle: "${netTotal.toStringAsFixed(2)} ريال",
+                    title: AppLocaleKey.netTotal.tr(),
+                    subtitle:
+                        "${netTotal.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
                   ),
                   SizedBox(height: 60.0),
                   Container(
@@ -213,14 +218,15 @@ class OldOrderScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: GlobalElevatedButton(
-                      label: "تحميل الفاتورة PDF",
+                      label: AppLocaleKey.downloadPDF.tr(),
                       onPressed: () {
                         final invoiceUrl = ordersDate.invoice;
                         if (invoiceUrl != null) {
                           _showPdfOptionsBottomSheet(invoiceUrl,
                               context: context);
                         } else {
-                          Fluttertoast.showToast(msg: 'الفاتورة غير متوفرة');
+                          Fluttertoast.showToast(
+                              msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
                         }
                       },
                       backgroundColor: Color(0xff1A3C98),
@@ -241,13 +247,14 @@ class OldOrderScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: GlobalElevatedButton(
-                label: "تحميل العقد PDF",
+                label: AppLocaleKey.downloadThePDFContract.tr(),
                 onPressed: () {
                   final invoiceUrl = ordersDate.contract;
                   if (invoiceUrl != null) {
                     _showPdfOptionsBottomSheet(invoiceUrl, context: context);
                   } else {
-                    Fluttertoast.showToast(msg: 'الفاتورة غير متوفرة');
+                    Fluttertoast.showToast(
+                        msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
                   }
                 },
                 backgroundColor: Colors.white,
@@ -276,7 +283,7 @@ class OldOrderScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'اختر الإجراء',
+                AppLocaleKey.chooseAction.tr(),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -285,7 +292,10 @@ class OldOrderScreen extends StatelessWidget {
               SizedBox(height: 20),
               ListTile(
                 leading: Icon(Icons.remove_red_eye),
-                title: Text('عرض الفاتورة'),
+                title: Text(
+                  AppLocaleKey.viewInvoice.tr(),
+                  style: AppTextStyle.text16_600,
+                ),
                 onTap: () async {
                   Navigator.pop(context);
                   if (await canLaunchUrl(Uri.parse(pdfUrl))) {
@@ -297,14 +307,18 @@ class OldOrderScreen extends StatelessWidget {
                       ),
                     );
                   } else {
-                    Fluttertoast.showToast(msg: 'لا يمكن عرض الفاتورة');
+                    Fluttertoast.showToast(
+                        msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
                   }
                 },
               ),
               Divider(),
               ListTile(
                 leading: Icon(Icons.download),
-                title: Text('تحميل الفاتورة'),
+                title: Text(
+                  AppLocaleKey.downloadInvoice.tr(),
+                  style: AppTextStyle.text16_600,
+                ),
                 onTap: () async {
                   Navigator.pop(context);
                   if (await canLaunchUrl(Uri.parse(pdfUrl))) {
@@ -313,13 +327,14 @@ class OldOrderScreen extends StatelessWidget {
                       mode: LaunchMode.externalApplication,
                     );
                   } else {
-                    Fluttertoast.showToast(msg: 'لا يمكن تحميل الفاتورة');
+                    Fluttertoast.showToast(
+                        msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
                   }
                 },
               ),
               SizedBox(height: 10),
               TextButton(
-                child: Text('إلغاء'),
+                child: Text(AppLocaleKey.cancel.tr()),
                 onPressed: () => Navigator.pop(context),
               ),
             ],

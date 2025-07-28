@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
@@ -137,6 +139,7 @@ class AuthCubit extends Cubit<AuthState> {
   TextEditingController confirmPasswordControllerCompleteProfile =
       TextEditingController();
   TextEditingController PhoneController = TextEditingController();
+  TextEditingController forgotPhoneController = TextEditingController();
   TextEditingController phoneControllerRegister = TextEditingController();
   String nameCompleteProfile = '';
   String emailCompleteProfile = '';
@@ -258,6 +261,20 @@ class AuthCubit extends Cubit<AuthState> {
     required String? phoneNumber,
     required String? type,
   }) async {
+    if (type == 'company') {
+      emit(AuthError(AppLocaleKey.nocompany.tr()));
+      Fluttertoast.showToast(
+        msg: AppLocaleKey.nocompany.tr(),
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        timeInSecForIosWeb: 2,
+        fontSize: 16.0,
+      );
+      return;
+    }
+
     emit(AuthLoading());
 
     final body = FormData.fromMap({

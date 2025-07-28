@@ -7,6 +7,7 @@ import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/widgets/circular-progress-stack-widget.dart';
+
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingContent extends StatelessWidget {

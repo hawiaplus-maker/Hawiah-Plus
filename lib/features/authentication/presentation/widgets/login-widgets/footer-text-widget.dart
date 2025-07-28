@@ -21,10 +21,10 @@ class FooterTextWidget extends StatelessWidget {
         GestureDetector(
           onTap: () {
             HiveMethods.updateIsVisitor(true);
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const RegisterScreen()));
+                MaterialPageRoute(builder: (context) => RegisterScreen()),
+                (route) => false);
           },
           child: Text(
             "new_subscription".tr(),

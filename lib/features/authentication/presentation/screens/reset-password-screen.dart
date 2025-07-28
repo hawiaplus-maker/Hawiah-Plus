@@ -5,8 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
-import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
+
 import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
 
@@ -58,19 +59,14 @@ class ResetPasswordScreen extends StatelessWidget {
                     CustomTextField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'كلمة المرور لا يمكن أن تكون فارغة';
+                          return "password_required".tr();
                         }
                         if (value.length < 8) {
-                          return 'كلمة المرور يجب ألا تقل عن 8 أحرف';
-                        }
-                        if (!RegExp(r'[0-9]').hasMatch(value)) {
-                          return 'كلمة المرور يجب أن تحتوي على رقم واحد على الأقل';
-                        }
-                        if (!RegExp(r'[!@#\$&*~%^-_=+<>?]').hasMatch(value)) {
-                          return 'كلمة المرور يجب أن تحتوي على رمز مثل @ أو # أو !';
+                          return "password_min_length".tr();
                         }
                         return null;
                       },
+                      isPassword: context.read<AuthCubit>().isResetPassword,
                       controller: authCubit.passwordController,
                       labelText: 'password'.tr(),
                       hintText: 'enter_your_password'.tr(),
@@ -97,22 +93,17 @@ class ResetPasswordScreen extends StatelessWidget {
                     CustomTextField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'كلمة المرور لا يمكن أن تكون فارغة';
+                          return "password_required".tr();
                         }
                         if (value.length < 8) {
-                          return 'كلمة المرور يجب ألا تقل عن 8 أحرف';
-                        }
-                        if (!RegExp(r'[0-9]').hasMatch(value)) {
-                          return 'كلمة المرور يجب أن تحتوي على رقم واحد على الأقل';
-                        }
-                        if (!RegExp(r'[!@#\$&*~%^-_=+<>?]').hasMatch(value)) {
-                          return 'كلمة المرور يجب أن تحتوي على رمز مثل @ أو # أو !';
+                          return "password_min_length".tr();
                         }
                         return null;
                       },
                       controller: authCubit.confirmPasswordController,
                       labelText: 'confirm_password'.tr(),
                       hintText: 'enter_your_password'.tr(),
+                      isPassword: passwordVisibleReset,
                       // obscureText: !passwordVisibleReset,
                       // hasSuffixIcon: true,
                       suffixIcon: IconButton(

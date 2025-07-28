@@ -43,7 +43,7 @@ class AllAddressesScreen extends StatelessWidget {
               NavigatorMethods.showAppDialog(
                 context,
                 AlertDialog(
-                  content: Text("يرجى تسجيل الدخول ".tr(),
+                  content: Text(AppLocaleKey.pleaselog.tr(),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 18)),
                   actions: [
@@ -56,7 +56,7 @@ class AllAddressesScreen extends StatelessWidget {
                                 builder: (context) => const RegisterScreen()));
                       },
                       child: Text(
-                        "تسجيل جديد ".tr(),
+                        AppLocaleKey.newRegistration.tr(),
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
