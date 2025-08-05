@@ -216,7 +216,7 @@ class CurrentOrderScreen extends StatelessWidget {
                         ),
                       ),
                       Image.asset(
-                        "assets/images/driver_image.PNG",
+                        AppImages.hawiaDriver,
                         height: 0.2.sh,
                         width: 0.35.sw,
                       )
@@ -229,7 +229,7 @@ class CurrentOrderScreen extends StatelessWidget {
                               onMessageSent: () {},
                               reciverId: ordersDate.driverId.toString(),
                               reciverType: "driver",
-                              reciverName: "محمد",
+                              reciverName: ordersDate.driver ?? "",
                               reciverImage: Urls.testUserImage,
                               senderId: context.read<ProfileCubit>().user.id.toString(),
                               senderType: "user",

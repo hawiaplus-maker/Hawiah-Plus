@@ -194,10 +194,7 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
                             DateMethods.formatToFullData(
                               DateTime.tryParse(order.createdAt ?? "") ?? DateTime.now(),
                             ),
-
-
                             style: AppTextStyle.text16_500.copyWith(color: AppColor.darkGreyColor),
-
                           ),
                           const SizedBox(height: 5),
                           Row(
@@ -225,23 +222,11 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
                   Row(
                     children: [
                       Text(
-
                         AppLocaleKey.orderDetails.tr(),
-                        style: AppTextStyle.text14_600
-                            .copyWith(color: AppColor.mainAppColor),
-                      ),
-                      const SizedBox(width: 5),
-                      Icon(Icons.arrow_forward_ios,
-                          color: AppColor.mainAppColor, size: 15),
-Text(
-  
-
-                        "تفاصيل الطلب",
                         style: AppTextStyle.text16_700.copyWith(color: AppColor.mainAppColor),
                       ),
                       const SizedBox(width: 5),
-                      Icon(Icons.arrow_forward_ios, color: AppColor.mainAppColor, size: 20),
-
+                      Icon(Icons.arrow_forward_ios, color: AppColor.mainAppColor, size: 15),
                     ],
                   ),
                 ],
