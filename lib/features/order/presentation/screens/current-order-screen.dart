@@ -261,7 +261,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                                   .id
                                   .toString(),
                               senderType: "user",
-                              orderId: widget.ordersDate.id.toString()));
+                              orderId: widget.ordersDate.id.toString(), reciverId: '', reciverType: '', onMessageSent: () {  }));
                     },
                     child: Container(
                       height: 50.h,

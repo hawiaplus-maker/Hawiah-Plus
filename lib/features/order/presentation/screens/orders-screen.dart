@@ -23,8 +23,7 @@ class OrdersScreen extends StatefulWidget {
   State<OrdersScreen> createState() => _OrdersScreenState();
 }
 
-class _OrdersScreenState extends State<OrdersScreen>
-    with SingleTickerProviderStateMixin {
+class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   //late OrderCubit orderCubit;
 
@@ -193,11 +192,12 @@ class _OrdersScreenState extends State<OrdersScreen>
                           const SizedBox(height: 5),
                           Text(
                             DateMethods.formatToFullData(
-                              DateTime.tryParse(order.createdAt ?? "") ??
-                                  DateTime.now(),
+                              DateTime.tryParse(order.createdAt ?? "") ?? DateTime.now(),
                             ),
-                            style: AppTextStyle.text14_500
-                                .copyWith(color: AppColor.darkGreyColor),
+
+
+                            style: AppTextStyle.text16_500.copyWith(color: AppColor.darkGreyColor),
+
                           ),
                           const SizedBox(height: 5),
                           Row(
@@ -210,11 +210,10 @@ class _OrdersScreenState extends State<OrdersScreen>
                               const SizedBox(width: 5),
                               Text(
                                 context.locale.languageCode == 'ar'
-                                    ? (order.status?.ar ?? '')
-                                    : (order.status?.en ?? ''),
+                                    ? (order.status?['ar'] ?? '')
+                                    : (order.status?['en'] ?? ''),
                                 style: AppTextStyle.text16_700.copyWith(
-                                  color: gtOrderStatusColor(
-                                      order.status?.en ?? ''),
+                                  color: gtOrderStatusColor(order.status?['en'] ?? ''),
                                 ),
                               )
                             ],
@@ -226,6 +225,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                   Row(
                     children: [
                       Text(
+
                         AppLocaleKey.orderDetails.tr(),
                         style: AppTextStyle.text14_600
                             .copyWith(color: AppColor.mainAppColor),
@@ -233,6 +233,15 @@ class _OrdersScreenState extends State<OrdersScreen>
                       const SizedBox(width: 5),
                       Icon(Icons.arrow_forward_ios,
                           color: AppColor.mainAppColor, size: 15),
+Text(
+  
+
+                        "تفاصيل الطلب",
+                        style: AppTextStyle.text16_700.copyWith(color: AppColor.mainAppColor),
+                      ),
+                      const SizedBox(width: 5),
+                      Icon(Icons.arrow_forward_ios, color: AppColor.mainAppColor, size: 20),
+
                     ],
                   ),
                 ],

@@ -6,8 +6,7 @@ class AppLocaleKey {
   static const String validateEmailStructure = 'validateEmailStructure';
   static const String validatePhone = 'validatePhone';
   static const String validatePhoneStartWithZero = 'validatePhoneStartWithZero';
-  static const String validatePhoneContainTenNumbers =
-      'validatePhoneContainTenNumbers';
+  static const String validatePhoneContainTenNumbers = 'validatePhoneContainTenNumbers';
   static const String validatePassword = 'validatePassword';
   static const String enterYourPassword = 'enterYourPassword';
   static const String validateConfirmPassword = 'validateConfirmPassword';
@@ -109,8 +108,7 @@ class AppLocaleKey {
   static const String emptytheContainer = "Emptythecontainer";
   static const String contactTheDriver = "Contactthedriver";
   static const String contactSupport = "ContactSupport";
-  static const String representativewasuncooperative =
-      "representativewasuncooperative";
+  static const String representativewasuncooperative = "representativewasuncooperative";
   static const String confirmcurrentlocation = "Confirmcurrentlocation";
   static const String currentaddress = "Currentaddress";
   static const String pleaselog = "Pleaselog";

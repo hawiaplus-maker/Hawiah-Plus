@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_slider/custom_slider.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
@@ -62,25 +63,16 @@ class _HomeScreenState extends State<HomeScreen> {
               final user = state.user;
               return Row(
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return UserProfile();
-                      }));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                              color: AppColor.mainAppColor, width: 1.5)),
-                      child: CustomNetworkImage(
-                        radius: 30,
-                        fit: BoxFit.fill,
-                        imageUrl: user.image,
-                        height: 45.h,
-                        width: 45.w,
-                      ),
+                  Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColor.mainAppColor, width: 1.5)),
+                    child: CustomNetworkImage(
+                      radius: 30,
+                      fit: BoxFit.fill,
+                      imageUrl: user.image,
+                      height: 45.h,
+                      width: 45.w,
                     ),
                   ),
                   SizedBox(width: 10.w),
@@ -93,8 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Text(
                         user.name,
-                        style: AppTextStyle.text16_500
-                            .copyWith(color: AppColor.greyColor),
+                        style: AppTextStyle.text16_500.copyWith(color: AppColor.greyColor),
                       ),
                     ],
                   ),
@@ -160,19 +151,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => CategoryDetailesScreen(
-                                    id: homeCubit
-                                            .categorieS?.message?[index].id ??
-                                        0,
+                                    id: homeCubit.categorieS?.message?[index].id ?? 0,
                                   )));
                     },
                     child: Card(
                       elevation: 5,
                       color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       child: Container(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 10.w, vertical: 10.h),
+                        margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
@@ -180,9 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             CustomNetworkImage(
                               height: 70.h,
                               width: 70.w,
-                              imageUrl:
-                                  homeCubit.categorieS?.message?[index].image ??
-                                      '',
+                              imageUrl: homeCubit.categorieS?.message?[index].image ?? '',
                               fit: BoxFit.contain,
                             ),
                             SizedBox(
@@ -229,11 +214,20 @@ class _SliderWidgetsState extends State<SliderWidgets> {
 
       return ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: CustomNetworkImage(
-          imageUrl: fullImageUrl2,
-          height: 200.h,
-          width: double.infinity,
-          fit: BoxFit.fill,
+        child: CustomSlider(
+          
+          sliderArguments: [
+            ...List.generate(
+                SettingCubit.get(context).setting?.mobileSlider?.length ?? 0,
+                (index) => SliderArguments(
+                      child: CustomNetworkImage(
+                        fit: BoxFit.fill,
+                        height: 200.h,
+                        width: double.infinity,
+                        imageUrl: SettingCubit.get(context).setting?.mobileSlider?[index].img ?? '',
+                      ),
+                    ))
+          ],
         ),
       );
     });

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
+import 'package:hawiah_client/features/chat/presentation/screens/chat-screen.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/screens/home-screen.dart';
-import 'package:hawiah_client/features/location/presentation/screens/all_addresses_screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/orders-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/profile-screen.dart';
@@ -24,8 +24,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
   void initState() {
     Future.wait([
       context.read<HomeCubit>().getCategories(),
-      if (HiveMethods.isVisitor() == false)
-        context.read<ProfileCubit>().fetchProfile(),
+      if (HiveMethods.isVisitor() == false) context.read<ProfileCubit>().fetchProfile(),
       context.read<SettingCubit>().getsetting()
     ]);
 
@@ -36,7 +35,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
 
   final List<Widget> _screens = [
     HomeScreen(),
-    AllAddressesScreen(),
+    AllChatsScreen(),
     OrdersScreen(),
     ProfileScreen(),
   ];
@@ -54,36 +53,32 @@ class _LayoutScreenState extends State<LayoutScreen> {
             fit: BoxFit.fill,
             height: 25.h,
             width: 25.w,
-            color: selectedIndex == 0
-                ? Colors.white
-                : Color(0xff929292), // Dynamically set the color
+            color:
+                selectedIndex == 0 ? Colors.white : Color(0xff929292), // Dynamically set the color
           ),
           Image.asset(
-            "assets/icons/location_icon.png",
+            "assets/images/message.png",
             fit: BoxFit.fill,
             height: 25.h,
             width: 25.w,
-            color: selectedIndex == 1
-                ? Colors.white
-                : Color(0xff929292), // Dynamically set the color
+            color:
+                selectedIndex == 1 ? Colors.white : Color(0xff929292), // Dynamically set the color
           ),
           Image.asset(
             "assets/icons/orders_icon.png",
             fit: BoxFit.fill,
             height: 25.h,
             width: 25.w,
-            color: selectedIndex == 2
-                ? Colors.white
-                : Color(0xff929292), // Dynamically set the color
+            color:
+                selectedIndex == 2 ? Colors.white : Color(0xff929292), // Dynamically set the color
           ),
           Image.asset(
             "assets/icons/person_profile_icon.png",
             fit: BoxFit.fill,
             height: 25.h,
             width: 25.w,
-            color: selectedIndex == 3
-                ? Colors.white
-                : Color(0xff929292), // Dynamically set the color
+            color:
+                selectedIndex == 3 ? Colors.white : Color(0xff929292), // Dynamically set the color
           ),
         ],
 

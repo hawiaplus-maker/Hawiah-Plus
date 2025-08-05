@@ -223,13 +223,13 @@
   "Pleaselog": "Please log in",
   "NewRegistration": "New registration",
   "Addtitle": "Add address",
-  "sarr":"sar",
-   "Notifications": "Notifications",
-  "noNotifications":"NoNotifications",
-  "nocompany":"Company registration is currently unavailable",
-  "orderdetails":"order details",
-  "Payby":"Pay by",
-"Electronicpayment":"Electronic payment",
-"Howfarisit?":"MadaPay",
-"ApplePay":"Apple Pay"
+  "sarr": "sar",
+  "Notifications": "Notifications",
+  "noNotifications": "NoNotifications",
+  "nocompany": "Company registration is currently unavailable",
+  "orderdetails": "order details",
+  "Payby": "Pay by",
+  "Electronicpayment": "Electronic payment",
+  "Howfarisit?": "MadaPay",
+  "ApplePay": "Apple Pay"
 }
