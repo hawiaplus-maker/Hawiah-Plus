@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +6,6 @@ import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
-import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
@@ -18,35 +16,25 @@ import 'package:hawiah_client/features/order/presentation/model/orders_model.dar
 import 'package:hawiah_client/features/order/presentation/screens/extend-time-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/widget/custom_list_item.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
-import 'package:hawiah_client/features/profile/presentation/screens/support_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/custom_widgets/global-elevated-button-widget.dart';
 
-class CurrentOrderScreen extends StatefulWidget {
+class CurrentOrderScreen extends StatelessWidget {
   const CurrentOrderScreen({
     Key? key,
     required this.ordersDate,
   }) : super(key: key);
   final Data ordersDate;
-
-  @override
-  State<CurrentOrderScreen> createState() => _CurrentOrderScreenState();
-}
-
-class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
   @override
   Widget build(BuildContext context) {
-    final double totalPrice = double.tryParse(
-          widget.ordersDate.totalPrice?.replaceAll(",", "") ?? "0",
-        ) ??
-        0;
+    final double totalPrice = double.tryParse(ordersDate.totalPrice ?? "0") ?? 0;
     final double vat = totalPrice * 0.15;
     final double netTotal = totalPrice + vat;
     return Scaffold(
       appBar: CustomAppBar(
         context,
-        titleText: AppLocaleKey.orderDetails.tr(),
+        titleText: 'تفاصيل الطلب',
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -72,7 +60,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(15.0),
                                   child: CustomNetworkImage(
-                                    imageUrl: widget.ordersDate.image ?? "",
+                                    imageUrl: ordersDate.image ?? "",
                                     fit: BoxFit.fill,
                                     height: 60.h,
                                     width: 60.w,
@@ -84,7 +72,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    widget.ordersDate.product ?? "",
+                                    ordersDate.product ?? "",
                                     style: AppTextStyle.text16_700,
                                   ),
                                   SizedBox(height: 5.h),
@@ -92,21 +80,15 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                                     text: TextSpan(
                                       children: [
                                         TextSpan(
-                                          text: AppLocaleKey.orderNumber.tr(),
-                                          style:
-                                              AppTextStyle.text14_500.copyWith(
-                                            color: AppColor.blackColor
-                                                .withValues(alpha: 0.7),
+                                          text: ' طلب رقم:',
+                                          style: AppTextStyle.text16_600.copyWith(
+                                            color: AppColor.blackColor.withValues(alpha: 0.7),
                                           ),
                                         ),
                                         TextSpan(
-                                          text: widget
-                                                  .ordersDate.referenceNumber ??
-                                              '',
-                                          style:
-                                              AppTextStyle.text14_500.copyWith(
-                                            color: AppColor.blackColor
-                                                .withValues(alpha: 0.7),
+                                          text: ordersDate.referenceNumber ?? '',
+                                          style: AppTextStyle.text16_500.copyWith(
+                                            color: AppColor.blackColor.withValues(alpha: 0.7),
                                           ),
                                         ),
                                       ],
@@ -115,14 +97,11 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                                   SizedBox(height: 5.h),
                                   Text(
                                     DateMethods.formatToFullData(
-                                      DateTime.tryParse(
-                                              widget.ordersDate.createdAt ??
-                                                  "") ??
+                                      DateTime.tryParse(ordersDate.createdAt ?? "") ??
                                           DateTime.now(),
                                     ),
-                                    style: AppTextStyle.text14_400.copyWith(
-                                      color: AppColor.blackColor
-                                          .withValues(alpha: 0.3),
+                                    style: AppTextStyle.text16_600.copyWith(
+                                      color: AppColor.blackColor.withValues(alpha: 0.3),
                                     ),
                                   ),
                                 ],
@@ -137,18 +116,15 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                             borderRadius: BorderRadius.circular(12.0),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 5),
-                            child: Text(widget.ordersDate.otp.toString(),
-                                style: AppTextStyle.text18_700),
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                            child: Text(ordersDate.otp.toString(), style: AppTextStyle.text18_700),
                           ),
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    margin:
-                        EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+                    margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
                     child: Row(
                       children: [
                         Flexible(
@@ -160,14 +136,14 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                               color: Colors.white,
                             ),
                             color: AppColor.mainAppColor,
-                            text: AppLocaleKey.reOrder.tr(),
+                            text: 'إعادة الطلب ',
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ExtendTimeOrderScreen(
-                                    orderId: widget.ordersDate.id ?? 0,
-                                    duration: widget.ordersDate.duration ?? 0,
+                                    orderId: ordersDate.id ?? 0,
+                                    duration: ordersDate.duration ?? 0,
                                   ),
                                 ),
                               );
@@ -185,7 +161,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                               color: Colors.red,
                             ),
                             child: Text(
-                              AppLocaleKey.emptytheContainer.tr(),
+                              'إفراغ الحاوية',
                               style: AppTextStyle.text16_600.copyWith(
                                 color: AppColor.redColor,
                               ),
@@ -217,26 +193,24 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                           children: [
                             SizedBox(height: 10.h),
                             Text(
-                              widget.ordersDate.driver ?? "",
+                              ordersDate.driver ?? "",
                               style: AppTextStyle.text16_700,
                             ),
                             SizedBox(
                               height: 10.h,
                             ),
-                            if ((widget.ordersDate.vehicles?.isNotEmpty ??
-                                false))
+                            if ((ordersDate.vehicles?.isNotEmpty ?? false))
                               Text(
-                                " ${widget.ordersDate.vehicles!.first.plateLetters} ${widget.ordersDate.vehicles!.first.plateNumbers}",
+                                " ${ordersDate.vehicles!.first.plateLetters} ${ordersDate.vehicles!.first.plateNumbers}",
                                 style: AppTextStyle.text16_700,
                               ),
                             SizedBox(
                               height: 10.h,
                             ),
-                            if (widget.ordersDate.vehicles?.isNotEmpty == true)
+                            if (ordersDate.vehicles?.isNotEmpty == true)
                               Text(
-                                "${widget.ordersDate.vehicles!.first.carModel} ${widget.ordersDate.vehicles!.first.carType} ${widget.ordersDate.vehicles!.first.carBrand}",
-                                style: AppTextStyle.text14_600
-                                    .copyWith(color: Color(0xff545454)),
+                                "${ordersDate.vehicles!.first.carModel} ${ordersDate.vehicles!.first.carType} ${ordersDate.vehicles!.first.carBrand}",
+                                style: AppTextStyle.text14_600.copyWith(color: Color(0xff545454)),
                               ),
                           ],
                         ),
@@ -250,23 +224,20 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      NavigatorMethods.pushNamed(
-                          context, SingleChatScreen.routeName,
+                      NavigatorMethods.pushNamed(context, SingleChatScreen.routeName,
                           arguments: SingleChatScreenArgs(
-                              reciverName: widget.ordersDate.driver ?? "",
+                              onMessageSent: () {},
+                              reciverId: ordersDate.driverId.toString(),
+                              reciverType: "driver",
+                              reciverName: "محمد",
                               reciverImage: Urls.testUserImage,
-                              senderId: context
-                                  .read<ProfileCubit>()
-                                  .user
-                                  .id
-                                  .toString(),
+                              senderId: context.read<ProfileCubit>().user.id.toString(),
                               senderType: "user",
-                              orderId: widget.ordersDate.id.toString()));
+                              orderId: ordersDate.id.toString()));
                     },
                     child: Container(
                       height: 50.h,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
                         color: Color(0xffEEEEEE),
                         borderRadius: BorderRadius.circular(10),
@@ -275,7 +246,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            AppLocaleKey.sendMessage.tr(),
+                            "إرسال رسالة ....",
                             style: AppTextStyle.text14_500,
                           ),
                           SizedBox(
@@ -300,60 +271,43 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                InkWell(
-                  onTap: () {
-                    launchURL(
-                      widget.ordersDate.driverMobile ?? "",
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Color(0xffD9D9D9),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.asset(
-                          AppImages.phone,
-                          height: 30.h,
-                          width: 30.w,
-                        ),
+                Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Color(0xffD9D9D9),
+                        shape: BoxShape.circle,
                       ),
-                      SizedBox(height: 5),
-                      Text(AppLocaleKey.contactTheDriver.tr(),
-                          style: TextStyle(fontSize: 12.sp))
-                    ],
-                  ),
+                      child: Image.asset(
+                        AppImages.phone,
+                        height: 30.h,
+                        width: 30.w,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text("تواصل مع السائق", style: TextStyle(fontSize: 12.sp))
+                  ],
                 ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SupportScreen()),
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Color(0xffD9D9D9),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.asset(
-                          AppImages.support,
-                          height: 30.h,
-                          width: 30.w,
-                        ),
+                Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Color(0xffD9D9D9),
+                        shape: BoxShape.circle,
                       ),
-                      SizedBox(height: 5),
-                      Text(AppLocaleKey.contactSupport.tr(),
-                          style: TextStyle(fontSize: 12.sp))
-                    ],
-                  ),
+                      child: Image.asset(
+                        AppImages.support,
+                        height: 30.h,
+                        width: 30.w,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text("تواصل مع الدعم", style: TextStyle(fontSize: 12.sp))
+                  ],
                 )
               ],
             ),
@@ -362,47 +316,41 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
               child: Column(
                 children: [
                   CustomListItem(
-                    title: AppLocaleKey.askPrice.tr(),
-                    subtitle: "${totalPrice} ${AppLocaleKey.sarr.tr()}",
+                    title: 'سعر الطلب',
+                    subtitle: "${totalPrice.toStringAsFixed(2)} ريال",
                   ),
                   SizedBox(height: 20),
                   CustomListItem(
-                    title: AppLocaleKey.valueAdded.tr(),
-                    subtitle:
-                        "${vat.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
+                    title: 'ضريبة القيمة المضافة (15%)',
+                    subtitle: "${vat.toStringAsFixed(2)} ريال",
                   ),
                   SizedBox(height: 10),
                   Divider(),
                   SizedBox(height: 10),
                   CustomListItem(
-                    title: AppLocaleKey.netTotal.tr(),
-                    subtitle:
-                        "${netTotal.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
+                    title: 'الإجمالي الصافي',
+                    subtitle: "${netTotal.toStringAsFixed(2)} ريال",
                   ),
                   SizedBox(height: 50.0),
-                  if (widget.ordersDate.invoice != null)
+                  if (ordersDate.invoice != null)
                     Container(
                       alignment: Alignment.bottomCenter,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: GlobalElevatedButton(
-                        label: AppLocaleKey.downloadPDF.tr(),
+                        label: "تحميل الفاتورة PDF",
                         onPressed: () {
-                          final invoiceUrl = widget.ordersDate.invoice;
+                          final invoiceUrl = ordersDate.invoice;
                           if (invoiceUrl != null) {
-                            _showPdfOptionsBottomSheet(invoiceUrl,
-                                context: context);
+                            _showPdfOptionsBottomSheet(invoiceUrl, context: context);
                           } else {
-                            Fluttertoast.showToast(
-                                msg:
-                                    AppLocaleKey.invoiceCannotBeDisplayed.tr());
+                            Fluttertoast.showToast(msg: 'الفاتورة غير متوفرة');
                           }
                         },
                         backgroundColor: Color(0xff1A3C98),
                         textColor: Colors.white,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                         borderRadius: BorderRadius.circular(10),
                         fixedWidth: 0.80,
                       ),
@@ -411,21 +359,20 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
               ),
             ),
             SizedBox(height: 10.0),
-            if (widget.ordersDate.contract != null)
+            if (ordersDate.contract != null)
               Container(
                 alignment: Alignment.bottomCenter,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: GlobalElevatedButton(
-                  label: AppLocaleKey.downloadThePDFContract.tr(),
+                  label: "تحميل العقد PDF",
                   onPressed: () {
-                    final invoiceUrl = widget.ordersDate.contract;
+                    final invoiceUrl = ordersDate.contract;
                     if (invoiceUrl != null) {
                       _showPdfOptionsBottomSheet(invoiceUrl, context: context);
                     } else {
-                      Fluttertoast.showToast(
-                          msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
+                      Fluttertoast.showToast(msg: 'الفاتورة غير متوفرة');
                     }
                   },
                   backgroundColor: Colors.white,
@@ -442,8 +389,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
     );
   }
 
-  void _showPdfOptionsBottomSheet(String pdfUrl,
-      {required BuildContext context}) {
+  void _showPdfOptionsBottomSheet(String pdfUrl, {required BuildContext context}) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -453,7 +399,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                AppLocaleKey.chooseAction.tr(),
+                'اختر الإجراء',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -462,8 +408,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
               SizedBox(height: 20),
               ListTile(
                 leading: Icon(Icons.remove_red_eye),
-                title: Text(AppLocaleKey.viewInvoice.tr(),
-                    style: AppTextStyle.text16_600),
+                title: Text('عرض الفاتورة'),
                 onTap: () async {
                   Navigator.pop(context);
                   if (await canLaunchUrl(Uri.parse(pdfUrl))) {
@@ -475,16 +420,14 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                       ),
                     );
                   } else {
-                    Fluttertoast.showToast(
-                        msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
+                    Fluttertoast.showToast(msg: 'لا يمكن عرض الفاتورة');
                   }
                 },
               ),
               Divider(),
               ListTile(
                 leading: Icon(Icons.download),
-                title: Text(AppLocaleKey.downloadInvoice.tr(),
-                    style: AppTextStyle.text16_600),
+                title: Text('تحميل الفاتورة'),
                 onTap: () async {
                   Navigator.pop(context);
                   if (await canLaunchUrl(Uri.parse(pdfUrl))) {
@@ -493,15 +436,13 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                       mode: LaunchMode.externalApplication,
                     );
                   } else {
-                    Fluttertoast.showToast(
-                        msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
+                    Fluttertoast.showToast(msg: 'لا يمكن تحميل الفاتورة');
                   }
                 },
               ),
               SizedBox(height: 10),
               TextButton(
-                child: Text(AppLocaleKey.cancel.tr(),
-                    style: AppTextStyle.text16_600),
+                child: Text('إلغاء'),
                 onPressed: () => Navigator.pop(context),
               ),
             ],
@@ -509,25 +450,5 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
         );
       },
     );
-  }
-
-  Future<void> launchURL(String? url,
-      {bool isWhatsapp = false, bool isEmail = false}) async {
-    if (url == null || url.isEmpty) return;
-
-    Uri uri;
-
-    if (isWhatsapp) {
-      uri = Uri.parse(
-          "https://wa.me/${url.replaceAll('+', '').replaceAll(' ', '')}");
-    } else if (isEmail) {
-      uri = Uri.parse("mailto:$url");
-    } else {
-      uri = Uri.parse("tel:$url");
-    }
-
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      Fluttertoast.showToast(msg: "لا يمكن فتح الرابط: $url");
-    }
   }
 }
