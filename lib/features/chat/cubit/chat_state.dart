@@ -1,8 +1,4 @@
-
-
 part of 'chat_cubit.dart';
-
-
 
 abstract class ChatState extends Equatable {
   const ChatState();
@@ -33,3 +29,8 @@ class ChatError extends ChatState {
   List<Object> get props => [message];
 }
 
+class RecentChatsLoaded extends ChatState {
+  final List<RecentChatModel> chats;
+
+  RecentChatsLoaded(this.chats);
+}

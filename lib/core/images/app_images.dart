@@ -45,4 +45,5 @@ class AppImages {
   static const String loginImage = 'assets/images/loginImage.png';
   static const String bellIcon = 'assets/svg/bellIcon.svg';
   static const String sendIcon = 'assets/svg/sendIcon.svg';
+  static const String hawiaDriver = 'assets/images/hawiaDriver.png';
 }

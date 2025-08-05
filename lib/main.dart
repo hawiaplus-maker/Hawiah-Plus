@@ -40,13 +40,10 @@ void main() async {
     EasyLocalization(
       supportedLocales: const [Locale('ar'), Locale('en')],
       path: 'assets/translations', startLocale: Locale('ar'),
-      fallbackLocale:
-          const Locale('en'), // Add a fallback locale if you haven't
+      fallbackLocale: const Locale('en'), // Add a fallback locale if you haven't
       child: BlocProvider(
           create: (context) => AppThemeCubit()..initial(),
-          child: MyApp(
-              initialMessage:
-                  initialMessage)), // Wrap MyApp instead of PetCareHomeScreen
+          child: MyApp(initialMessage: initialMessage)), // Wrap MyApp instead of PetCareHomeScreen
     ),
   );
 }
@@ -78,7 +75,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _initializeMessaging() async {
-    await MessagingService.init(navKey: navigatorKey);
+    await MessagingService.init(navKey: AppRouters.navigatorKey);
   }
 
   void _handleInitialNotification() {
@@ -173,21 +170,17 @@ class _MyAppState extends State<MyApp> {
           ),
           border: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.black
-                  .withOpacity(0.6), // Slightly greyish black for border
+              color: Colors.black.withOpacity(0.6), // Slightly greyish black for border
               width: 1.5, // Slightly thicker border for better visibility
             ),
-            borderRadius:
-                BorderRadius.circular(12.0), // Rounded corners for modern look
+            borderRadius: BorderRadius.circular(12.0), // Rounded corners for modern look
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.grey.withOpacity(
-                  0.6), // Slightly greyish black for disabled state
+              color: Colors.grey.withOpacity(0.6), // Slightly greyish black for disabled state
               width: 1.5, // Slightly thicker border for better visibility
             ),
-            borderRadius:
-                BorderRadius.circular(12.0), // Rounded corners for modern look
+            borderRadius: BorderRadius.circular(12.0), // Rounded corners for modern look
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
@@ -211,8 +204,8 @@ class _MyAppState extends State<MyApp> {
             borderRadius: BorderRadius.circular(12.0),
           ),
           // Optional: Adding `contentPadding` to adjust space inside the field
-          contentPadding: EdgeInsets.symmetric(
-              horizontal: 16, vertical: 14), // More space for readability
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 16, vertical: 14), // More space for readability
         ));
   }
 }

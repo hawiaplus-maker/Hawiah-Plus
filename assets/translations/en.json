@@ -107,5 +107,15 @@
         "confirm_date": "Confirm Date",
         "continue_payment": "Continue Payment",
         "confirm_address": "Confirm Address",
-        "back_order": "Back Order"
+        "back_order": "Back Order",
+        "chat": "Chat",
+        "order_details": "Order Details",
+        "cancel_order": "Cancel Order",
+        "cancel_order_text": "Are you sure you want to cancel this order?",
+        "yes": "Yes",
+        "no": "No",
+        "order_cancelled": "Order Cancelled",
+        "order_cancelled_text": "Order has been cancelled successfully",
+        "continue_to_home": "Continue to Home",
+        "findAConversation": "Find A Conversation"
     }

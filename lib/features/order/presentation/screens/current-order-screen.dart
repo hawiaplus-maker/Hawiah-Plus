@@ -28,8 +28,7 @@ class CurrentOrderScreen extends StatelessWidget {
   final Data ordersDate;
   @override
   Widget build(BuildContext context) {
-    final double totalPrice =
-        double.tryParse(ordersDate.totalPrice ?? "0") ?? 0;
+    final double totalPrice = double.tryParse(ordersDate.totalPrice ?? "0") ?? 0;
     final double vat = totalPrice * 0.15;
     final double netTotal = totalPrice + vat;
     return Scaffold(
@@ -82,19 +81,14 @@ class CurrentOrderScreen extends StatelessWidget {
                                       children: [
                                         TextSpan(
                                           text: ' طلب رقم:',
-                                          style:
-                                              AppTextStyle.text16_600.copyWith(
-                                            color: AppColor.blackColor
-                                                .withValues(alpha: 0.7),
+                                          style: AppTextStyle.text16_600.copyWith(
+                                            color: AppColor.blackColor.withValues(alpha: 0.7),
                                           ),
                                         ),
                                         TextSpan(
-                                          text:
-                                              ordersDate.referenceNumber ?? '',
-                                          style:
-                                              AppTextStyle.text16_500.copyWith(
-                                            color: AppColor.blackColor
-                                                .withValues(alpha: 0.7),
+                                          text: ordersDate.referenceNumber ?? '',
+                                          style: AppTextStyle.text16_500.copyWith(
+                                            color: AppColor.blackColor.withValues(alpha: 0.7),
                                           ),
                                         ),
                                       ],
@@ -103,13 +97,11 @@ class CurrentOrderScreen extends StatelessWidget {
                                   SizedBox(height: 5.h),
                                   Text(
                                     DateMethods.formatToFullData(
-                                      DateTime.tryParse(
-                                              ordersDate.createdAt ?? "") ??
+                                      DateTime.tryParse(ordersDate.createdAt ?? "") ??
                                           DateTime.now(),
                                     ),
                                     style: AppTextStyle.text16_600.copyWith(
-                                      color: AppColor.blackColor
-                                          .withValues(alpha: 0.3),
+                                      color: AppColor.blackColor.withValues(alpha: 0.3),
                                     ),
                                   ),
                                 ],
@@ -124,18 +116,15 @@ class CurrentOrderScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12.0),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 5),
-                            child: Text(ordersDate.otp.toString(),
-                                style: AppTextStyle.text18_700),
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                            child: Text(ordersDate.otp.toString(), style: AppTextStyle.text18_700),
                           ),
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    margin:
-                        EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+                    margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
                     child: Row(
                       children: [
                         Flexible(
@@ -221,8 +210,7 @@ class CurrentOrderScreen extends StatelessWidget {
                             if (ordersDate.vehicles?.isNotEmpty == true)
                               Text(
                                 "${ordersDate.vehicles!.first.carModel} ${ordersDate.vehicles!.first.carType} ${ordersDate.vehicles!.first.carBrand}",
-                                style: AppTextStyle.text14_600
-                                    .copyWith(color: Color(0xff545454)),
+                                style: AppTextStyle.text14_600.copyWith(color: Color(0xff545454)),
                               ),
                           ],
                         ),
@@ -237,22 +225,24 @@ class CurrentOrderScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       NavigatorMethods.pushNamed(
-                          context, SingleChatScreen.routeName,
-                          arguments: SingleChatScreenArgs(
-                              reciverName: "محمد",
-                              reciverImage: Urls.testUserImage,
-                              senderId: context
-                                  .read<ProfileCubit>()
-                                  .user
-                                  .id
-                                  .toString(),
-                              senderType: "user",
-                              orderId: ordersDate.id.toString()));
+                        context,
+                        SingleChatScreen.routeName,
+                        arguments: SingleChatScreenArgs(
+                            reciverId: ordersDate.userId.toString(),
+                          reciverType: "user",
+                          reciverName: ordersDate.user ?? "",
+                          reciverImage: ordersDate.userImage ?? "",
+                          senderId:
+                              context.read<ProfileCubit>().user.id.toString(),
+                          senderType: "driver",
+                          orderId: ordersDate.id.toString(),
+                          onMessageSent: () {},
+                        ),
+                      );
                     },
                     child: Container(
                       height: 50.h,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
                         color: Color(0xffEEEEEE),
                         borderRadius: BorderRadius.circular(10),
@@ -358,16 +348,14 @@ class CurrentOrderScreen extends StatelessWidget {
                         onPressed: () {
                           final invoiceUrl = ordersDate.invoice;
                           if (invoiceUrl != null) {
-                            _showPdfOptionsBottomSheet(invoiceUrl,
-                                context: context);
+                            _showPdfOptionsBottomSheet(invoiceUrl, context: context);
                           } else {
                             Fluttertoast.showToast(msg: 'الفاتورة غير متوفرة');
                           }
                         },
                         backgroundColor: Color(0xff1A3C98),
                         textColor: Colors.white,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                         borderRadius: BorderRadius.circular(10),
                         fixedWidth: 0.80,
                       ),
@@ -406,8 +394,7 @@ class CurrentOrderScreen extends StatelessWidget {
     );
   }
 
-  void _showPdfOptionsBottomSheet(String pdfUrl,
-      {required BuildContext context}) {
+  void _showPdfOptionsBottomSheet(String pdfUrl, {required BuildContext context}) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {

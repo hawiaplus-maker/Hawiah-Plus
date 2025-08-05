@@ -39,4 +39,10 @@ class AppLocaleKey {
   static const String today = 'today';
   static const String tomorrow = 'tomorrow';
   static const String message = 'message';
+  static const String chat = 'chat';
+  static const String call = 'call';
+  static const String writeMessage = 'writeMessage';
+  static const String noMessages = 'noMessages';
+  static const String noChats = 'noChats';
+  static const String findAConversation = 'findAConversation';
 }
