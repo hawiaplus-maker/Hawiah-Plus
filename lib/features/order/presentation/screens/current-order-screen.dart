@@ -16,6 +16,7 @@ import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/single-chat-screen.dart';
 import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
 import 'package:hawiah_client/features/order/presentation/screens/extend-time-order-screen.dart';
+import 'package:hawiah_client/features/order/presentation/screens/payment_web_view.dart';
 import 'package:hawiah_client/features/order/presentation/widget/custom_list_item.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
@@ -93,20 +94,14 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                                       children: [
                                         TextSpan(
                                           text: AppLocaleKey.orderNumber.tr(),
-                                          style:
-                                              AppTextStyle.text14_500.copyWith(
-                                            color: AppColor.blackColor
-                                                .withValues(alpha: 0.7),
+                                          style: AppTextStyle.text14_500.copyWith(
+                                            color: AppColor.blackColor.withValues(alpha: 0.7),
                                           ),
                                         ),
                                         TextSpan(
-                                          text: widget
-                                                  .ordersDate.referenceNumber ??
-                                              '',
-                                          style:
-                                              AppTextStyle.text14_500.copyWith(
-                                            color: AppColor.blackColor
-                                                .withValues(alpha: 0.7),
+                                          text: widget.ordersDate.referenceNumber ?? '',
+                                          style: AppTextStyle.text14_500.copyWith(
+                                            color: AppColor.blackColor.withValues(alpha: 0.7),
                                           ),
                                         ),
                                       ],
@@ -115,14 +110,11 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                                   SizedBox(height: 5.h),
                                   Text(
                                     DateMethods.formatToFullData(
-                                      DateTime.tryParse(
-                                              widget.ordersDate.createdAt ??
-                                                  "") ??
+                                      DateTime.tryParse(widget.ordersDate.createdAt ?? "") ??
                                           DateTime.now(),
                                     ),
                                     style: AppTextStyle.text14_400.copyWith(
-                                      color: AppColor.blackColor
-                                          .withValues(alpha: 0.3),
+                                      color: AppColor.blackColor.withValues(alpha: 0.3),
                                     ),
                                   ),
                                 ],
@@ -137,8 +129,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                             borderRadius: BorderRadius.circular(12.0),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 5),
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                             child: Text(widget.ordersDate.otp.toString(),
                                 style: AppTextStyle.text18_700),
                           ),
@@ -147,8 +138,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                     ),
                   ),
                   Container(
-                    margin:
-                        EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+                    margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
                     child: Row(
                       children: [
                         Flexible(
@@ -223,8 +213,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                             SizedBox(
                               height: 10.h,
                             ),
-                            if ((widget.ordersDate.vehicles?.isNotEmpty ??
-                                false))
+                            if ((widget.ordersDate.vehicles?.isNotEmpty ?? false))
                               Text(
                                 " ${widget.ordersDate.vehicles!.first.plateLetters} ${widget.ordersDate.vehicles!.first.plateNumbers}",
                                 style: AppTextStyle.text16_700,
@@ -235,8 +224,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                             if (widget.ordersDate.vehicles?.isNotEmpty == true)
                               Text(
                                 "${widget.ordersDate.vehicles!.first.carModel} ${widget.ordersDate.vehicles!.first.carType} ${widget.ordersDate.vehicles!.first.carBrand}",
-                                style: AppTextStyle.text14_600
-                                    .copyWith(color: Color(0xff545454)),
+                                style: AppTextStyle.text14_600.copyWith(color: Color(0xff545454)),
                               ),
                           ],
                         ),
@@ -250,26 +238,21 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      NavigatorMethods.pushNamed(
-                          context, SingleChatScreen.routeName,
+                      NavigatorMethods.pushNamed(context, SingleChatScreen.routeName,
                           arguments: SingleChatScreenArgs(
-                              onMessageSent: () {},
-                              reciverId:widget. ordersDate.driverId.toString(),
-                              reciverType: "driver",
-                              reciverName: widget. ordersDate.driver ?? "",
-                              reciverImage: Urls.testUserImage,
-                              senderId: context
-                                  .read<ProfileCubit>()
-                                  .user
-                                  .id
-                                  .toString(),
-                              senderType: "user",
-                              orderId: widget.ordersDate.id.toString(),));
+                            onMessageSent: () {},
+                            reciverId: widget.ordersDate.driverId.toString(),
+                            reciverType: "driver",
+                            reciverName: widget.ordersDate.driver ?? "",
+                            reciverImage: Urls.testUserImage,
+                            senderId: context.read<ProfileCubit>().user.id.toString(),
+                            senderType: "user",
+                            orderId: widget.ordersDate.id.toString(),
+                          ));
                     },
                     child: Container(
                       height: 50.h,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
                         color: Color(0xffEEEEEE),
                         borderRadius: BorderRadius.circular(10),
@@ -325,8 +308,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                         ),
                       ),
                       SizedBox(height: 5),
-                      Text(AppLocaleKey.contactTheDriver.tr(),
-                          style: TextStyle(fontSize: 12.sp))
+                      Text(AppLocaleKey.contactTheDriver.tr(), style: TextStyle(fontSize: 12.sp))
                     ],
                   ),
                 ),
@@ -352,8 +334,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                         ),
                       ),
                       SizedBox(height: 5),
-                      Text(AppLocaleKey.contactSupport.tr(),
-                          style: TextStyle(fontSize: 12.sp))
+                      Text(AppLocaleKey.contactSupport.tr(), style: TextStyle(fontSize: 12.sp))
                     ],
                   ),
                 )
@@ -370,16 +351,29 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                   SizedBox(height: 20),
                   CustomListItem(
                     title: AppLocaleKey.valueAdded.tr(),
-                    subtitle:
-                        "${vat.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
+                    subtitle: "${vat.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
                   ),
                   SizedBox(height: 10),
                   Divider(),
                   SizedBox(height: 10),
                   CustomListItem(
                     title: AppLocaleKey.netTotal.tr(),
-                    subtitle:
-                        "${netTotal.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
+                    subtitle: "${netTotal.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
+                  ),
+                  SizedBox(height: 30),
+                  CustomButton(
+                    text: AppLocaleKey.continue_payment.tr(),
+                    onPressed: () {
+                      NavigatorMethods.pushNamed(context, CustomPaymentWebViewScreen.routeName,
+                          arguments: PaymentArgs(
+                              url: Urls.payment(widget.ordersDate.id!),
+                              onFailed: () {
+                                Fluttertoast.showToast(msg: AppLocaleKey.paymentFailed.tr());
+                              },
+                              onSuccess: () {
+                                Fluttertoast.showToast(msg: AppLocaleKey.paymentSuccess.tr());
+                              }));
+                    },
                   ),
                   SizedBox(height: 50.0),
                   if (widget.ordersDate.invoice != null)
@@ -393,18 +387,14 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                         onPressed: () {
                           final invoiceUrl = widget.ordersDate.invoice;
                           if (invoiceUrl != null) {
-                            _showPdfOptionsBottomSheet(invoiceUrl,
-                                context: context);
+                            _showPdfOptionsBottomSheet(invoiceUrl, context: context);
                           } else {
-                            Fluttertoast.showToast(
-                                msg:
-                                    AppLocaleKey.invoiceCannotBeDisplayed.tr());
+                            Fluttertoast.showToast(msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
                           }
                         },
                         backgroundColor: Color(0xff1A3C98),
                         textColor: Colors.white,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                         borderRadius: BorderRadius.circular(10),
                         fixedWidth: 0.80,
                       ),
@@ -426,8 +416,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                     if (invoiceUrl != null) {
                       _showPdfOptionsBottomSheet(invoiceUrl, context: context);
                     } else {
-                      Fluttertoast.showToast(
-                          msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
+                      Fluttertoast.showToast(msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
                     }
                   },
                   backgroundColor: Colors.white,
@@ -444,8 +433,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
     );
   }
 
-  void _showPdfOptionsBottomSheet(String pdfUrl,
-      {required BuildContext context}) {
+  void _showPdfOptionsBottomSheet(String pdfUrl, {required BuildContext context}) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -464,8 +452,7 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
               SizedBox(height: 20),
               ListTile(
                 leading: Icon(Icons.remove_red_eye),
-                title: Text(AppLocaleKey.viewInvoice.tr(),
-                    style: AppTextStyle.text16_600),
+                title: Text(AppLocaleKey.viewInvoice.tr(), style: AppTextStyle.text16_600),
                 onTap: () async {
                   Navigator.pop(context);
                   if (await canLaunchUrl(Uri.parse(pdfUrl))) {
@@ -477,16 +464,14 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                       ),
                     );
                   } else {
-                    Fluttertoast.showToast(
-                        msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
+                    Fluttertoast.showToast(msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
                   }
                 },
               ),
               Divider(),
               ListTile(
                 leading: Icon(Icons.download),
-                title: Text(AppLocaleKey.downloadInvoice.tr(),
-                    style: AppTextStyle.text16_600),
+                title: Text(AppLocaleKey.downloadInvoice.tr(), style: AppTextStyle.text16_600),
                 onTap: () async {
                   Navigator.pop(context);
                   if (await canLaunchUrl(Uri.parse(pdfUrl))) {
@@ -495,15 +480,13 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                       mode: LaunchMode.externalApplication,
                     );
                   } else {
-                    Fluttertoast.showToast(
-                        msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
+                    Fluttertoast.showToast(msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
                   }
                 },
               ),
               SizedBox(height: 10),
               TextButton(
-                child: Text(AppLocaleKey.cancel.tr(),
-                    style: AppTextStyle.text16_600),
+                child: Text(AppLocaleKey.cancel.tr(), style: AppTextStyle.text16_600),
                 onPressed: () => Navigator.pop(context),
               ),
             ],
@@ -513,15 +496,13 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
     );
   }
 
-  Future<void> launchURL(String? url,
-      {bool isWhatsapp = false, bool isEmail = false}) async {
+  Future<void> launchURL(String? url, {bool isWhatsapp = false, bool isEmail = false}) async {
     if (url == null || url.isEmpty) return;
 
     Uri uri;
 
     if (isWhatsapp) {
-      uri = Uri.parse(
-          "https://wa.me/${url.replaceAll('+', '').replaceAll(' ', '')}");
+      uri = Uri.parse("https://wa.me/${url.replaceAll('+', '').replaceAll(' ', '')}");
     } else if (isEmail) {
       uri = Uri.parse("mailto:$url");
     } else {

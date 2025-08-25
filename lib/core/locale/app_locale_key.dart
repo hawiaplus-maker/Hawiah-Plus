@@ -122,4 +122,8 @@ class AppLocaleKey {
   static const String electronicpayment = "Electronicpayment";
   static const String howfarisit = "Howfarisit?";
   static const String applepay = "ApplePay";
+  static const String paymentFailed = "paymentFailed";
+  static const String paymentSuccess = "paymentSuccess";
+  static const String paymentFailedTryAgain = "paymentFailedTryAgain";
+  static const String continue_payment = "continue_payment";
 }

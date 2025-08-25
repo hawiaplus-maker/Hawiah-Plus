@@ -231,5 +231,8 @@
   "Payby": "Pay by",
   "Electronicpayment": "Electronic payment",
   "Howfarisit?": "MadaPay",
-  "ApplePay": "Apple Pay"
+  "ApplePay": "Apple Pay",
+  "paymentFailed": "Payment failed",
+  "paymentSuccess": "Payment success",
+  "paymentFailedTryAgain": "Payment failed, try again"
 }

@@ -72,6 +72,12 @@ class AppRouters {
             args: args,
           ),
         );
+      case CustomPaymentWebViewScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => CustomPaymentWebViewScreen(
+            args: args,
+          ),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const LayoutScreen(),

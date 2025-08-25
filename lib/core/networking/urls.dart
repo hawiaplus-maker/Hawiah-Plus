@@ -3,8 +3,7 @@ class Urls {
       'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?cs=srgb&amp;dl=pexels-mike-b-170811.jpg&amp;fm=jpg';
   static const String testWhiteCarImage =
       'https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?cs=srgb&amp;dl=pexels-mike-b-116675.jpg&amp;fm=jpg';
-  static const String testCarLogoImage =
-      'https://cdn.worldvectorlogo.com/logos/bmw-logo.svg';
+  static const String testCarLogoImage = 'https://cdn.worldvectorlogo.com/logos/bmw-logo.svg';
   static const String testUserImage =
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLlsHCzHU2GndYsMJQscyixYSlDVggHDzbXtXSuEmLAc309Z-6e1TUhHJFCLCw40Kicw0';
   static const String testAppleLogo =
@@ -42,5 +41,6 @@ class Urls {
   static String repeateOrder = '${baseUrl}users/orders/repeate-order';
   static String neighborhoodsByCity(int id) => '${baseUrl}neighborhoods/$id';
   static String updateAddress(int id) => '${baseUrl}user-addresses/$id';
+  static String payment(int orderId) => '${baseUrl}/paymob-paid/?order_id=$orderId';
   static const String notifications = '${baseUrl}notifications';
 }
