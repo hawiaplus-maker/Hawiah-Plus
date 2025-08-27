@@ -34,6 +34,7 @@ class Data {
   double? latitude;
   double? longitude;
   int? orderStatus;
+  int? paidStatus;
   Map<String, String>? status;
   int? priceId;
   int? duration;
@@ -57,7 +58,6 @@ class Data {
   String? fcmToken;
   String? contract;
   String? invoice;
-  
 
   Data({
     this.id,
@@ -66,6 +66,7 @@ class Data {
     this.latitude,
     this.longitude,
     this.orderStatus,
+    this.paidStatus,
     this.status,
     this.priceId,
     this.duration,
@@ -98,6 +99,7 @@ class Data {
     latitude = double.tryParse(json['latitude'].toString());
     longitude = double.tryParse(json['longitude'].toString());
     orderStatus = json['order_status'];
+    paidStatus = json['paid_status'];
     status = Map<String, String>.from(json['status']);
     priceId = json['price_id'];
     duration = json['duration'];
@@ -131,6 +133,7 @@ class Data {
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
     data['order_status'] = this.orderStatus;
+    data['paid_status'] = this.paidStatus;
     data['status'] = this.status;
     data['price_id'] = this.priceId;
     data['duration'] = this.duration;

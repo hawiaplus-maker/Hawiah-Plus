@@ -9,12 +9,12 @@ import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
-import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/presentation/model/nearby_service-provider_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
-import 'package:hawiah_client/features/home/presentation/screens/payment-screen.dart';
+import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/features/location/presentation/model/address_model.dart';
+import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../controllers/home-cubit/home-cubit.dart';
@@ -53,15 +53,13 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
   void _showCalendarModal(BuildContext context, HomeCubit homeCubit) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled:
-          true, // This allows the bottom sheet to take full height
+      isScrollControlled: true, // This allows the bottom sheet to take full height
       builder: (BuildContext context) {
         return Container(
           height: 0.6.sh,
           child: Column(
             children: [
-              StatefulBuilder(
-                  builder: (BuildContext context, StateSetter mystate) {
+              StatefulBuilder(builder: (BuildContext context, StateSetter mystate) {
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: TableCalendar(
@@ -69,8 +67,7 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                     firstDay: DateTime.now(),
                     lastDay: DateTime(2050),
                     focusedDay: homeCubit.focusedDay,
-                    selectedDayPredicate: (day) =>
-                        isSameDay(homeCubit.selectedDay, day),
+                    selectedDayPredicate: (day) => isSameDay(homeCubit.selectedDay, day),
                     rangeStartDay: homeCubit.rangeStart,
                     rangeEndDay: homeCubit.rangeEnd,
                     calendarFormat: homeCubit.calendarFormat,
@@ -90,8 +87,7 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                         homeCubit.focusedDay = focusedDay;
                         homeCubit.rangeStart = start;
                         homeCubit.rangeEnd = end;
-                        homeCubit.rangeSelectionMode =
-                            RangeSelectionMode.toggledOn;
+                        homeCubit.rangeSelectionMode = RangeSelectionMode.toggledOn;
                       });
                       homeCubit.changeRebuild();
                     },
@@ -139,8 +135,7 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                 GestureDetector(
                   onTap: () {},
                   child: Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
+                    padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Color(0xffDADADA)),
@@ -188,9 +183,7 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                       Text(
                         widget.args.showCategoriesModel.message?.title ?? "",
                         style: TextStyle(
-                            fontSize: 16.sp,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500),
+                            fontSize: 16.sp, color: Colors.black, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
@@ -219,8 +212,7 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                       SizedBox(width: 10.w),
                       Text(
                         widget.args.showCategoriesModel.message?.services
-                                ?.where((element) =>
-                                    element.id == widget.args.serviceProviderId)
+                                ?.where((element) => element.id == widget.args.serviceProviderId)
                                 .first
                                 .title ??
                             "",
@@ -239,21 +231,18 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                     _showCalendarModal(context, homeCubit);
                   },
                   child: Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
+                    padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Color(0xffDADADA)),
                     ),
                     child: Row(
                       children: [
-                        SvgPicture.asset(AppImages.timeIcon,
-                            height: 25.h, width: 25.w),
+                        SvgPicture.asset(AppImages.timeIcon, height: 25.h, width: 25.w),
                         SizedBox(width: 10.w),
                         Text(
                           homeCubit.rangeStart != null
-                              ? DateFormat('yyyy-MM-dd', 'en')
-                                  .format(homeCubit.rangeStart!)
+                              ? DateFormat('yyyy-MM-dd', 'en').format(homeCubit.rangeStart!)
                               : "date_start".tr(),
                           style: TextStyle(fontSize: 14.sp),
                         ),
@@ -263,27 +252,22 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
                 ),
                 SizedBox(height: 20.h),
                 Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
+                  padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: Color(0xffDADADA)),
                   ),
                   child: Row(
                     children: [
-                      SvgPicture.asset(AppImages.timeIcon,
-                          height: 25.h, width: 25.w),
+                      SvgPicture.asset(AppImages.timeIcon, height: 25.h, width: 25.w),
                       SizedBox(width: 10.w),
                       Text(
                         homeCubit.rangeStart != null
-                            ? DateFormat('yyyy-MM-dd', 'en').format(
-                                (homeCubit.rangeStart?.add(Duration(
-                                        days: widget
-                                                .args
-                                                .nearbyServiceProviderModel
-                                                .duration ??
+                            ? DateFormat('yyyy-MM-dd', 'en').format((homeCubit.rangeStart?.add(
+                                    Duration(
+                                        days: widget.args.nearbyServiceProviderModel.duration ??
                                             0))) ??
-                                    DateTime.now())
+                                DateTime.now())
                             : "date_end".tr(),
                         style: TextStyle(fontSize: 14.sp),
                       ),
@@ -301,42 +285,54 @@ class _RequistHawiaScreenState extends State<RequistHawiaScreen> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: CustomButton(
-          text: "continue_payment".tr(),
+          text: AppLocaleKey.executeorder.tr(),
           onPressed: () {
-            double calculateVat(double price) {
-              const double vatRate = 0.15; // 15% VAT
-              return price * vatRate;
-            }
+            context.read<OrderCubit>().createOrder(
+                serviceProviderId: widget.args.serviceProviderId,
+                priceId: widget.args.nearbyServiceProviderModel.id!,
+                addressId: widget.args.address.id!,
+                fromDate:
+                    DateFormat('yyyy-MM-dd', 'en').format(context.read<OrderCubit>().rangeStart!),
+                onSuccess: () {
+                  NavigatorMethods.pushReplacementNamed(
+                    context,
+                    LayoutScreen.routeName,
+                  );
+                });
+            // double calculateVat(double price) {
+            //   const double vatRate = 0.15; // 15% VAT
+            //   return price * vatRate;
+            // }
 
-            double calculatetotal(double price) {
-              const double vatRate = 0.15; // 15% VAT
-              double vatValue = price * vatRate;
-              return price + vatValue;
-            }
+            // double calculatetotal(double price) {
+            //   const double vatRate = 0.15; // 15% VAT
+            //   double vatValue = price * vatRate;
+            //   return price + vatValue;
+            // }
 
-            final homeCubit = HomeCubit.get(context);
-            if (homeCubit.rangeStart == null) {
-              CommonMethods.showError(
-                  message: AppLocaleKey.youHaveToChooseStartDate.tr());
-            } else if (homeCubit.rangeStart != null) {
-              NavigatorMethods.pushNamed(context, PaymentScreen.routeName,
-                  arguments: PaymentScreenArgs(
-                      addressId: widget.args.address.id!,
-                      catigoryId: widget.args.catigoryId,
-                      serviceProviderId: widget.args.serviceProviderId,
-                      totalPrice: calculatetotal(double.tryParse(widget
-                                  .args.nearbyServiceProviderModel.dailyPrice ??
-                              "0.0") ??
-                          0.0),
-                      price: double.tryParse(widget
-                                  .args.nearbyServiceProviderModel.dailyPrice ??
-                              "0.0") ??
-                          0.0,
-                      vatValue: calculateVat(
-                          double.tryParse(widget.args.nearbyServiceProviderModel.dailyPrice ?? "0.0") ?? 0.0),
-                      fromDate: DateFormat('yyyy-MM-dd', 'en').format(homeCubit.rangeStart!),
-                      priceId: widget.args.nearbyServiceProviderModel.id!));
-            }
+            // final homeCubit = HomeCubit.get(context);
+            // if (homeCubit.rangeStart == null) {
+            //   CommonMethods.showError(
+            //       message: AppLocaleKey.youHaveToChooseStartDate.tr());
+            // } else if (homeCubit.rangeStart != null) {
+            //   NavigatorMethods.pushNamed(context, PaymentScreen.routeName,
+            //       arguments: PaymentScreenArgs(
+            //           addressId: widget.args.address.id!,
+            //           catigoryId: widget.args.catigoryId,
+            //           serviceProviderId: widget.args.serviceProviderId,
+            //           totalPrice: calculatetotal(double.tryParse(widget
+            //                       .args.nearbyServiceProviderModel.dailyPrice ??
+            //                   "0.0") ??
+            //               0.0),
+            //           price: double.tryParse(widget
+            //                       .args.nearbyServiceProviderModel.dailyPrice ??
+            //                   "0.0") ??
+            //               0.0,
+            //           vatValue: calculateVat(
+            //               double.tryParse(widget.args.nearbyServiceProviderModel.dailyPrice ?? "0.0") ?? 0.0),
+            //           fromDate: DateFormat('yyyy-MM-dd', 'en').format(homeCubit.rangeStart!),
+            //           priceId: widget.args.nearbyServiceProviderModel.id!));
+            // }
           },
         ),
       ),

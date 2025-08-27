@@ -11,10 +11,12 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/single-chat-screen.dart';
 import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
+import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 import 'package:hawiah_client/features/order/presentation/screens/extend-time-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/payment_web_view.dart';
 import 'package:hawiah_client/features/order/presentation/widget/custom_list_item.dart';
@@ -361,20 +363,34 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                     subtitle: "${netTotal.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
                   ),
                   SizedBox(height: 30),
-                  CustomButton(
-                    text: AppLocaleKey.continue_payment.tr(),
-                    onPressed: () {
-                      NavigatorMethods.pushNamed(context, CustomPaymentWebViewScreen.routeName,
-                          arguments: PaymentArgs(
-                              url: Urls.payment(widget.ordersDate.id!),
-                              onFailed: () {
-                                Fluttertoast.showToast(msg: AppLocaleKey.paymentFailed.tr());
-                              },
-                              onSuccess: () {
-                                Fluttertoast.showToast(msg: AppLocaleKey.paymentSuccess.tr());
-                              }));
-                    },
-                  ),
+                  widget.ordersDate.paidStatus == 0
+                      ? CustomButton(
+                          color: AppColor.greenColor,
+                          text: AppLocaleKey.payNow.tr(),
+                          onPressed: () {
+                            context.read<OrderCubit>().getPaymentLink(
+                                orderId: widget.ordersDate.id!,
+                                onSuccess: (url) {
+                                  if (url.contains('already exists') == true) {
+                                    CommonMethods.showError(message: url);
+                                  } else {
+                                    NavigatorMethods.pushNamed(
+                                        context, CustomPaymentWebViewScreen.routeName,
+                                        arguments: PaymentArgs(
+                                            url: url,
+                                            onFailed: () {
+                                              Fluttertoast.showToast(
+                                                  msg: AppLocaleKey.paymentFailed.tr());
+                                            },
+                                            onSuccess: () {
+                                              Fluttertoast.showToast(
+                                                  msg: AppLocaleKey.paymentSuccess.tr());
+                                            }));
+                                  }
+                                });
+                          },
+                        )
+                      : SizedBox(),
                   SizedBox(height: 50.0),
                   if (widget.ordersDate.invoice != null)
                     Container(

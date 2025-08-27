@@ -234,5 +234,7 @@
    "ApplePay": "آبل باي",
    "paymentFailed": "فشل الدفع",
    "paymentSuccess": "تم الدفع بنجاح",
-   "paymentFailedTryAgain": "فشل الدفع، حاول مرة اخرى"
+   "paymentFailedTryAgain": "فشل الدفع، حاول مرة اخرى",
+   "executeorder":"تنفيذ الطلب",
+   "payNow":"إدفع الآن"
 }

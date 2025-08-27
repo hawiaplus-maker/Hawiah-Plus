@@ -234,5 +234,7 @@
   "ApplePay": "Apple Pay",
   "paymentFailed": "Payment failed",
   "paymentSuccess": "Payment success",
-  "paymentFailedTryAgain": "Payment failed, try again"
+  "paymentFailedTryAgain": "Payment failed, try again",
+  "executeorder": "Execute Order",
+  "payNow": "Pay Now"
 }

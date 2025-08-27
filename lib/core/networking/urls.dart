@@ -41,6 +41,6 @@ class Urls {
   static String repeateOrder = '${baseUrl}users/orders/repeate-order';
   static String neighborhoodsByCity(int id) => '${baseUrl}neighborhoods/$id';
   static String updateAddress(int id) => '${baseUrl}user-addresses/$id';
-  static String payment(int orderId) => '${baseUrl}/paymob-paid/?order_id=$orderId';
+  static String payment(int orderId) => '${baseUrl}paymob-paid/?order_id=$orderId';
   static const String notifications = '${baseUrl}notifications';
 }

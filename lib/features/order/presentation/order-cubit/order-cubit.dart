@@ -72,8 +72,8 @@ class OrderCubit extends Cubit<OrderState> {
 
     emit(OrderLoading());
 
-    _ordersResponse = await ApiHelper.instance.get(Urls.orders(orderStatus),
-        queryParameters: {"order_status": orderStatus});
+    _ordersResponse = await ApiHelper.instance
+        .get(Urls.orders(orderStatus), queryParameters: {"order_status": orderStatus});
 
     emit(OrderChange());
 
@@ -107,13 +107,11 @@ class OrderCubit extends Cubit<OrderState> {
     state: ResponseState.sleep,
     data: null,
   );
-  ApiResponse get nearbyServiceProviderResponse =>
-      _nearbyServiceProviderResponse;
+  ApiResponse get nearbyServiceProviderResponse => _nearbyServiceProviderResponse;
 
   List<NearbyServiceProviderModel> _nearbyServiceProvider = [];
 
-  List<NearbyServiceProviderModel> get nearbyServiceProvider =>
-      _nearbyServiceProvider;
+  List<NearbyServiceProviderModel> get nearbyServiceProvider => _nearbyServiceProvider;
 
   Future<void> getNearbyProviders({
     required int serviceProviderId,
@@ -121,8 +119,7 @@ class OrderCubit extends Cubit<OrderState> {
     VoidCallback? onBadRequest,
   }) async {
     NavigatorMethods.loading();
-    FormData body = FormData.fromMap(
-        {'product_id': serviceProviderId, 'address_id': addressId});
+    FormData body = FormData.fromMap({'product_id': serviceProviderId, 'address_id': addressId});
     _nearbyServiceProviderResponse = await ApiHelper.instance.post(
       Urls.getNearbyProviders,
       body: body,
@@ -130,16 +127,13 @@ class OrderCubit extends Cubit<OrderState> {
     NavigatorMethods.loadingOff();
     if (_nearbyServiceProviderResponse.state == ResponseState.complete) {
       Iterable iterable = _nearbyServiceProviderResponse.data['data'];
-      _nearbyServiceProvider =
-          iterable.map((e) => NearbyServiceProviderModel.fromJson(e)).toList();
+      _nearbyServiceProvider = iterable.map((e) => NearbyServiceProviderModel.fromJson(e)).toList();
       emit(OrderChange());
-    } else if (_nearbyServiceProviderResponse.state ==
-        ResponseState.unauthorized) {
+    } else if (_nearbyServiceProviderResponse.state == ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(
         message: tr(AppLocaleKey.youMustLogInFirst),
       );
-    } else if (_nearbyServiceProviderResponse.state ==
-        ResponseState.badRequest) {
+    } else if (_nearbyServiceProviderResponse.state == ResponseState.badRequest) {
       CommonMethods.showError(
         message: _nearbyServiceProviderResponse.data['message'] ?? 'حدث خطاء',
         apiResponse: _nearbyServiceProviderResponse,
@@ -191,7 +185,7 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   // =================== repeat Order ====================
- 
+
   Future<void> repeatOrder({
     required int orderId,
     required String fromDate,
@@ -219,6 +213,30 @@ class OrderCubit extends Cubit<OrderState> {
     } else {
       CommonMethods.showError(
         message: response.data['message'] ?? 'حدث خطأ',
+        apiResponse: response,
+      );
+    }
+  }
+
+  // =================== get payment link ====================
+  Future<void> getPaymentLink({
+    required int orderId,
+    required  Function(String) onSuccess,
+  }) async {
+    NavigatorMethods.loading();
+    final response = await ApiHelper.instance.get(
+      Urls.payment(orderId),
+    );
+    NavigatorMethods.loadingOff();
+    if (response.state == ResponseState.complete) {
+      onSuccess.call(response.data['payment_url']);
+    } else if (response.state == ResponseState.unauthorized) {
+      CommonMethods.showAlertDialog(
+        message: tr(AppLocaleKey.youMustLogInFirst),
+      );
+    } else {
+      CommonMethods.showError(
+        message: response.data['message'] ?? 'حدث خطاء',
         apiResponse: response,
       );
     }

@@ -77,7 +77,7 @@ class ApiHelper {
   ) {
     return Options(
       contentType: 'application/json',
-      followRedirects: false,
+      followRedirects: true,
       validateStatus: (status) {
         return true;
       },
