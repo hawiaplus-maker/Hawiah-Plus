@@ -7,8 +7,7 @@ import 'dart:convert';
 NotificationsModel notificationsModelFromJson(String str) =>
     NotificationsModel.fromJson(json.decode(str));
 
-String notificationsModelToJson(NotificationsModel data) =>
-    json.encode(data.toJson());
+String notificationsModelToJson(NotificationsModel data) => json.encode(data.toJson());
 
 class NotificationsModel {
   bool success;
@@ -16,8 +15,7 @@ class NotificationsModel {
 
   NotificationsModel({required this.success, required this.notifications});
 
-  factory NotificationsModel.fromJson(Map<String, dynamic> json) =>
-      NotificationsModel(
+  factory NotificationsModel.fromJson(Map<String, dynamic> json) => NotificationsModel(
         success: json["success"],
         notifications: Notifications.fromJson(json["notifications"]),
       );
@@ -102,7 +100,7 @@ class Datum {
   int modelId;
   int seen;
   int userId;
-  Data data;
+  Data? data; // خليته nullable
   DateTime createdAt;
   DateTime updatedAt;
   int showClient;
@@ -120,7 +118,7 @@ class Datum {
     required this.modelId,
     required this.seen,
     required this.userId,
-    required this.data,
+    this.data, // nullable
     required this.createdAt,
     required this.updatedAt,
     required this.showClient,
@@ -139,7 +137,11 @@ class Datum {
         modelId: json["model_id"],
         seen: json["seen"],
         userId: json["user_id"],
-        data: Data.fromJson(json["data"]),
+        data: json["data"] != null
+            ? Data.fromJson(jsonDecode(json["data"])) // خلي بالك لو string
+            : Data(
+                type: "",
+              ),
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         showClient: json["show_client"],
@@ -158,7 +160,7 @@ class Datum {
         "model_id": modelId,
         "seen": seen,
         "user_id": userId,
-        "data": data.toJson(),
+        "data": data?.toJson(), // لو null مش هيرجع error
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
         "show_client": showClient,
@@ -185,12 +187,8 @@ class Message {
   Message({required this.en, required this.ar});
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      en: enValues.map.containsKey(json["en"])
-          ? enValues.map[json["en"]]!
-          : En.ORDER_ASSIGNED,
-      ar: arValues.map.containsKey(json["ar"])
-          ? arValues.map[json["ar"]]!
-          : Ar.AR,
+      en: enValues.map.containsKey(json["en"]) ? enValues.map[json["en"]]! : En.ORDER_ASSIGNED,
+      ar: arValues.map.containsKey(json["ar"]) ? arValues.map[json["ar"]]! : Ar.AR,
     );
   }
 
@@ -211,8 +209,7 @@ enum En { ORDER_ASSIGNED, YOU_HAVE_BEEN_ASSIGNED_TO_A_NEW_ORDER }
 
 final enValues = EnumValues({
   "Order assigned": En.ORDER_ASSIGNED,
-  "You have been assigned to a new order.":
-      En.YOU_HAVE_BEEN_ASSIGNED_TO_A_NEW_ORDER,
+  "You have been assigned to a new order.": En.YOU_HAVE_BEEN_ASSIGNED_TO_A_NEW_ORDER,
 });
 
 class Link {
