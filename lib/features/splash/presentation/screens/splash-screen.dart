@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/app-language/presentation/screens/app-language-screen.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
@@ -50,12 +51,14 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
-            child: Image.asset(
-              'assets/images/app_store.png',
-              height: 500,
-              width: 500,
-              fit: BoxFit.fill,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: Center(
+              child: Image.asset(
+                AppImages.hawiahPlus,
+                height: 500,
+                width: 500,
+              ),
             ),
           ),
         ],

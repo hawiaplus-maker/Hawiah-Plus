@@ -17,11 +17,11 @@ import 'package:hawiah_client/features/chat/presentation/widget/message_widget.d
 
 class SingleChatScreenArgs {
   final String senderId;
-  final String reciverId;
-  final String reciverImage;
-  final String reciverName;
+  final String receiverId;
+  final String receiverImage;
+  final String receiverName;
   final String senderType;
-  final String reciverType;
+  final String receiverType;
   final String orderId;
   final VoidCallback onMessageSent;
 
@@ -29,10 +29,10 @@ class SingleChatScreenArgs {
     required this.senderId,
     required this.senderType,
     required this.orderId,
-    required this.reciverImage,
-    required this.reciverName,
-    required this.reciverId,
-    required this.reciverType,
+    required this.receiverImage,
+    required this.receiverName,
+    required this.receiverId,
+    required this.receiverType,
     required this.onMessageSent,
   });
 }
@@ -78,7 +78,7 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
         child: Scaffold(
           appBar: CustomAppBar(
             context,
-            titleText: widget.args.reciverName,
+            titleText: widget.args.receiverName,
             centerTitle: false,
             leadingWidth: 70,
             actions: [
@@ -93,7 +93,7 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
             leading: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: CustomNetworkImage(
-                imageUrl: widget.args.reciverImage,
+                imageUrl: widget.args.receiverImage,
                 height: 40,
                 width: 40,
                 radius: 30,
@@ -168,10 +168,10 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                             message: txt,
                             senderId: widget.args.senderId,
                             senderType: widget.args.senderType,
-                            receiverId: widget.args.reciverId,
-                            receiverType: widget.args.reciverType,
-                            receiverName: widget.args.reciverName,
-                            receiverImage: widget.args.reciverImage,
+                            receiverId: widget.args.receiverId,
+                            receiverType: widget.args.receiverType,
+                            receiverName: widget.args.receiverName,
+                            receiverImage: widget.args.receiverImage,
                           );
                         }
                         _messageEC.clear();

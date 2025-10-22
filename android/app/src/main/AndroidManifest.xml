@@ -22,7 +22,7 @@
         </intent>
     </queries>
     <application
-        android:label="حاوية"
+        android:label="Hawiah Plus"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <meta-data

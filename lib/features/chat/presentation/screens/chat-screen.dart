@@ -21,7 +21,7 @@ class AllChatsScreen extends StatefulWidget {
 
 class _AllChatsScreenState extends State<AllChatsScreen> {
   late ChatCubit chatCubit;
-  late String driverId;
+  late String userId;
   final TextEditingController _searchController = TextEditingController();
   List<RecentChatModel> _allChats = [];
   List<RecentChatModel> _filteredChats = [];
@@ -29,9 +29,12 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
   @override
   void initState() {
     super.initState();
-    driverId = context.read<ProfileCubit>().user.id.toString();
+    userId = context.read<ProfileCubit>().user.id.toString();
     chatCubit = ChatCubit();
-    chatCubit.fetchRecentChats(driverId);
+    chatCubit.fetchRecentChats(
+      currentId: userId,
+      currentType: 'user',
+    );
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -49,12 +52,11 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
       if (query.isEmpty) {
         _filteredChats = List.from(_allChats);
       } else {
-        _filteredChats =
-            _allChats.where((chat) {
-              final name = chat.receiverName.toLowerCase();
-              final id = chat.orderId.toLowerCase();
-              return name.contains(query) || id.contains(query);
-            }).toList();
+        _filteredChats = _allChats.where((chat) {
+          final name = chat.receiverName.toLowerCase();
+          final id = chat.orderId.toLowerCase();
+          return name.contains(query) || id.contains(query);
+        }).toList();
       }
     });
   }
@@ -102,11 +104,12 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
                                 elevation: 2,
                                 color: AppColor.whiteColor,
                                 child: ListTile(
-                                  leading: CircleAvatar(
-                                    child: CustomNetworkImage(
-                                      imageUrl: chat.receiverImage,
-                                      fit: BoxFit.fill,
-                                    ),
+                                  leading: CustomNetworkImage(
+                                    imageUrl: chat.receiverImage,
+                                    fit: BoxFit.fill,
+                                    height: 40,
+                                    width: 40,
+                                    radius: 30,
                                   ),
                                   title: Text(
                                     chat.receiverName,
@@ -121,8 +124,8 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
                                   trailing: Text(
                                     chat.lastMessageTime != null
                                         ? DateMethods.formatToTime(
-                                          chat.lastMessageTime,
-                                        )
+                                            chat.lastMessageTime,
+                                          )
                                         : '',
                                   ),
                                   onTap: () {
@@ -130,15 +133,18 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
                                       context,
                                       SingleChatScreen.routeName,
                                       arguments: SingleChatScreenArgs(
-                                        reciverId: chat.receiverId,
-                                        reciverType: 'user',
-                                        reciverName: chat.receiverName,
-                                        reciverImage: chat.receiverImage,
-                                        senderId: driverId,
-                                        senderType: 'driver',
+                                        receiverId: chat.receiverId,
+                                        receiverType: 'driver',
+                                        receiverName: chat.receiverName,
+                                        receiverImage: chat.receiverImage,
+                                        senderId: userId,
+                                        senderType: 'user',
                                         orderId: chat.orderId,
                                         onMessageSent: () {
-                                          chatCubit.fetchRecentChats(driverId);
+                                          chatCubit.fetchRecentChats(
+                                            currentId: userId,
+                                            currentType: 'user',
+                                          );
                                         },
                                       ),
                                     );

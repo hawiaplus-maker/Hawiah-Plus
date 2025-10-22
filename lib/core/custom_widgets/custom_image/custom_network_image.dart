@@ -64,7 +64,7 @@ class CustomNetworkImage extends StatelessWidget {
 
   Widget _buildErrorWidget() {
     return Image.asset(
-      imagePlaceHolder ?? AppImages.logoIcon,
+      imagePlaceHolder ?? AppImages.hawiahPlus,
       width: width,
       height: height,
       fit: fit ?? BoxFit.contain,

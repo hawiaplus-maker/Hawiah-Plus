@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,7 +16,9 @@ import 'package:hawiah_client/core/theme/cubit/app_theme_cubit.dart';
 import 'package:hawiah_client/features/splash/presentation/screens/splash-screen.dart';
 import 'package:hawiah_client/injection_container.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
 import 'firebase_options.dart';
+
 late BuildContext genContext;
 final bool isGuest = HiveMethods.getToken() == null;
 void main() async {
@@ -145,7 +148,7 @@ class _MyAppState extends State<MyApp> {
     return ThemeData(
         fontFamily: 'Cairo',
         appBarTheme: const AppBarTheme(
-          color: Colors.white,
+          backgroundColor: Colors.white,
         ),
         scaffoldBackgroundColor: Colors.white,
         canvasColor: Colors.white,

@@ -1,4 +1,4 @@
-package com.example.hawiah_client
+package com.hawiah.plus
 
 import io.flutter.embedding.android.FlutterActivity
 

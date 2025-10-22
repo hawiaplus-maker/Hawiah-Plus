@@ -236,5 +236,7 @@
    "paymentSuccess": "تم الدفع بنجاح",
    "paymentFailedTryAgain": "فشل الدفع، حاول مرة اخرى",
    "executeorder":"تنفيذ الطلب",
-   "payNow":"إدفع الآن"
+   "payNow":"إدفع الآن",
+   "youhaveorder":"لديك طلب حالي "
+
 }
