@@ -5,8 +5,7 @@ class AppImages {
   static const String warning = 'assets/global_icon/warning.svg';
   static const String errorIcon = 'assets/global_icon/errorIcon.svg';
   static const String refreshIcon = 'assets/global_icon/refreshIcon.svg';
-  static const String emptyFolderIcon =
-      'assets/global_icon/emptyFolderIcon.svg';
+  static const String emptyFolderIcon = 'assets/global_icon/emptyFolderIcon.svg';
   static const String offlineIcon = 'assets/global_icon/offlineIcon.svg';
   static const String galleryIcon = 'assets/global_icon/gallery.svg';
   static const String cameraIcon = 'assets/global_icon/camera.svg';
@@ -22,8 +21,7 @@ class AppImages {
   static const String noDataImage = 'assets/images/noDataImage.png';
   static const String exceptionImage = 'assets/images/exceptionImage.png';
   static const String addAddressImage = 'assets/images/addAddressImage.png';
-  static const String addressLocationIcon =
-      'assets/svg/addressLocationIcon.svg';
+  static const String addressLocationIcon = 'assets/svg/addressLocationIcon.svg';
   static const String locationMapIcon = 'assets/icons/location_map_icon.png';
   static const String refreshCw = 'assets/images/refresh-cw-03.png';
   static const String trendDown = 'assets/images/trend_down.png';
@@ -31,7 +29,7 @@ class AppImages {
   static const String support = 'assets/images/support.png';
   static const String send = 'assets/images/send.png';
   static const String orderIcon = 'assets/icons/orders_icon.png';
-  static const String hawiaDetailesIcon = 'assets/svg/hawiaDetailesIcon.svg';
+  static const String hawiahDetailsIcon = 'assets/svg/hawiahDetailsIcon.svg';
   static const String locationIcon = 'assets/svg/locationIcon.svg';
   static const String containerIcon = 'assets/svg/renameIcon.svg';
   static const String timeIcon = 'assets/svg/timeIcon.svg';
@@ -45,8 +43,9 @@ class AppImages {
   static const String loginImage = 'assets/images/loginImage.png';
   static const String bellIcon = 'assets/svg/bellIcon.svg';
   static const String sendIcon = 'assets/svg/sendIcon.svg';
-  static const String hawiaDriver = 'assets/images/hawiaDriver.png';
+  static const String hawiahDriver = 'assets/images/hawiahDriver.png';
   static const String hawiahPlus = 'assets/images/hawiahPlus.png';
   static const String appLogoImage = 'assets/images/appLogoImage.png';
   static const String locationsIcon = 'assets/svg/locationsIcon.svg';
+  static const String editIcon = 'assets/icons/edit_icon.png';
 }

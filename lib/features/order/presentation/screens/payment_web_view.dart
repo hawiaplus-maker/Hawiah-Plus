@@ -68,11 +68,11 @@ class _CustomPaymentWebViewScreenState extends State<CustomPaymentWebViewScreen>
           onWebResourceError: (WebResourceError error) {
             debugPrint('''
            Page resource error:
-  code: ${error.errorCode}
-  description: ${error.description}
-  errorType: ${error.errorType}
-  isForMainFrame: ${error.isForMainFrame}
-          ''');
+           code: ${error.errorCode}
+           description: ${error.description}
+           errorType: ${error.errorType}
+           isForMainFrame: ${error.isForMainFrame}
+           ''');
           },
           onHttpError: (HttpResponseError error) {
             debugPrint('Error occurred on page: ${error.response?.statusCode}');
@@ -103,16 +103,6 @@ class _CustomPaymentWebViewScreenState extends State<CustomPaymentWebViewScreen>
     _controller = controller;
   }
 
-  _exitApp(BuildContext context) async {
-    _controller.canGoBack().then((value) {
-      if (value) {
-        _controller.goBack();
-      } else {
-        Navigator.pop(context);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -139,30 +129,6 @@ class _CustomPaymentWebViewScreenState extends State<CustomPaymentWebViewScreen>
     );
   }
 
-  // Future<NavigationDecision> _pageRedirect(
-  //     BuildContext context, String url) async {
-  //       log(url);
-  //   //bool isSuccess = url.contains('pay-thanks');
-  //   bool isSuccess = url.contains('success=true');
-  //   bool isFailed=url.contains('success=flase');
-  //  // bool isFailed = url.contains('cancelled-form');
-  //   if ( isSuccess) {
-  //     Navigator.pop(context, isSuccess);
-  //     CommonMethods.showToast(message: AppLocaleKey.paymentSuccessful.tr(),seconds: 5);
-  //     widget.args.onSuccess.call();
-  //     return NavigationDecision.prevent;
-  //  }
-  //    else if (isFailed) {
-  //     Navigator.pop(context, isSuccess);
-  //     CommonMethods.showError(message: 'Payment Failed');
-  //     return NavigationDecision.prevent;
-  //   }
-  //   else {
-  //      Navigator.pop(context, isSuccess);
-  //     CommonMethods.showError(message: 'Payment Failed',seconds:5 );
-  //     return NavigationDecision.navigate;
-  //   }
-  // }
   Future<NavigationDecision> _pageRedirect(BuildContext context, String url) async {
     bool isSuccess = url.contains('paid_status=1');
     bool isFailed = url.contains('paid_status=0');

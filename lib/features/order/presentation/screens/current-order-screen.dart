@@ -1,37 +1,22 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
-import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
-import 'package:hawiah_client/core/networking/urls.dart';
-import 'package:hawiah_client/core/theme/app_colors.dart';
-import 'package:hawiah_client/core/theme/app_text_style.dart';
-import 'package:hawiah_client/core/utils/common_methods.dart';
-import 'package:hawiah_client/core/utils/date_methods.dart';
-import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/chat/presentation/screens/single-chat-screen.dart';
 import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
-import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
-import 'package:hawiah_client/features/order/presentation/screens/extend-time-order-screen.dart';
-import 'package:hawiah_client/features/order/presentation/screens/payment_web_view.dart';
-import 'package:hawiah_client/features/order/presentation/widget/custom_list_item.dart';
-import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
-import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import '../../../../core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:hawiah_client/features/order/presentation/widget/driver_and_support_contact_buttons_widget.dart';
+import 'package:hawiah_client/features/order/presentation/widget/driver_card_widget.dart';
+import 'package:hawiah_client/features/order/presentation/widget/hawiah_details.dart';
+import 'package:hawiah_client/features/order/presentation/widget/invoice_and_contract_buttons_widget.dart';
+import 'package:hawiah_client/features/order/presentation/widget/payment_button.dart';
+import 'package:hawiah_client/features/order/presentation/widget/pricing_section_widget.dart';
+import 'package:hawiah_client/features/order/presentation/widget/reorder_and_empty_hawiah_buttons_widget.dart';
 
 class CurrentOrderScreen extends StatefulWidget {
   const CurrentOrderScreen({
     Key? key,
-    required this.ordersDate,
+    required this.ordersData,
   }) : super(key: key);
-  final Data ordersDate;
+  final Data ordersData;
 
   @override
   State<CurrentOrderScreen> createState() => _CurrentOrderScreenState();
@@ -40,12 +25,6 @@ class CurrentOrderScreen extends StatefulWidget {
 class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
   @override
   Widget build(BuildContext context) {
-    final double totalPrice = double.tryParse(
-          widget.ordersDate.totalPrice?.replaceAll(",", "") ?? "0",
-        ) ??
-        0;
-    final double vat = totalPrice * 0.15;
-    final double netTotal = totalPrice + vat;
     return Scaffold(
       appBar: CustomAppBar(
         context,
@@ -57,476 +36,27 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              // Vehicle Image
-                              Flexible(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  child: CustomNetworkImage(
-                                    imageUrl: widget.ordersDate.image ?? "",
-                                    fit: BoxFit.fill,
-                                    height: 60.h,
-                                    width: 60.w,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.ordersDate.product ?? "",
-                                    style: AppTextStyle.text16_700,
-                                  ),
-                                  SizedBox(height: 5.h),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: AppLocaleKey.orderNumber.tr(),
-                                          style: AppTextStyle.text14_500.copyWith(
-                                            color: AppColor.blackColor.withValues(alpha: 0.7),
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: widget.ordersDate.referenceNumber ?? '',
-                                          style: AppTextStyle.text14_500.copyWith(
-                                            color: AppColor.blackColor.withValues(alpha: 0.7),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: 5.h),
-                                  Text(
-                                    DateMethods.formatToFullData(
-                                      DateTime.tryParse(widget.ordersDate.createdAt ?? "") ??
-                                          DateTime.now(),
-                                    ),
-                                    style: AppTextStyle.text14_400.copyWith(
-                                      color: AppColor.blackColor.withValues(alpha: 0.3),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Card(
-                          color: AppColor.whiteColor,
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                            child: Text(widget.ordersDate.otp.toString(),
-                                style: AppTextStyle.text18_700),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: CustomButton(
-                            prefixIcon: Image.asset(
-                              AppImages.refreshCw,
-                              height: 20.0,
-                              width: 20.0,
-                              color: Colors.white,
-                            ),
-                            color: AppColor.mainAppColor,
-                            text: AppLocaleKey.reOrder.tr(),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ExtendTimeOrderScreen(
-                                    orderId: widget.ordersDate.id ?? 0,
-                                    duration: widget.ordersDate.duration ?? 0,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 30),
-                        Flexible(
-                          child: CustomButton(
-                            color: Colors.transparent,
-                            prefixIcon: Image.asset(
-                              AppImages.trendDown,
-                              height: 20.0,
-                              width: 20.0,
-                              color: Colors.red,
-                            ),
-                            child: Text(
-                              AppLocaleKey.emptytheContainer.tr(),
-                              style: AppTextStyle.text16_600.copyWith(
-                                color: AppColor.redColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+            HawiahDetails(ordersDate: widget.ordersData),
+            SizedBox(height: 16.0),
+            ReOrderAndEmptyHawiahButtons(widget: widget),
+            SizedBox(height: 16.0),
+            DriverCardWidget(
+              ordersData: widget.ordersData,
             ),
             SizedBox(height: 16.0),
-            Container(
-              padding: const EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade50,
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 10.h),
-                            Text(
-                              widget.ordersDate.driver ?? "",
-                              style: AppTextStyle.text16_700,
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            if ((widget.ordersDate.vehicles?.isNotEmpty ?? false))
-                              Text(
-                                " ${widget.ordersDate.vehicles!.first.plateLetters} ${widget.ordersDate.vehicles!.first.plateNumbers}",
-                                style: AppTextStyle.text16_700,
-                              ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            if (widget.ordersDate.vehicles?.isNotEmpty == true)
-                              Text(
-                                "${widget.ordersDate.vehicles!.first.carModel} ${widget.ordersDate.vehicles!.first.carType} ${widget.ordersDate.vehicles!.first.carBrand}",
-                                style: AppTextStyle.text14_600.copyWith(color: Color(0xff545454)),
-                              ),
-                          ],
-                        ),
-                      ),
-                      Image.asset(
-                        AppImages.hawiaDriver,
-                        height: 0.2.sh,
-                        width: 0.35.sw,
-                      )
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      NavigatorMethods.pushNamed(context, SingleChatScreen.routeName,
-                          arguments: SingleChatScreenArgs(
-                            onMessageSent: () {},
-                            receiverId: widget.ordersDate.driverId.toString(),
-                            receiverType: "driver",
-                            receiverName: widget.ordersDate.driver ?? "",
-                            receiverImage: Urls.testUserImage,
-                            senderId: context.read<ProfileCubit>().user.id.toString(),
-                            senderType: "user",
-                            orderId: widget.ordersDate.id.toString(),
-                          ));
-                    },
-                    child: Container(
-                      height: 50.h,
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Color(0xffEEEEEE),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            AppLocaleKey.sendMessage.tr(),
-                            style: AppTextStyle.text14_500,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Image.asset(
-                            AppImages.send,
-                            height: 30.h,
-                            width: 30.w,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10.h),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                InkWell(
-                  onTap: () {
-                    launchURL(
-                      widget.ordersDate.driverMobile ?? "",
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Color(0xffD9D9D9),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.asset(
-                          AppImages.phone,
-                          height: 30.h,
-                          width: 30.w,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(AppLocaleKey.contactTheDriver.tr(), style: TextStyle(fontSize: 12.sp))
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    launchURL(
-                      context.read<SettingCubit>().setting?.phone ?? "",
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Color(0xffD9D9D9),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.asset(
-                          AppImages.support,
-                          height: 30.h,
-                          width: 30.w,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(AppLocaleKey.contactSupport.tr(), style: TextStyle(fontSize: 12.sp))
-                    ],
-                  ),
-                )
-              ],
-            ),
+            DriverAndSupportContactButtons(widget: widget),
             SizedBox(height: 60.0),
-            Container(
-              child: Column(
-                children: [
-                  CustomListItem(
-                    title: AppLocaleKey.askPrice.tr(),
-                    subtitle: "${totalPrice} ${AppLocaleKey.sarr.tr()}",
-                  ),
-                  SizedBox(height: 20),
-                  CustomListItem(
-                    title: AppLocaleKey.valueAdded.tr(),
-                    subtitle: "${vat.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
-                  ),
-                  SizedBox(height: 10),
-                  Divider(),
-                  SizedBox(height: 10),
-                  CustomListItem(
-                    title: AppLocaleKey.netTotal.tr(),
-                    subtitle: "${netTotal.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
-                  ),
-                  SizedBox(height: 30),
-                  widget.ordersDate.paidStatus == 0
-                      ? CustomButton(
-                          color: AppColor.greenColor,
-                          text: AppLocaleKey.payNow.tr(),
-                          onPressed: () {
-                            context.read<OrderCubit>().getPaymentLink(
-                                orderId: widget.ordersDate.id!,
-                                onSuccess: (url) {
-                                  if (url.contains('already exists') == true) {
-                                    CommonMethods.showError(message: url);
-                                  } else {
-                                    NavigatorMethods.pushNamed(
-                                        context, CustomPaymentWebViewScreen.routeName,
-                                        arguments: PaymentArgs(
-                                            url: url,
-                                            onFailed: () {
-                                              Fluttertoast.showToast(
-                                                  msg: AppLocaleKey.paymentFailed.tr());
-                                            },
-                                            onSuccess: () {
-                                              Fluttertoast.showToast(
-                                                  msg: AppLocaleKey.paymentSuccess.tr());
-                                            }));
-                                  }
-                                });
-                          },
-                        )
-                      : SizedBox(),
-                  SizedBox(height: 50.0),
-                  if (widget.ordersDate.invoice != null)
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: GlobalElevatedButton(
-                        label: AppLocaleKey.downloadPDF.tr(),
-                        onPressed: () {
-                          final invoiceUrl = widget.ordersDate.invoice;
-                          if (invoiceUrl != null) {
-                            _showPdfOptionsBottomSheet(invoiceUrl, context: context);
-                          } else {
-                            Fluttertoast.showToast(msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
-                          }
-                        },
-                        backgroundColor: Color(0xff1A3C98),
-                        textColor: Colors.white,
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        borderRadius: BorderRadius.circular(10),
-                        fixedWidth: 0.80,
-                      ),
-                    ),
-                ],
-              ),
+            PricingSectionWidget(ordersData: widget.ordersData),
+            SizedBox(height: 30),
+            PaymentButtonWidget(
+              ordersData: widget.ordersData,
             ),
-            SizedBox(height: 10.0),
-            if (widget.ordersDate.contract != null)
-              Container(
-                alignment: Alignment.bottomCenter,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: GlobalElevatedButton(
-                  label: AppLocaleKey.downloadThePDFContract.tr(),
-                  onPressed: () {
-                    final invoiceUrl = widget.ordersDate.contract;
-                    if (invoiceUrl != null) {
-                      _showPdfOptionsBottomSheet(invoiceUrl, context: context);
-                    } else {
-                      Fluttertoast.showToast(msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
-                    }
-                  },
-                  backgroundColor: Colors.white,
-                  textColor: Color(0xff1A3C98),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  borderRadius: BorderRadius.circular(10),
-                  fixedWidth: 0.80,
-                  side: BorderSide(color: Color(0xff1A3C98)),
-                ),
-              ),
+            SizedBox(height: 30.0),
+            InvoiceAndContractButtonsWidget(ordersData: widget.ordersData),
+            SizedBox(height: 30.0),
           ],
         ),
       ),
     );
-  }
-
-  void _showPdfOptionsBottomSheet(String pdfUrl, {required BuildContext context}) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                AppLocaleKey.chooseAction.tr(),
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 20),
-              ListTile(
-                leading: Icon(Icons.remove_red_eye),
-                title: Text(AppLocaleKey.viewInvoice.tr(), style: AppTextStyle.text16_600),
-                onTap: () async {
-                  Navigator.pop(context);
-                  if (await canLaunchUrl(Uri.parse(pdfUrl))) {
-                    await launchUrl(
-                      Uri.parse(pdfUrl),
-                      mode: LaunchMode.inAppWebView,
-                      webViewConfiguration: WebViewConfiguration(
-                        enableJavaScript: true,
-                      ),
-                    );
-                  } else {
-                    Fluttertoast.showToast(msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
-                  }
-                },
-              ),
-              Divider(),
-              ListTile(
-                leading: Icon(Icons.download),
-                title: Text(AppLocaleKey.downloadInvoice.tr(), style: AppTextStyle.text16_600),
-                onTap: () async {
-                  Navigator.pop(context);
-                  if (await canLaunchUrl(Uri.parse(pdfUrl))) {
-                    await launchUrl(
-                      Uri.parse(pdfUrl),
-                      mode: LaunchMode.externalApplication,
-                    );
-                  } else {
-                    Fluttertoast.showToast(msg: AppLocaleKey.invoiceCannotBeDisplayed.tr());
-                  }
-                },
-              ),
-              SizedBox(height: 10),
-              TextButton(
-                child: Text(AppLocaleKey.cancel.tr(), style: AppTextStyle.text16_600),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> launchURL(String? url, {bool isWhatsapp = false, bool isEmail = false}) async {
-    if (url == null || url.isEmpty) return;
-
-    Uri uri;
-
-    if (isWhatsapp) {
-      uri = Uri.parse("https://wa.me/${url.replaceAll('+', '').replaceAll(' ', '')}");
-    } else if (isEmail) {
-      uri = Uri.parse("mailto:$url");
-    } else {
-      uri = Uri.parse("tel:$url");
-    }
-
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      Fluttertoast.showToast(msg: "لا يمكن فتح الرابط: $url");
-    }
   }
 }

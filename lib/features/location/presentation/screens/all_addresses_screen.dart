@@ -36,59 +36,13 @@ class AllAddressesScreen extends StatelessWidget {
           context,
           titleText: AppLocaleKey.addresses.tr(),
         ),
-        body:
-            BlocBuilder<ProfileCubit, ProfileState>(builder: (context, state) {
+        body: BlocBuilder<ProfileCubit, ProfileState>(builder: (context, state) {
           if (state is ProfileUnAuthorized) {
-            Future.microtask(() {
-              NavigatorMethods.showAppDialog(
-                context,
-                AlertDialog(
-                  content: Text(AppLocaleKey.pleaselog.tr(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18)),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const RegisterScreen()));
-                      },
-                      child: Text(
-                        AppLocaleKey.newRegistration.tr(),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Color(0xff2204AE)),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginScreen()));
-                      },
-                      child: Text(
-                        "login".tr(),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Color(0xff2204AE)),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            });
-
+            unAuthorizedDialog(context);
             return const SizedBox.shrink();
           }
 
-          return BlocBuilder<AddressCubit, AddressState>(
-              builder: (BuildContext context, state) {
+          return BlocBuilder<AddressCubit, AddressState>(builder: (BuildContext context, state) {
             AddressCubit addressCubit = context.read<AddressCubit>();
             if (addressCubit.addressesResponse == []) {
               addressCubit.getaddresses();
@@ -111,20 +65,19 @@ class AllAddressesScreen extends StatelessWidget {
                     child: CustomButton(
                       text: "add_new_address".tr(),
                       onPressed: () {
-                        NavigatorMethods.pushNamed(
-                            context, AddNewLocationScreen.routeName,
-                            arguments: AddNewLocationScreenArgs(onAddressAdded: () {
-                              addressCubit.getaddresses();
-                            },)
-                            );
+                        NavigatorMethods.pushNamed(context, AddNewLocationScreen.routeName,
+                            arguments: AddNewLocationScreenArgs(
+                          onAddressAdded: () {
+                            addressCubit.getaddresses();
+                          },
+                        ));
                       },
                     ),
                   ),
                 ],
               ),
               child: ListView.builder(
-                itemCount:
-                    addressCubit.addresses.length + 1, // Add 1 for extra item
+                itemCount: addressCubit.addresses.length + 1, // Add 1 for extra item
                 itemBuilder: (context, index) {
                   // Render addresses for existing indices
                   if (index < addressCubit.addresses.length) {
@@ -135,18 +88,15 @@ class AllAddressesScreen extends StatelessWidget {
                           "${addressCubit.addresses[index].city ?? ""} - ${addressCubit.addresses[index].neighborhood ?? ""}",
                       isSelected: false,
                       onTap: () {
-                        NavigatorMethods.pushNamed(
-                            context, LocationScreen.routeName,
+                        NavigatorMethods.pushNamed(context, LocationScreen.routeName,
                             arguments: LocationScreenArgs(
                               onLocationSelected: (latLng) {
                                 addressCubit.updateAddress(
-                                  addressId:
-                                      addressCubit.addresses[index].id ?? 0,
+                                  addressId: addressCubit.addresses[index].id ?? 0,
                                   latitude: latLng.latitude,
                                   longitude: latLng.longitude,
                                   neighborhoodId: 5,
-                                  title:
-                                      addressCubit.addresses[index].title ?? "",
+                                  title: addressCubit.addresses[index].title ?? "",
                                   onSuccess: () {
                                     addressCubit.initialaddresses();
                                     addressCubit.getaddresses();
@@ -154,52 +104,74 @@ class AllAddressesScreen extends StatelessWidget {
                                 );
                               },
                               initialLatLng: LatLng(
-                                  double.tryParse(addressCubit
-                                              .addresses[index].latitude ??
-                                          "0.0") ??
+                                  double.tryParse(
+                                          addressCubit.addresses[index].latitude ?? "0.0") ??
                                       0.0,
-                                  double.tryParse(addressCubit
-                                              .addresses[index].longitude ??
-                                          "0.0") ??
+                                  double.tryParse(
+                                          addressCubit.addresses[index].longitude ?? "0.0") ??
                                       0.0),
                             ));
                       },
                     );
-                  }
-                  // Render "Add New Address" as the last item
-                  else {
+                  } else {
                     return LocationItemWidget(
-                      imagePath: AppImages.addAddressImage,
-                      isSVG: false,
-                      title: "add_new_address".tr(),
-                      address: "",
-                      isSelected: false,
-                      onTap: () => NavigatorMethods.pushNamed(
-                            context, AddNewLocationScreen.routeName,
-                            arguments: AddNewLocationScreenArgs(onAddressAdded: () {
-                              addressCubit.getaddresses();
-                            },)
-                            )
-                    );
+                        imagePath: AppImages.addAddressImage,
+                        isSVG: false,
+                        title: "add_new_address".tr(),
+                        address: "",
+                        isSelected: false,
+                        onTap: () =>
+                            NavigatorMethods.pushNamed(context, AddNewLocationScreen.routeName,
+                                arguments: AddNewLocationScreenArgs(
+                              onAddressAdded: () {
+                                addressCubit.getaddresses();
+                              },
+                            )));
                   }
                 },
               ),
             );
-          }
-// ... rest of the code ... },
-              );
+          });
         }),
-        // bottomNavigationBar: Padding(
-        //   padding: const EdgeInsets.all(16.0),
-        //   child: CustomButton(
-        //     text: "add_new_address".tr(),
-        //     onPressed: () {
-        //       NavigatorMethods.pushNamed(
-        //           context, AddNewLocationScreen.routeName);
-        //     },
-        //   ),
-        // ),
       ),
     );
+  }
+
+  Future<Null> unAuthorizedDialog(BuildContext context) {
+    return Future.microtask(() {
+      NavigatorMethods.showAppDialog(
+        context,
+        AlertDialog(
+          content: Text(AppLocaleKey.pleaselog.tr(),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => const RegisterScreen()));
+              },
+              child: Text(
+                AppLocaleKey.newRegistration.tr(),
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xff2204AE)),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+              },
+              child: Text(
+                "login".tr(),
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xff2204AE)),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

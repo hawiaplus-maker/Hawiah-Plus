@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
@@ -9,7 +10,6 @@ import 'package:hawiah_client/core/utils/date_methods.dart';
 import 'package:hawiah_client/features/notifications/model/notifications_model.dart';
 import 'package:hawiah_client/features/notifications/presentation/cubit/notifications_cubit.dart';
 import 'package:hawiah_client/features/notifications/presentation/cubit/notifications_state.dart';
-
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -27,7 +27,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
+        context,
         title: Text(
           AppLocaleKey.notifications.tr(),
           style: AppTextStyle.text20_700,
@@ -69,15 +70,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               itemBuilder: (context, index) {
                 final item = notifications[index];
                 final locale = context.locale.languageCode;
-                final title =
-                    locale == 'ar'
-                        ? arValues.reverse[item.title.ar]
-                        : enValues.reverse[item.title.en];
+                final title = locale == 'ar'
+                    ? arValues.reverse[item.title.ar]
+                    : enValues.reverse[item.title.en];
 
-                final message =
-                    locale == 'ar'
-                        ? arValues.reverse[item.message.ar]
-                        : enValues.reverse[item.message.en];
+                final message = locale == 'ar'
+                    ? arValues.reverse[item.message.ar]
+                    : enValues.reverse[item.message.en];
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),

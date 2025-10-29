@@ -7,10 +7,10 @@ class LocationService {
   StreamSubscription<LocationData>? _locationSubscription;
   bool _isListening = false;
 
+  /// ✅ Get current location (with checks)
   Future<LocationData?> getCurrentLocation() async {
     try {
-      if (await checkAndRequestLocationService() &&
-          await checkAndRequestLocationPermission()) {
+      if (await checkAndRequestLocationService() && await checkAndRequestLocationPermission()) {
         return await _location.getLocation();
       }
       return null;
@@ -20,6 +20,7 @@ class LocationService {
     }
   }
 
+  /// ✅ Ensure location service is active
   Future<bool> checkAndRequestLocationService() async {
     bool serviceEnabled = await _location.serviceEnabled();
     if (!serviceEnabled) {
@@ -28,6 +29,7 @@ class LocationService {
     return serviceEnabled;
   }
 
+  /// ✅ Ensure location permission is granted
   Future<bool> checkAndRequestLocationPermission() async {
     PermissionStatus permission = await _location.hasPermission();
     if (permission == PermissionStatus.deniedForever) return false;
@@ -35,19 +37,23 @@ class LocationService {
     if (permission == PermissionStatus.denied) {
       permission = await _location.requestPermission();
     }
-
     return permission == PermissionStatus.granted;
   }
 
-
-  void getLocationData(void Function(LocationData)? onData) async {
-    _location.onLocationChanged.listen(onData);
+  /// ✅ Start location updates (callback)
+  void listenToLocation(void Function(LocationData) onData) {
+    _locationSubscription?.cancel();
+    _isListening = true;
+    _locationSubscription = _location.onLocationChanged.listen(onData);
   }
-   void pauseLocationStream() {
+
+  /// ✅ Pause stream updates
+  void pauseLocationStream() {
     _locationSubscription?.pause();
     _isListening = false;
   }
 
+  /// ✅ Resume stream updates
   void resumeLocationStream() {
     if (_locationSubscription != null && !_isListening) {
       _locationSubscription?.resume();
@@ -55,14 +61,8 @@ class LocationService {
     }
   }
 
-  void listenToLocation(void Function(LocationData) onData) {
-    _locationSubscription?.cancel();
-    _isListening = true;
-    _locationSubscription = _location.onLocationChanged.listen(onData);
-  }
-
+  /// ✅ Stop everything
   void dispose() {
     _locationSubscription?.cancel();
-    
   }
 }

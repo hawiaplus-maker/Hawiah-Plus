@@ -17,12 +17,12 @@ class NotificationsModel {
 
   factory NotificationsModel.fromJson(Map<String, dynamic> json) => NotificationsModel(
         success: json["success"],
-        notifications: Notifications.fromJson(json["notifications"]),
+        notifications: Notifications.fromJson(json["message"]),
       );
 
   Map<String, dynamic> toJson() => {
         "success": success,
-        "notifications": notifications.toJson(),
+        "message": notifications.toJson(),
       };
 }
 

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -10,9 +9,9 @@ import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
+import 'package:location/location.dart';
 
-typedef OnLocationSelected = void Function(
-    double lat, double lng, String locality);
+typedef OnLocationSelected = void Function(double lat, double lng, String locality);
 
 @immutable
 class LocationState {
@@ -47,7 +46,6 @@ class LocationState {
   }
 
   bool get hasValidCoordinates => latitude != null && longitude != null;
-
   LatLng get latLng => LatLng(latitude ?? 0, longitude ?? 0);
 }
 
@@ -89,7 +87,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
-    _determineInitialPosition();
+    _initLocation();
   }
 
   @override
@@ -98,35 +96,34 @@ class _MapScreenState extends State<MapScreen> {
     super.dispose();
   }
 
-  Future<void> _determineInitialPosition() async {
+  /// ✅ Determine and display initial user position
+  Future<void> _initLocation() async {
     setState(() => _locationState = _locationState.copyWith(isLoading: true));
 
-    try {
-      final location = await _locationService.getCurrentLocation();
-      if (location?.latitude != null && location?.longitude != null) {
-        await _updateLocationState(
-          location!.latitude!,
-          location.longitude!,
-          fetchLocality: true,
-        );
-      }
-    } catch (e) {
-      setState(() {
-        _locationState = _locationState.copyWith(
-          isLoading: false,
-          error: 'location_error'.tr(),
-        );
-      });
+    final location = await _locationService.getCurrentLocation();
+    if (location != null && location.latitude != null && location.longitude != null) {
+      await _updateLocation(location.latitude!, location.longitude!, fetchLocality: true);
+      _startListeningToLocation();
+    } else {
+      setState(() => _locationState = _locationState.copyWith(
+            isLoading: false,
+            error: 'location_error'.tr(),
+          ));
     }
   }
 
-  Future<void> _updateLocationState(
-    double lat,
-    double lng, {
-    bool fetchLocality = false,
-  }) async {
-    String? locality;
+  /// ✅ Start listening for live location updates
+  void _startListeningToLocation() {
+    _locationService.listenToLocation((LocationData data) async {
+      if (!_isManualSelection && data.latitude != null && data.longitude != null) {
+        await _updateLocation(data.latitude!, data.longitude!);
+      }
+    });
+  }
 
+  /// ✅ Update map + locality (reverse geocode)
+  Future<void> _updateLocation(double lat, double lng, {bool fetchLocality = false}) async {
+    String? locality;
     if (fetchLocality) {
       try {
         final placemarks = await placemarkFromCoordinates(lat, lng);
@@ -145,7 +142,7 @@ class _MapScreenState extends State<MapScreen> {
       _locationState = _locationState.copyWith(
         latitude: lat,
         longitude: lng,
-        locality: locality,
+        locality: locality ?? _locationState.locality,
         isLoading: false,
         error: null,
       );
@@ -154,11 +151,11 @@ class _MapScreenState extends State<MapScreen> {
     _mapController?.animateCamera(CameraUpdate.newLatLng(LatLng(lat, lng)));
   }
 
+  /// ✅ When user taps on map manually
   Future<void> _onMapTap(LatLng latLng) async {
-    _locationService.pauseLocationStream();
     _isManualSelection = true;
+    _locationService.pauseLocationStream();
 
-    // Immediately update position
     setState(() {
       _locationState = _locationState.copyWith(
         latitude: latLng.latitude,
@@ -166,14 +163,8 @@ class _MapScreenState extends State<MapScreen> {
       );
     });
 
-    // Fetch locality asynchronously
-    await _updateLocationState(
-      latLng.latitude,
-      latLng.longitude,
-      fetchLocality: true,
-    );
+    await _updateLocation(latLng.latitude, latLng.longitude, fetchLocality: true);
 
-    // Notify parent with locality
     if (_locationState.locality != null) {
       widget.args.safeLocationSelected(
         latLng.latitude,
@@ -183,10 +174,11 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  Future<void> _resumeLocationTracking() async {
+  /// ✅ Resume live tracking when pressing FAB
+  Future<void> _resumeTracking() async {
     _isManualSelection = false;
     _locationService.resumeLocationStream();
-    await _determineInitialPosition();
+    await _initLocation();
   }
 
   @override
@@ -195,11 +187,8 @@ class _MapScreenState extends State<MapScreen> {
       extendBody: true,
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColor.mainAppColor,
-        onPressed: _resumeLocationTracking,
-        child: Icon(
-          Icons.my_location,
-          color: AppColor.whiteColor,
-        ),
+        onPressed: _resumeTracking,
+        child: Icon(Icons.my_location, color: AppColor.whiteColor),
       ),
       body: _buildBody(),
       bottomNavigationBar: _buildBottomPanel(),
@@ -212,33 +201,29 @@ class _MapScreenState extends State<MapScreen> {
     }
 
     if (!_locationState.hasValidCoordinates) {
-      return Center(
-        child: Text('location_unavailable'.tr()),
-      );
+      return Center(child: Text('location_unavailable'.tr()));
     }
 
     return Stack(
       children: [
-        Positioned.fill(
-          child: GoogleMap(
-            onTap: _onMapTap,
-            markers: {
-              Marker(
-                markerId: const MarkerId("selectedLocation"),
-                position: _locationState.latLng,
-              )
-            },
-            zoomControlsEnabled: false,
-            onMapCreated: (controller) {
-              _mapController = controller;
-              _mapController?.animateCamera(
-                CameraUpdate.newLatLng(_locationState.latLng),
-              );
-            },
-            initialCameraPosition: CameraPosition(
-              target: _locationState.latLng,
-              zoom: _initialZoom,
+        GoogleMap(
+          onTap: _onMapTap,
+          markers: {
+            Marker(
+              markerId: const MarkerId("selectedLocation"),
+              position: _locationState.latLng,
             ),
+          },
+          zoomControlsEnabled: false,
+          onMapCreated: (controller) {
+            _mapController = controller;
+            _mapController?.animateCamera(
+              CameraUpdate.newLatLng(_locationState.latLng),
+            );
+          },
+          initialCameraPosition: CameraPosition(
+            target: _locationState.latLng,
+            zoom: _initialZoom,
           ),
         ),
         if (_locationState.locality != null)

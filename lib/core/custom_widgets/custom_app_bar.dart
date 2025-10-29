@@ -38,13 +38,12 @@ class CustomAppBar extends PreferredSize {
           preferredSize: Size.fromHeight(height),
           child: AppBar(
             elevation: elevation,
-            backgroundColor: appBarColor ?? Colors.transparent,
+            backgroundColor: appBarColor ?? Colors.white,
             toolbarHeight: height,
             automaticallyImplyLeading: automaticallyImplyLeading,
             shadowColor: shadowColor,
             centerTitle: centerTitle,
-            title:
-                title ?? Text(titleText ?? "", style: AppTextStyle.text18_700),
+            title: title ?? Text(titleText ?? "", style: AppTextStyle.text18_700),
             leading: leading ??
                 (automaticallyImplyLeading && Navigator.canPop(context)
                     ? IconButton(

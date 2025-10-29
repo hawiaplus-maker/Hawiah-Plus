@@ -46,7 +46,7 @@ class ApiHelper {
     return _instance!;
   }
 
-  final String _serverKey = '';
+
 
   MediaType appMediaType(String path) {
     List<String> list = "${lookupMimeType(path)}".split('/');

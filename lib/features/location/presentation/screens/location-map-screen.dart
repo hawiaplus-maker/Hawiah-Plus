@@ -7,14 +7,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/features/location/presentation/widget/selected_location_widget.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
 
 class LocationScreenArgs {
   final LatLng initialLatLng;
   final Function(LatLng) onLocationSelected;
 
-  LocationScreenArgs(
-      {required this.initialLatLng, required this.onLocationSelected});
+  LocationScreenArgs({required this.initialLatLng, required this.onLocationSelected});
 }
 
 class LocationScreen extends StatefulWidget {
@@ -116,35 +116,8 @@ class _LocationScreenState extends State<LocationScreen> {
               ),
             ),
 
-            // Top AppBar
-            Align(
-              alignment: Alignment.topCenter,
-              child: AnimatedOpacity(
-                opacity: _showContainer ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 200),
-                child: AppBar(
-                  backgroundColor: Colors.transparent,
-                  actions: [
-                    IconButton(
-                      icon: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        padding: const EdgeInsets.all(10),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.black,
-                          size: 16,
-                        ),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                    )
-                  ],
-                ),
-              ),
-            ),
+            // Top selected location widget
+            SelectedLocationWidget(showContainer: _showContainer),
 
             // Bottom Container with animation
             Align(
@@ -157,8 +130,7 @@ class _LocationScreenState extends State<LocationScreen> {
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(20)),
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black12,
@@ -184,7 +156,7 @@ class _LocationScreenState extends State<LocationScreen> {
                           ),
                           SizedBox(height: 10.h),
                           Text(
-                           AppLocaleKey.currentaddress.tr(),
+                            AppLocaleKey.currentaddress.tr(),
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 15.sp,
@@ -194,8 +166,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       ),
                       SizedBox(height: 10.h),
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                         decoration: BoxDecoration(
                           color: const Color(0xffF9F9F9),
                           borderRadius: BorderRadius.circular(10),

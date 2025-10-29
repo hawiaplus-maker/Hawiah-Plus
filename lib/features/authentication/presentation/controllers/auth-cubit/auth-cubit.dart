@@ -19,8 +19,7 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
   // Default phone number details
-  PhoneNumber fullNumber =
-      PhoneNumber(isoCode: 'SA'); // Default country code (SA)
+  PhoneNumber fullNumber = PhoneNumber(isoCode: 'SA'); // Default country code (SA)
   String phoneNumber = '';
 
   // For managing password
@@ -134,10 +133,8 @@ class AuthCubit extends Cubit<AuthState> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordControllerCompleteProfile =
-      TextEditingController();
-  TextEditingController confirmPasswordControllerCompleteProfile =
-      TextEditingController();
+  TextEditingController passwordControllerCompleteProfile = TextEditingController();
+  TextEditingController confirmPasswordControllerCompleteProfile = TextEditingController();
   TextEditingController PhoneController = TextEditingController();
   TextEditingController forgotPhoneController = TextEditingController();
   TextEditingController phoneControllerRegister = TextEditingController();
@@ -177,8 +174,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthChange());
   }
 
-  PhoneNumber fullNumberResetPassword =
-      PhoneNumber(isoCode: 'SA'); // Default country code (SA)
+  PhoneNumber fullNumberResetPassword = PhoneNumber(isoCode: 'SA'); // Default country code (SA)
   String phoneNumberResetPassword = '';
   bool isResetPassword = false;
 
@@ -230,8 +226,7 @@ class AuthCubit extends Cubit<AuthState> {
       hasToken: false,
     );
 
-    if (response.state == ResponseState.complete &&
-        response.data['success'] == true) {
+    if (response.state == ResponseState.complete && response.data['success'] == true) {
       final data = response.data['data'];
       final message = response.data['message'] ?? 'Login completed';
 
@@ -288,8 +283,7 @@ class AuthCubit extends Cubit<AuthState> {
       hasToken: false,
     );
 
-    if (response.state == ResponseState.complete &&
-        response.data['success'] == true) {
+    if (response.state == ResponseState.complete && response.data['success'] == true) {
       final data = response.data['data'];
       final message = response.data['message'] ?? 'Login completed';
 
@@ -330,8 +324,7 @@ class AuthCubit extends Cubit<AuthState> {
       hasToken: false,
     );
 
-    if (response.state == ResponseState.complete &&
-        response.data['success'] == true) {
+    if (response.state == ResponseState.complete && response.data['success'] == true) {
       final data = response.data['data'];
       final message = response.data['message'] ?? 'Login completed';
 
@@ -368,8 +361,7 @@ class AuthCubit extends Cubit<AuthState> {
       hasToken: false,
     );
 
-    if (response.state == ResponseState.complete &&
-        response.data['success'] == true) {
+    if (response.state == ResponseState.complete && response.data['success'] == true) {
       final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
 
       Fluttertoast.showToast(
@@ -383,11 +375,9 @@ class AuthCubit extends Cubit<AuthState> {
 
       emit(AuthCodeResentSuccess(message: message));
     } else if (response.state == ResponseState.unauthorized) {
-      emit(AuthCodeResentError(
-          message: response.data['message'] ?? "بيانات غير صحيحة"));
+      emit(AuthCodeResentError(message: response.data['message'] ?? "بيانات غير صحيحة"));
     } else if (response.state == ResponseState.error) {
-      emit(AuthCodeResentError(
-          message: response.data['message'] ?? "حدث خطأ أثناء العملية"));
+      emit(AuthCodeResentError(message: response.data['message'] ?? "حدث خطأ أثناء العملية"));
     } else if (response.state == ResponseState.offline) {
       emit(AuthCodeResentError(message: "لا يوجد اتصال بالإنترنت"));
     } else {
@@ -411,8 +401,7 @@ class AuthCubit extends Cubit<AuthState> {
       hasToken: false,
     );
 
-    if (response.state == ResponseState.complete &&
-        response.data['success'] == true) {
+    if (response.state == ResponseState.complete && response.data['success'] == true) {
       final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
       final data = response.data['data'];
 
@@ -456,8 +445,7 @@ class AuthCubit extends Cubit<AuthState> {
       body: body,
       hasToken: false,
     );
-    if (response.state == ResponseState.complete &&
-        response.data['success'] == true) {
+    if (response.state == ResponseState.complete && response.data['success'] == true) {
       final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
       Fluttertoast.showToast(
         msg: message,

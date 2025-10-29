@@ -33,12 +33,18 @@ class _LayoutScreenState extends State<LayoutScreen> {
 
   int selectedIndex = 0;
 
-  final List<Widget> _screens = [
-    HomeScreen(),
-    AllChatsScreen(),
-    OrdersScreen(),
-    ProfileScreen(),
-  ];
+  List<Widget> get _screens => [
+        HomeScreen(),
+        AllChatsScreen(),
+        OrdersScreen(),
+        ProfileScreen(
+          onOrderTap: () {
+            setState(() {
+              selectedIndex = 2;
+            });
+          },
+        ),
+      ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +53,8 @@ class _LayoutScreenState extends State<LayoutScreen> {
       bottomNavigationBar: CurvedNavigationBar(
         color: Color(0xffE5E7FE),
         buttonBackgroundColor: const Color(0xff2B03F0),
+        index: selectedIndex,
+        
         items: [
           Image.asset(
             "assets/icons/home_icon.png",

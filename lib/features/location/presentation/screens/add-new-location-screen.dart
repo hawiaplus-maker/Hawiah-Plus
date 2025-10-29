@@ -265,25 +265,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Row(
-        //   crossAxisAlignment: CrossAxisAlignment.center,
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     Image.asset(
-        //       "assets/icons/check_icon.png",
-        //       height: 20,
-        //       width: 20,
-        //     ),
-        //     SizedBox(width: 10.w),
-        //     Text(
-        //       "جعل هذا العنوان عنواني الإفتراضي",
-        //       style: TextStyle(
-        //         color: Colors.black,
-        //         fontSize: 15.sp,
-        //       ),
-        //     ),
-        //   ],
-        // ),
+     
         SizedBox(height: 20.h),
         GlobalElevatedButton(
           label: AppLocaleKey.addtitle.tr(),
@@ -341,4 +323,3 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   }
 }
 
-// Additional strongly typed models

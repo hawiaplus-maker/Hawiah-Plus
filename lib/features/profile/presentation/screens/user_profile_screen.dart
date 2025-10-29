@@ -12,66 +12,107 @@ import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
-import 'package:image_picker/image_picker.dart'; // إضافة المكتبة
+import 'package:image_picker/image_picker.dart';
 
 class UserProfile extends StatefulWidget {
+  const UserProfile({super.key});
+
   @override
   State<UserProfile> createState() => _UserProfileState();
 }
 
 class _UserProfileState extends State<UserProfile> {
-  final Map<String, TextEditingController> controllers = {
+  final _controllers = {
     "name": TextEditingController(),
     "mobile": TextEditingController(),
     "email": TextEditingController(),
   };
 
+  final _picker = ImagePicker();
   File? _pickedImage;
-
-  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      context.read<ProfileCubit>().fetchProfile();
-    });
+    Future.microtask(() => context.read<ProfileCubit>().fetchProfile());
   }
 
   Future<void> _pickImage() async {
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
+    final picked = await _picker.pickImage(source: ImageSource.gallery);
+    if (picked == null) return;
 
-    if (pickedFile != null) {
-      setState(() {
-        _pickedImage = File(pickedFile.path);
-      });
-
-      Fluttertoast.showToast(msg: AppLocaleKey.imageSelected.tr());
-    }
+    setState(() => _pickedImage = File(picked.path));
+    Fluttertoast.showToast(msg: AppLocaleKey.imageSelected.tr());
   }
+
+  void _onUpdatePressed() async {
+    final cubit = context.read<ProfileCubit>();
+    await cubit.updateProfile(
+      name: _controllers['name']!.text,
+      mobile: _controllers['mobile']!.text,
+      email: _controllers['email']!.text,
+      imageFile: _pickedImage,
+    );
+  }
+
+  Widget _buildProfileImage(String imageUrl) {
+    final imageProvider = _pickedImage != null
+        ? FileImage(_pickedImage!)
+        : (imageUrl.isNotEmpty ? NetworkImage(imageUrl) : AssetImage(AppImages.profileEmptyImage))
+            as ImageProvider;
+
+    return GestureDetector(
+      onTap: _pickImage,
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        children: [
+          CircleAvatar(
+            radius: 60,
+            backgroundImage: imageProvider,
+            backgroundColor: Colors.grey.shade200,
+          ),
+          CircleAvatar(
+            radius: 18,
+            backgroundColor: Colors.white,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColor.mainAppColor,
+                border: Border.all(color: Colors.black12),
+              ),
+              child: const Icon(Icons.camera_alt_outlined, color: Colors.white, size: 18),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildTextFields() => _controllers.entries
+      .map((entry) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: CustomTextField(
+              controller: entry.value,
+              labelText: entry.key.capitalize(),
+            ),
+          ))
+      .toList();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          AppLocaleKey.profileFile.tr(),
-          style: AppTextStyle.text20_700,
-        ),
+        title: Text(AppLocaleKey.profileFile.tr(), style: AppTextStyle.text20_700),
         centerTitle: true,
       ),
-      resizeToAvoidBottomInset: false,
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state is ProfileLoaded) {
             final user = state.user;
-            controllers['name']!.text = user.name;
-            controllers['mobile']!.text = user.mobile;
-            controllers['email']!.text = user.email;
-          }
-
-          if (state is ProfileUpdateSuccess) {
+            _controllers['name']!.text = user.name;
+            _controllers['mobile']!.text = user.mobile;
+            _controllers['email']!.text = user.email;
+          } else if (state is ProfileUpdateSuccess) {
             Fluttertoast.showToast(
               msg: state.message,
               backgroundColor: Colors.green,
@@ -86,112 +127,54 @@ class _UserProfileState extends State<UserProfile> {
           }
         },
         builder: (context, state) {
-          String imageUrl = '';
+          if (state is ProfileLoading) return const CustomLoading();
+
           if (state is ProfileLoaded) {
-            imageUrl = state.user.image;
+            final imageUrl = state.user.image;
             return SafeArea(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 child: Column(
                   children: [
-                    SizedBox(height: 50),
-                    GestureDetector(
-                      onTap: _pickImage,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                              color: AppColor.mainAppColor, width: 1),
-                        ),
-                        child: CircleAvatar(
-                          radius: 60,
-                          backgroundImage: _pickedImage != null
-                              ? FileImage(_pickedImage!)
-                              : (imageUrl.isNotEmpty
-                                  ? NetworkImage(imageUrl) as ImageProvider
-                                  : AssetImage(
-                                      AppImages.profileEmptyImage,
-                                    )),
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 15,
-                              child: Container(
-                                height: 50,
-                                width: 70,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(0xff2204AE),
-                                  border: Border.all(
-                                      color: Colors.black, width: .5),
-                                ),
-                                child: Icon(
-                                  Icons.camera_alt_outlined,
-                                  size: 18,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 40),
-                    ...controllers.entries.map((entry) {
-                      final key = entry.key;
-                      final controller = entry.value;
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15.0),
-                        child: CustomTextField(
-                          controller: controller,
-                          labelText: key.capitalize(),
-                        ),
-                      );
-                    }).toList(),
-                    Spacer(),
+                    const SizedBox(height: 40),
+                    _buildProfileImage(imageUrl),
+                    const SizedBox(height: 30),
+                    ..._buildTextFields(),
+                    const Spacer(),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 56, 109, 222),
-                        fixedSize: Size.fromWidth(300),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        backgroundColor: AppColor.mainAppColor,
+                        fixedSize: const Size.fromWidth(300),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
-                      onPressed: () async {
-                        final cubit = context.read<ProfileCubit>();
-
-                        await cubit.updateProfile(
-                          name: controllers['name']!.text,
-                          mobile: controllers['mobile']!.text,
-                          email: controllers['email']!.text,
-                          imageFile: _pickedImage,
-                        );
-                      },
+                      onPressed: _onUpdatePressed,
                       child: Text(
                         AppLocaleKey.tracking.tr(),
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style: const TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
             );
-          } else if (state is ProfileLoading) {
-            return Center(child: CustomLoading());
-          } else
-            return Container(
-              color: Colors.red,
-            );
+          }
+
+          return const Center(child: Text('Something went wrong.'));
         },
       ),
     );
   }
+
+  @override
+  void dispose() {
+    for (final controller in _controllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
 }
 
 extension StringX on String {
-  String capitalize() =>
-      isNotEmpty ? "${this[0].toUpperCase()}${substring(1)}" : this;
+  String capitalize() => isEmpty ? this : "${this[0].toUpperCase()}${substring(1)}";
 }

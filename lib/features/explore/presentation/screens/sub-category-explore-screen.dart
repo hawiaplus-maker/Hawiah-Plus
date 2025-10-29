@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
-import 'package:hawiah_client/features/home/presentation/screens/request_hawia_screen.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+
 import '../controllers/explore-flow-cubit.dart';
 import '../controllers/explore-flow-state.dart';
 
@@ -18,7 +18,7 @@ class SubCategoryExploreScreen extends StatelessWidget {
           final exploreFlowCubit = ExploreFlowCubit.get(context);
           return Stack(
             children: [
-              // Map background (you can use Google Maps or a placeholder)
+            
               Positioned.fill(
                 child: Image.asset(
                   "assets/images/map_design.png",
@@ -60,8 +60,7 @@ class SubCategoryExploreScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(20)),
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black12,
@@ -79,10 +78,9 @@ class SubCategoryExploreScreen extends StatelessWidget {
                         width: 0.40.sw,
                         padding: EdgeInsets.symmetric(horizontal: 10.w),
                         decoration: BoxDecoration(
-                          color: Color(
-                              0xFFF9F9F9), // Set background color to #F9F9F9
-                          borderRadius: BorderRadius.circular(
-                              40.0), // Optional: Add rounded corners
+                          color: Color(0xFFF9F9F9), // Set background color to #F9F9F9
+                          borderRadius:
+                              BorderRadius.circular(40.0), // Optional: Add rounded corners
                         ),
                         child: DropdownButton<String>(
                           isExpanded: true,
@@ -115,26 +113,22 @@ class SubCategoryExploreScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
-                                exploreFlowCubit.changeCar(
-                                    exploreFlowCubit.carList[index].title);
+                                exploreFlowCubit.changeCar(exploreFlowCubit.carList[index].title);
                               },
                               child: Container(
                                 margin: EdgeInsets.symmetric(vertical: 10.h),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w, vertical: 10.h),
+                                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                                 decoration: BoxDecoration(
                                     color: Color(0xFFFCFCFC),
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
                                       color: exploreFlowCubit.selectedCar ==
-                                              exploreFlowCubit
-                                                  .carList[index].title
+                                              exploreFlowCubit.carList[index].title
                                           ? Color(0xff5FFF9F)
                                           : Colors.transparent,
                                     )),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
@@ -150,15 +144,11 @@ class SubCategoryExploreScreen extends StatelessWidget {
                                               .start, // Align children to the start (left)
                                           children: [
                                             Text(
-                                              exploreFlowCubit
-                                                  .carList[index].title,
+                                              exploreFlowCubit.carList[index].title,
                                               style: TextStyle(
-                                                fontSize: 15
-                                                    .sp, // Adjust the font size
-                                                fontWeight: FontWeight
-                                                    .bold, // Bold the title
-                                                color:
-                                                    Colors.black, // Text color
+                                                fontSize: 15.sp, // Adjust the font size
+                                                fontWeight: FontWeight.bold, // Bold the title
+                                                color: Colors.black, // Text color
                                               ),
                                             ),
                                             SizedBox(
@@ -167,17 +157,14 @@ class SubCategoryExploreScreen extends StatelessWidget {
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment
                                                   .start, // Align items to the start (left)
-                                              children: exploreFlowCubit
-                                                  .carList[index].sizes
+                                              children: exploreFlowCubit.carList[index].sizes
                                                   .map((buildSize) {
                                                 return Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal: 2.h),
+                                                  margin: EdgeInsets.symmetric(horizontal: 2.h),
                                                   child: Text(
                                                     buildSize.tr(),
                                                     style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: Colors.black),
+                                                        fontSize: 12, color: Colors.black),
                                                   ),
                                                 );
                                               }).toList(),
@@ -193,19 +180,17 @@ class SubCategoryExploreScreen extends StatelessWidget {
                                                     text: "distance".tr(),
                                                     style: TextStyle(
                                                       fontSize: 12,
-                                                      color: Colors
-                                                          .black, // Regular text color
+                                                      color: Colors.black, // Regular text color
                                                     ),
                                                   ),
                                                   TextSpan(
                                                     text: exploreFlowCubit
-                                                        .carList[index]
-                                                        .distanceFromLocation
+                                                        .carList[index].distanceFromLocation
                                                         .toString(),
                                                     style: TextStyle(
                                                       fontSize: 12,
-                                                      fontWeight: FontWeight
-                                                          .bold, // Make "2.5" bold
+                                                      fontWeight:
+                                                          FontWeight.bold, // Make "2.5" bold
                                                       color: Colors
                                                           .blue, // Set color to blue for the number
                                                     ),
@@ -214,8 +199,7 @@ class SubCategoryExploreScreen extends StatelessWidget {
                                                     text: "distance_unit".tr(),
                                                     style: TextStyle(
                                                       fontSize: 10,
-                                                      color: Colors
-                                                          .black, // Regular text color
+                                                      color: Colors.black, // Regular text color
                                                     ),
                                                   ),
                                                 ],
@@ -226,20 +210,17 @@ class SubCategoryExploreScreen extends StatelessWidget {
                                       ],
                                     ),
                                     Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .start, // Centers the content vertically
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start, // Centers the content vertically
                                       crossAxisAlignment: CrossAxisAlignment
                                           .start, // Centers the content horizontally
                                       children: [
                                         Text(
                                           "price_start_from".tr(),
                                           style: TextStyle(
-                                            fontSize:
-                                                10, // Adjust the font size as needed
-                                            fontWeight: FontWeight
-                                                .bold, // Bold the text if needed
-                                            color: Colors
-                                                .black, // Adjust the color if needed
+                                            fontSize: 10, // Adjust the font size as needed
+                                            fontWeight: FontWeight.bold, // Bold the text if needed
+                                            color: Colors.black, // Adjust the color if needed
                                           ),
                                         ),
                                         SizedBox(height: 5),
@@ -249,20 +230,17 @@ class SubCategoryExploreScreen extends StatelessWidget {
                                             text: "per_day".tr(),
                                             style: TextStyle(
                                               fontSize: 10,
-                                              color: Colors
-                                                  .black, // Regular text color
+                                              color: Colors.black, // Regular text color
                                             ),
                                           ),
                                           TextSpan(text: " "),
                                           TextSpan(
-                                            text: exploreFlowCubit
-                                                .carList[index].pricePerDay
+                                            text: exploreFlowCubit.carList[index].pricePerDay
                                                 .toString(),
                                             style: TextStyle(
                                                 fontSize: 10,
                                                 color: Colors.black,
-                                                fontWeight: FontWeight
-                                                    .bold // Regular text color
+                                                fontWeight: FontWeight.bold // Regular text color
                                                 ),
                                           ),
                                         ])),
@@ -293,8 +271,7 @@ class SubCategoryExploreScreen extends StatelessWidget {
                           },
                           backgroundColor: AppColor.mainAppColor,
                           textColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                           borderRadius: BorderRadius.circular(10),
                           fixedWidth: 0.80, // 80% of the screen width
                         ),

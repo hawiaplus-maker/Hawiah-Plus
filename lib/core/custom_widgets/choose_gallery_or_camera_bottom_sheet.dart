@@ -1,10 +1,5 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
-
-
 
 class ChooseGalleryOrCameraBottomSheet extends StatelessWidget {
   final void Function()? onCamera;
@@ -87,7 +82,7 @@ class ChooseGalleryOrCameraBottomSheet extends StatelessWidget {
                   //     ],
                   //   ),
                   // ),
-                  
+
                   const SizedBox(height: 15),
                 ],
               ),

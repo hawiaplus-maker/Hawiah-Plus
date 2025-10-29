@@ -44,9 +44,9 @@ class AppRouters {
             args: args,
           ),
         );
-      case RequistHawiaScreen.routeName:
+      case RequestHawiahScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => RequistHawiaScreen(
+          builder: (_) => RequestHawiahScreen(
             args: args,
           ),
         );
@@ -64,7 +64,13 @@ class AppRouters {
         );
       case LayoutScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => LayoutScreen(),
+          builder: (_) => MultiBlocProvider(providers: [
+            BlocProvider<OrderCubit>(
+              create: (context) => OrderCubit()
+                ..getOrders(0)
+                ..getOrders(1),
+            ),
+          ], child: LayoutScreen()),
         );
       case SingleChatScreen.routeName:
         return MaterialPageRoute(

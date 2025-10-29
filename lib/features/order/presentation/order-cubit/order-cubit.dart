@@ -86,6 +86,10 @@ class OrderCubit extends Cubit<OrderState> {
       } else {
         oldOrders = result.data ?? [];
       }
+      if (result.data == null || result.data!.isEmpty) {
+        emit(OrderEmpty());
+        return;
+      }
 
       emit(OrderSuccess(ordersModel: result));
     } else if (_ordersResponse.state == ResponseState.unauthorized) {
@@ -221,7 +225,7 @@ class OrderCubit extends Cubit<OrderState> {
   // =================== get payment link ====================
   Future<void> getPaymentLink({
     required int orderId,
-    required  Function(String) onSuccess,
+    required Function(String) onSuccess,
   }) async {
     NavigatorMethods.loading();
     final response = await ApiHelper.instance.get(

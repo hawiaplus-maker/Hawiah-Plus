@@ -10,20 +10,20 @@ import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/home/execution/screen/nearby_service_provider_screen.dart';
 import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
-import 'package:hawiah_client/features/home/presentation/screens/nearby_service_provider_screen.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/location-item-widget.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_state.dart';
 import 'package:hawiah_client/features/location/presentation/model/address_model.dart';
 import 'package:hawiah_client/features/location/presentation/screens/add-new-location-screen.dart';
 
-class ChoooseAddressScreenArgs {
+class ChooseAddressScreenArgs {
   final int catigoryId;
   final int serviceProviderId;
   final ShowCategoriesModel showCategoriesModel;
 
-  ChoooseAddressScreenArgs(
+  ChooseAddressScreenArgs(
       {required this.showCategoriesModel,
       required this.catigoryId,
       required this.serviceProviderId});
@@ -31,7 +31,7 @@ class ChoooseAddressScreenArgs {
 
 class ChooseAddressScreen extends StatefulWidget {
   static const String routeName = "choose-location-screen";
-  final ChoooseAddressScreenArgs args;
+  final ChooseAddressScreenArgs args;
   const ChooseAddressScreen({super.key, required this.args});
 
   @override
@@ -70,8 +70,7 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                   child: CustomButton(
                     text: "add_new_address".tr(),
                     onPressed: () {
-                      NavigatorMethods.pushNamed(
-                          context, AddNewLocationScreen.routeName,
+                      NavigatorMethods.pushNamed(context, AddNewLocationScreen.routeName,
                           arguments: AddNewLocationScreenArgs(
                         onAddressAdded: () {
                           addressCubit.getaddresses();
@@ -108,8 +107,7 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                     title: "add_new_address".tr(),
                     address: "",
                     isSelected: false,
-                    onTap: () => NavigatorMethods.pushNamed(
-                        context, AddNewLocationScreen.routeName,
+                    onTap: () => NavigatorMethods.pushNamed(context, AddNewLocationScreen.routeName,
                         arguments: AddNewLocationScreenArgs(
                       onAddressAdded: () {
                         addressCubit.getaddresses();
@@ -122,32 +120,33 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
           ),
           bottomNavigationBar: addressCubit.addresses.isEmpty == true
               ? SizedBox()
-              : Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  child: CustomButton(
-                    text: "confirm_address".tr(),
-                    onPressed: () {
-                      if (address == null) {
-                        return CommonMethods.showError(
-                            message: AppLocaleKey.youHaveToChooseAddress.tr());
-                      } else {
-                        NavigatorMethods.pushNamed(
-                          context,
-                          NearbyServiceProviderScreen.routeName,
-                          arguments: NearbyServiceProviderArguments(
-                              showCategoriesModel:
-                                  widget.args.showCategoriesModel,
-                              catigoryId: widget.args.catigoryId,
-                              serviceProviderId: widget.args.serviceProviderId,
-                              address: address!),
-                        );
-                      }
-                    },
-                  ),
-                ),
+              : _buildConfirmOrderButton(context),
         );
       }),
+    );
+  }
+
+  Padding _buildConfirmOrderButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: CustomButton(
+        text: "confirm_address".tr(),
+        onPressed: () {
+          if (address == null) {
+            return CommonMethods.showError(message: AppLocaleKey.youHaveToChooseAddress.tr());
+          } else {
+            NavigatorMethods.pushNamed(
+              context,
+              NearbyServiceProviderScreen.routeName,
+              arguments: NearbyServiceProviderArguments(
+                  showCategoriesModel: widget.args.showCategoriesModel,
+                  catigoryId: widget.args.catigoryId,
+                  serviceProviderId: widget.args.serviceProviderId,
+                  address: address!),
+            );
+          }
+        },
+      ),
     );
   }
 }
