@@ -78,26 +78,28 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
                 if (state is OrderError) {
                   return const Center(child: NoDataWidget());
                 }
-
-                return TabBarView(
-                  controller: _tabController,
-                  children: [
-                    OrderTapList(
-                      orders: state is OrderLoading &&
-                              (context.read<OrderCubit>().currentOrders == null)
-                          ? []
-                          : context.read<OrderCubit>().currentOrders ?? [],
-                      isCurrent: true,
-                    ),
-                    OrderTapList(
-                      orders:
-                          state is OrderLoading && (context.read<OrderCubit>().oldOrders == null)
-                              ? []
-                              : context.read<OrderCubit>().oldOrders ?? [],
-                      isCurrent: false,
-                    ),
-                  ],
-                );
+                if (state is OrderSuccess) {
+                  return TabBarView(
+                    controller: _tabController,
+                    children: [
+                      OrderTapList(
+                        orders: state is OrderLoading &&
+                                (context.read<OrderCubit>().currentOrders == null)
+                            ? []
+                            : context.read<OrderCubit>().currentOrders ?? [],
+                        isCurrent: true,
+                      ),
+                      OrderTapList(
+                        orders:
+                            state is OrderLoading && (context.read<OrderCubit>().oldOrders == null)
+                                ? []
+                                : context.read<OrderCubit>().oldOrders ?? [],
+                        isCurrent: false,
+                      ),
+                    ],
+                  );
+                }
+                return const Center(child: NoDataWidget());
               },
             ),
           ),

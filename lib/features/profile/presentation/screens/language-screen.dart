@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/features/app-language/presentation/controllers/app-language-cubit/app-language-cubit.dart';
-import 'package:hawiah_client/main.dart';
+import 'package:hawiah_client/hawiah_plus_app.dart';
 
 class LanguageScreen extends StatelessWidget {
   const LanguageScreen({super.key});
@@ -28,7 +28,7 @@ class LanguageScreen extends StatelessWidget {
               appLanguageCubit.changeLanguage(language: "arabic");
               await context.setLocale(const Locale("ar"));
               appLanguageCubit.changeRebuild();
-              MyApp.setMyAppState(context);
+              HawiahPlusApp.setMyAppState(context);
             },
           ),
           languageItem(
@@ -38,7 +38,7 @@ class LanguageScreen extends StatelessWidget {
               appLanguageCubit.changeLanguage(language: "english");
               await context.setLocale(const Locale("en"));
               appLanguageCubit.changeRebuild();
-              MyApp.setMyAppState(context);
+              HawiahPlusApp.setMyAppState(context);
             },
             isHaveLine: false,
           ),

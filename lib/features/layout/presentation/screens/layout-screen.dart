@@ -1,15 +1,10 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/chat-screen.dart';
-import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/screens/home-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/orders-screen.dart';
-import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/profile-screen.dart';
-import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 
 class LayoutScreen extends StatefulWidget {
   static const routeName = '/layout-screen';
@@ -20,17 +15,6 @@ class LayoutScreen extends StatefulWidget {
 }
 
 class _LayoutScreenState extends State<LayoutScreen> {
-  @override
-  void initState() {
-    Future.wait([
-      context.read<HomeCubit>().getCategories(),
-      if (HiveMethods.isVisitor() == false) context.read<ProfileCubit>().fetchProfile(),
-      context.read<SettingCubit>().getsetting()
-    ]);
-
-    super.initState();
-  }
-
   int selectedIndex = 0;
 
   List<Widget> get _screens => [
@@ -54,7 +38,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
         color: Color(0xffE5E7FE),
         buttonBackgroundColor: const Color(0xff2B03F0),
         index: selectedIndex,
-        
+
         items: [
           Image.asset(
             "assets/icons/home_icon.png",

@@ -1,29 +1,83 @@
+import 'dart:convert';
+
+OrdersModel ordersModelFromJson(String str) =>
+    OrdersModel.fromJson(json.decode(str));
+
+String ordersModelToJson(OrdersModel data) => json.encode(data.toJson());
+
 class OrdersModel {
   bool? success;
   String? message;
-  List<Data>? data;
+  OrdersData? data;
 
   OrdersModel({this.success, this.message, this.data});
 
-  OrdersModel.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
-    message = json['message'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
+  factory OrdersModel.fromJson(Map<String, dynamic> json) {
+    return OrdersModel(
+      success: json['success'],
+      message: json['message'],
+      data: json['data'] != null ? OrdersData.fromJson(json['data']) : null,
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
+    final Map<String, dynamic> map = {};
+    map['success'] = success;
+    map['message'] = message;
+    if (data != null) map['data'] = data!.toJson();
+    return map;
+  }
+}
+
+class OrdersData {
+  List<Data>? data;
+  Pagination? pagination;
+
+  OrdersData({this.data, this.pagination});
+
+  factory OrdersData.fromJson(Map<String, dynamic> json) {
+    return OrdersData(
+      data: (json['data'] as List?)
+          ?.map((v) => Data.fromJson(v))
+          .toList(),
+      pagination: json['pagination'] != null
+          ? Pagination.fromJson(json['pagination'])
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> map = {};
+    if (data != null) map['data'] = data!.map((v) => v.toJson()).toList();
+    if (pagination != null) map['pagination'] = pagination!.toJson();
+    return map;
+  }
+}
+
+class Pagination {
+  int? currentPage;
+  int? lastPage;
+  int? perPage;
+  int? total;
+
+  Pagination({this.currentPage, this.lastPage, this.perPage, this.total});
+
+  factory Pagination.fromJson(Map<String, dynamic> json) {
+    return Pagination(
+      currentPage: json['current_page'],
+      lastPage: json['last_page'],
+      perPage: json['per_page'],
+      total: json['total'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> map = {};
+    map['current_page'] = currentPage;
+    map['last_page'] = lastPage;
+    map['per_page'] = perPage;
+    map['total'] = total;
+    return map;
   }
 }
 
@@ -92,76 +146,80 @@ class Data {
     this.invoice,
   });
 
-  Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    referenceNumber = json['reference_number'];
-    address = json['address'];
-    latitude = double.tryParse(json['latitude'].toString());
-    longitude = double.tryParse(json['longitude'].toString());
-    orderStatus = json['order_status'];
-    paidStatus = json['paid_status'];
-    status = Map<String, String>.from(json['status']);
-    priceId = json['price_id'];
-    duration = json['duration'];
-    totalPrice = json['total_price'];
-    fromDate = json['from_date'];
-    toDate = json['to_date'];
-    discount = json['discount'];
-    discountValue = json['discount_value'];
-    createdAt = json['created_at'];
-    product = json['product'];
-    image = json['image'];
-    driver = json['driver'];
-    driverId = json['driver_id'];
-    driverMobile = json['driver_mobile'];
-    otp = json['otp'];
-    user = json['user'];
-    userId = json['user_id'];
-    userMobile = json['user_mobile'];
-    userImage = json['user_image'];
-    fcmToken = json['fcm_token'];
-    contract = json['contract'];
-    invoice = json['invoice'];
-    vehicles = (json['vehicles'] as List?)?.map((v) => VehicleModel.fromJson(v)).toList();
+  factory Data.fromJson(Map<String, dynamic> json) {
+    return Data(
+      id: json['id'],
+      referenceNumber: json['reference_number'],
+      address: json['address'],
+      latitude: double.tryParse(json['latitude']?.toString() ?? ''),
+      longitude: double.tryParse(json['longitude']?.toString() ?? ''),
+      orderStatus: json['order_status'],
+      paidStatus: json['paid_status'],
+      status: json['status'] != null
+          ? Map<String, String>.from(json['status'])
+          : null,
+      priceId: json['price_id'],
+      duration: json['duration'],
+      totalPrice: json['total_price'],
+      fromDate: json['from_date'],
+      toDate: json['to_date'],
+      discount: json['discount'],
+      discountValue: json['discount_value'],
+      createdAt: json['created_at'],
+      product: json['product'],
+      image: json['image'],
+      driver: json['driver'],
+      driverId: json['driver_id'],
+      driverMobile: json['driver_mobile'],
+      otp: json['otp'],
+      user: json['user'],
+      userId: json['user_id'],
+      userMobile: json['user_mobile'],
+      userImage: json['user_image'],
+      fcmToken: json['fcm_token'],
+      contract: json['contract'],
+      invoice: json['invoice'],
+      vehicles: (json['vehicles'] as List?)
+          ?.map((v) => VehicleModel.fromJson(v))
+          .toList(),
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {};
-    data['id'] = this.id;
-    data['reference_number'] = this.referenceNumber;
-    data['address'] = this.address;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
-    data['order_status'] = this.orderStatus;
-    data['paid_status'] = this.paidStatus;
-    data['status'] = this.status;
-    data['price_id'] = this.priceId;
-    data['duration'] = this.duration;
-    data['total_price'] = this.totalPrice;
-    data['from_date'] = this.fromDate;
-    data['to_date'] = this.toDate;
-    data['discount'] = this.discount;
-    data['discount_value'] = this.discountValue;
-    data['created_at'] = this.createdAt;
-    data['product'] = this.product;
-    data['image'] = this.image;
-    data['driver'] = this.driver;
-    data['driver_id'] = this.driverId;
-    data['driver_mobile'] = this.driverMobile;
-    data['otp'] = this.otp;
-    data['user'] = this.user;
-    data['user_id'] = this.userId;
-    data['user_mobile'] = this.userMobile;
-    data['user_image'] = this.userImage;
-    data['fcm_token'] = this.fcmToken;
-    data['contract'] = this.contract;
-    data['invoice'] = this.invoice;
-
-    if (this.vehicles != null) {
-      data['vehicles'] = this.vehicles!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> map = {};
+    map['id'] = id;
+    map['reference_number'] = referenceNumber;
+    map['address'] = address;
+    map['latitude'] = latitude;
+    map['longitude'] = longitude;
+    map['order_status'] = orderStatus;
+    map['paid_status'] = paidStatus;
+    map['status'] = status;
+    map['price_id'] = priceId;
+    map['duration'] = duration;
+    map['total_price'] = totalPrice;
+    map['from_date'] = fromDate;
+    map['to_date'] = toDate;
+    map['discount'] = discount;
+    map['discount_value'] = discountValue;
+    map['created_at'] = createdAt;
+    map['product'] = product;
+    map['image'] = image;
+    map['driver'] = driver;
+    map['driver_id'] = driverId;
+    map['driver_mobile'] = driverMobile;
+    map['otp'] = otp;
+    map['user'] = user;
+    map['user_id'] = userId;
+    map['user_mobile'] = userMobile;
+    map['user_image'] = userImage;
+    map['fcm_token'] = fcmToken;
+    map['contract'] = contract;
+    map['invoice'] = invoice;
+    if (vehicles != null) {
+      map['vehicles'] = vehicles!.map((v) => v.toJson()).toList();
     }
-
-    return data;
+    return map;
   }
 }
 
@@ -184,12 +242,12 @@ class VehicleModel {
 
   factory VehicleModel.fromJson(Map<String, dynamic> json) {
     return VehicleModel(
-      plateLetters: json['plate_letters'],
-      plateNumbers: json['plate_numbers'],
-      carType: json['car_type'],
-      carBrand: json['car_brand'],
-      carModel: json['car_model'],
-      carYear: json['car_year'],
+      plateLetters: json['plate_letters'] ?? '',
+      plateNumbers: json['plate_numbers'] ?? '',
+      carType: json['car_type'] ?? '',
+      carBrand: json['car_brand'] ?? '',
+      carModel: json['car_model'] ?? '',
+      carYear: json['car_year'] ?? '',
     );
   }
 
@@ -211,52 +269,17 @@ class Status {
 
   Status({this.en, this.ar});
 
-  Status.fromJson(Map<String, dynamic> json) {
-    en = json['en'];
-    ar = json['ar'];
+  factory Status.fromJson(Map<String, dynamic> json) {
+    return Status(
+      en: json['en'],
+      ar: json['ar'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['en'] = this.en;
-    data['ar'] = this.ar;
-    return data;
-  }
-}
-
-class Vehicles {
-  String? plateLetters;
-  String? plateNumbers;
-  String? carType;
-  String? carBrand;
-  String? carModel;
-  String? carYear;
-
-  Vehicles(
-      {this.plateLetters,
-      this.plateNumbers,
-      this.carType,
-      this.carBrand,
-      this.carModel,
-      this.carYear});
-
-  Vehicles.fromJson(Map<String, dynamic> json) {
-    plateLetters = json['plate_letters'];
-    plateNumbers = json['plate_numbers'];
-    carType = json['car_type'];
-    carBrand = json['car_brand'];
-    carModel = json['car_model'];
-    carYear = json['car_year'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['plate_letters'] = this.plateLetters;
-    data['plate_numbers'] = this.plateNumbers;
-    data['car_type'] = this.carType;
-    data['car_brand'] = this.carBrand;
-    data['car_model'] = this.carModel;
-    data['car_year'] = this.carYear;
-    return data;
+    final Map<String, dynamic> map = {};
+    map['en'] = en;
+    map['ar'] = ar;
+    return map;
   }
 }

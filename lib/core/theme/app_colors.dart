@@ -4,20 +4,20 @@ import 'app_theme.dart';
 
 class AppColor {
   static Color get mainAppColor => AppTheme.getByTheme(
-        light: const Color(0xff2204AE),
-        dark: const Color(0xff2204AE),
+        light: const Color(0xFF2AD352),
+        dark: const Color(0xff2AD352),
       );
   static Color get secondAppColor => AppTheme.getByTheme(
-        light: const Color(0xffF8E4B6),
-        dark: const Color(0xffF8E4B6),
+        light: const Color(0xff0F172A),
+        dark: const Color(0xff0F172A),
       );
   static Color get darkSecondAppColor => AppTheme.getByTheme(
         light: const Color(0xffFFCB97),
         dark: const Color(0xffFFCB97),
       );
   static Color get darkMainAppColor => AppTheme.getByTheme(
-        light: const Color(0xff1A3C98),
-        dark: const Color(0xff1A3C98),
+        light: const Color(0xff2AD352),
+        dark: const Color(0xff2AD352),
       );
   static Color get lightSecondAppColor => AppTheme.getByTheme(
         light: const Color(0xffF3F1EB),
@@ -40,12 +40,12 @@ class AppColor {
         dark: const Color(0xffF7F7FC),
       );
   static Color get bottomNavColor => AppTheme.getByTheme(
-        light: const Color(0xff2204AE),
-        dark: const Color(0xff2204AE),
+        light: const Color(0xFF2AD352),
+        dark: const Color(0xFF2AD352),
       );
   static Color get mainButtonColor => AppTheme.getByTheme(
-        light: const Color(0xff2204AE),
-        dark: const Color(0xff2204AE),
+        light: const Color(0xFF2AD352),
+        dark: const Color(0xFF2AD352),
       );
   static Color get secondButtonColor => AppTheme.getByTheme(
         light: const Color(0xffFFFFFF),
@@ -56,24 +56,24 @@ class AppColor {
         dark: const Color(0xFFA4A4A4),
       );
   static Color get textPrimaryColor => AppTheme.getByTheme(
-        light: const Color(0xff0A141B),
-        dark: const Color(0xff0A141B),
+        light: const Color(0xff2C2C2C),
+        dark: const Color(0xff2C2C2C),
       );
   static Color get textGrayColor => AppTheme.getByTheme(
-        light: const Color(0xff4A4A4A),
-        dark: const Color(0xff4A4A4A),
+        light: const Color(0xff6E6E6E),
+        dark: const Color(0xff6E6E6E),
       );
   static Color get textSecondaryColor => AppTheme.getByTheme(
-        light: const Color(0xff6C6C6C),
-        dark: const Color(0xff6C6C6C),
+        light: const Color(0xff6E6E6E),
+        dark: const Color(0xff6E6E6E),
       );
   static Color get textTertiaryColor => AppTheme.getByTheme(
-        light: const Color(0xffAEAEAE),
-        dark: const Color(0xffAEAEAE),
+        light: const Color(0xff6E6E6E),
+        dark: const Color(0xff6E6E6E),
       );
   static Color get greyColor => AppTheme.getByTheme(
-        light: const Color(0xffA4A4A4),
-        dark: const Color(0xffA4A4A4),
+        light: const Color(0xff6E6E6E),
+        dark: const Color(0xff6E6E6E),
       );
   static Color get grey50Color => AppTheme.getByTheme(
         light: const Color(0xffF8F9FA),

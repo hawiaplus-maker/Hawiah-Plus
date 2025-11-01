@@ -46,56 +46,67 @@ class OrderCubit extends Cubit<OrderState> {
     state: ResponseState.sleep,
     data: null,
   );
+int _currentPage = 1;
+int _lastPage = 1;
+bool _isLoadingMore = false;
+
+bool get canLoadMore => _currentPage < _lastPage;
 
   ApiResponse get ordersResponse => _ordersResponse;
 
-  Future<void> getOrders(int orderStatus) async {
-    emit(OrderLoading());
+Future<void> getOrders({
+  required int orderStatus,
+  int page = 1,
+  bool isLoadMore = false,
+}) async {
+  if (isLoadMore && _isLoadingMore) return; // منع تكرار الطلب
+  if (isLoadMore) _isLoadingMore = true;
 
-    // ✅ لا تجلب البيانات من الـ API إن كانت موجودة مسبقاً
-    if (orderStatus == 0 && currentOrders != null) {
-      _orders = OrdersModel(data: currentOrders);
-      emit(OrderSuccess(ordersModel: _orders));
-      return;
-    }
+  emit(OrderLoading());
 
-    if (orderStatus == 1 && oldOrders != null) {
-      _orders = OrdersModel(data: oldOrders);
-      emit(OrderSuccess(ordersModel: _orders));
-      return;
-    }
+  final response = await ApiHelper.instance.get(
+    Urls.orders(orderStatus),
+    queryParameters: {
+      "order_status": orderStatus,
+      "page": page,
+    },
+  );
 
-    _ordersResponse = ApiResponse(
-      state: ResponseState.loading,
-      data: null,
-    );
+  if (response.state == ResponseState.complete) {
+ 
+  final result = OrdersModel.fromJson(response.data);
+final newOrders = result.data?.data ?? [];
+final pagination = result.data?.pagination;
 
-    emit(OrderLoading());
 
-    _ordersResponse = await ApiHelper.instance
-        .get(Urls.orders(orderStatus), queryParameters: {"order_status": orderStatus});
-
-    emit(OrderChange());
-
-    if (_ordersResponse.state == ResponseState.complete) {
-      final result = OrdersModel.fromJson(_ordersResponse.data);
+    if (!isLoadMore) {
       _orders = result;
+      _currentPage = pagination?.currentPage ?? 1;
+      _lastPage = pagination?.lastPage ?? 1;
 
       if (orderStatus == 0) {
-        currentOrders = result.data ?? [];
+        currentOrders = newOrders;
       } else {
-        oldOrders = result.data ?? [];
+        oldOrders = newOrders;
       }
-      if (result.data == null || result.data!.isEmpty) {
-        emit(OrderEmpty());
-        return;
+    } else {
+      _currentPage++;
+      if (orderStatus == 0) {
+        currentOrders?.addAll(newOrders);
+      } else {
+        oldOrders?.addAll(newOrders);
       }
-
-      emit(OrderSuccess(ordersModel: result));
-    } else if (_ordersResponse.state == ResponseState.unauthorized) {
-      emit(OrderError());
     }
+
+    emit(OrderSuccess(ordersModel: _orders!));
+  } else if (response.state == ResponseState.unauthorized) {
+    emit(OrderError());
+  } else {
+    emit(OrderError());
   }
+
+  if (isLoadMore) _isLoadingMore = false;
+}
 
   //================== get nearby provider ====================
   void initialNearbyServiceProvider() {

@@ -43,7 +43,7 @@ class CustomAppBar extends PreferredSize {
             automaticallyImplyLeading: automaticallyImplyLeading,
             shadowColor: shadowColor,
             centerTitle: centerTitle,
-            title: title ?? Text(titleText ?? "", style: AppTextStyle.text18_700),
+            title: title ?? Text(titleText ?? "", style: AppTextStyle.text18_700.copyWith(fontFamily: "Cairo"), ),
             leading: leading ??
                 (automaticallyImplyLeading && Navigator.canPop(context)
                     ? IconButton(
