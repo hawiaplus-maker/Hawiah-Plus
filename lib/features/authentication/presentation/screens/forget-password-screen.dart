@@ -43,13 +43,11 @@ class ForgetPasswordScreen extends StatelessWidget {
                       children: [
                         Text(
                           "forgot_password".tr(),
-                          style:
-                              TextStyle(fontSize: 25.sp, color: Colors.black),
+                          style: TextStyle(fontSize: 25.sp, color: Colors.black),
                         ),
                         Text(
                           "setPasswordMessage".tr(),
-                          style: TextStyle(
-                              fontSize: 15.sp, color: Color(0xff979797)),
+                          style: TextStyle(fontSize: 15.sp, color: Color(0xff979797)),
                         ),
                       ],
                     ),
