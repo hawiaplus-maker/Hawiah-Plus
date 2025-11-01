@@ -6,9 +6,9 @@ import 'package:gap/gap.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_select/custom_select_item.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_toast.dart';
 import 'package:hawiah_client/core/routes/app_routers_import.dart';
+import 'package:hawiah_client/hawiah_plus_app.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
-import '../../main.dart';
 import '../extension/context_extension.dart';
 import '../hive/hive_methods.dart';
 import '../locale/app_locale_key.dart';
@@ -217,9 +217,7 @@ class CommonMethods {
       toastBuilder: (context) => CustomToast(
         title: title,
         message: message,
-        type: apiResponse?.state == ResponseState.offline
-            ? ToastType.offline
-            : ToastType.error,
+        type: apiResponse?.state == ResponseState.offline ? ToastType.offline : ToastType.error,
         backgroundColor: backgroundColor,
         icon: icon,
         textColor: textColor,
@@ -279,7 +277,7 @@ class CommonMethods {
               HiveMethods.updateLang(const Locale('ar'));
               context.setLocale(const Locale('ar'));
               onTap.call();
-              MyApp.setMyAppState(context);
+              HawiahPlusApp.setMyAppState(context);
               Navigator.pop(context);
             },
             child: Text(
@@ -298,7 +296,7 @@ class CommonMethods {
               HiveMethods.updateLang(const Locale('en'));
               context.setLocale(const Locale('en'));
               onTap.call();
-              MyApp.setMyAppState(context);
+              HawiahPlusApp.setMyAppState(context);
               Navigator.pop(context);
             },
             child: Text(

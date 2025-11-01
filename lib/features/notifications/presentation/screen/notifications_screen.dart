@@ -7,7 +7,6 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
-import 'package:hawiah_client/features/notifications/model/notifications_model.dart';
 import 'package:hawiah_client/features/notifications/presentation/cubit/notifications_cubit.dart';
 import 'package:hawiah_client/features/notifications/presentation/cubit/notifications_state.dart';
 
@@ -38,7 +37,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       body: BlocBuilder<NotificationsCubit, NotificationsState>(
         builder: (context, state) {
           final cubit = context.read<NotificationsCubit>();
-          final notifications = cubit.setting?.notifications.data;
+          final notifications = cubit.setting?.notifications;
 
           if (state is NotificationsLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -70,13 +69,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               itemBuilder: (context, index) {
                 final item = notifications[index];
                 final locale = context.locale.languageCode;
-                final title = locale == 'ar'
-                    ? arValues.reverse[item.title.ar]
-                    : enValues.reverse[item.title.en];
+                final title = locale == 'ar' ? item.title.ar : item.title.en;
 
-                final message = locale == 'ar'
-                    ? arValues.reverse[item.message.ar]
-                    : enValues.reverse[item.message.en];
+                final message = locale == 'ar' ? item.message.ar : item.message.en;
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
