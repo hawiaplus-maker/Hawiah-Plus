@@ -3,8 +3,7 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 
 ThemeData appTHeme() {
   return ThemeData(
-      fontFamily: 'Cairo',
-     
+      fontFamily: 'DINNextLTArabic',
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.white,
         elevation: 0,
