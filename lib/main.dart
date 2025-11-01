@@ -29,7 +29,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   await Hive.initFlutter();
   await Hive.openBox('app');
 
@@ -146,7 +145,7 @@ class _MyAppState extends State<MyApp> {
 
   ThemeData appTHeme() {
     return ThemeData(
-        fontFamily: 'Cairo',
+        fontFamily: 'DINNextLTArabic',
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
         ),
