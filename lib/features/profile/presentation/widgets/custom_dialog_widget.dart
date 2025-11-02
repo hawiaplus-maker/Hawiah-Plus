@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 
 class CustomConfirmDialog extends StatelessWidget {
@@ -22,7 +23,7 @@ class CustomConfirmDialog extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
+          color: AppColor.whiteColor,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -36,7 +37,7 @@ class CustomConfirmDialog extends StatelessWidget {
                   width: 25,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: AppColor.whiteColor,
                     border: Border.all(color: Colors.black),
                   ),
                   child: Icon(

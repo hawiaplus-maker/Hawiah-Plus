@@ -243,5 +243,7 @@
    "homePage": "الرئيسية",
    "messages": "الرسائل",
    "ordersPage": "طلباتي",
-   "saveChanges": "حفظ التغييرات"
+   "saveChanges": "حفظ التغييرات",
+   "saveChangesSuccess": "تم حفظ التغييرات بنجاح",
+   "somethingWentWrong": "حدث خطأ ما ؛ حاول مرة أخري"
 }

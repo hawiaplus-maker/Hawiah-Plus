@@ -120,7 +120,7 @@ class _UserProfileState extends State<UserProfile> {
               context: context,
               barrierDismissible: false,
               builder: (ctx) => CustomConfirmDialog(
-                content: "تم حفظ التغييرات بنجاح",
+                content: AppLocaleKey.saveChangesSuccess.tr(),
                 image: AppImages.successSvg,
               ),
             );
@@ -129,7 +129,7 @@ class _UserProfileState extends State<UserProfile> {
               context: context,
               barrierDismissible: false,
               builder: (ctx) => CustomConfirmDialog(
-                content: 'حدث خطأ ما ؛ حاول مرة أخري',
+                content: AppLocaleKey.somethingWentWrong.tr(),
                 image: AppImages.errorSvg,
               ),
             );
@@ -154,7 +154,7 @@ class _UserProfileState extends State<UserProfile> {
                       onPressed: _onUpdatePressed,
                       child: Text(
                         AppLocaleKey.saveChanges.tr(),
-                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                        style: AppTextStyle.text16_600.copyWith(color: AppColor.whiteColor),
                       ),
                     ),
                     const SizedBox(height: 20),

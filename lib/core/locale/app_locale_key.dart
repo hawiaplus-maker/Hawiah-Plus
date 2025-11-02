@@ -133,4 +133,6 @@ class AppLocaleKey {
   static const String messages = 'messages';
   static const String ordersPage = 'ordersPage';
   static const String saveChanges = 'saveChanges';
+  static const String saveChangesSuccess = 'saveChangesSuccess';
+  static const String somethingWentWrong = 'somethingWentWrong';
 }
