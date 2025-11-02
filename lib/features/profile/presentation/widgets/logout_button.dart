@@ -2,11 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
-import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 
 class LogoutButton extends StatelessWidget {
   const LogoutButton({super.key});
@@ -16,21 +17,27 @@ class LogoutButton extends StatelessWidget {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthError) {
-          Fluttertoast.showToast(msg: state.message, backgroundColor: Colors.redAccent);
+          CommonMethods.showError(message: state.message);
         } else if (state is AuthLoading) {
           CustomLoading();
         } else if (state is AuthSuccess) {
-          Fluttertoast.showToast(msg: state.message, backgroundColor: Colors.green);
+          CommonMethods.showToast(message: state.message);
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (_) => const LoginScreen()),
+            MaterialPageRoute(builder: (_) => const ValidateMobileScreen()),
             (route) => false,
           );
         }
       },
       builder: (context, state) {
         return InkWell(
-          onTap: () => AuthCubit.get(context).logout(),
+          onTap: () {
+            CommonMethods.showChooseDialog(
+              message: AppLocaleKey.didYouWantToLogout.tr(),
+              context,
+              onPressed: () => AuthCubit.get(context).logout(),
+            );
+          },
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
             child: Row(

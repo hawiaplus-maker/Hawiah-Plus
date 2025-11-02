@@ -191,6 +191,7 @@ class CommonMethods {
     int seconds = 3,
   }) {
     BotToast.showCustomText(
+      align: Alignment.topCenter,
       duration: Duration(seconds: seconds),
       toastBuilder: (cancelFunc) => CustomToast(
         type: type,
@@ -213,6 +214,7 @@ class CommonMethods {
     int seconds = 3,
   }) {
     BotToast.showCustomText(
+      align: Alignment.topCenter,
       duration: Duration(seconds: seconds),
       toastBuilder: (context) => CustomToast(
         title: title,

@@ -29,7 +29,7 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
   @override
   void initState() {
     super.initState();
-    userId = context.read<ProfileCubit>().user.id.toString();
+    userId = context.read<ProfileCubit>().user!.id.toString();
     chatCubit = ChatCubit();
     chatCubit.fetchRecentChats(
       currentId: userId,

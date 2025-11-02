@@ -16,6 +16,7 @@ class Urls {
   //! ===================> Live Api <=================== !//
   static const String baseUrl = 'https://hawia-sa.com/api/';
   static const String login = '${baseUrl}login';
+  static const String validateMobile = '${baseUrl}validate-mobile';
   static const String settings = '${baseUrl}settings';
 
   static const String logout = '${baseUrl}logout';

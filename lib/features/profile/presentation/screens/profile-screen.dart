@@ -20,6 +20,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isGuest = HiveMethods.getToken() == null;
+    final profileCubit = context.watch<ProfileCubit>();
     final user = isGuest
         ? UserProfileModel(
             name: AppLocaleKey.guest.tr(),
@@ -32,7 +33,16 @@ class ProfileScreen extends StatelessWidget {
             city: "",
             id: 0,
           )
-        : context.read<ProfileCubit>().user;
+        : profileCubit.user;
+
+    // لو المستخدم مش ضيف ولسه البيانات مش جاهزة
+    if (!isGuest && user == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -58,7 +68,7 @@ class ProfileScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ProfileHeaderWidget(user: user, isGuest: isGuest),
+            ProfileHeaderWidget(user: user!, isGuest: isGuest),
             SizedBox(height: 20.h),
             ProfileMenuList(
               isGuest: isGuest,

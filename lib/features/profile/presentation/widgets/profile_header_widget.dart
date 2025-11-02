@@ -9,6 +9,7 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/model/user_profile_model.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
 
@@ -64,7 +65,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                       context,
                       onPressed: () {
                         Navigator.pop(context);
-                        NavigatorMethods.pushNamedAndRemoveUntil(context, LoginScreen.routeName);
+                        NavigatorMethods.pushNamedAndRemoveUntil(context, ValidateMobileScreen.routeName);
                       },
                     )
                   : Navigator.push(

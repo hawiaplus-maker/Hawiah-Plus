@@ -13,7 +13,7 @@ class AppTextStyle {
       );
 
   static TextStyle get buttonStyle => TextStyle(
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: FontWeight.w500,
         color: AppColor.buttonTextColor,
       );
@@ -37,8 +37,8 @@ class AppTextStyle {
 
   static TextStyle get formTitleStyle => TextStyle(
         fontSize: 16,
-        fontWeight: FontWeight.w500,
-        color: AppColor.textGrayColor,
+        fontWeight: FontWeight.w700,
+        color: AppColor.textBlackColor,
       );
 
   static TextStyle get otpStyle => TextStyle(
@@ -82,7 +82,7 @@ class AppTextStyle {
   static TextStyle get text18_500 => TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w500,
-        color: AppColor.textPrimaryColor,
+        color: AppColor.textBlackColor,
       );
   static TextStyle get text18M_500 => TextStyle(
         fontSize: 18,

@@ -12,7 +12,7 @@ import 'package:hawiah_client/features/profile/presentation/screens/model/user_p
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit() : super(ProfileInitial());
 
-  late UserProfileModel user;
+  UserProfileModel? user;
 
   Future<void> fetchProfile({
     VoidCallback? onSuccess,
@@ -26,7 +26,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         user = UserProfileModel.fromJson(
             response.data); // Access 'message' from response
         log("Profile fetched successfully");
-        emit(ProfileLoaded(user)); // Only emit once
+        emit(ProfileLoaded(user!)); // Only emit once
         onSuccess?.call(); // Call success callback after state emission
       } else if (response.state == ResponseState.error ||
           response.state == ResponseState.unauthorized) {

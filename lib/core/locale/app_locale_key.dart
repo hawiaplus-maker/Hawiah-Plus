@@ -129,4 +129,13 @@ class AppLocaleKey {
   static const String executeorder = "executeorder";
   static const String payNow = "payNow";
   static const String youhaveorder = "youhaveorder";
+  static const String phoneHint = "phoneHint";
+  static const String loginToYourAccount = "loginToYourAccount";
+  static const String rememberMe = "rememberMe";
+  static const String phoneNumber = "phone_number";
+  static const String welcomeToHawiah = "welcomeToHawiah";
+  static const String didYouWantToLogout = "didYouWantToLogout";
+  static const String check = "check";
+  static const String otpCode = "otpCode";
+  static const String createNewPassword = "createNewPassword";
 }

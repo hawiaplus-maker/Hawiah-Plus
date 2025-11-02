@@ -4,7 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/routes/app_routers_import.dart';
-import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
@@ -45,8 +46,6 @@ class ApiHelper {
 
     return _instance!;
   }
-
-
 
   MediaType appMediaType(String path) {
     List<String> list = "${lookupMimeType(path)}".split('/');
@@ -421,9 +420,9 @@ class ApiHelper {
         Future.delayed(Duration.zero, () {
           HiveMethods.deleteToken();
           if (HiveMethods.isVisitor() == false) {
-            AppRouters.navigatorKey.currentState?.pushNamedAndRemoveUntil(
-              LoginScreen.routeName,
-              (route) => false,
+            NavigatorMethods.pushNamedAndRemoveUntil(
+              AppRouters.navigatorKey.currentContext!,
+              ValidateMobileScreen.routeName,
             );
           }
         });

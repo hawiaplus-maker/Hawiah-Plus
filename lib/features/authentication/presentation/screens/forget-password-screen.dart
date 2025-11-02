@@ -2,26 +2,29 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
-import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
-import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/verification-otp-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/phone-input-widget.dart';
 
 import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
+  static const String routeName = '/ForgetPasswordScreen';
   const ForgetPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(
-        context,
-      ),
+      appBar: AppBarAuthWidget(),
       body: BlocConsumer<AuthCubit, AuthState>(
         builder: (BuildContext context, AuthState state) {
           final authCubit = AuthCubit.get(context);
@@ -32,54 +35,31 @@ class ForgetPasswordScreen extends StatelessWidget {
             child: Form(
               key: authCubit.formKeyRegister,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    alignment: Alignment.centerRight,
-                    margin: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "forgot_password".tr(),
-                          style: TextStyle(fontSize: 25.sp, color: Colors.black),
-                        ),
-                        Text(
-                          "setPasswordMessage".tr(),
-                          style: TextStyle(fontSize: 15.sp, color: Color(0xff979797)),
-                        ),
-                      ],
-                    ),
+                  Text(
+                    "forgot_password".tr(),
+                    style: AppTextStyle.text18_700,
+                  ),
+                  SizedBox(height: 5.h),
+                  SvgPicture.asset(
+                    AppImages.forgetPasswordIcon,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                  ),
+                  PhoneInputWidget(
+                    controller: authChange.PhoneController,
                   ),
                   SizedBox(height: 20.h),
-                  PhoneInputWidget(
-                    controller: authChange.forgotPhoneController,
-                  ),
-                  // GlobalPhoneInputWidget(
-                  //   onPhoneNumberChange: (PhoneNumber number) {
-                  //     authCubit.onPhoneNumberChange(number: number);
-                  //   },
-
-                  //   initialValue: fullNumberResetPassword,
-                  //   isRtl: context.locale.languageCode == 'ar',
-                  //   // Customizable hint text
-                  // ),
-                  Spacer(),
-                  GlobalElevatedButton(
-                    label: "continue".tr(),
+                  CustomButton(
+                    isLoading: state is AuthLoading,
+                    text: AppLocaleKey.check.tr(),
                     onPressed: () {
                       if (authCubit.formKeyRegister.currentState!.validate()) {
                         AuthCubit.get(context).forgotPassword(
-                          phoneNumber: authCubit.forgotPhoneController.text,
+                          phoneNumber: authCubit.PhoneController.text,
                         );
                       }
                     },
-                    backgroundColor: AppColor.mainAppColor,
-                    textColor: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    borderRadius: BorderRadius.circular(10),
-                    fixedWidth: 0.80, // 80% width of the screen
                   ),
                   SizedBox(height: 20.h),
                 ],
@@ -88,34 +68,15 @@ class ForgetPasswordScreen extends StatelessWidget {
           );
         },
         listener: (BuildContext context, AuthState state) {
-          if (state is AuthError) {
-            Fluttertoast.showToast(
-              msg: state.message,
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.redAccent,
-              textColor: Colors.black,
-              fontSize: 16.0,
-            );
-          }
-          if (state is AuthSuccess) {
+          if (state is ForgetPasswordSuccess) {
             AuthCubit.get(context).isResetPassword = true;
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => VerificationOtpScreen(
-                          phoneNumber: state.data?['mobile'],
-                          otp: state.data?['otp'],
-                        )));
+            NavigatorMethods.pushNamed(context, VerificationOtpScreen.routeName,
+                arguments: VerificationOtpScreenArgs(
+                  phoneNumber: state.data?['mobile'],
+                  otp: state.data?['otp'],
+                ));
           } else if (state is AuthError) {
-            Fluttertoast.showToast(
-              msg: state.message,
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.redAccent,
-              textColor: Colors.white,
-              fontSize: 16.0,
-            );
+            CommonMethods.showError(message: state.message);
           }
         },
       ),

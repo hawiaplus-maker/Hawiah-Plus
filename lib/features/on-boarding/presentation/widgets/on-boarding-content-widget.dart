@@ -6,6 +6,7 @@ import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/widgets/circular-progress-stack-widget.dart';
 
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -78,7 +79,7 @@ class OnBoardingContent extends StatelessWidget {
                     Navigator.pushAndRemoveUntil<void>(
                       context,
                       MaterialPageRoute<void>(
-                        builder: (BuildContext context) => const LoginScreen(),
+                        builder: (BuildContext context) => const ValidateMobileScreen(),
                       ),
                       (route) => false,
                     );

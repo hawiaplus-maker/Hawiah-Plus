@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
@@ -21,7 +22,7 @@ class HomeAppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        if (state is ProfileUnAuthorized) {
+        if (state is ProfileUnAuthorized || HiveMethods.isVisitor() == true) {
           return ListTile(
             leading: CustomNetworkImage(
               radius: 30,

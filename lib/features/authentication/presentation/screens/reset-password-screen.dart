@@ -1,27 +1,27 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
-import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
-import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 
 import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
-  const ResetPasswordScreen(
-      {super.key, required this.phone, required this.otp});
+  const ResetPasswordScreen({super.key, required this.phone, required this.otp});
   final String phone;
   final int otp;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: BlocConsumer<AuthCubit, AuthState>(
-            builder: (BuildContext context, AuthState state) {
+        resizeToAvoidBottomInset: true,
+        appBar: AppBarAuthWidget(),
+        body: BlocConsumer<AuthCubit, AuthState>(builder: (BuildContext context, AuthState state) {
           final authCubit = AuthCubit.get(context);
           context.read<AuthCubit>().timer.cancel();
           String passwordReset = authCubit.passwordReset;
@@ -29,31 +29,17 @@ class ResetPasswordScreen extends StatelessWidget {
           String passwordConfirmReset = authCubit.passwordConfirmReset;
           bool passwordVisibleReset = authCubit.passwordVisibleReset;
           final listPasswordCriteria = authCubit.listPasswordCriteria;
-          return SizedBox(
-            child: Container(
-              alignment: Alignment.topCenter,
-              padding: EdgeInsets.only(right: 25.w, top: 60.h, left: 25.w),
-              child: Form(
-                key: authCubit.formKeyCompleteProfile,
+          return SingleChildScrollView(
+            child: Form(
+              key: authCubit.formKeyCompleteProfile,
+              child: Padding(
+                padding: const EdgeInsets.all(18.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 40),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "createNewPassword".tr(),
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          "enterSecurePassword".tr(),
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                      ],
+                    Text(
+                      "createNewPassword".tr(),
+                      style: AppTextStyle.text18_500,
                     ),
                     SizedBox(height: 30),
                     CustomTextField(
@@ -68,23 +54,8 @@ class ResetPasswordScreen extends StatelessWidget {
                       },
                       isPassword: context.read<AuthCubit>().isResetPassword,
                       controller: authCubit.passwordController,
-                      labelText: 'password'.tr(),
+                      title: 'password'.tr(),
                       hintText: 'enter_your_password'.tr(),
-                      // obscureText: !passwordVisibleReset,
-                      // hasSuffixIcon: true,
-                      suffixIcon: IconButton(
-                        icon: Image.asset(
-                          passwordVisibleReset
-                              ? 'assets/icons/view.png'
-                              : 'assets/icons/eye_hide_password_icon.png',
-                          color: Theme.of(context).primaryColorDark,
-                          height: 24.0,
-                          width: 24.0,
-                        ),
-                        onPressed: () {
-                          authCubit.togglePasswordVisibilityReset();
-                        },
-                      ),
                       onChanged: (value) {
                         passwordReset = value;
                       },
@@ -101,73 +72,35 @@ class ResetPasswordScreen extends StatelessWidget {
                         return null;
                       },
                       controller: authCubit.confirmPasswordController,
-                      labelText: 'confirm_password'.tr(),
+                      title: 'confirm_password'.tr(),
                       hintText: 'enter_your_password'.tr(),
                       isPassword: passwordVisibleReset,
-                      // obscureText: !passwordVisibleReset,
-                      // hasSuffixIcon: true,
-                      suffixIcon: IconButton(
-                        icon: Image.asset(
-                          passwordVisibleReset
-                              ? 'assets/icons/view.png'
-                              : 'assets/icons/eye_hide_password_icon.png',
-                          color: Theme.of(context).primaryColorDark,
-                          height: 24.0,
-                          width: 24.0,
-                        ),
-                        onPressed: () {
-                          authCubit.togglePasswordVisibilityReset();
-                        },
-                      ),
                       onChanged: (value) {
                         passwordConfirmReset = value;
                       },
                     ),
-                    Spacer(),
                     SizedBox(height: 20),
-                    Center(
-                      child: GlobalElevatedButton(
-                        label: "continue".tr(),
-                        onPressed: () {
-                          final password =
-                              authCubit.passwordController.text.trim();
-                          final confirmPassword =
-                              authCubit.confirmPasswordController.text.trim();
+                    CustomButton(
+                      text: AppLocaleKey.confirm.tr(),
+                      isLoading: state is AuthLoading,
+                      onPressed: () {
+                        final password = authCubit.passwordController.text.trim();
+                        final confirmPassword = authCubit.confirmPasswordController.text.trim();
 
-                          if (authCubit.formKeyCompleteProfile.currentState!
-                              .validate()) {
-                            if (password != confirmPassword) {
-                              Fluttertoast.showToast(
-                                msg: "كلمة المرور وتأكيدها غير متطابقين",
-                                toastLength: Toast.LENGTH_LONG,
-                                gravity: ToastGravity.BOTTOM,
-                                backgroundColor: Colors.redAccent,
-                                textColor: Colors.white,
-                                fontSize: 16.0,
-                              );
-                              return;
-                            }
-
-                            authCubit.resetPassword(
-                              password: password,
-                              password_confirmation: confirmPassword,
-                              phoneNumber: phone,
-                              otp: otp,
-                            );
+                        if (authCubit.formKeyCompleteProfile.currentState!.validate()) {
+                          if (password != confirmPassword) {
+                            CommonMethods.showError(message: "كلمة المرور وتأكيدها غير متطابقين");
+                            return;
                           }
-                        },
-                        backgroundColor: Color(0xffEDEEFF),
-                        textColor:
-                            authCubit.passwordController.text.isNotEmpty &&
-                                    authCubit.confirmPasswordController.text
-                                        .isNotEmpty
-                                ? AppColor.mainAppColor
-                                : AppColor.mainAppColor.withOpacity(0.5),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        borderRadius: BorderRadius.circular(20),
-                        fixedWidth: 0.80, // 80% of the screen width
-                      ),
+
+                          authCubit.resetPassword(
+                            password: password,
+                            password_confirmation: confirmPassword,
+                            phoneNumber: phone,
+                            otp: otp,
+                          );
+                        }
+                      },
                     ),
                     SizedBox(height: 40),
                   ],
@@ -177,17 +110,10 @@ class ResetPasswordScreen extends StatelessWidget {
           );
         }, listener: (BuildContext context, AuthState state) {
           if (state is AuthError) {
-            Fluttertoast.showToast(
-              msg: state.message,
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.redAccent,
-              textColor: Colors.white,
-              fontSize: 16.0,
-            );
+            CommonMethods.showError(message: state.message);
           }
 
-          if (state is AuthSuccess) {
+          if (state is ResetPasswordSuccess) {
             if (context.mounted) {
               context.read<AuthCubit>().timer.cancel();
             }

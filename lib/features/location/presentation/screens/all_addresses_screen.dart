@@ -12,6 +12,7 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/register-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/location-item-widget.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_state.dart';
@@ -161,7 +162,7 @@ class AllAddressesScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+                    context, MaterialPageRoute(builder: (context) => const ValidateMobileScreen()));
               },
               child: Text(
                 "login".tr(),

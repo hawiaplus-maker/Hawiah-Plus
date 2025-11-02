@@ -27,7 +27,7 @@ class CustomButton extends StatelessWidget {
     super.key,
     this.radius = 12,
     this.width,
-    this.height = 47,
+    this.height = 55,
     this.style,
     this.text,
     this.prefixIcon = const SizedBox(),
@@ -55,10 +55,7 @@ class CustomButton extends StatelessWidget {
             width: width ?? double.infinity,
             height: height,
             decoration: BoxDecoration(
-              color: color ??
-                  (isMainColor
-                      ? AppColor.darkMainAppColor
-                      : AppColor.secondAppColor),
+              color: color ?? (isMainColor ? AppColor.darkMainAppColor : AppColor.secondAppColor),
               borderRadius: borderRadius ?? BorderRadius.circular(radius),
               border: Border.all(color: borderColor ?? Colors.transparent),
               boxShadow: boxShadow ??

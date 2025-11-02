@@ -22,6 +22,20 @@ class AppRouters {
         return MaterialPageRoute(
           builder: (_) => LoginScreen(),
         );
+      case ForgetPasswordScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => ForgetPasswordScreen(),
+        );
+      case VerificationOtpScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => VerificationOtpScreen(
+            args: args,
+          ),
+        );
+      case ValidateMobileScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => ValidateMobileScreen(),
+        );
       case AllAddressesScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => AllAddressesScreen(),
@@ -93,7 +107,7 @@ class AppRouters {
         );
       default:
         return MaterialPageRoute(
-          builder: (_) => const LayoutScreen(),
+          builder: (_) => const ValidateMobileScreen(),
         );
     }
   }

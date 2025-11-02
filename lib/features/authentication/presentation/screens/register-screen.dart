@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/verification-otp-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/phone-input-widget.dart';
@@ -30,14 +31,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBarAuthWidget(),
-      body: BlocConsumer<AuthCubit, AuthState>(
-          builder: (BuildContext context, AuthState state) {
+      body: BlocConsumer<AuthCubit, AuthState>(builder: (BuildContext context, AuthState state) {
         final authChange = AuthCubit.get(context);
         final accountTypes = authChange.accountTypes;
         final selectedAccountType = authChange.selectedAccountType;
         final checkedValueTerms = authChange.checkedValueTerms;
-        final selectedTypeValue =
-            selectedAccountType == 0 ? 'individual' : 'company';
+        final selectedTypeValue = selectedAccountType == 0 ? 'individual' : 'company';
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 10.w),
           child: Form(
@@ -87,23 +86,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         );
       }, listener: (context, state) {
-        if (state is AuthSuccess) {
-          Fluttertoast.showToast(
-            msg: state.message,
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0,
-          );
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => VerificationOtpScreen(
-                      phoneNumber: state.data?['mobile'],
-                      otp: state.data?['otp'],
-                    )),
-          );
+        if (state is RegisterSuccess) {
+          NavigatorMethods.pushNamed(context, VerificationOtpScreen.routeName,
+              arguments: VerificationOtpScreenArgs(
+                phoneNumber: state.data?['mobile'],
+                otp: state.data?['otp'],
+              ));
         }
         if (state is AuthError) {
           Fluttertoast.showToast(

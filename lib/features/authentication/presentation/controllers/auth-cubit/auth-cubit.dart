@@ -4,11 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_toast.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
@@ -38,6 +40,11 @@ class AuthCubit extends Cubit<AuthState> {
 
   // Receive notifications toggle
   bool receiveNotifications = false;
+
+  void updateRememberMe(bool newValue) {
+    rememberMe = newValue;
+    emit(AuthChange());
+  }
 
   // Update the selected SMS or WhatsApp method
   void updateSelectedSmsOrWhatsApp(int index) {
@@ -96,7 +103,7 @@ class AuthCubit extends Cubit<AuthState> {
   void startTimer() {
     isTimerCompleted = false;
     showInvalidCodeMessage = false; // Reset message
-    remainingTime = 30;
+    remainingTime = 59;
 
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (remainingTime > 0) {
@@ -143,6 +150,7 @@ class AuthCubit extends Cubit<AuthState> {
   String usernameCompleteProfile = '';
   String passwordCompleteProfile = '';
   bool passwordVisibleCompleteProfile = false;
+  bool rememberMe = false;
   String confirmPasswordCompleteProfile = '';
   List<String> genders = ['male', 'female'];
   String? selectedGender;
@@ -250,6 +258,43 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  ///**************************************validate mobile*********************** */
+  Future<void> validateMobile({
+    required String? phoneNumber,
+  }) async {
+    emit(validateLoading());
+
+    final body = FormData.fromMap({
+      'mobile': phoneNumber,
+    });
+
+    final response = await ApiHelper.instance.post(
+      Urls.validateMobile,
+      body: body,
+      hasToken: false,
+    );
+
+    if (response.state == ResponseState.complete && response.data['success'] == true) {
+      final message = response.data['message'];
+
+      if (response.data['message'] == "complete login") {
+        emit(ValidateMobileSuccess(
+          message: message,
+        ));
+      } else {
+        emit(ValidateMobileError(message: message));
+      }
+    } else if (response.state == ResponseState.unauthorized) {
+      emit(validateUnAuthorized());
+    } else if (response.state == ResponseState.error) {
+      emit(ValidateMobileError(message: response.data['message'] ?? "حدث خطأ أثناء العملية"));
+    } else if (response.state == ResponseState.offline) {
+      emit(ValidateMobileError(message: "لا يوجد اتصال بالإنترنت"));
+    } else {
+      emit(ValidateMobileError(message: response.data['message'] ?? "حدث خطأ أثناء العملية"));
+    }
+  }
+
   ///******************Register*********************** */
   ///
   Future<void> register({
@@ -258,15 +303,11 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     if (type == 'company') {
       emit(AuthError(AppLocaleKey.nocompany.tr()));
-      Fluttertoast.showToast(
-        msg: AppLocaleKey.nocompany.tr(),
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        timeInSecForIosWeb: 2,
-        fontSize: 16.0,
+      CommonMethods.showToast(
+        message: AppLocaleKey.nocompany.tr(),
+        type: ToastType.error,
       );
+
       return;
     }
 
@@ -288,7 +329,7 @@ class AuthCubit extends Cubit<AuthState> {
       final message = response.data['message'] ?? 'Login completed';
 
       if (data != null) {
-        emit(AuthSuccess(
+        emit(RegisterSuccess(
           message: message,
           data: response.data['data'] as Map<String, dynamic>,
         ));
@@ -330,7 +371,7 @@ class AuthCubit extends Cubit<AuthState> {
 
       if (data != null) {
         HiveMethods.updateToken(data['user']['api_token']);
-        emit(AuthSuccess(message: message));
+        emit(VerifyOTPSuccess(message: message));
       } else {
         emit(AuthError(message));
       }
@@ -363,14 +404,8 @@ class AuthCubit extends Cubit<AuthState> {
 
     if (response.state == ResponseState.complete && response.data['success'] == true) {
       final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
-
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0,
+      CommonMethods.showToast(
+        message: message,
       );
 
       emit(AuthCodeResentSuccess(message: message));
@@ -405,16 +440,11 @@ class AuthCubit extends Cubit<AuthState> {
       final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
       final data = response.data['data'];
 
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0,
+      CommonMethods.showToast(
+        message: message,
       );
 
-      emit(AuthSuccess(message: message, data: data));
+      emit(ForgetPasswordSuccess(message: message, data: data));
     } else if (response.state == ResponseState.unauthorized) {
       emit(AuthError(response.data['message'] ?? "بيانات غير صحيحة"));
     } else if (response.state == ResponseState.error) {
@@ -447,16 +477,12 @@ class AuthCubit extends Cubit<AuthState> {
     );
     if (response.state == ResponseState.complete && response.data['success'] == true) {
       final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0,
+
+      CommonMethods.showToast(
+        message: message,
       );
 
-      emit(AuthSuccess(message: message));
+      emit(ResetPasswordSuccess(message: message));
     } else if (response.state == ResponseState.unauthorized) {
       emit(AuthError(response.data['message'] ?? "بيانات غير صحيحة"));
     } else if (response.state == ResponseState.error) {
@@ -471,22 +497,21 @@ class AuthCubit extends Cubit<AuthState> {
   ///*************logout************************** */
   Future<void> logout() async {
     emit(AuthLoading());
-
+    NavigatorMethods.loading();
     final response = await ApiHelper.instance.post(
       Urls.logout,
       hasToken: true,
     );
-
+    NavigatorMethods.loadingOff();
     if (response.state == ResponseState.complete) {
       final data = response.data['data'];
       final message = response.data['message'] ?? 'Logout completed';
-
-      if (response.state == ResponseState.complete) {
-        HiveMethods.deleteToken();
-        emit(AuthSuccess(
-          message: message,
-        ));
-      } else if (response.state == ResponseState.unauthorized) {
+      HiveMethods.deleteToken();
+      HiveMethods.updateIsVisitor(true);
+      emit(LogOutSuccess(
+        message: message,
+      ));
+      if (response.state == ResponseState.unauthorized) {
         emit(AuthError(response.data['message'] ?? "تم انتهاء الجلسة"));
       } else if (response.state == ResponseState.error) {
         emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
@@ -525,7 +550,7 @@ class AuthCubit extends Cubit<AuthState> {
       final message = response.data['message'] ?? 'Login completed';
 
       if (data != null) {
-        emit(AuthSuccess(
+        emit(CompleteRegisterSuccess(
           message: message,
           data: response.data['data'] as Map<String, dynamic>,
         ));

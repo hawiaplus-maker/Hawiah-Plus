@@ -10,6 +10,7 @@ import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart'
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -203,14 +204,7 @@ class _PersonalProfileCompletionScreenState
         },
         listener: (BuildContext context, AuthState state) {
           if (state is AuthSuccess) {
-            Fluttertoast.showToast(
-              msg: state.message,
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 16.0,
-            );
+             CommonMethods.showToast(message: state.message);
             AwesomeDialog(
               context: context,
               dialogType: DialogType.noHeader,

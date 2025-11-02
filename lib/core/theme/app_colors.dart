@@ -56,8 +56,12 @@ class AppColor {
         dark: const Color(0xFFA4A4A4),
       );
   static Color get textPrimaryColor => AppTheme.getByTheme(
-        light: const Color(0xff2C2C2C),
-        dark: const Color(0xff2C2C2C),
+        light: const Color(0xff000000),
+        dark: const Color(0xff000000),
+      );
+  static Color get textBlackColor => AppTheme.getByTheme(
+        light: const Color(0xff000000),
+        dark: const Color(0xff000000),
       );
   static Color get textGrayColor => AppTheme.getByTheme(
         light: const Color(0xff6E6E6E),
@@ -127,13 +131,13 @@ class AppColor {
       );
 
   static Color get textFormFillColor => AppTheme.getByTheme(
-        light: const Color(0xFFFFFFFF),
-        dark: const Color(0xFFFFFFFF),
+        light: const Color(0xFFF4F4F5),
+        dark: const Color(0xFFF4F4F5),
       );
 
   static Color get textFormBorderColor => AppTheme.getByTheme(
-        light: const Color(0xFFA4A4A4),
-        dark: const Color(0xFFA4A4A4),
+        light: const Color(0xFFF4F4F5),
+        dark: const Color(0xFFF4F4F5),
       );
 
   static Color get yellowColor => AppTheme.getByTheme(

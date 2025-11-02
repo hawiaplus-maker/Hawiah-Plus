@@ -13,10 +13,10 @@ class MessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: int.tryParse(message.senderId.toString()) ==
-              context.read<ProfileCubit>().user.id
-          ? TextDirection.rtl
-          : TextDirection.ltr,
+      textDirection:
+          int.tryParse(message.senderId.toString()) == context.read<ProfileCubit>().user!.id
+              ? TextDirection.rtl
+              : TextDirection.ltr,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -27,7 +27,7 @@ class MessageWidget extends StatelessWidget {
                 clipBehavior: Clip.none,
                 children: [
                   // int.tryParse(message.senderId.toString()) ==
-                  //         context.read<ProfileCubit>().user.id
+                  //         context.read<ProfileCubit>().user!.id
                   //     ? Positioned(
                   //       bottom: 0,
                   //       right: -14,
@@ -55,7 +55,7 @@ class MessageWidget extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                         color: int.tryParse(message.senderId.toString()) ==
-                                context.read<ProfileCubit>().user.id
+                                context.read<ProfileCubit>().user!.id
                             ? AppColor.blueColor
                             : AppColor.whiteColor,
                         borderRadius: BorderRadius.only(
@@ -63,20 +63,20 @@ class MessageWidget extends StatelessWidget {
                           topRight: const Radius.circular(20),
                           bottomLeft: Radius.circular(
                             int.tryParse(message.senderId.toString()) ==
-                                    context.read<ProfileCubit>().user.id
+                                    context.read<ProfileCubit>().user!.id
                                 ? 20
                                 : 0,
                           ),
                           bottomRight: Radius.circular(
                             int.tryParse(message.senderId.toString()) ==
-                                    context.read<ProfileCubit>().user.id
+                                    context.read<ProfileCubit>().user!.id
                                 ? 0
                                 : 20,
                           ),
                         ),
                         boxShadow: [
                           int.tryParse(message.senderId.toString()) ==
-                                  context.read<ProfileCubit>().user.id
+                                  context.read<ProfileCubit>().user!.id
                               ? BoxShadow()
                               : BoxShadow(
                                   color: AppColor.lightGreyColor,
@@ -92,17 +92,15 @@ class MessageWidget extends StatelessWidget {
                           message.message ?? "",
                           maxLines: 5,
                           style: int.tryParse(message.senderId.toString()) ==
-                                  context.read<ProfileCubit>().user.id
-                              ? AppTextStyle.text14_500
-                                  .copyWith(color: AppColor.whiteColor)
+                                  context.read<ProfileCubit>().user!.id
+                              ? AppTextStyle.text14_500.copyWith(color: AppColor.whiteColor)
                               : AppTextStyle.text14_500,
                         ),
                         Text(
                           DateMethods.formatToTime(message.timeStamp),
                           style: int.tryParse(message.senderId.toString()) ==
-                                  context.read<ProfileCubit>().user.id
-                              ? AppTextStyle.text10_400
-                                  .copyWith(color: AppColor.whiteColor)
+                                  context.read<ProfileCubit>().user!.id
+                              ? AppTextStyle.text10_400.copyWith(color: AppColor.whiteColor)
                               : AppTextStyle.text10_400.copyWith(
                                   color: AppColor.textSecondaryColor,
                                 ),
@@ -112,11 +110,11 @@ class MessageWidget extends StatelessWidget {
                   ),
                   Positioned(
                     left: int.tryParse(message.senderId.toString()) ==
-                            context.read<ProfileCubit>().user.id
+                            context.read<ProfileCubit>().user!.id
                         ? 0
                         : -20,
                     right: int.tryParse(message.senderId.toString()) ==
-                            context.read<ProfileCubit>().user.id
+                            context.read<ProfileCubit>().user!.id
                         ? -20
                         : 0,
                     bottom: -30,

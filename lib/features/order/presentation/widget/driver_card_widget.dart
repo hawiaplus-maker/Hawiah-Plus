@@ -100,7 +100,7 @@ class DriverCardWidget extends StatelessWidget {
         receiverType: "driver",
         receiverName: driverName,
         receiverImage: Urls.testUserImage,
-        senderId: profileCubit.user.id.toString(),
+        senderId: profileCubit.user!.id.toString(),
         senderType: "user",
         orderId: ordersData.id.toString(),
       ),

@@ -1,25 +1,38 @@
 import 'package:easy_localization/easy_localization.dart' as es;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/company-profile-completion-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/personal-profile-completion-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/reset-password-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 import 'package:pinput/pinput.dart';
 
 import '../controllers/auth-cubit/auth-cubit.dart';
 import '../controllers/auth-cubit/auth-state.dart';
 
-class VerificationOtpScreen extends StatefulWidget {
-  const VerificationOtpScreen({Key? key, this.phoneNumber, this.otp})
-      : super(key: key);
+class VerificationOtpScreenArgs {
+  final String phoneNumber;
+  final int otp;
 
-  final String? phoneNumber;
-  final int? otp;
+  VerificationOtpScreenArgs({required this.phoneNumber, required this.otp});
+}
+
+class VerificationOtpScreen extends StatefulWidget {
+  static const String routeName = '/VerificationOtpScreen';
+  const VerificationOtpScreen({
+    Key? key,
+    required this.args,
+  }) : super(key: key);
+
+  final VerificationOtpScreenArgs args;
   @override
   _VerificationOtpScreenState createState() => _VerificationOtpScreenState();
 }
@@ -40,257 +53,224 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
     context.read<AuthCubit>().timer.cancel();
     super.dispose();
   }
-  // @override
-  // void dispose() {
-  //   if (mounted) {
-  //     context.read<AuthCubit>().timer.cancel();
-  //   }
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: BlocConsumer<AuthCubit, AuthState>(
-        builder: (BuildContext context, AuthState state) {
-          int remainingTime = 30;
-          bool isTimerCompleted = false;
-          if (state is AuthTimerState) {
-            remainingTime = state.remainingTime;
-            isTimerCompleted = state.isTimerCompleted;
+      resizeToAvoidBottomInset: true,
+      appBar: AppBarAuthWidget(),
+      body: PopScope(
+        canPop: true,
+        onPopInvokedWithResult: (didPop, result) {
+          if (context.mounted) {
+            context.read<AuthCubit>().timer.cancel();
           }
-          final authCubit = AuthCubit.get(context);
-          final isResetPassword = authCubit.isResetPassword;
-          return SafeArea(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "enterVerificationCode".tr(),
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "verificationCodeSentResetPassword".tr(),
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 30),
-                  Directionality(
-                    textDirection: context.locale.languageCode == 'ar'
-                        ? TextDirection.ltr
-                        : TextDirection.rtl,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(width: 10),
-                        Text(
-                          '${widget.phoneNumber}' ?? '+966 5 123 45678',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(width: 10),
-                        Image.asset("assets/images/refresh-cw-03.png",
-                            fit: BoxFit.fill, height: 18.w, width: 18.h),
-                      ],
+        },
+        child: BlocConsumer<AuthCubit, AuthState>(
+          builder: (BuildContext context, AuthState state) {
+            int remainingTime = 59;
+            bool isTimerCompleted = false;
+            if (state is AuthTimerState) {
+              remainingTime = state.remainingTime;
+              isTimerCompleted = state.isTimerCompleted;
+            }
+            final authCubit = AuthCubit.get(context);
+            final isResetPassword = authCubit.isResetPassword;
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "enterVerificationCode".tr(),
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  SizedBox(height: 30),
-                  Center(
-                    child: Directionality(
+                    SizedBox(height: 10),
+                    Text(
+                      "verificationCodeSentResetPassword".tr(
+                        args: [widget.args.phoneNumber ?? ''],
+                      ),
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                    SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SvgPicture.asset(
+                        AppImages.otpIcon,
+                        height: MediaQuery.of(context).size.height * 0.4,
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    Text(AppLocaleKey.otpCode.tr(), style: AppTextStyle.formTitleStyle),
+                    SizedBox(height: 10),
+                    Directionality(
                       textDirection: context.locale.languageCode == 'ar'
                           ? TextDirection.ltr
                           : TextDirection.ltr,
-                      child: Pinput(
-                        controller: otpController,
-                        length: 5,
-                        onChanged: (value) {
-                          setState(() {
-                            isOtpValid = value.length == 5;
-                          });
-                        },
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        defaultPinTheme: PinTheme(
-                          width: 56,
-                          height: 56,
-                          textStyle: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF5F6F8),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Pinput(
+                          controller: otpController,
+                          length: 5,
+                          separatorBuilder: (index) => const SizedBox(width: 30),
+                          showCursor: true,
+                          cursor: Container(
+                            width: 2,
+                            height: 28,
+                            color: AppColor.mainAppColor,
                           ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: isOtpValid ? Colors.green : Colors.red,
-                              width: 2,
+                          defaultPinTheme: PinTheme(
+                            width: 40,
+                            height: 60,
+                            textStyle: const TextStyle(
+                              fontSize: 22,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
                             ),
-                            borderRadius: BorderRadius.circular(8),
+                            decoration: const BoxDecoration(
+                              color: Colors.transparent,
+                            ),
                           ),
+                          preFilledWidget: Center(
+                            child: Text(
+                              '---',
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.grey.shade500,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: -3),
+                            ),
+                          ),
+                          focusedPinTheme: PinTheme(
+                            width: 40,
+                            height: 60,
+                            textStyle: const TextStyle(
+                              fontSize: 22,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            decoration: const BoxDecoration(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                          submittedPinTheme: PinTheme(
+                            width: 40,
+                            height: 60,
+                            textStyle: const TextStyle(
+                              fontSize: 22,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            decoration: const BoxDecoration(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                          onCompleted: (value) {
+                            final otpText = otpController.text;
+                            if (otpText.length == 5) {
+                              AuthCubit.get(context).otp(
+                                phoneNumber: widget.args.phoneNumber,
+                                otp: int.parse(otpText),
+                              );
+                            }
+                          },
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  authCubit.showInvalidCodeMessage
-                      ? Center(
-                          child: Text(
-                            'كود غير صحيح، الرجاء المحاولة مرة أخرى',
-                            style: TextStyle(fontSize: 16, color: Colors.red),
-                          ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                            onPressed: authCubit.isTimerCompleted
+                                ? () {
+                                    authCubit.resetInvalidCodeMessage();
+                                    authCubit.startTimer();
+                                    otpController.clear();
+                                    authCubit.resendCodeToApi(
+                                      phoneNumber: widget.args.phoneNumber ?? "",
+                                    );
+                                  }
+                                : null,
+                            child: Text(
+                              "resend_code".tr(),
+                              style:
+                                  AppTextStyle.text18_400.copyWith(color: AppColor.textGrayColor),
+                            )),
+                        Text(
+                          isTimerCompleted
+                              ? "00:00"
+                              : es.tr("00:${remainingTime.toString().padLeft(2, '0')}"),
+                          style: AppTextStyle.text18_400.copyWith(color: AppColor.mainAppColor),
                         )
-                      : Center(
-                          child: Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'لم يصلك الرمز؟ إعادة الإرسال بعد ',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.black),
-                                ),
-                                TextSpan(
-                                  text:
-                                      '${authCubit.remainingTime < 10 ? "00:0${authCubit.remainingTime}" : "00:${authCubit.remainingTime}"}',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.blue),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                  SizedBox(height: 20),
-                  Center(
-                    child: GlobalElevatedButton(
-                      label: "resend_code".tr(),
-                      onPressed: authCubit.isTimerCompleted
-                          ? () {
-                              authCubit.resetInvalidCodeMessage();
-                              authCubit.startTimer();
-                              otpController.clear();
-                              authCubit.resendCodeToApi(
-                                phoneNumber: widget.phoneNumber ?? "",
-                              );
-                            }
-                          : null,
-                      backgroundColor: Color(0xffEDEEFF),
-                      textColor: AppColor.mainAppColor,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      borderRadius: BorderRadius.circular(20),
-                      fixedWidth: 0.40,
+                      ],
                     ),
-                  ),
-                  Spacer(),
-                  SizedBox(height: 20),
-                  Center(
-                    child: GlobalElevatedButton(
-                      label: "continue".tr(),
+                    SizedBox(height: 20),
+                    CustomButton(
+                      isLoading: state is AuthLoading,
+                      text: AppLocaleKey.check.tr(),
                       onPressed: () {
                         final otpText = otpController.text;
                         if (otpText.length == 5) {
                           AuthCubit.get(context).otp(
-                            phoneNumber: widget.phoneNumber!,
+                            phoneNumber: widget.args.phoneNumber,
                             otp: int.parse(otpText),
                           );
                         }
                       },
-                      backgroundColor: AppColor.mainAppColor,
-                      textColor: AppColor.whiteColor,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      borderRadius: BorderRadius.circular(20),
-                      fixedWidth: 0.80, // 80% of the screen width
-                    ),
-                  ),
-                  SizedBox(height: 40),
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-        listener: (BuildContext context, AuthState state) {
-          if (state is AuthError) {
-            Fluttertoast.showToast(
-              msg: state.message,
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.redAccent,
-              textColor: Colors.black,
-              fontSize: 16.0,
             );
-          }
-          if (state is AuthSuccess) {
-            final authCubit = AuthCubit.get(context);
-            final isResetPassword = authCubit.isResetPassword;
-            context.read<AuthCubit>().timer.cancel();
+          },
+          listener: (BuildContext context, AuthState state) {
+            if (state is AuthError) {
+              CommonMethods.showError(message: state.message);
+            }
+            if (state is VerifyOTPSuccess) {
+              final authCubit = AuthCubit.get(context);
+              final isResetPassword = authCubit.isResetPassword;
+              context.read<AuthCubit>().timer.cancel();
 
-            if (isResetPassword) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ResetPasswordScreen(
-                            phone: widget.phoneNumber ?? "",
-                            otp: widget.otp ?? 0,
-                          )));
-            } else {
-              if (context.read<AuthCubit>().selectedAccountType == 0) {
-                Navigator.pushReplacement(
+              if (isResetPassword) {
+                Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => PersonalProfileCompletionScreen(
-                              phoneNumber: widget.phoneNumber ?? "",
+                        builder: (context) => ResetPasswordScreen(
+                              phone: widget.args.phoneNumber ?? "",
+                              otp: widget.args.otp ?? 0,
                             )));
               } else {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const CompanyProfileCompletionScreen()));
+                if (context.read<AuthCubit>().selectedAccountType == 0) {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PersonalProfileCompletionScreen(
+                                phoneNumber: widget.args.phoneNumber ?? "",
+                              )));
+                } else {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CompanyProfileCompletionScreen()));
+                }
               }
+            } else if (state is AuthError) {
+              CommonMethods.showError(message: state.message);
+            } else if (state is AuthCodeResentSuccess) {
+              CommonMethods.showToast(message: state.message);
+            } else if (state is AuthCodeResentError) {
+              CommonMethods.showError(message: state.message);
             }
-          } else if (state is AuthError) {
-            Fluttertoast.showToast(
-              msg: state.message,
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.redAccent,
-              textColor: Colors.white,
-              fontSize: 16.0,
-            );
-          } else if (state is AuthCodeResentSuccess) {
-            Fluttertoast.showToast(
-              msg: state.message,
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 16.0,
-            );
-          } else if (state is AuthCodeResentError) {
-            Fluttertoast.showToast(
-              msg: state.message,
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.redAccent,
-              textColor: Colors.white,
-              fontSize: 16.0,
-            );
-          }
-        },
+          },
+        ),
       ),
     );
   }

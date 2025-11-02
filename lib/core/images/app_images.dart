@@ -48,4 +48,10 @@ class AppImages {
   static const String appLogoImage = 'assets/images/appLogoImage.png';
   static const String locationsIcon = 'assets/svg/locationsIcon.svg';
   static const String editIcon = 'assets/icons/edit_icon.png';
+  static const String loginPhoneImage = 'assets/images/loginPhoneImage.png';
+  static const String loginPasswordImage = 'assets/images/loginPasswordImage.png';
+  static const String loginPhoneIcon = 'assets/svg/loginPhoneIcon.svg';
+  static const String loginPasswordIcon = 'assets/svg/loginPasswordIcon.svg';
+  static const String forgetPasswordIcon = 'assets/svg/forgetPasswordIcon.svg';
+  static const String otpIcon = 'assets/svg/otpIcon.svg';
 }

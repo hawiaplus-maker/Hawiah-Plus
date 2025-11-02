@@ -12,8 +12,8 @@ class CustomLoading extends StatelessWidget {
     return SizedBox(
       height: size,
       child: LoadingIndicator(
-        indicatorType: Indicator.ballSpinFadeLoader,
-        colors: [color ?? AppColor.blackColor],
+        indicatorType: Indicator.ballRotateChase,
+        colors: [color ?? AppColor.mainAppColor],
         strokeWidth: 2,
       ),
     );
