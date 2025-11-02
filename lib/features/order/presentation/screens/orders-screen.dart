@@ -51,7 +51,7 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
                 controller: _tabController,
                 labelColor: AppColor.whiteColor,
                 unselectedLabelColor: AppColor.greyColor,
-                labelStyle: AppTextStyle.text20_700,
+                labelStyle: AppTextStyle.text20_700.copyWith(fontFamily: "DINNextLTArabic"),
                 indicator: BoxDecoration(
                   color: AppColor.mainAppColor,
                   borderRadius: BorderRadius.circular(14),

@@ -33,11 +33,13 @@ class HomeAppBarTitle extends StatelessWidget {
             ),
             title: Text(
               'welcome_2'.tr(),
-              style: TextStyle(fontSize: 14.sp, color: Color(0xff19104E)),
+              style: TextStyle(
+                  fontSize: 14.sp, color: Color(0xff19104E), fontFamily: "DINNextLTArabic"),
             ),
             subtitle: Text(
               AppLocaleKey.guest.tr(),
-              style: TextStyle(fontSize: 14.sp, color: Color(0xff19104E)),
+              style: TextStyle(
+                  fontSize: 14.sp, color: Color(0xff19104E), fontFamily: "DINNextLTArabic"),
             ),
           );
         }
@@ -63,11 +65,12 @@ class HomeAppBarTitle extends StatelessWidget {
                 children: [
                   Text(
                     'welcome_2'.tr(),
-                    style: AppTextStyle.text16_700,
+                    style: AppTextStyle.text16_700.copyWith(fontFamily: "DINNextLTArabic"),
                   ),
                   Text(
                     user.name,
-                    style: AppTextStyle.text16_500.copyWith(color: AppColor.greyColor),
+                    style: AppTextStyle.text16_500
+                        .copyWith(color: AppColor.greyColor, fontFamily: "DINNextLTArabic"),
                   ),
                 ],
               ),
