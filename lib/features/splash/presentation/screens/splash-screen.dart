@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
-import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/app-language/presentation/screens/app-language-screen.dart';
-import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
+import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-cubit.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,31 +14,31 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    OnBoardingCubit.get(context).getOnboarding();
     _initializeApp();
   }
 
   Future<void> _initializeApp() async {
-   
     await Future.delayed(Duration.zero);
 
     final cubit = context.read<ProfileCubit>();
-
-    cubit.fetchProfile(
-      onSuccess: () {
-        log("Navigation to LayoutScreen");
-        NavigatorMethods.pushReplacementNamed(
-          context,
-          LayoutScreen.routeName,
-        );
-      },
-      onError: () {
-        log("Navigation to AppLanguageScreen");
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const AppLanguageScreen()),
-        );
-      },
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const AppLanguageScreen()),
     );
+    // cubit.fetchProfile(
+    //   onSuccess: () {
+    //     log("Navigation to LayoutScreen");
+    //     NavigatorMethods.pushReplacementNamed(
+    //       context,
+    //       LayoutScreen.routeName,
+    //     );
+    //   },
+    //   onError: () {
+    //     log("Navigation to AppLanguageScreen");
+
+    //   },
+    // );
   }
 
   @override

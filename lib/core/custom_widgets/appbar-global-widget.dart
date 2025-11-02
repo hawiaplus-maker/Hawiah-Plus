@@ -12,6 +12,7 @@ class AppbarGlobalWidget extends StatelessWidget
     return PreferredSize(
       preferredSize: preferredSize,
       child: AppBar(
+        
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,

@@ -16,6 +16,7 @@
    "french": "الفرنسية",
    "german": "الألمانية",
    "spanish": "الاسبانية",
+   "Urdu": "اردو",
    "skip": "تخطي",
    "on_boarding_title_1": "أحصل الآن على تجربة ذكية ومميزة",
    "on_boarding_content_1": "بضع لحظات تفصلك عن أفضل خدمات مُختارة لك بفائق العناية .... لنبدأ الآن ",
@@ -235,8 +236,8 @@
    "paymentFailed": "فشل الدفع",
    "paymentSuccess": "تم الدفع بنجاح",
    "paymentFailedTryAgain": "فشل الدفع، حاول مرة اخرى",
-   "executeorder":"تنفيذ الطلب",
-   "payNow":"إدفع الآن",
-   "youhaveorder":"لديك طلب حالي "
-
+   "executeorder": "تنفيذ الطلب",
+   "payNow": "إدفع الآن",
+   "youhaveorder": "لديك طلب حالي ",
+   "Letsgetstarted": " هيا نبدأ"
 }
