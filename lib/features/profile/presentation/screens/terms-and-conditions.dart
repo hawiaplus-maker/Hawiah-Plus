@@ -9,11 +9,11 @@ import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_state.dart';
 
 class TermsAndConditionsScreen extends StatefulWidget {
+  static const String routeName = '/terms-and-conditions';
   const TermsAndConditionsScreen({super.key});
 
   @override
-  State<TermsAndConditionsScreen> createState() =>
-      _TermsAndConditionsScreenState();
+  State<TermsAndConditionsScreen> createState() => _TermsAndConditionsScreenState();
 }
 
 class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {

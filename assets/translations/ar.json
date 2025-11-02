@@ -239,5 +239,9 @@
    "executeorder": "تنفيذ الطلب",
    "payNow": "إدفع الآن",
    "youhaveorder": "لديك طلب حالي ",
-   "Letsgetstarted": " هيا نبدأ"
+   "Letsgetstarted": " هيا نبدأ",
+   "homePage": "الرئيسية",
+   "messages": "الرسائل",
+   "ordersPage": "طلباتي",
+   "saveChanges": "حفظ التغييرات"
 }

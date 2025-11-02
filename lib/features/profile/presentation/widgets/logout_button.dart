@@ -2,8 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
@@ -35,9 +37,15 @@ class LogoutButton extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
             child: Row(
               children: [
-                Image.asset("assets/icons/sign_out_icon.png", height: 30.h, width: 30.w),
-                SizedBox(width: 10.w),
+                SvgPicture.asset(AppImages.logOut, height: 24.h, width: 24.w),
+                SizedBox(width: 15.w),
                 Text("logout".tr(), style: TextStyle(fontSize: 14.sp, color: Colors.black)),
+                Spacer(),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 15.sp,
+                  color: Colors.black,
+                ),
               ],
             ),
           ),

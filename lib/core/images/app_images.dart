@@ -48,4 +48,17 @@ class AppImages {
   static const String appLogoImage = 'assets/images/appLogoImage.png';
   static const String locationsIcon = 'assets/svg/locationsIcon.svg';
   static const String editIcon = 'assets/icons/edit_icon.png';
+  static const String earth = 'assets/svg/earth.svg';
+  static const String fileLock = 'assets/svg/file-lock.svg';
+  static const String handFist = 'assets/svg/hand-fist.svg';
+  static const String handshake = 'assets/svg/handshake.svg';
+  static const String logOut = 'assets/svg/log-out.svg';
+  static const String shield = 'assets/svg/shield-question-mark.svg';
+  static const String user = 'assets/svg/user-round-pen.svg';
+  static const String userSvg = 'assets/svg/user.svg';
+  static const String message = 'assets/svg/message-circle-more.svg';
+  static const String logs = 'assets/svg/logs.svg';
+  static const String house = 'assets/svg/house.svg';
+  static const String errorSvg = 'assets/svg/errorsvg.svg';
+  static const String successSvg = 'assets/svg/success.svg';
 }

@@ -17,6 +17,9 @@ import 'package:hawiah_client/features/location/presentation/screens/map_screen.
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 import 'package:hawiah_client/features/order/presentation/screens/payment_web_view.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
+import 'package:hawiah_client/features/profile/presentation/screens/faq-screen.dart';
+import 'package:hawiah_client/features/profile/presentation/screens/support_screen.dart';
+import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 
 part 'app_routers.dart';

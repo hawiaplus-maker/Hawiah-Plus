@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gap/gap.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
@@ -12,9 +15,11 @@ import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
+import 'package:hawiah_client/features/profile/presentation/widgets/custom_dialog_widget.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserProfile extends StatefulWidget {
+  static const String routeName = '/userprofile';
   const UserProfile({super.key});
 
   @override
@@ -25,7 +30,6 @@ class _UserProfileState extends State<UserProfile> {
   final _controllers = {
     "name": TextEditingController(),
     "mobile": TextEditingController(),
-    "email": TextEditingController(),
   };
 
   final _picker = ImagePicker();
@@ -50,7 +54,7 @@ class _UserProfileState extends State<UserProfile> {
     await cubit.updateProfile(
       name: _controllers['name']!.text,
       mobile: _controllers['mobile']!.text,
-      email: _controllers['email']!.text,
+      email: '', // Email removed, pass empty
       imageFile: _pickedImage,
     );
   }
@@ -90,10 +94,10 @@ class _UserProfileState extends State<UserProfile> {
 
   List<Widget> _buildTextFields() => _controllers.entries
       .map((entry) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 15),
             child: CustomTextField(
+              title: entry.key.capitalize(),
               controller: entry.value,
-              labelText: entry.key.capitalize(),
             ),
           ))
       .toList();
@@ -111,23 +115,28 @@ class _UserProfileState extends State<UserProfile> {
             final user = state.user;
             _controllers['name']!.text = user.name;
             _controllers['mobile']!.text = user.mobile;
-            _controllers['email']!.text = user.email;
           } else if (state is ProfileUpdateSuccess) {
-            Fluttertoast.showToast(
-              msg: state.message,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (ctx) => CustomConfirmDialog(
+                content: "تم حفظ التغييرات بنجاح",
+                image: AppImages.successSvg,
+              ),
             );
           } else if (state is ProfileError) {
-            Fluttertoast.showToast(
-              msg: state.message,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (ctx) => CustomConfirmDialog(
+                content: 'حدث خطأ ما ؛ حاول مرة أخري',
+                image: AppImages.errorSvg,
+              ),
             );
           }
         },
         builder: (context, state) {
-          if (state is ProfileLoading) return const CustomLoading();
+          if (state is ProfileLoading) return Center(child: const CustomLoading());
 
           if (state is ProfileLoaded) {
             final imageUrl = state.user.image;
@@ -140,16 +149,11 @@ class _UserProfileState extends State<UserProfile> {
                     _buildProfileImage(imageUrl),
                     const SizedBox(height: 30),
                     ..._buildTextFields(),
-                    const Spacer(),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.mainAppColor,
-                        fixedSize: const Size.fromWidth(300),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      ),
+                    Gap(40.h),
+                    CustomButton(
                       onPressed: _onUpdatePressed,
                       child: Text(
-                        AppLocaleKey.tracking.tr(),
+                        AppLocaleKey.saveChanges.tr(),
                         style: const TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),

@@ -8,6 +8,7 @@ import 'package:hawiah_client/features/app-language/presentation/controllers/app
 import 'package:hawiah_client/hawiah_plus_app.dart';
 
 class LanguageScreen extends StatelessWidget {
+  static const String routeName = '/language-screen';
   const LanguageScreen({super.key});
 
   @override

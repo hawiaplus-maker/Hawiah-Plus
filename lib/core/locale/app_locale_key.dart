@@ -129,4 +129,8 @@ class AppLocaleKey {
   static const String executeorder = "executeorder";
   static const String payNow = "payNow";
   static const String youhaveorder = "youhaveorder";
+  static const String homePage = 'homePage';
+  static const String messages = 'messages';
+  static const String ordersPage = 'ordersPage';
+  static const String saveChanges = 'saveChanges';
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
 
 class PersonProfileListTile extends StatelessWidget {
   final String title;
@@ -25,26 +27,26 @@ class PersonProfileListTile extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             child: Row(
               children: [
-                Image.asset(
+                SvgPicture.asset(
                   logo,
-                  height: 30.h,
-                  width: 30.w,
-                  color: AppColor.mainAppColor,
+                  height: 24.h,
+                  width: 24.w,
+                  color: AppColor.blackColor,
                 ),
-                SizedBox(width: 10.w),
+                SizedBox(width: 15.w),
                 Expanded(
                   child: Text(
                     title,
-                    style: TextStyle(fontSize: 14.sp, color: Colors.black),
+                    style: AppTextStyle.text14_400,
                   ),
                 ),
                 trailing ??
                     Icon(
                       Icons.arrow_forward_ios,
-                      size: 20.sp,
+                      size: 15.sp,
                       color: AppColor.blackColor,
                     ),
               ],

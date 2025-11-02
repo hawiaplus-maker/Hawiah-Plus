@@ -9,6 +9,7 @@ import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_state.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
+  static const String routeName = '/ privacyPolicy';
   const PrivacyPolicyScreen({super.key});
 
   @override
@@ -18,10 +19,7 @@ class PrivacyPolicyScreen extends StatefulWidget {
 class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        context,
-       titleText:  AppLocaleKey.privacyPolicy.tr()
-      ),
+      appBar: CustomAppBar(context, titleText: AppLocaleKey.privacyPolicy.tr()),
       body: BlocBuilder<SettingCubit, SettingState>(builder: (context, state) {
         final setting = context.read<SettingCubit>().setting;
         if (setting == null) return const Center(child: CustomLoading());
