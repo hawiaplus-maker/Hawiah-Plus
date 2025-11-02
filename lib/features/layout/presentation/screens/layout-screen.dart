@@ -1,6 +1,10 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/chat-screen.dart';
 import 'package:hawiah_client/features/home/presentation/screens/home-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/orders-screen.dart';
@@ -32,65 +36,56 @@ class _LayoutScreenState extends State<LayoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
       body: _screens[selectedIndex],
-      bottomNavigationBar: CurvedNavigationBar(
-        color: Color(0xffE5E7FE),
-        buttonBackgroundColor: const Color(0xff2B03F0),
-        index: selectedIndex,
-
-        items: [
-          Image.asset(
-            "assets/icons/home_icon.png",
-            fit: BoxFit.fill,
-            height: 25.h,
-            width: 25.w,
-            color:
-                selectedIndex == 0 ? Colors.white : Color(0xff929292), // Dynamically set the color
-          ),
-          Image.asset(
-            "assets/images/message.png",
-            fit: BoxFit.fill,
-            height: 25.h,
-            width: 25.w,
-            color:
-                selectedIndex == 1 ? Colors.white : Color(0xff929292), // Dynamically set the color
-          ),
-          Image.asset(
-            "assets/icons/orders_icon.png",
-            fit: BoxFit.fill,
-            height: 25.h,
-            width: 25.w,
-            color:
-                selectedIndex == 2 ? Colors.white : Color(0xff929292), // Dynamically set the color
-          ),
-          Image.asset(
-            "assets/icons/person_profile_icon.png",
-            fit: BoxFit.fill,
-            height: 25.h,
-            width: 25.w,
-            color:
-                selectedIndex == 3 ? Colors.white : Color(0xff929292), // Dynamically set the color
-          ),
-        ],
-
-        // backgroundColor: Color(0xffE5E6FF),
-        // color: Color(0xff929292),
-        // colorSelected: Colors.white,
-        // indexSelected: selectedIndex,
-        backgroundColor: Colors.transparent,
-
-        onTap: (int index) {
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: AppColor.mainAppColor,
+        unselectedItemColor: AppColor.greyColor,
+        showUnselectedLabels: true,
+        onTap: (index) {
           setState(() {
             selectedIndex = index;
           });
         },
-        // top: -25,
-        // animated: true,
-        // itemStyle: ItemStyle.circle,
-        // chipStyle: const ChipStyle(
-        //   notchSmoothness: NotchSmoothness.sharpEdge,
-        // ),
+        items: [
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              AppImages.house,
+              height: 24.h,
+              width: 24.w,
+              color: selectedIndex == 0 ? AppColor.mainAppColor : AppColor.greyColor,
+            ),
+            label: AppLocaleKey.homePage.tr(),
+          ),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              AppImages.message,
+              height: 24.h,
+              width: 24.w,
+              color: selectedIndex == 1 ? AppColor.mainAppColor : AppColor.greyColor,
+            ),
+            label: AppLocaleKey.messages.tr(),
+          ),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              AppImages.logs,
+              height: 24.h,
+              width: 24.w,
+              color: selectedIndex == 2 ? AppColor.mainAppColor : AppColor.greyColor,
+            ),
+            label: AppLocaleKey.ordersPage.tr(),
+          ),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              AppImages.userSvg,
+              height: 24.h,
+              width: 24.w,
+              color: selectedIndex == 3 ? AppColor.mainAppColor : AppColor.greyColor,
+            ),
+            label: AppLocaleKey.profileFile.tr(),
+          ),
+        ],
       ),
     );
   }

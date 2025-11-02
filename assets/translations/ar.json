@@ -16,6 +16,7 @@
    "french": "الفرنسية",
    "german": "الألمانية",
    "spanish": "الاسبانية",
+   "Urdu": "اردو",
    "skip": "تخطي",
    "on_boarding_title_1": "أحصل الآن على تجربة ذكية ومميزة",
    "on_boarding_content_1": "بضع لحظات تفصلك عن أفضل خدمات مُختارة لك بفائق العناية .... لنبدأ الآن ",
@@ -246,5 +247,12 @@
    "yes": "نعم",
    "didYouWantToLogout": "هل تريد تسجيل الخروج ؟",
    "check": "تحقق",
-   "otpCode": "رمز OTP"
+   "otpCode": "رمز OTP",
+   "Letsgetstarted": " هيا نبدأ",
+   "homePage": "الرئيسية",
+   "messages": "الرسائل",
+   "ordersPage": "طلباتي",
+   "saveChanges": "حفظ التغييرات",
+   "saveChangesSuccess": "تم حفظ التغييرات بنجاح",
+   "somethingWentWrong": "حدث خطأ ما ؛ حاول مرة أخري"
 }

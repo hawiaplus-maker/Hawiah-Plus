@@ -138,4 +138,10 @@ class AppLocaleKey {
   static const String check = "check";
   static const String otpCode = "otpCode";
   static const String createNewPassword = "createNewPassword";
+  static const String homePage = 'homePage';
+  static const String messages = 'messages';
+  static const String ordersPage = 'ordersPage';
+  static const String saveChanges = 'saveChanges';
+  static const String saveChangesSuccess = 'saveChangesSuccess';
+  static const String somethingWentWrong = 'somethingWentWrong';
 }

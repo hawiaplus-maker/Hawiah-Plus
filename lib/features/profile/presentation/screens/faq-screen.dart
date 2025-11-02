@@ -4,6 +4,7 @@ import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 
 class FaqScreen extends StatelessWidget {
+  static const String routeName = '/faq-screen';
   const FaqScreen({super.key});
 
   @override

@@ -25,7 +25,7 @@ class CustomButton extends StatelessWidget {
   final List<BoxShadow>? boxShadow;
   const CustomButton({
     super.key,
-    this.radius = 12,
+    this.radius = 10,
     this.width,
     this.height = 55,
     this.style,

@@ -10,6 +10,7 @@ import 'package:hawiah_client/core/theme/cubit/app_theme_cubit.dart';
 import 'package:hawiah_client/hawiah_plus_app.dart';
 import 'package:hawiah_client/injection_container.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
 import 'firebase_options.dart';
 
 late BuildContext genContext;
@@ -24,13 +25,15 @@ void main() async {
   );
   await Hive.initFlutter();
   await Hive.openBox('app');
-
   Bloc.observer = MyBlocObserver();
-
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   runApp(
     EasyLocalization(
-      supportedLocales: const [Locale('ar'), Locale('en')],
+      supportedLocales: const [
+        Locale('ar'),
+        Locale('en'),
+        Locale('ur'),
+      ],
       path: 'assets/translations', startLocale: Locale('ar'),
       fallbackLocale: const Locale('en'), // Add a fallback locale if you haven't
       child: BlocProvider(

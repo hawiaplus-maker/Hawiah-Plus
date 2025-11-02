@@ -105,6 +105,18 @@ class AppRouters {
             args: args,
           ),
         );
+      case UserProfile.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const UserProfile(),
+        );
+      case SupportScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const SupportScreen(),
+        );
+      case FaqScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const FaqScreen(),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const ValidateMobileScreen(),

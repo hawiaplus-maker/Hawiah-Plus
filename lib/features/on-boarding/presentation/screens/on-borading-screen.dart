@@ -20,10 +20,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   void initState() {
     HiveMethods.updateFirstTime();
-    OnBoardingCubit.get(context).getOnboarding();
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,25 +42,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           final progressValue = cubit.progressValue;
           final pageController = cubit.pageController;
 
-          final onBoardingImages =
-              cubit.onBoardingList.map((e) => e.image ?? "").toList();
-          final onboardingTitles =
-              cubit.onBoardingList.map((e) => e.title ?? "").toList();
-          final onboardingContents =
-              cubit.onBoardingList.map((e) => e.about ?? "").toList();
+          final onBoardingImages = cubit.onBoardingList.map((e) => e.image ?? "").toList();
+          final onboardingTitles = cubit.onBoardingList.map((e) => e.title ?? "").toList();
+          final onboardingContents = cubit.onBoardingList.map((e) => e.about ?? "").toList();
           final onboardingIcons = List.generate(
             cubit.onBoardingList.length,
             (index) => "",
           );
 
-          return Stack(
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              OnBoardingAppBar(),
               OnBoardingPageView(
                 onBoardingImages: onBoardingImages,
                 pageController: pageController,
                 onPageChanged: (index) => cubit.changePageController(index),
               ),
-              OnBoardingAppBar(),
               OnBoardingContent(
                 currentIndex: currentIndex,
                 onboardingIcons: onboardingIcons,

@@ -11,6 +11,7 @@ import 'package:hawiah_client/features/setting/cubit/setting_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SupportScreen extends StatefulWidget {
+  static const String routeName = '/support-screen';
   const SupportScreen({super.key});
 
   @override
