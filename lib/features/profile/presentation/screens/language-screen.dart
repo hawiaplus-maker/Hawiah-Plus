@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/app-language/presentation/controllers/app-language-cubit/app-language-cubit.dart';
 import 'package:hawiah_client/hawiah_plus_app.dart';
 
@@ -14,83 +15,108 @@ class LanguageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appLanguageCubit = BlocProvider.of<AppLanguageCubit>(context);
+    final selectedLang = appLanguageCubit.languageSelected; // اللغة الحالية
 
     return Scaffold(
       appBar: CustomAppBar(
         context,
         titleText: AppLocaleKey.langApp.tr(),
       ),
-      body: Column(
-        children: [
-          languageItem(
-            title: AppLocaleKey.arabic.tr(),
-            logo: 'assets/icons/flag_saudi_arabia_icon.png',
-            onTap: () async {
-              appLanguageCubit.changeLanguage(language: "arabic");
-              await context.setLocale(const Locale("ar"));
-              appLanguageCubit.changeRebuild();
-              HawiahPlusApp.setMyAppState(context);
-            },
-          ),
-          languageItem(
-            title: AppLocaleKey.english.tr(),
-            logo: 'assets/icons/flag_united_kingdom_icon.png',
-            onTap: () async {
-              appLanguageCubit.changeLanguage(language: "english");
-              await context.setLocale(const Locale("en"));
-              appLanguageCubit.changeRebuild();
-              HawiahPlusApp.setMyAppState(context);
-            },
-            isHaveLine: false,
-          ),
-        ],
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildLanguageItem(
+              context: context,
+              language: "arabic",
+              title: AppLocaleKey.arabic.tr(),
+              logo: 'assets/icons/flag_saudi_arabia_icon.png',
+              isSelected: selectedLang == "arabic",
+              onTap: () async {
+                await _changeLanguage(context, appLanguageCubit, "arabic");
+              },
+            ),
+            Divider(color: Colors.grey.shade300),
+            _buildLanguageItem(
+              context: context,
+              language: "english",
+              title: AppLocaleKey.english.tr(),
+              logo: 'assets/icons/flag_united_kingdom_icon.png',
+              isSelected: selectedLang == "english",
+              onTap: () async {
+                await _changeLanguage(context, appLanguageCubit, "english");
+              },
+            ),
+            Divider(color: Colors.grey.shade300),
+            _buildLanguageItem(
+              context: context,
+              language: "urdu",
+              title: "Urdu".tr(),
+              logo: 'assets/images/world.png',
+              isSelected: selectedLang == "urdu",
+              onTap: () async {
+                await _changeLanguage(context, appLanguageCubit, "urdu");
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget languageItem({
+  Widget _buildLanguageItem({
+    required BuildContext context,
+    required String language,
     required String title,
     required String logo,
-    bool isHaveLine = true,
+    required bool isSelected,
     required VoidCallback onTap,
-    Color color = Colors.black,
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-            child: Row(
-              children: [
-                Image.asset(
-                  logo,
-                  height: 40.h,
-                  width: 40.w,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 12.h),
+        child: Row(
+          children: [
+            Image.asset(logo, height: 26.h, width: 26.w),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
                 ),
-                SizedBox(width: 10.w),
-                Text(
-                  title,
-                  style: TextStyle(fontSize: 14.sp, color: color),
-                ),
-                Spacer(),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  size: 20.sp,
-                  color: const Color(0xffA6A6A6),
-                ),
-              ],
+              ),
             ),
-          ),
-          if (isHaveLine)
-            Divider(
-              color: Colors.grey,
-              thickness: 0.5,
-            )
-          else
-            SizedBox.shrink(),
-        ],
+            Radio<String>(
+              value: language,
+              groupValue: context.read<AppLanguageCubit>().languageSelected,
+              onChanged: (_) => onTap(),
+              activeColor: AppColor.mainAppColor,
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  Future<void> _changeLanguage(
+    BuildContext context,
+    AppLanguageCubit cubit,
+    String language,
+  ) async {
+    cubit.changeLanguage(language: language);
+    if (language == "arabic") {
+      await context.setLocale(const Locale("ar"));
+    } else if (language == "english") {
+      await context.setLocale(const Locale("en"));
+    } else if (language == "urdu") {
+      await context.setLocale(const Locale("ur"));
+    }
+    cubit.changeRebuild();
+    HawiahPlusApp.setMyAppState(context);
   }
 }
