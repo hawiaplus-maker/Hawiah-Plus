@@ -226,6 +226,7 @@ class AuthCubit extends Cubit<AuthState> {
       'password': password,
       'mobile': phoneNumber,
       'fcm_token': fcmToken,
+      'remember_me': rememberMe ? '1' : '0',
     });
 
     final response = await ApiHelper.instance.post(
@@ -466,7 +467,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     final body = FormData.fromMap({
       'mobile': phoneNumber,
-      'otp': otp,
+      // 'otp': otp,
       'password': password,
       'password_confirmation': password_confirmation,
     });
@@ -495,7 +496,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   ///*************logout************************** */
-  Future<void> logout() async {
+  Future<void> logout({void Function()? onSuccess}) async {
     emit(AuthLoading());
     NavigatorMethods.loading();
     final response = await ApiHelper.instance.post(
@@ -504,6 +505,7 @@ class AuthCubit extends Cubit<AuthState> {
     );
     NavigatorMethods.loadingOff();
     if (response.state == ResponseState.complete) {
+      onSuccess?.call();
       final data = response.data['data'];
       final message = response.data['message'] ?? 'Logout completed';
       HiveMethods.deleteToken();

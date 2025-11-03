@@ -5,11 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
-import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
+import 'package:hawiah_client/features/profile/presentation/widgets/log_out_dialog.dart';
 
 class LogoutButton extends StatelessWidget {
   const LogoutButton({super.key});
@@ -22,7 +23,7 @@ class LogoutButton extends StatelessWidget {
           CommonMethods.showError(message: state.message);
         } else if (state is AuthLoading) {
           CustomLoading();
-        } else if (state is AuthSuccess) {
+        } else if (state is LogOutSuccess) {
           CommonMethods.showToast(message: state.message);
           Navigator.pushAndRemoveUntil(
             context,
@@ -34,11 +35,7 @@ class LogoutButton extends StatelessWidget {
       builder: (context, state) {
         return InkWell(
           onTap: () {
-            CommonMethods.showChooseDialog(
-              message: AppLocaleKey.didYouWantToLogout.tr(),
-              context,
-              onPressed: () => AuthCubit.get(context).logout(),
-            );
+            NavigatorMethods.showAppDialog(context, LogOutDialog());
           },
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),

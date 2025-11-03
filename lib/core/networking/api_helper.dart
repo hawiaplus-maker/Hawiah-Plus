@@ -84,7 +84,7 @@ class ApiHelper {
         "Content-Type": "application/json",
         'Accept': 'application/json',
         // 'Accept-Language': HiveMethods.getLang(),
-        'Lang': HiveMethods.getLang(),
+        'Accept-Language': HiveMethods.getLang(),
         if (HiveMethods.getToken() != null && hasToken) ...{
           'Authorization': "Bearer ${HiveMethods.getToken()}",
         },

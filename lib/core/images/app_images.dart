@@ -67,4 +67,6 @@ class AppImages {
   static const String house = 'assets/svg/house.svg';
   static const String errorSvg = 'assets/svg/errorsvg.svg';
   static const String successSvg = 'assets/svg/success.svg';
+  static const String logoutGif = 'assets/gifs/logoutGif.gif';
+  static const String closeCircleIcon = 'assets/svg/closeCircleIcon.svg';
 }
