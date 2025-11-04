@@ -226,7 +226,7 @@
    "Addtitle": "إضافة العنوان",
    "sarr": "ريال",
    "Notifications": "الاشعارات",
-   "noNotifications": "لاتوجد اشعارات",
+   "noNotifications": "لا يوجد اشعارات حتي الأن",
    "nocompany": "تسجيل الشركات غير متاح حالياً",
    "orderdetails": "تفاصيل الطلب",
    "Payby": "الدفع بواسطة",
@@ -254,5 +254,7 @@
    "ordersPage": "طلباتي",
    "saveChanges": "حفظ التغييرات",
    "saveChangesSuccess": "تم حفظ التغييرات بنجاح",
-   "somethingWentWrong": "حدث خطأ ما ؛ حاول مرة أخري"
+   "somethingWentWrong": "حدث خطأ ما ؛ حاول مرة أخري",
+   "phones": "رقم الجوال",
+   "map": "الموقع"
 }

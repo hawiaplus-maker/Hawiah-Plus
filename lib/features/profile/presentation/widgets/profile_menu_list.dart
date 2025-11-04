@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/faq-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/language-screen.dart';
@@ -69,8 +68,8 @@ class ProfileMenuList extends StatelessWidget {
             ? PersonProfileListTile(
                 title: AppLocaleKey.login.tr(),
                 logo: AppImages.logOut,
-                onTap: () =>
-                    NavigatorMethods.pushNamedAndRemoveUntil(context, ValidateMobileScreen.routeName),
+                onTap: () => NavigatorMethods.pushNamedAndRemoveUntil(
+                    context, ValidateMobileScreen.routeName),
               )
             : const LogoutButton(),
       ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 
@@ -48,7 +47,7 @@ class CustomConfirmDialog extends StatelessWidget {
                 ),
               ),
             ),
-            SvgPicture.asset(image),
+            Image.asset(image),
             const SizedBox(height: 15),
             Text(
               content,

@@ -117,6 +117,18 @@ class AppRouters {
         return MaterialPageRoute(
           builder: (_) => const FaqScreen(),
         );
+      case LanguageScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const LanguageScreen(),
+        );
+      case PrivacyPolicyScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const PrivacyPolicyScreen(),
+        );
+      case TermsAndConditionsScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const TermsAndConditionsScreen(),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const ValidateMobileScreen(),

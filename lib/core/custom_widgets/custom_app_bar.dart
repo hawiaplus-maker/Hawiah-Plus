@@ -51,7 +51,7 @@ class CustomAppBar extends PreferredSize {
             leading: leading ??
                 (automaticallyImplyLeading && Navigator.canPop(context)
                     ? IconButton(
-                        icon: Icon(Icons.arrow_back_ios),
+                        icon: Icon(Icons.arrow_back, color: Colors.black),
                         onPressed: () => Navigator.pop(context),
                       )
                     : const SizedBox()),

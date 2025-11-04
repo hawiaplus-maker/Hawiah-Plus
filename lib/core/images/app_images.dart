@@ -65,8 +65,15 @@ class AppImages {
   static const String message = 'assets/svg/message-circle-more.svg';
   static const String logs = 'assets/svg/logs.svg';
   static const String house = 'assets/svg/house.svg';
-  static const String errorSvg = 'assets/svg/errorsvg.svg';
-  static const String successSvg = 'assets/svg/success.svg';
+  static const String errorSvg = 'assets/gifs/errorSvg.gif';
+  static const String successSvg = 'assets/gifs/successSvg.gif';
   static const String logoutGif = 'assets/gifs/logoutGif.gif';
   static const String closeCircleIcon = 'assets/svg/closeCircleIcon.svg';
+  static const String phoneSvg = 'assets/images/phones.png';
+  static const String mapPin = 'assets/images/map-pin-pen.png';
+  static const String mail = 'assets/images/mail.png';
+  static const String search = 'assets/svg/Search.svg';
+  static const String filter = 'assets/svg/Filter.svg';
+  static const String trash = 'assets/svg/trash-2.svg';
+  static const String notification = 'assets/images/notifications.gif';
 }
