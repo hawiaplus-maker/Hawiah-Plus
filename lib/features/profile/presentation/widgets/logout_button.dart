@@ -36,6 +36,7 @@ class LogoutButton extends StatelessWidget {
         return InkWell(
           onTap: () {
             NavigatorMethods.showAppDialog(context, LogOutDialog());
+
           },
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
