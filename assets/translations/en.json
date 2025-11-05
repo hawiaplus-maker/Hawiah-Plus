@@ -237,5 +237,6 @@
   "paymentFailedTryAgain": "Payment failed, try again",
   "executeorder": "Execute Order",
   "payNow": "Pay Now",
-  "youhaveorder": "You have a current order "
+  "youhaveorder": "You have a current order ",
+  "messageHint": "Write your message here"
 }

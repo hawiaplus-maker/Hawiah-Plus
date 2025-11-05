@@ -76,4 +76,5 @@ class AppImages {
   static const String filter = 'assets/svg/Filter.svg';
   static const String trash = 'assets/svg/trash-2.svg';
   static const String notification = 'assets/images/notifications.gif';
+  static const String sends = 'assets/images/Icon.png';
 }

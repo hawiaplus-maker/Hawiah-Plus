@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
@@ -14,8 +13,10 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/chat/cubit/chat_cubit.dart';
 import 'package:hawiah_client/features/chat/model/chat_model.dart';
+import 'package:hawiah_client/features/chat/presentation/screens/chat-screen.dart' hide DateMethods;
 import 'package:hawiah_client/features/chat/presentation/widget/message_widget.dart';
 
 class SingleChatScreenArgs {
@@ -118,6 +119,8 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                 }
 
                 return CustomAppBar(
+                  appBarColor: AppColor.whiteColor,
+                  elevation: 1,
                   context,
                   title: Row(
                     children: [
@@ -169,8 +172,10 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                   ),
                   centerTitle: false,
                   leadingWidth: 70,
-                  leading:
-                      GestureDetector(onTap: () => Navigator.pop(context), child: BackButton()),
+                  leading: GestureDetector(
+                      onTap: () => NavigatorMethods.pushNamedAndRemoveUntil(
+                          context, AllChatsScreen.routeName),
+                      child: BackButton()),
                   actions: [
                     IconButton(
                       onPressed: () => Navigator.pop(context),
@@ -228,7 +233,7 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(10.0),
                               child: Text(
                                 date.day == DateTime.now().day
                                     ? AppLocaleKey.today.tr()
@@ -256,6 +261,7 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                         unFocusColor: AppColor.grayBlueColor.withAlpha(100),
                         fillColor: AppColor.grayBlueColor,
                         controller: _messageEC,
+                        hintText: AppLocaleKey.messageHint.tr(),
                       ),
                     ),
                     IconButton(
@@ -274,7 +280,24 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                         }
                         _messageEC.clear();
                       },
-                      icon: SvgPicture.asset(AppImages.sendIcon),
+                      icon: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: AppColor.mainAppColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                AppImages.sends,
+                                height: 20,
+                                width: 20,
+                                color: AppColor.whiteColor,
+                              ),
+                            ],
+                          )),
                     ),
                   ],
                 ),

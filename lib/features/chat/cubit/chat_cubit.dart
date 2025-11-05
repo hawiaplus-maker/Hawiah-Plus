@@ -136,7 +136,7 @@ class ChatCubit extends Cubit<ChatState> {
 
   Future<void> updateUserStatus({
     required String orderId,
-    required String userType, 
+    required String userType,
     required bool isOnline,
   }) async {
     final orderRef = _firestore.collection('orders').doc(orderId);
@@ -146,6 +146,17 @@ class ChatCubit extends Cubit<ChatState> {
         '${userType}_lastSeen': isOnline ? FieldValue.serverTimestamp() : DateTime.now(),
       }, SetOptions(merge: true));
     } catch (e) {}
+  }
+
+  Future<void> updateTypingStatus({
+    required String orderId,
+    required String userType,
+    required bool isTyping,
+  }) async {
+    final orderRef = _firestore.collection('orders').doc(orderId);
+    await orderRef.set({
+      '${userType}_isTyping': isTyping,
+    }, SetOptions(merge: true));
   }
 
   @override

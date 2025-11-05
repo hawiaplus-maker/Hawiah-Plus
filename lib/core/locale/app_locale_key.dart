@@ -144,4 +144,5 @@ class AppLocaleKey {
   static const String saveChanges = 'saveChanges';
   static const String saveChangesSuccess = 'saveChangesSuccess';
   static const String somethingWentWrong = 'somethingWentWrong';
+  static const String messageHint = 'messageHint';
 }
