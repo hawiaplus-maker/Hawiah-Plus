@@ -256,5 +256,6 @@
    "saveChangesSuccess": "تم حفظ التغييرات بنجاح",
    "somethingWentWrong": "حدث خطأ ما ؛ حاول مرة أخري",
    "phones": "رقم الجوال",
-   "map": "الموقع"
+   "map": "الموقع",
+   "messageHint": "اكتب رسالتك هنا"
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
@@ -17,114 +20,82 @@ class MessageWidget extends StatelessWidget {
           int.tryParse(message.senderId.toString()) == context.read<ProfileCubit>().user!.id
               ? TextDirection.rtl
               : TextDirection.ltr,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  // int.tryParse(message.senderId.toString()) ==
-                  //         context.read<ProfileCubit>().user!.id
-                  //     ? Positioned(
-                  //       bottom: 0,
-                  //       right: -14,
-                  //       child: CustomPaint(
-                  //         size: const Size(14, 15),
-                  //         painter: MeTrianglePainter(
-                  //           color: AppColor.greyColor.withOpacity(.100),
-                  //         ),
-                  //       ),
-                  //     )
-                  //     : Positioned(
-                  //       bottom: 0,
-                  //       left: -14,
-                  //       child: CustomPaint(
-                  //         size: const Size(14, 15),
-                  //         painter: TrianglePainter(
-                  //           color: AppColor.mainAppColor.withOpacity(.100),
-                  //         ),
-                  //       ),
-                  //     ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 15,
-                    ),
-                    decoration: BoxDecoration(
-                        color: int.tryParse(message.senderId.toString()) ==
-                                context.read<ProfileCubit>().user!.id
-                            ? AppColor.blueColor
-                            : AppColor.whiteColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: const Radius.circular(20),
-                          topRight: const Radius.circular(20),
-                          bottomLeft: Radius.circular(
-                            int.tryParse(message.senderId.toString()) ==
-                                    context.read<ProfileCubit>().user!.id
-                                ? 20
-                                : 0,
-                          ),
-                          bottomRight: Radius.circular(
-                            int.tryParse(message.senderId.toString()) ==
-                                    context.read<ProfileCubit>().user!.id
-                                ? 0
-                                : 20,
-                          ),
-                        ),
-                        boxShadow: [
-                          int.tryParse(message.senderId.toString()) ==
-                                  context.read<ProfileCubit>().user!.id
-                              ? BoxShadow()
-                              : BoxShadow(
-                                  color: AppColor.lightGreyColor,
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: const Offset(0, 3),
-                                ),
-                        ]),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          message.message ?? "",
-                          maxLines: 5,
-                          style: int.tryParse(message.senderId.toString()) ==
-                                  context.read<ProfileCubit>().user!.id
-                              ? AppTextStyle.text14_500.copyWith(color: AppColor.whiteColor)
-                              : AppTextStyle.text14_500,
-                        ),
-                        Text(
-                          DateMethods.formatToTime(message.timeStamp),
-                          style: int.tryParse(message.senderId.toString()) ==
-                                  context.read<ProfileCubit>().user!.id
-                              ? AppTextStyle.text10_400.copyWith(color: AppColor.whiteColor)
-                              : AppTextStyle.text10_400.copyWith(
-                                  color: AppColor.textSecondaryColor,
-                                ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    left: int.tryParse(message.senderId.toString()) ==
-                            context.read<ProfileCubit>().user!.id
-                        ? 0
-                        : -20,
-                    right: int.tryParse(message.senderId.toString()) ==
-                            context.read<ProfileCubit>().user!.id
-                        ? -20
-                        : 0,
-                    bottom: -30,
-                    child: const Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                    ),
-                  ),
-                ],
+          Gap(10.h),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomNetworkImage(
+                imageUrl: context.read<ProfileCubit>().user!.image,
+                fit: BoxFit.fill,
+                height: 50,
+                width: 50,
+                radius: 30,
               ),
-            ),
+              SizedBox(width: 5.w),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 15,
+                ),
+                decoration: BoxDecoration(
+                    color: int.tryParse(message.senderId.toString()) ==
+                            context.read<ProfileCubit>().user!.id
+                        ? AppColor.mainAppColor
+                        : AppColor.whiteColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: const Radius.circular(24),
+                      bottomLeft: Radius.circular(
+                        int.tryParse(message.senderId.toString()) ==
+                                context.read<ProfileCubit>().user!.id
+                            ? 10
+                            : 0,
+                      ),
+                      bottomRight: Radius.circular(
+                        int.tryParse(message.senderId.toString()) ==
+                                context.read<ProfileCubit>().user!.id
+                            ? 20
+                            : 0,
+                      ),
+                    ),
+                    boxShadow: [
+                      int.tryParse(message.senderId.toString()) ==
+                              context.read<ProfileCubit>().user!.id
+                          ? BoxShadow()
+                          : BoxShadow(
+                              color: AppColor.lightGreyColor,
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(0, 3),
+                            ),
+                    ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      message.message ?? "",
+                      maxLines: 5,
+                      style: int.tryParse(message.senderId.toString()) ==
+                              context.read<ProfileCubit>().user!.id
+                          ? AppTextStyle.text14_500.copyWith(color: AppColor.whiteColor)
+                          : AppTextStyle.text14_500,
+                    ),
+                    Text(
+                      DateMethods.formatToTime(message.timeStamp),
+                      style: int.tryParse(message.senderId.toString()) ==
+                              context.read<ProfileCubit>().user!.id
+                          ? AppTextStyle.text12_400.copyWith(color: AppColor.whiteColor)
+                          : AppTextStyle.text12_400.copyWith(
+                              color: AppColor.textSecondaryColor,
+                            ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
