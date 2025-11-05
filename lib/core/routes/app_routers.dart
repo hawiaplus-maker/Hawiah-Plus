@@ -82,8 +82,7 @@ class AppRouters {
             providers: [
               BlocProvider(create: (_) => HomeCubit()..getCategories()),
               if (HiveMethods.isVisitor() == false)
-                BlocProvider(create: (_) => ProfileCubit()..fetchProfile()),
-              BlocProvider(create: (_) => SettingCubit()..getsetting()),
+                BlocProvider(create: (_) => sl<SettingCubit>()..getsetting()),
               BlocProvider(
                   create: (_) => OrderCubit()
                     ..getOrders(orderStatus: 0)

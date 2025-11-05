@@ -72,10 +72,7 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
         extendBody: true,
         appBar: CustomAppBar(
           context,
-          title: Text(
-            AppLocaleKey.chat.tr(),
-            style: const TextStyle(color: Colors.black),
-          ),
+          titleText: AppLocaleKey.chat.tr(),
           centerTitle: true,
         ),
         body: Padding(

@@ -4,7 +4,7 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
 import 'package:hawiah_client/features/chat/model/chat_model.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
-import 'package:provider/provider.dart';
+import 'package:hawiah_client/injection_container.dart';
 
 class MessageWidget extends StatelessWidget {
   const MessageWidget({super.key, required this.message});
@@ -13,10 +13,9 @@ class MessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection:
-          int.tryParse(message.senderId.toString()) == context.read<ProfileCubit>().user!.id
-              ? TextDirection.rtl
-              : TextDirection.ltr,
+      textDirection: int.tryParse(message.senderId.toString()) == sl<ProfileCubit>().user!.id
+          ? TextDirection.rtl
+          : TextDirection.ltr,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -27,7 +26,7 @@ class MessageWidget extends StatelessWidget {
                 clipBehavior: Clip.none,
                 children: [
                   // int.tryParse(message.senderId.toString()) ==
-                  //         context.read<ProfileCubit>().user!.id
+                  //         sl<ProfileCubit>().user!.id
                   //     ? Positioned(
                   //       bottom: 0,
                   //       right: -14,
@@ -54,29 +53,32 @@ class MessageWidget extends StatelessWidget {
                       horizontal: 15,
                     ),
                     decoration: BoxDecoration(
-                        color: int.tryParse(message.senderId.toString()) ==
-                                context.read<ProfileCubit>().user!.id
-                            ? AppColor.blueColor
-                            : AppColor.whiteColor,
+                        color:
+                            int.tryParse(message.senderId.toString()) == sl<ProfileCubit>().user!.id
+                                ? AppColor.mainAppColor
+                                : AppColor.whiteColor,
                         borderRadius: BorderRadius.only(
-                          topLeft: const Radius.circular(20),
-                          topRight: const Radius.circular(20),
+                          topLeft: Radius.circular(int.tryParse(message.senderId.toString()) ==
+                                  sl<ProfileCubit>().user!.id
+                              ? 0
+                              : 20),
+                          topRight: Radius.circular(int.tryParse(message.senderId.toString()) ==
+                                  sl<ProfileCubit>().user!.id
+                              ? 20
+                              : 0),
                           bottomLeft: Radius.circular(
-                            int.tryParse(message.senderId.toString()) ==
-                                    context.read<ProfileCubit>().user!.id
+                            int.tryParse(message.senderId.toString()) == sl<ProfileCubit>().user!.id
                                 ? 20
                                 : 0,
                           ),
                           bottomRight: Radius.circular(
-                            int.tryParse(message.senderId.toString()) ==
-                                    context.read<ProfileCubit>().user!.id
+                            int.tryParse(message.senderId.toString()) == sl<ProfileCubit>().user!.id
                                 ? 0
                                 : 20,
                           ),
                         ),
                         boxShadow: [
-                          int.tryParse(message.senderId.toString()) ==
-                                  context.read<ProfileCubit>().user!.id
+                          int.tryParse(message.senderId.toString()) == sl<ProfileCubit>().user!.id
                               ? BoxShadow()
                               : BoxShadow(
                                   color: AppColor.lightGreyColor,
@@ -92,14 +94,14 @@ class MessageWidget extends StatelessWidget {
                           message.message ?? "",
                           maxLines: 5,
                           style: int.tryParse(message.senderId.toString()) ==
-                                  context.read<ProfileCubit>().user!.id
+                                  sl<ProfileCubit>().user!.id
                               ? AppTextStyle.text14_500.copyWith(color: AppColor.whiteColor)
                               : AppTextStyle.text14_500,
                         ),
                         Text(
                           DateMethods.formatToTime(message.timeStamp),
                           style: int.tryParse(message.senderId.toString()) ==
-                                  context.read<ProfileCubit>().user!.id
+                                  sl<ProfileCubit>().user!.id
                               ? AppTextStyle.text10_400.copyWith(color: AppColor.whiteColor)
                               : AppTextStyle.text10_400.copyWith(
                                   color: AppColor.textSecondaryColor,
@@ -109,12 +111,10 @@ class MessageWidget extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    left: int.tryParse(message.senderId.toString()) ==
-                            context.read<ProfileCubit>().user!.id
+                    left: int.tryParse(message.senderId.toString()) == sl<ProfileCubit>().user!.id
                         ? 0
                         : -20,
-                    right: int.tryParse(message.senderId.toString()) ==
-                            context.read<ProfileCubit>().user!.id
+                    right: int.tryParse(message.senderId.toString()) == sl<ProfileCubit>().user!.id
                         ? -20
                         : 0,
                     bottom: -30,

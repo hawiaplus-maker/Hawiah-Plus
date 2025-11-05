@@ -70,6 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 SizedBox(height: 40.h),
                 BlocProvider(
+                  lazy: true,
                   create: (context) => SettingCubit(),
                   child: TermsAndConditionsSection(
                     checkedValueTerms: checkedValueTerms,
@@ -78,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                 ),
-                Spacer(),
+           
                 FooterRegisterWidget(),
                 SizedBox(height: 20.h),
               ],

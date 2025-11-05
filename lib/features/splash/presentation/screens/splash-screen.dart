@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/app-language/presentation/screens/app-language-screen.dart';
+import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-cubit.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
+import 'package:hawiah_client/injection_container.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -21,24 +26,33 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _initializeApp() async {
     await Future.delayed(Duration.zero);
 
-    final cubit = context.read<ProfileCubit>();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const AppLanguageScreen()),
-    );
-    // cubit.fetchProfile(
-    //   onSuccess: () {
-    //     log("Navigation to LayoutScreen");
-    //     NavigatorMethods.pushReplacementNamed(
-    //       context,
-    //       LayoutScreen.routeName,
-    //     );
-    //   },
-    //   onError: () {
-    //     log("Navigation to AppLanguageScreen");
-
-    //   },
-    // );
+    final cubit = sl<ProfileCubit>();
+    if (HiveMethods.isFirstTime() == true) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AppLanguageScreen()),
+      );
+    } else {
+      if (HiveMethods.getToken() != null) {
+        await cubit.fetchProfile(
+          onSuccess: () {
+            log("Navigation to LayoutScreen");
+            NavigatorMethods.pushReplacementNamed(
+              context,
+              LayoutScreen.routeName,
+            );
+          },
+          onError: () {
+            log("Navigation to AppLanguageScreen");
+          },
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const AppLanguageScreen()),
+        );
+      }
+    }
   }
 
   @override

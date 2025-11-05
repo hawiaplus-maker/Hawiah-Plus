@@ -10,6 +10,7 @@ import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_state.dart';
+import 'package:hawiah_client/injection_container.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SupportScreen extends StatefulWidget {
@@ -21,12 +22,12 @@ class SupportScreen extends StatefulWidget {
 }
 
 class _SupportScreenState extends State<SupportScreen> {
-  @override
-  void initState() {
-    context.read<SettingCubit>().initialSetting();
-    context.read<SettingCubit>().getsetting();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   sl<SettingCubit>().initialSetting();
+  //   sl<SettingCubit>().getsetting();
+  //   super.initState();
+  // }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,8 +36,8 @@ class _SupportScreenState extends State<SupportScreen> {
         titleText: AppLocaleKey.support.tr(),
       ),
       body: ApiResponseWidget(
-        apiResponse: context.watch<SettingCubit>().settingResponse,
-        onReload: () => context.read<SettingCubit>().getsetting(),
+        apiResponse: sl<SettingCubit>().settingResponse,
+        onReload: () => sl<SettingCubit>().getsetting(),
         isEmpty: false,
         child: Container(
           margin: const EdgeInsets.all(16),
@@ -47,7 +48,7 @@ class _SupportScreenState extends State<SupportScreen> {
               CustomSupport(
                 image: AppImages.mail,
                 title: "email".tr(),
-                subtitle: context.read<SettingCubit>().setting?.email ?? "",
+                subtitle: sl<SettingCubit>().setting?.email ?? "",
               ),
               Divider(
                 thickness: 1,
@@ -56,7 +57,7 @@ class _SupportScreenState extends State<SupportScreen> {
               CustomSupport(
                 image: AppImages.phoneSvg,
                 title: "phones".tr(),
-                subtitle: context.read<SettingCubit>().setting?.phone ?? "",
+                subtitle: sl<SettingCubit>().setting?.phone ?? "",
               ),
               Divider(
                 thickness: 1,
@@ -65,11 +66,11 @@ class _SupportScreenState extends State<SupportScreen> {
               CustomSupport(
                 image: AppImages.mapPin,
                 title: "map".tr(),
-                subtitle: context.read<SettingCubit>().setting?.address?.ar ?? "",
+                subtitle: sl<SettingCubit>().setting?.address?.ar ?? "",
               ),
               BlocBuilder<SettingCubit, SettingState>(
                 builder: (context, state) {
-                  final setting = context.read<SettingCubit>().setting;
+                  final setting = sl<SettingCubit>().setting;
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

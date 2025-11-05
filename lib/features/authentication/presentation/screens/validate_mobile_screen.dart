@@ -35,35 +35,37 @@ class _ValidateMobileScreenState extends State<ValidateMobileScreen> {
         builder: (BuildContext context, AuthState state) {
           return Form(
             key: formKey,
-            child: Container(
+            child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    AppLocaleKey.welcomeToHawiah.tr(),
-                    style: AppTextStyle.text16_400,
-                  ),
-                  Text(
-                    AppLocaleKey.loginToYourAccount.tr(),
-                    style: AppTextStyle.text18_500,
-                  ),
-                  SvgPicture.asset(
-                    AppImages.loginPhoneIcon,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                  ),
-                  SizedBox(height: 20.h),
-                  PhoneInputWidget(
-                    controller: AuthCubit.get(context).PhoneController,
-                  ),
-                  SizedBox(height: 20.h),
-                  ActionButtonsWidget(
-                    formKey: formKey,
-                  ),
-                  Spacer(),
-                  SizedBox(height: 20.h),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppLocaleKey.welcomeToHawiah.tr(),
+                      style: AppTextStyle.text16_400,
+                    ),
+                    Text(
+                      AppLocaleKey.loginToYourAccount.tr(),
+                      style: AppTextStyle.text18_500,
+                    ),
+                    SvgPicture.asset(
+                      AppImages.loginPhoneIcon,
+                      height: MediaQuery.of(context).size.height * 0.4,
+                    ),
+                    SizedBox(height: 20.h),
+                    PhoneInputWidget(
+                      controller: AuthCubit.get(context).PhoneController,
+                    ),
+                    SizedBox(height: 20.h),
+                    ActionButtonsWidget(
+                      formKey: formKey,
+                    ),
+                  
+                    SizedBox(height: 20.h),
+                  ],
+                ),
               ),
             ),
           );

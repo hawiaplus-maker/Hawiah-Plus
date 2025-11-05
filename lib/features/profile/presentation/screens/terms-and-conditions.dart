@@ -7,6 +7,7 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/features/authentication/presentation/bottom_sheet/privacy_bottom_sheet.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_state.dart';
+import 'package:hawiah_client/injection_container.dart';
 
 class TermsAndConditionsScreen extends StatefulWidget {
   static const String routeName = '/terms-and-conditions';
@@ -17,11 +18,6 @@ class TermsAndConditionsScreen extends StatefulWidget {
 }
 
 class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
-  void initState() {
-    context.read<SettingCubit>().initialSetting();
-    context.read<SettingCubit>().getsetting();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +26,10 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
         context,
         titleText: AppLocaleKey.termsAndConditions.tr(),
       ),
-      body: BlocBuilder<SettingCubit, SettingState>(builder: (context, state) {
-        final setting = context.read<SettingCubit>().setting;
+      body: BlocBuilder<SettingCubit, SettingState>(
+        bloc: sl<SettingCubit>(),
+        builder: (context, state) {
+        final setting = sl<SettingCubit>().setting;
         if (setting == null) return const Center(child: CustomLoading());
         return Column(
           children: [

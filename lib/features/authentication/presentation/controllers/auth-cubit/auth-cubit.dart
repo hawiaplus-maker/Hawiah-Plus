@@ -12,6 +12,8 @@ import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
+import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
+import 'package:hawiah_client/injection_container.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -240,7 +242,8 @@ class AuthCubit extends Cubit<AuthState> {
       final message = response.data['message'] ?? 'Login completed';
 
       if (data != null) {
-        HiveMethods.updateToken(data['api_token']);
+        HiveMethods.updateToken(data['api_token']);  
+        await sl<ProfileCubit>().fetchProfile();
 
         emit(AuthSuccess(
           message: message,

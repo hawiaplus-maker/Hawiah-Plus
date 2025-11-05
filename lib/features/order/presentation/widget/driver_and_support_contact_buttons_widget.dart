@@ -7,6 +7,7 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/url_luncher_methods.dart';
 import 'package:hawiah_client/features/order/presentation/screens/current-order-screen.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
+import 'package:hawiah_client/injection_container.dart';
 
 class DriverAndSupportContactButtons extends StatelessWidget {
   const DriverAndSupportContactButtons({
@@ -50,7 +51,7 @@ class DriverAndSupportContactButtons extends StatelessWidget {
         InkWell(
           onTap: () {
             UrlLauncherMethods.launchURL(
-              context.read<SettingCubit>().setting?.phone ?? "",
+              sl<SettingCubit>().setting?.phone ?? "",
             );
           },
           child: Column(
