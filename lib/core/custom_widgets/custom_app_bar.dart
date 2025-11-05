@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hawiah_client/core/extension/context_extension.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 
 class CustomAppBar extends PreferredSize {
@@ -46,7 +47,9 @@ class CustomAppBar extends PreferredSize {
             title: title ??
                 Text(
                   titleText ?? "",
-                  style: AppTextStyle.text18_700.copyWith(fontFamily: "DINNextLTArabic"),
+                  style: AppTextStyle.text18_700.copyWith(
+                    fontFamily: context.fontFamily(),
+                  ),
                 ),
             leading: leading ??
                 (automaticallyImplyLeading && Navigator.canPop(context)
