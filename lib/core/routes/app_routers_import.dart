@@ -6,6 +6,7 @@ import 'package:hawiah_client/features/authentication/presentation/screens/forge
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/verification-otp-screen.dart';
+import 'package:hawiah_client/features/chat/presentation/screens/chat-screen.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/single-chat-screen.dart';
 import 'package:hawiah_client/features/home/execution/screen/nearby_service_provider_screen.dart';
 import 'package:hawiah_client/features/home/execution/screen/payment-screen.dart';

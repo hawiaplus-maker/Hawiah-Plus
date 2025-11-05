@@ -128,6 +128,10 @@ class AppRouters {
         return MaterialPageRoute(
           builder: (_) => const TermsAndConditionsScreen(),
         );
+      case AllChatsScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const AllChatsScreen(),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const ValidateMobileScreen(),
