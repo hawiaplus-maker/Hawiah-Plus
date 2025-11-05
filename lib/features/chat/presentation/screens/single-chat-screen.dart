@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
@@ -10,6 +12,7 @@ import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
 import 'package:hawiah_client/features/chat/cubit/chat_cubit.dart';
 import 'package:hawiah_client/features/chat/model/chat_model.dart';
@@ -53,13 +56,24 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
 
   @override
   void initState() {
+    super.initState();
     _chatCubit = ChatCubit();
     _chatCubit.initialize(widget.args.orderId);
-    super.initState();
+
+    _chatCubit.updateUserStatus(
+      orderId: widget.args.orderId,
+      userType: widget.args.senderType,
+      isOnline: true,
+    );
   }
 
   @override
   void dispose() {
+    _chatCubit.updateUserStatus(
+      orderId: widget.args.orderId,
+      userType: widget.args.senderType,
+      isOnline: false,
+    );
     _chatCubit.close();
     super.dispose();
   }
@@ -76,29 +90,103 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
       child: BlocProvider(
         create: (context) => _chatCubit,
         child: Scaffold(
-          appBar: CustomAppBar(
-            context,
-            titleText: widget.args.receiverName,
-            centerTitle: false,
-            leadingWidth: 70,
-            actions: [
-              IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: RotatedBox(
-                  quarterTurns: 90,
-                  child: Icon(Icons.arrow_back_ios_new),
-                ),
-              ),
-            ],
-            leading: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: CustomNetworkImage(
-                imageUrl: widget.args.receiverImage,
-                height: 40,
-                width: 40,
-                radius: 30,
-                fit: BoxFit.cover,
-              ),
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(70),
+            child: StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('orders')
+                  .doc(widget.args.orderId)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                String statusText = '';
+
+                if (snapshot.hasData && snapshot.data!.exists) {
+                  final data = snapshot.data!.data() as Map<String, dynamic>;
+
+                  final receiverType = widget.args.receiverType;
+
+                  final bool isOnline = data['${receiverType}_isOnline'] ?? false;
+                  final lastSeen = (data['${receiverType}_lastSeen'] as Timestamp?)?.toDate();
+
+                  if (isOnline) {
+                    statusText = 'متصل الآن';
+                  } else if (lastSeen != null) {
+                    statusText = 'آخر ظهور: ${DateMethods.formatToTime(lastSeen)}';
+                  } else {
+                    statusText = 'غير متصل';
+                  }
+                }
+
+                return CustomAppBar(
+                  context,
+                  title: Row(
+                    children: [
+                      Stack(
+                        children: [
+                          CustomNetworkImage(
+                            imageUrl: widget.args.receiverImage,
+                            height: 40,
+                            width: 40,
+                            radius: 30,
+                            fit: BoxFit.cover,
+                          ),
+                          if (snapshot.hasData &&
+                              snapshot.data!.data() != null &&
+                              (snapshot.data!.data() as Map<String, dynamic>)[
+                                      '${widget.args.receiverType}_isOnline'] ==
+                                  true)
+                            Positioned(
+                              bottom: 8,
+                              right: 12,
+                              child: Container(
+                                height: 12,
+                                width: 12,
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.white, width: 2),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      Gap(5),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.args.receiverName,
+                            style: AppTextStyle.text14_400,
+                          ),
+                          if (statusText.isNotEmpty)
+                            Text(
+                              statusText,
+                              style: AppTextStyle.text12_400.copyWith(color: Colors.grey),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  centerTitle: false,
+                  leadingWidth: 70,
+                  leading:
+                      GestureDetector(onTap: () => Navigator.pop(context), child: BackButton()),
+                  actions: [
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(Icons.phone, color: AppColor.textGrayColor),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(Icons.video_call, color: AppColor.textGrayColor),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.more_vert, color: AppColor.textGrayColor),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
           body: Column(
@@ -133,10 +221,20 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                           return MessageWidget(message: element);
                         },
                         groupSeparatorBuilder: (date) => Center(
-                          child: Text(
-                            date.day == DateTime.now().day
-                                ? AppLocaleKey.today.tr()
-                                : DateMethods.formatToDate(date),
+                          child: Card(
+                            elevation: 5,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                date.day == DateTime.now().day
+                                    ? AppLocaleKey.today.tr()
+                                    : DateMethods.formatToDate(date),
+                              ),
+                            ),
                           ),
                         ),
                         separator: const SizedBox(height: 15),

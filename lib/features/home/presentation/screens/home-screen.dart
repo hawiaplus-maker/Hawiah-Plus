@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/home_app_bar_title.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/home_bottom_floating_order_widget.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/home_categories_list_widget.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/home_slider_widget.dart';
+import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +17,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
+  void initState() {
+    Future.microtask(() => context.read<ProfileCubit>().fetchProfile());
+
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
         extendBody: true,

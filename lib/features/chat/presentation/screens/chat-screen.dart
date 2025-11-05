@@ -2,12 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
-import 'package:hawiah_client/core/utils/date_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/chat/cubit/chat_cubit.dart';
 import 'package:hawiah_client/features/chat/model/chat_model.dart';
@@ -15,6 +16,8 @@ import 'package:hawiah_client/features/chat/presentation/screens/single-chat-scr
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 
 class AllChatsScreen extends StatefulWidget {
+  const AllChatsScreen({super.key});
+
   @override
   State<AllChatsScreen> createState() => _AllChatsScreenState();
 }
@@ -80,6 +83,8 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
           child: Column(
             children: [
               _buildSearchField(),
+              Gap(10.h),
+              Divider(color: Colors.grey.shade300),
               Expanded(
                 child: BlocListener<ChatCubit, ChatState>(
                   listener: (context, state) {
@@ -98,35 +103,54 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
                           itemCount: chats.length,
                           itemBuilder: (context, index) {
                             final chat = chats[index];
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Card(
-                                elevation: 2,
-                                color: AppColor.whiteColor,
-                                child: ListTile(
-                                  leading: CustomNetworkImage(
-                                    imageUrl: chat.receiverImage,
-                                    fit: BoxFit.fill,
-                                    height: 40,
-                                    width: 40,
-                                    radius: 30,
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ListTile(
+                                  leading: Stack(
+                                    children: [
+                                      CustomNetworkImage(
+                                        imageUrl: chat.receiverImage,
+                                        fit: BoxFit.fill,
+                                        height: 40,
+                                        width: 40,
+                                        radius: 30,
+                                      ),
+                                      Positioned(
+                                        bottom: 2,
+                                        left: 2,
+                                        child: Container(
+                                          width: 10,
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                chat.isOnline == true ? Colors.green : Colors.grey,
+                                            shape: BoxShape.circle,
+                                            border: Border.all(color: Colors.white, width: 1.5),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   title: Text(
                                     chat.receiverName,
-                                    style: AppTextStyle.text18_700,
+                                    style: AppTextStyle.text14_400,
                                   ),
                                   subtitle: Text(
                                     chat.lastMessage,
-                                    style: AppTextStyle.text16_500,
+                                    style: AppTextStyle.text12_400.copyWith(
+                                      color: AppColor.greyColor,
+                                    ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   trailing: Text(
                                     chat.lastMessageTime != null
-                                        ? DateMethods.formatToTime(
-                                            chat.lastMessageTime,
-                                          )
+                                        ? DateMethods.formatToTime(chat.lastMessageTime)
                                         : '',
+                                    style:
+                                        AppTextStyle.text12_400.copyWith(color: AppColor.greyColor),
                                   ),
                                   onTap: () {
                                     NavigatorMethods.pushNamed(
@@ -150,7 +174,8 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
                                     );
                                   },
                                 ),
-                              ),
+                                Divider(color: Colors.grey.shade300),
+                              ],
                             );
                           },
                         );
@@ -171,23 +196,45 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
   }
 
   Widget _buildSearchField() {
-    return TextFormField(
-      controller: _searchController,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 10,
-        ),
+    return Material(
+      elevation: 4,
+      shadowColor: Colors.black26,
+      borderRadius: BorderRadius.circular(12),
+      child: CustomTextField(
+        controller: _searchController,
         hintText: AppLocaleKey.findAConversation.tr(),
         hintStyle: TextStyle(color: const Color(0xff979797), fontSize: 15.sp),
-        filled: true,
-        fillColor: const Color(0xFFF9F9F9),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(40.0),
-          borderSide: BorderSide(color: Color(0xFFF9F9F9)),
-        ),
+        fillColor: Colors.white,
         prefixIcon: Icon(Icons.search, color: AppColor.mainAppColor, size: 25),
       ),
     );
+  }
+}
+
+class DateMethods {
+  static String formatToTime(DateTime? dateTime) {
+    if (dateTime == null) return '';
+
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inSeconds < 60) {
+      return 'منذ لحظات';
+    } else if (difference.inMinutes < 60) {
+      return 'منذ ${difference.inMinutes} دقيقة';
+    } else if (difference.inHours < 24) {
+      return 'منذ ${difference.inHours} ساعة';
+    } else if (difference.inDays < 7) {
+      return 'منذ ${difference.inDays} يوم';
+    } else if (difference.inDays < 30) {
+      final weeks = (difference.inDays / 7).floor();
+      return 'منذ $weeks أسبوع';
+    } else if (difference.inDays < 365) {
+      final months = (difference.inDays / 30).floor();
+      return 'منذ $months شهر';
+    } else {
+      final years = (difference.inDays / 365).floor();
+      return 'منذ $years سنة';
+    }
   }
 }

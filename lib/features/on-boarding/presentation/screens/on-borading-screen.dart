@@ -22,6 +22,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     HiveMethods.updateFirstTime();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,8 +44,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           final pageController = cubit.pageController;
 
           final onBoardingImages = cubit.onBoardingList.map((e) => e.image ?? "").toList();
-          final onboardingTitles = cubit.onBoardingList.map((e) => e.title ?? "").toList();
-          final onboardingContents = cubit.onBoardingList.map((e) => e.about ?? "").toList();
+        final onboardingTitles =
+    cubit.onBoardingList.map((e) => e.title?.text(context) ?? "").toList();
+
+final onboardingContents =
+    cubit.onBoardingList.map((e) => e.about?.text(context) ?? "").toList();
+
+
           final onboardingIcons = List.generate(
             cubit.onBoardingList.length,
             (index) => "",

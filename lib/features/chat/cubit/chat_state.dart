@@ -34,3 +34,12 @@ class RecentChatsLoaded extends ChatState {
 
   RecentChatsLoaded(this.chats);
 }
+
+class OrdersStatusLoaded extends ChatState {
+  final List<Map<String, dynamic>> statuses;
+
+  OrdersStatusLoaded(this.statuses);
+
+  @override
+  List<Object> get props => [statuses];
+}
