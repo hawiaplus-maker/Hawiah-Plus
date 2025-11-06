@@ -78,18 +78,7 @@ class AppRouters {
         );
       case LayoutScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider(create: (_) => HomeCubit()..getCategories()),
-              if (HiveMethods.isVisitor() == false)
-                BlocProvider(create: (_) => sl<SettingCubit>()..getsetting()),
-              BlocProvider(
-                  create: (_) => OrderCubit()
-                    ..getOrders(orderStatus: 0)
-                    ..getOrders(orderStatus: 1)),
-            ],
-            child: const LayoutScreen(),
-          ),
+          builder: (_) => const LayoutScreen(),
         );
 
       case SingleChatScreen.routeName:

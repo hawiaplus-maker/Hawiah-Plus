@@ -10,6 +10,7 @@ class OrderSuccess extends OrderState {
 }
 
 class OrderLoading extends OrderState {}
+class OrderPaginationLoading extends OrderState {}
 
 class OrderChange extends OrderState {}
 

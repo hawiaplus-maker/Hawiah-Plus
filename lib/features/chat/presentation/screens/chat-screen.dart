@@ -5,14 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
-import 'package:hawiah_client/core/theme/app_text_style.dart';
-import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/chat/cubit/chat_cubit.dart';
 import 'package:hawiah_client/features/chat/model/chat_model.dart';
-import 'package:hawiah_client/features/chat/presentation/screens/single-chat-screen.dart';
+import 'package:hawiah_client/features/chat/presentation/widget/conversation_list_tile.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 
 class AllChatsScreen extends StatefulWidget {
@@ -76,7 +74,7 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
           centerTitle: true,
         ),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          padding: EdgeInsets.symmetric(horizontal: 18),
           child: Column(
             children: [
               _buildSearchField(),
@@ -93,87 +91,17 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
                   child: BlocBuilder<ChatCubit, ChatState>(
                     builder: (context, state) {
                       if (state is ChatLoading) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(child: CustomLoading());
                       } else if (state is RecentChatsLoaded) {
                         final chats = _filteredChats;
-                        return ListView.builder(
+                        return ListView.separated(
+                          separatorBuilder: (context, index) =>
+                              Divider(color: Colors.grey.shade300),
                           itemCount: chats.length,
                           itemBuilder: (context, index) {
                             final chat = chats[index];
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ListTile(
-                                  leading: Stack(
-                                    children: [
-                                      CustomNetworkImage(
-                                        imageUrl: chat.receiverImage,
-                                        fit: BoxFit.fill,
-                                        height: 40,
-                                        width: 40,
-                                        radius: 30,
-                                      ),
-                                      Positioned(
-                                        bottom: 2,
-                                        left: 2,
-                                        child: Container(
-                                          width: 10,
-                                          height: 10,
-                                          decoration: BoxDecoration(
-                                            color:
-                                                chat.isOnline == true ? Colors.green : Colors.grey,
-                                            shape: BoxShape.circle,
-                                            border: Border.all(color: Colors.white, width: 1.5),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  title: Text(
-                                    chat.receiverName,
-                                    style: AppTextStyle.text14_400,
-                                  ),
-                                  subtitle: Text(
-                                    chat.lastMessage,
-                                    style: AppTextStyle.text12_400.copyWith(
-                                      color: AppColor.greyColor,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  trailing: Text(
-                                    chat.lastMessageTime != null
-                                        ? DateMethods.formatToTime(chat.lastMessageTime)
-                                        : '',
-                                    style:
-                                        AppTextStyle.text12_400.copyWith(color: AppColor.greyColor),
-                                  ),
-                                  onTap: () {
-                                    NavigatorMethods.pushNamed(
-                                      context,
-                                      SingleChatScreen.routeName,
-                                      arguments: SingleChatScreenArgs(
-                                        receiverId: chat.receiverId,
-                                        receiverType: 'driver',
-                                        receiverName: chat.receiverName,
-                                        receiverImage: chat.receiverImage,
-                                        senderId: userId,
-                                        senderType: 'user',
-                                        orderId: chat.orderId,
-                                        onMessageSent: () {
-                                          chatCubit.fetchRecentChats(
-                                            currentId: userId,
-                                            currentType: 'user',
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  },
-                                ),
-                                Divider(color: Colors.grey.shade300),
-                              ],
-                            );
+                            return ConversationListTile(
+                                chat: chat, userId: userId, chatCubit: chatCubit);
                           },
                         );
                       } else if (state is ChatError) {
@@ -205,33 +133,5 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
         prefixIcon: Icon(Icons.search, color: AppColor.mainAppColor, size: 25),
       ),
     );
-  }
-}
-
-class DateMethods {
-  static String formatToTime(DateTime? dateTime) {
-    if (dateTime == null) return '';
-
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-
-    if (difference.inSeconds < 60) {
-      return 'منذ لحظات';
-    } else if (difference.inMinutes < 60) {
-      return 'منذ ${difference.inMinutes} دقيقة';
-    } else if (difference.inHours < 24) {
-      return 'منذ ${difference.inHours} ساعة';
-    } else if (difference.inDays < 7) {
-      return 'منذ ${difference.inDays} يوم';
-    } else if (difference.inDays < 30) {
-      final weeks = (difference.inDays / 7).floor();
-      return 'منذ $weeks أسبوع';
-    } else if (difference.inDays < 365) {
-      final months = (difference.inDays / 30).floor();
-      return 'منذ $months شهر';
-    } else {
-      final years = (difference.inDays / 365).floor();
-      return 'منذ $years سنة';
-    }
   }
 }

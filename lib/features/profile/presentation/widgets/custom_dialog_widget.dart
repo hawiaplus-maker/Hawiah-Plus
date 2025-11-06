@@ -47,7 +47,10 @@ class CustomConfirmDialog extends StatelessWidget {
                 ),
               ),
             ),
-            Image.asset(image),
+            Image.asset(
+              image,
+              height: 80,
+            ),
             const SizedBox(height: 15),
             Text(
               content,

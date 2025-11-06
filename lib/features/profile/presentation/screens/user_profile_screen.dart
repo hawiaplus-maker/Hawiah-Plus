@@ -126,7 +126,8 @@ class _UserProfileState extends State<UserProfile> {
               barrierDismissible: false,
               builder: (ctx) => CustomConfirmDialog(
                 content: AppLocaleKey.saveChangesSuccess.tr(),
-                image: AppImages.successSvg,
+                image: AppImages.successGif,
+                
               ),
             );
           } else if (state is ProfileError) {

@@ -10,6 +10,7 @@ import 'package:hawiah_client/core/theme/cubit/app_theme_cubit.dart';
 import 'package:hawiah_client/hawiah_plus_app.dart';
 import 'package:hawiah_client/injection_container.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'firebase_options.dart';
 
@@ -27,6 +28,10 @@ void main() async {
   await Hive.openBox('app');
   Bloc.observer = MyBlocObserver();
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+  timeago.setLocaleMessages('ar', timeago.ArMessages());
+  timeago.setLocaleMessages('ar_short', timeago.ArShortMessages());
+  timeago.setLocaleMessages('en', timeago.EnMessages());
+  timeago.setLocaleMessages('en_short', timeago.EnShortMessages());
   runApp(
     EasyLocalization(
       supportedLocales: const [

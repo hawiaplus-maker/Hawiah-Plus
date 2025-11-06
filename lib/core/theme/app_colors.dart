@@ -97,8 +97,8 @@ class AppColor {
       );
 
   static Color get lightGreyColor => AppTheme.getByTheme(
-        light: const Color(0xffECECEC),
-        dark: const Color(0xffECECEC),
+        light: const Color(0xffA1A1AA),
+        dark: const Color(0xffA1A1AA),
       );
 
   static Color get redColor => AppTheme.getByTheme(

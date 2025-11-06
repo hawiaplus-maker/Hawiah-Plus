@@ -29,7 +29,7 @@ class _ValidateMobileScreenState extends State<ValidateMobileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBarAuthWidget(),
       body: BlocConsumer<AuthCubit, AuthState>(
         builder: (BuildContext context, AuthState state) {
@@ -62,7 +62,6 @@ class _ValidateMobileScreenState extends State<ValidateMobileScreen> {
                     ActionButtonsWidget(
                       formKey: formKey,
                     ),
-                  
                     SizedBox(height: 20.h),
                   ],
                 ),

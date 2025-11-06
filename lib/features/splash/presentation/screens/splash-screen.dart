@@ -19,13 +19,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+   if(HiveMethods.isFirstTime() == false){
     OnBoardingCubit.get(context).getOnboarding();
-    _initializeApp();
+   }
+   _initializeApp();
   }
 
   Future<void> _initializeApp() async {
-    await Future.delayed(Duration.zero);
-
+    await Future.delayed(Duration(seconds: 2));
+    log("is first time ${HiveMethods.isFirstTime()}");
     final cubit = sl<ProfileCubit>();
     if (HiveMethods.isFirstTime() == true) {
       Navigator.pushReplacement(

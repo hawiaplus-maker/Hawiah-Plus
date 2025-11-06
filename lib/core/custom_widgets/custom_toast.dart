@@ -37,19 +37,25 @@ class CustomToast extends StatelessWidget {
       child: Row(
         children: [
           Center(
-            child: CircleAvatar(
-              radius: 24,
-              backgroundColor: backgroundColor ?? _backgroundColor(),
-              child: SvgPicture.asset(
-                icon ?? _icons(),
-                height: 30,
-                width: 30,
-                colorFilter: const ColorFilter.mode(
-                  Colors.white,
-                  BlendMode.srcIn,
-                ),
-              ),
-            ),
+            child: type == ToastType.success
+                ? Image.asset(
+                    AppImages.successGif,
+                    height: 30,
+                    width: 30,
+                  )
+                : CircleAvatar(
+                    radius: 24,
+                    backgroundColor: backgroundColor ?? _backgroundColor(),
+                    child: SvgPicture.asset(
+                      icon ?? _icons(),
+                      height: 30,
+                      width: 30,
+                      colorFilter: const ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -106,7 +112,7 @@ class CustomToast extends StatelessWidget {
   String _icons() {
     switch (type) {
       case ToastType.success:
-        return AppImages.success;
+        return AppImages.successGif;
       case ToastType.error:
         return AppImages.error;
       case ToastType.offline:

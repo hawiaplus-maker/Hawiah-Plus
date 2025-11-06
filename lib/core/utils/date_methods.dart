@@ -8,9 +8,7 @@ import '../theme/app_colors.dart';
 
 class DateMethods {
   static String formatToDate(DateTime? dateTime) {
-    return dateTime != null
-        ? DateFormat('yyy-MM-dd', 'en').format(dateTime)
-        : "";
+    return dateTime != null ? DateFormat('yyy-MM-dd', 'en').format(dateTime) : "";
   }
 
   static String formatToFullData(DateTime? dateTime) {
@@ -37,8 +35,7 @@ class DateMethods {
     int hours = s?.containsKey(0) == true ? int.parse(s![0]!) : 00;
     int minutes = s?.containsKey(1) == true ? int.parse(s![1]!) : 00;
 
-    DateTime? dateTime =
-        s != null ? DateTime(0000, 00, 00, hours, minutes) : null;
+    DateTime? dateTime = s != null ? DateTime(0000, 00, 00, hours, minutes) : null;
     return dateTime != null
         ? DateFormat(
             "hh:mm a",
@@ -56,9 +53,7 @@ class DateMethods {
   }
 
   static String timeAgo(DateTime? date, BuildContext context) {
-    return date != null
-        ? timeago.format(date, locale: context.locale.languageCode)
-        : "----";
+    return date != null ? timeago.format(date, locale: context.locale.languageCode) : "----";
   }
 
   static int daysInMonth(final int monthNum, final int year) {
@@ -159,8 +154,7 @@ class DateMethods {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: validInitialDate,
-      firstDate:
-          firstDate ?? DateTime.now().subtract(const Duration(days: 365 * 10)),
+      firstDate: firstDate ?? DateTime.now().subtract(const Duration(days: 365 * 10)),
       lastDate: lastDate ?? DateTime.now().add(const Duration(days: 365 * 30)),
       selectableDayPredicate: (day) {
         if (disabledDates != null) {

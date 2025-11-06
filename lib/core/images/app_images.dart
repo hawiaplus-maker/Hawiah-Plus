@@ -66,7 +66,7 @@ class AppImages {
   static const String logs = 'assets/svg/logs.svg';
   static const String house = 'assets/svg/house.svg';
   static const String errorSvg = 'assets/gifs/errorSvg.gif';
-  static const String successSvg = 'assets/gifs/successSvg.gif';
+  static const String successGif = 'assets/gifs/successSvg.gif';
   static const String logoutGif = 'assets/gifs/logoutGif.gif';
   static const String closeCircleIcon = 'assets/svg/closeCircleIcon.svg';
   static const String phoneSvg = 'assets/images/phones.png';
@@ -77,4 +77,7 @@ class AppImages {
   static const String trash = 'assets/svg/trash-2.svg';
   static const String notification = 'assets/images/notifications.gif';
   static const String sends = 'assets/images/Icon.png';
+  static const String videoCallIcon = 'assets/svg/videoCallIcon.svg';
+  static const String phoneCallIcon = 'assets/svg/phoneCallIcon.svg';
+  static const String noMessages = 'assets/svg/noMessages.svg';
 }
