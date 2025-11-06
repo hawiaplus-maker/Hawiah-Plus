@@ -7,6 +7,7 @@ import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/bottom_sheet/privacy_bottom_sheet.dart';
 import 'package:hawiah_client/features/authentication/presentation/bottom_sheet/terms_bottom_sheet.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
+import 'package:hawiah_client/injection_container.dart';
 
 class TermsAndConditionsSection extends StatefulWidget {
   final bool checkedValueTerms;
@@ -23,19 +24,19 @@ class TermsAndConditionsSection extends StatefulWidget {
 }
 
 class _TermsAndConditionsSectionState extends State<TermsAndConditionsSection> {
-  @override
-  void initState() {
-    context.read<SettingCubit>().initialSetting();
-    context.read<SettingCubit>().getsetting();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   context.read<SettingCubit>().initialSetting();
+  //   context.read<SettingCubit>().getsetting();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-        bloc: context.read<SettingCubit>(),
+        bloc: sl<SettingCubit>(),
         builder: (context, state) {
-          final setting = context.read<SettingCubit>().setting;
+          final setting = sl<SettingCubit>().setting;
           return GestureDetector(
             onTap: () {
               widget.onCheckboxChanged(!widget.checkedValueTerms);

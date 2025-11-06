@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
@@ -16,6 +17,7 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/widgets/custom_dialog_widget.dart';
+import 'package:hawiah_client/injection_container.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserProfile extends StatefulWidget {
@@ -35,12 +37,6 @@ class _UserProfileState extends State<UserProfile> {
   final _picker = ImagePicker();
   File? _pickedImage;
 
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() => context.read<ProfileCubit>().fetchProfile());
-  }
-
   Future<void> _pickImage() async {
     final picked = await _picker.pickImage(source: ImageSource.gallery);
     if (picked == null) return;
@@ -49,8 +45,15 @@ class _UserProfileState extends State<UserProfile> {
     Fluttertoast.showToast(msg: AppLocaleKey.imageSelected.tr());
   }
 
+  @override
+  void initState() {
+    _controllers['name']!.text = sl<ProfileCubit>().user?.name ?? '';
+    _controllers['mobile']!.text = sl<ProfileCubit>().user?.mobile ?? '';
+    super.initState();
+  }
+
   void _onUpdatePressed() async {
-    final cubit = context.read<ProfileCubit>();
+    final cubit = sl<ProfileCubit>();
     await cubit.updateProfile(
       name: _controllers['name']!.text,
       mobile: _controllers['mobile']!.text,
@@ -96,7 +99,7 @@ class _UserProfileState extends State<UserProfile> {
       .map((entry) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: CustomTextField(
-              title: entry.key.capitalize(),
+              title: entry.key.tr(),
               controller: entry.value,
             ),
           ))
@@ -105,11 +108,13 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocaleKey.profileFile.tr(), style: AppTextStyle.text20_700),
+      appBar: CustomAppBar(
+        context,
+        titleText: AppLocaleKey.profileFile.tr(),
         centerTitle: true,
       ),
       body: BlocConsumer<ProfileCubit, ProfileState>(
+        bloc: sl<ProfileCubit>(),
         listener: (context, state) {
           if (state is ProfileLoaded) {
             final user = state.user;

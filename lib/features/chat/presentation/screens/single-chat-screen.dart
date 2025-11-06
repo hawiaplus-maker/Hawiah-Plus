@@ -8,6 +8,7 @@ import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart'
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
+import 'package:hawiah_client/core/extension/context_extension.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
@@ -162,12 +163,14 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                         children: [
                           Text(
                             widget.args.receiverName,
-                            style: AppTextStyle.text14_400,
+                            style:
+                                AppTextStyle.text14_400.copyWith(fontFamily: context.fontFamily()),
                           ),
                           if (statusText.isNotEmpty)
                             Text(
                               statusText,
-                              style: AppTextStyle.text12_400.copyWith(color: Colors.grey),
+                              style: AppTextStyle.text12_400
+                                  .copyWith(color: Colors.grey, fontFamily: context.fontFamily()),
                             ),
                         ],
                       ),
@@ -175,10 +178,12 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                   ),
                   centerTitle: false,
                   leadingWidth: 70,
+
                   leading: GestureDetector(
                       onTap: () => NavigatorMethods.pushNamedAndRemoveUntil(
                           context, AllChatsScreen.routeName),
                       child: BackButton()),
+
                   actions: [
                     IconButton(
                       onPressed: () => Navigator.pop(context),

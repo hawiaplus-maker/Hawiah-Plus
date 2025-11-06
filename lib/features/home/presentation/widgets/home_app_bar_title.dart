@@ -12,6 +12,7 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/notifications/presentation/screen/notifications_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
+import 'package:hawiah_client/injection_container.dart';
 
 class HomeAppBarTitle extends StatelessWidget {
   const HomeAppBarTitle({
@@ -20,7 +21,10 @@ class HomeAppBarTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = sl<ProfileCubit>().user;
+
     return BlocBuilder<ProfileCubit, ProfileState>(
+      bloc: sl<ProfileCubit>(),
       builder: (context, state) {
         if (state is ProfileUnAuthorized || HiveMethods.isVisitor() == true) {
           return ListTile(
@@ -43,8 +47,7 @@ class HomeAppBarTitle extends StatelessWidget {
             ),
           );
         }
-        if (state is ProfileLoaded) {
-          final user = state.user;
+        if (user != null) {
           return Row(
             children: [
               Container(

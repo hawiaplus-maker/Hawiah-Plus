@@ -28,5 +28,6 @@ import 'package:hawiah_client/features/profile/presentation/screens/support_scre
 import 'package:hawiah_client/features/profile/presentation/screens/terms-and-conditions.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
+import 'package:hawiah_client/injection_container.dart';
 
 part 'app_routers.dart';

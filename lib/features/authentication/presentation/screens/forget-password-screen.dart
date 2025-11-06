@@ -30,39 +30,41 @@ class ForgetPasswordScreen extends StatelessWidget {
           final authCubit = AuthCubit.get(context);
           final fullNumberResetPassword = authCubit.fullNumberResetPassword;
           final authChange = AuthCubit.get(context);
-          return Container(
+          return Padding(
             padding: EdgeInsets.all(10.w),
             child: Form(
               key: authCubit.formKeyRegister,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "forgot_password".tr(),
-                    style: AppTextStyle.text18_700,
-                  ),
-                  SizedBox(height: 5.h),
-                  SvgPicture.asset(
-                    AppImages.forgetPasswordIcon,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                  ),
-                  PhoneInputWidget(
-                    controller: authChange.PhoneController,
-                  ),
-                  SizedBox(height: 20.h),
-                  CustomButton(
-                    isLoading: state is AuthLoading,
-                    text: AppLocaleKey.check.tr(),
-                    onPressed: () {
-                      if (authCubit.formKeyRegister.currentState!.validate()) {
-                        AuthCubit.get(context).forgotPassword(
-                          phoneNumber: authCubit.PhoneController.text,
-                        );
-                      }
-                    },
-                  ),
-                  SizedBox(height: 20.h),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "forgot_password".tr(),
+                      style: AppTextStyle.text18_700,
+                    ),
+                    SizedBox(height: 5.h),
+                    SvgPicture.asset(
+                      AppImages.forgetPasswordIcon,
+                      height: MediaQuery.of(context).size.height * 0.4,
+                    ),
+                    PhoneInputWidget(
+                      controller: authChange.PhoneController,
+                    ),
+                    SizedBox(height: 20.h),
+                    CustomButton(
+                      isLoading: state is AuthLoading,
+                      text: AppLocaleKey.check.tr(),
+                      onPressed: () {
+                        if (authCubit.formKeyRegister.currentState!.validate()) {
+                          AuthCubit.get(context).forgotPassword(
+                            phoneNumber: authCubit.PhoneController.text,
+                          );
+                        }
+                      },
+                    ),
+                    SizedBox(height: 20.h),
+                  ],
+                ),
               ),
             ),
           );

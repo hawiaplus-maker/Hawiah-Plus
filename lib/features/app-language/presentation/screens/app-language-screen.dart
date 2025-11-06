@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
-import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/app-language/presentation/controllers/app-language-cubit/app-language-cubit.dart';
 import 'package:hawiah_client/features/app-language/presentation/widgets/floating-action-button-widget.dart';
 import 'package:hawiah_client/features/app-language/presentation/widgets/language-list-view-widget.dart';
@@ -40,11 +39,7 @@ class _AppLanguageScreenState extends State<AppLanguageScreen> {
           floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
           appBar: CustomAppBar(
             context,
-            title: Text(
-              "app_language".tr(),
-              style: AppTextStyle.text20_700,
-            ),
-            leading: const BackButton(color: Colors.black),
+            titleText: "app_language".tr(),
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
