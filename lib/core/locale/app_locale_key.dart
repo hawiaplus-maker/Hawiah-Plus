@@ -145,4 +145,5 @@ class AppLocaleKey {
   static const String saveChangesSuccess = 'saveChangesSuccess';
   static const String somethingWentWrong = 'somethingWentWrong';
   static const String messageHint = 'messageHint';
+  static const String typing = 'typing';
 }

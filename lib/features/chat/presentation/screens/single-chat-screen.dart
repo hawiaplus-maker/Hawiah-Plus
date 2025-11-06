@@ -108,13 +108,16 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
 
                   final bool isOnline = data['${receiverType}_isOnline'] ?? false;
                   final lastSeen = (data['${receiverType}_lastSeen'] as Timestamp?)?.toDate();
+                  final bool isTyping = data['${receiverType}_isTyping'] ?? false;
 
-                  if (isOnline) {
-                    statusText = 'متصل الآن';
+                  if (isTyping) {
+                    statusText = "يكتب الآن...";
+                  } else if (isOnline) {
+                    statusText = "متصل الآن";
                   } else if (lastSeen != null) {
-                    statusText = 'آخر ظهور: ${DateMethods.formatToTime(lastSeen)}';
+                    statusText = "آخر ظهور: ${DateMethods.formatToTime(lastSeen)}";
                   } else {
-                    statusText = 'غير متصل';
+                    statusText = "غير متصل";
                   }
                 }
 
@@ -252,6 +255,41 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                   },
                 ),
               ),
+              StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('orders')
+                    .doc(widget.args.orderId)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data!.exists) {
+                    final data = snapshot.data!.data() as Map<String, dynamic>;
+                    final isTyping = data['${widget.args.receiverType}_isTyping'] ?? false;
+
+                    if (isTyping) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 20),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                AppLocaleKey.typing.tr(),
+                                style: AppTextStyle.text14_400.copyWith(color: Colors.black54),
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    }
+                  }
+                  return const SizedBox();
+                },
+              ),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Row(
@@ -262,6 +300,14 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                         fillColor: AppColor.grayBlueColor,
                         controller: _messageEC,
                         hintText: AppLocaleKey.messageHint.tr(),
+                        onChanged: (txt) {
+                          final isTyping = txt.isNotEmpty;
+                          _chatCubit.setTyping(
+                            orderId: widget.args.orderId,
+                            userType: widget.args.senderType,
+                            isTyping: isTyping,
+                          );
+                        },
                       ),
                     ),
                     IconButton(
@@ -276,6 +322,11 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                             receiverType: widget.args.receiverType,
                             receiverName: widget.args.receiverName,
                             receiverImage: widget.args.receiverImage,
+                          );
+                          _chatCubit.updateTypingStatus(
+                            orderId: widget.args.orderId,
+                            userType: widget.args.senderType,
+                            isTyping: false,
                           );
                         }
                         _messageEC.clear();

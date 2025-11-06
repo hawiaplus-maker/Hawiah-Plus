@@ -238,5 +238,6 @@
   "executeorder": "Execute Order",
   "payNow": "Pay Now",
   "youhaveorder": "You have a current order ",
-  "messageHint": "Write your message here"
+  "messageHint": "Write your message here",
+  "typing": " typing..."
 }

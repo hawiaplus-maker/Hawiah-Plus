@@ -159,6 +159,23 @@ class ChatCubit extends Cubit<ChatState> {
     }, SetOptions(merge: true));
   }
 
+  Timer? _typingTimer;
+
+  void setTyping({
+    required String orderId,
+    required String userType,
+    required bool isTyping,
+  }) {
+    updateTypingStatus(orderId: orderId, userType: userType, isTyping: isTyping);
+
+    _typingTimer?.cancel();
+    if (isTyping) {
+      _typingTimer = Timer(const Duration(seconds: 2), () {
+        updateTypingStatus(orderId: orderId, userType: userType, isTyping: false);
+      });
+    }
+  }
+
   @override
   Future<void> close() {
     _messageSubscription?.cancel();
