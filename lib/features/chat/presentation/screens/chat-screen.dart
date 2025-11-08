@@ -129,7 +129,7 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
         controller: _searchController,
         hintText: AppLocaleKey.findAConversation.tr(),
         hintStyle: TextStyle(color: const Color(0xff979797), fontSize: 15.sp),
-        fillColor: Colors.white,
+        fillColor: AppColor.whiteColor,
         prefixIcon: Icon(Icons.search, color: AppColor.mainAppColor, size: 25),
       ),
     );

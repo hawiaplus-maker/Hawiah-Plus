@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final notificationsModel = notificationsModelFromJson(jsonString);
-
 import 'dart:convert';
 
 NotificationsModel notificationsModelFromJson(String str) =>
@@ -19,17 +15,15 @@ class NotificationsModel {
   });
 
   factory NotificationsModel.fromJson(Map<String, dynamic> json) => NotificationsModel(
-        success: json["success"],
-        notifications: List<Datum>.from(
-          json["message"].map((x) => Datum.fromJson(x)),
-        ),
+        success: json["success"] ?? false,
+        notifications: json["message"] != null
+            ? List<Datum>.from(json["message"].map((x) => Datum.fromJson(x)))
+            : [],
       );
 
   Map<String, dynamic> toJson() => {
         "success": success,
-        "message": List<dynamic>.from(
-          notifications.map((x) => x.toJson()),
-        ),
+        "message": List<dynamic>.from(notifications.map((x) => x.toJson())),
       };
 }
 
@@ -37,11 +31,12 @@ class Datum {
   int id;
   Message title;
   Message message;
-  String notifiableType;
-  int notifiableId;
-  String modelType;
-  int modelId;
+  String? notifiableType;
+  int? notifiableId;
+  String? modelType;
+  int? modelId;
   int seen;
+  int seenByAdmin;
   int userId;
   Data? data;
   DateTime? createdAt;
@@ -60,6 +55,7 @@ class Datum {
     required this.modelType,
     required this.modelId,
     required this.seen,
+    required this.seenByAdmin,
     required this.userId,
     this.data,
     this.createdAt,
@@ -72,15 +68,18 @@ class Datum {
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
-        title: Message.fromJson(json["title"]),
-        message: Message.fromJson(json["message"]),
+        title: Message.fromJson(json["title"] ?? {}),
+        message: Message.fromJson(json["message"] ?? {}),
         notifiableType: json["notifiable_type"],
         notifiableId: json["notifiable_id"],
         modelType: json["model_type"],
         modelId: json["model_id"],
-        seen: json["seen"],
-        userId: json["user_id"],
-        data: json["data"] != null ? Data.fromJson(jsonDecode(json["data"])) : null,
+        seen: json["seen"] ?? 0,
+        seenByAdmin: json["seen_by_admin"] ?? 0,
+        userId: json["user_id"] ?? 0,
+        data: json["data"] != null && json["data"] != ""
+            ? Data.fromJson(jsonDecode(json["data"]))
+            : null,
         createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"]) : null,
         updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"]) : null,
         showClient: json["show_client"],
@@ -98,6 +97,7 @@ class Datum {
         "model_type": modelType,
         "model_id": modelId,
         "seen": seen,
+        "seen_by_admin": seenByAdmin,
         "user_id": userId,
         "data": data != null ? jsonEncode(data!.toJson()) : null,
         "created_at": createdAt?.toIso8601String(),
@@ -110,9 +110,9 @@ class Datum {
 }
 
 class Data {
-  String type;
+  String? type;
 
-  Data({required this.type});
+  Data({this.type});
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         type: json["type"],

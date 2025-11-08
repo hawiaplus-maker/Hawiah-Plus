@@ -25,7 +25,7 @@ class LayoutScreen extends StatefulWidget {
 class _LayoutScreenState extends State<LayoutScreen> {
   @override
   initState() {
-      sl<HomeCubit>()..getCategories();
+    sl<HomeCubit>()..getCategories();
     if (HiveMethods.isVisitor() == false) {
       sl<SettingCubit>()..getsetting();
     }
@@ -35,10 +35,11 @@ class _LayoutScreenState extends State<LayoutScreen> {
   int selectedIndex = 0;
 
   List<Widget> get _screens => [
-        HomeScreen(),
-        AllChatsScreen(),
-        OrdersScreen(),
+        HomeScreen(key: ValueKey("home_${DateTime.now()}")),
+        AllChatsScreen(key: ValueKey("chat_${DateTime.now()}")),
+        OrdersScreen(key: ValueKey("orders_${DateTime.now()}")),
         ProfileScreen(
+          key: ValueKey("profile_${DateTime.now()}"),
           onOrderTap: () {
             setState(() {
               selectedIndex = 2;
@@ -46,9 +47,13 @@ class _LayoutScreenState extends State<LayoutScreen> {
           },
         ),
       ];
+
   @override
   Widget build(BuildContext context) {
+    final localeCode = context.locale.languageCode;
+
     return Scaffold(
+      key: ValueKey("layout_$localeCode"),
       body: _screens[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
