@@ -31,79 +31,84 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        context,
-        titleText: AppLocaleKey.orders.tr(),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                color: AppColor.selectedLightBlueColor,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: TabBar(
-                controller: _tabController,
-                labelColor: AppColor.whiteColor,
-                unselectedLabelColor: AppColor.greyColor,
-                labelStyle: AppTextStyle.text20_700.copyWith(fontFamily: "DINNextLTArabic"),
-                indicator: BoxDecoration(
-                  color: AppColor.mainAppColor,
+    return BlocProvider(
+      create: (_) => OrderCubit()
+        ..getOrders(orderStatus: 0)
+        ..getOrders(orderStatus: 1),
+      child: Scaffold(
+        appBar: CustomAppBar(
+          context,
+          titleText: AppLocaleKey.orders.tr(),
+        ),
+        body: Column(
+          children: [
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  color: AppColor.selectedLightBlueColor,
                   borderRadius: BorderRadius.circular(14),
                 ),
-                dividerHeight: 0,
-                indicatorSize: TabBarIndicatorSize.tab,
-                tabs: [
-                  Tab(text: AppLocaleKey.current.tr()),
-                  Tab(text: AppLocaleKey.end.tr()),
-                ],
+                child: TabBar(
+                  controller: _tabController,
+                  labelColor: AppColor.whiteColor,
+                  unselectedLabelColor: AppColor.greyColor,
+                  labelStyle: AppTextStyle.text20_700.copyWith(fontFamily: "DINNextLTArabic"),
+                  indicator: BoxDecoration(
+                    color: AppColor.mainAppColor,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  dividerHeight: 0,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  tabs: [
+                    Tab(text: AppLocaleKey.current.tr()),
+                    Tab(text: AppLocaleKey.end.tr()),
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: BlocBuilder<OrderCubit, OrderState>(
-              builder: (context, state) {
-                if (state is OrderLoading) {
-                  return const Center(child: CustomLoading());
-                }
-                if (state is OrderEmpty) {
+            const SizedBox(height: 10),
+            Expanded(
+              child: BlocBuilder<OrderCubit, OrderState>(
+                builder: (context, state) {
+                  if (state is OrderLoading) {
+                    return const Center(child: CustomLoading());
+                  }
+                  if (state is OrderEmpty) {
+                    return const Center(child: NoDataWidget());
+                  }
+                  if (state is OrderError) {
+                    return const Center(child: NoDataWidget());
+                  }
+                  if (state is OrderSuccess) {
+                    return TabBarView(
+                      controller: _tabController,
+                      children: [
+                        OrderTapList(
+                          orders: state is OrderLoading &&
+                                  (context.read<OrderCubit>().currentOrders == null)
+                              ? []
+                              : context.read<OrderCubit>().currentOrders ?? [],
+                          isCurrent: true,
+                        ),
+                        OrderTapList(
+                          orders: state is OrderLoading &&
+                                  (context.read<OrderCubit>().oldOrders == null)
+                              ? []
+                              : context.read<OrderCubit>().oldOrders ?? [],
+                          isCurrent: false,
+                        ),
+                      ],
+                    );
+                  }
                   return const Center(child: NoDataWidget());
-                }
-                if (state is OrderError) {
-                  return const Center(child: NoDataWidget());
-                }
-                if (state is OrderSuccess) {
-                  return TabBarView(
-                    controller: _tabController,
-                    children: [
-                      OrderTapList(
-                        orders: state is OrderLoading &&
-                                (context.read<OrderCubit>().currentOrders == null)
-                            ? []
-                            : context.read<OrderCubit>().currentOrders ?? [],
-                        isCurrent: true,
-                      ),
-                      OrderTapList(
-                        orders:
-                            state is OrderLoading && (context.read<OrderCubit>().oldOrders == null)
-                                ? []
-                                : context.read<OrderCubit>().oldOrders ?? [],
-                        isCurrent: false,
-                      ),
-                    ],
-                  );
-                }
-                return const Center(child: NoDataWidget());
-              },
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

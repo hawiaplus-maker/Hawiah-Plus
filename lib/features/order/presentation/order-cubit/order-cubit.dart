@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -49,7 +51,8 @@ class OrderCubit extends Cubit<OrderState> {
 int _currentPage = 1;
 int _lastPage = 1;
 bool _isLoadingMore = false;
-
+int get currentPage => _currentPage; 
+int get lastPage => _lastPage;   
 bool get canLoadMore => _currentPage < _lastPage;
 
   ApiResponse get ordersResponse => _ordersResponse;
@@ -59,10 +62,15 @@ Future<void> getOrders({
   int page = 1,
   bool isLoadMore = false,
 }) async {
-  if (isLoadMore && _isLoadingMore) return; // منع تكرار الطلب
-  if (isLoadMore) _isLoadingMore = true;
+  log("**************************** getOrders ************************* ");
+  if (isLoadMore && _isLoadingMore) return;
 
-  emit(OrderLoading());
+  if (isLoadMore) {
+    _isLoadingMore = true;
+    emit(OrderPaginationLoading());
+  } else {
+    emit(OrderLoading());
+  }
 
   final response = await ApiHelper.instance.get(
     Urls.orders(orderStatus),
@@ -73,17 +81,14 @@ Future<void> getOrders({
   );
 
   if (response.state == ResponseState.complete) {
- 
-  final result = OrdersModel.fromJson(response.data);
-final newOrders = result.data?.data ?? [];
-final pagination = result.data?.pagination;
+    final result = OrdersModel.fromJson(response.data);
+    final newOrders = result.data?.data ?? [];
+    final pagination = result.data?.pagination;
 
+    _currentPage = pagination?.currentPage ?? 1;
+    _lastPage = pagination?.lastPage ?? 1;
 
     if (!isLoadMore) {
-      _orders = result;
-      _currentPage = pagination?.currentPage ?? 1;
-      _lastPage = pagination?.lastPage ?? 1;
-
       if (orderStatus == 0) {
         currentOrders = newOrders;
       } else {
@@ -98,14 +103,12 @@ final pagination = result.data?.pagination;
       }
     }
 
-    emit(OrderSuccess(ordersModel: _orders!));
-  } else if (response.state == ResponseState.unauthorized) {
-    emit(OrderError());
+    emit(OrderSuccess(ordersModel: result));
   } else {
     emit(OrderError());
   }
 
-  if (isLoadMore) _isLoadingMore = false;
+  _isLoadingMore = false;
 }
 
   //================== get nearby provider ====================
