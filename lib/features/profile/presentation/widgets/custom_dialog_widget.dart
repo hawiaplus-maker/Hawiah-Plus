@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 
@@ -31,23 +34,14 @@ class CustomConfirmDialog extends StatelessWidget {
               alignment: Alignment.topRight,
               child: IconButton(
                 onPressed: () => Navigator.pop(context),
-                icon: Container(
-                  height: 25,
-                  width: 25,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColor.whiteColor,
-                    border: Border.all(color: Colors.black),
-                  ),
-                  child: Icon(
-                    Icons.close,
-                    size: 15,
-                    color: Colors.black,
-                  ),
+                icon: SvgPicture.asset(
+                  AppImages.closeCircleIcon,
+                  height: 24,
+                  width: 24,
                 ),
               ),
             ),
-            Image.asset(image),
+            Image.asset(image, height: 80.h, width: 80.w),
             const SizedBox(height: 15),
             Text(
               content,

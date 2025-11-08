@@ -40,15 +40,17 @@ class _UserProfileState extends State<UserProfile> {
   Future<void> _pickImage() async {
     final picked = await _picker.pickImage(source: ImageSource.gallery);
     if (picked == null) return;
-
     setState(() => _pickedImage = File(picked.path));
     Fluttertoast.showToast(msg: AppLocaleKey.imageSelected.tr());
   }
 
   @override
   void initState() {
-    _controllers['name']!.text = sl<ProfileCubit>().user?.name ?? '';
-    _controllers['mobile']!.text = sl<ProfileCubit>().user?.mobile ?? '';
+    final cubit = sl<ProfileCubit>();
+    if (cubit.user != null) {
+      _controllers['name']!.text = cubit.user!.name;
+      _controllers['mobile']!.text = cubit.user!.mobile;
+    }
     super.initState();
   }
 
@@ -57,7 +59,7 @@ class _UserProfileState extends State<UserProfile> {
     await cubit.updateProfile(
       name: _controllers['name']!.text,
       mobile: _controllers['mobile']!.text,
-      email: '', // Email removed, pass empty
+      email: '',
       imageFile: _pickedImage,
     );
   }
@@ -73,21 +75,16 @@ class _UserProfileState extends State<UserProfile> {
       child: Stack(
         alignment: Alignment.bottomRight,
         children: [
-          CircleAvatar(
-            radius: 60,
-            backgroundImage: imageProvider,
-            backgroundColor: Colors.grey.shade200,
-          ),
+          CircleAvatar(radius: 60, backgroundImage: imageProvider),
           CircleAvatar(
             radius: 18,
-            backgroundColor: Colors.white,
+            backgroundColor: AppColor.whiteColor,
             child: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColor.mainAppColor,
-                border: Border.all(color: Colors.black12),
               ),
-              child: const Icon(Icons.camera_alt_outlined, color: Colors.white, size: 18),
+              child: Icon(Icons.camera_alt_outlined, color: AppColor.whiteColor, size: 18),
             ),
           ),
         ],
@@ -108,19 +105,11 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        context,
-        titleText: AppLocaleKey.profileFile.tr(),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(context, titleText: AppLocaleKey.profileFile.tr(), centerTitle: true),
       body: BlocConsumer<ProfileCubit, ProfileState>(
         bloc: sl<ProfileCubit>(),
-        listener: (context, state) {
-          if (state is ProfileLoaded) {
-            final user = state.user;
-            _controllers['name']!.text = user.name;
-            _controllers['mobile']!.text = user.mobile;
-          } else if (state is ProfileUpdateSuccess) {
+        listener: (context, state) async {
+          if (state is ProfileUpdateSuccess) {
             showDialog(
               context: context,
               barrierDismissible: false,
@@ -129,7 +118,12 @@ class _UserProfileState extends State<UserProfile> {
                 image: AppImages.successSvg,
               ),
             );
-          } else if (state is ProfileError) {
+
+            await Future.delayed(const Duration(seconds: 5));
+            if (mounted) Navigator.pop(context);
+          }
+
+          if (state is ProfileError) {
             showDialog(
               context: context,
               barrierDismissible: false,
@@ -138,38 +132,46 @@ class _UserProfileState extends State<UserProfile> {
                 image: AppImages.errorSvg,
               ),
             );
+
+            await Future.delayed(const Duration(seconds: 5));
+            if (mounted) Navigator.pop(context);
           }
         },
         builder: (context, state) {
-          if (state is ProfileLoading) return Center(child: const CustomLoading());
+          final cubit = sl<ProfileCubit>();
+          final user = cubit.user;
 
-          if (state is ProfileLoaded) {
-            final imageUrl = state.user.image;
-            return SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 40),
-                    _buildProfileImage(imageUrl),
-                    const SizedBox(height: 30),
-                    ..._buildTextFields(),
-                    Gap(40.h),
-                    CustomButton(
-                      onPressed: _onUpdatePressed,
-                      child: Text(
-                        AppLocaleKey.saveChanges.tr(),
-                        style: AppTextStyle.text16_600.copyWith(color: AppColor.whiteColor),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
-              ),
-            );
+          if (user == null) {
+            return const Center(child: CustomLoading());
           }
 
-          return const Center(child: Text('Something went wrong.'));
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              child: Column(
+                children: [
+                  const SizedBox(height: 40),
+                  _buildProfileImage(user.image),
+                  const SizedBox(height: 30),
+                  ..._buildTextFields(),
+                  Gap(40.h),
+
+                 
+                  state is ProfileUpdating
+                      ? const CustomLoading()
+                      : CustomButton(
+                          onPressed: _onUpdatePressed,
+                          child: Text(
+                            AppLocaleKey.saveChanges.tr(),
+                            style: AppTextStyle.text16_600.copyWith(color: AppColor.whiteColor),
+                          ),
+                        ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          );
         },
       ),
     );
@@ -182,8 +184,4 @@ class _UserProfileState extends State<UserProfile> {
     }
     super.dispose();
   }
-}
-
-extension StringX on String {
-  String capitalize() => isEmpty ? this : "${this[0].toUpperCase()}${substring(1)}";
 }
