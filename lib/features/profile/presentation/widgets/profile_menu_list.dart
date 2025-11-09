@@ -29,22 +29,20 @@ class ProfileMenuList extends StatelessWidget {
               NavigatorMethods.pushNamed(context, UserProfile.routeName);
             },
           ),
-        if (!isGuest)
-          PersonProfileListTile(
-            title: AppLocaleKey.support.tr(),
-            logo: AppImages.handFist,
-            onTap: () {
-              NavigatorMethods.pushNamed(context, SupportScreen.routeName);
-            },
-          ),
-        if (!isGuest)
-          PersonProfileListTile(
-            title: AppLocaleKey.frequentlyAskedQuestions.tr(),
-            logo: AppImages.shield,
-            onTap: () {
-              NavigatorMethods.pushNamed(context, FaqScreen.routeName);
-            },
-          ),
+        PersonProfileListTile(
+          title: AppLocaleKey.support.tr(),
+          logo: AppImages.handFist,
+          onTap: () {
+            NavigatorMethods.pushNamed(context, SupportScreen.routeName);
+          },
+        ),
+        PersonProfileListTile(
+          title: AppLocaleKey.frequentlyAskedQuestions.tr(),
+          logo: AppImages.shield,
+          onTap: () {
+            NavigatorMethods.pushNamed(context, FaqScreen.routeName);
+          },
+        ),
         PersonProfileListTile(
           title: AppLocaleKey.langApp.tr(),
           logo: AppImages.earth,

@@ -34,15 +34,15 @@ class NotificationsModel {
 }
 
 class Datum {
-  int id;
-  Message title;
-  Message message;
-  String notifiableType;
-  int notifiableId;
-  String modelType;
-  int modelId;
-  int seen;
-  int userId;
+  int? id;
+  Message? title;
+  Message? message;
+  String? notifiableType;
+  int? notifiableId;
+  String? modelType;
+  int? modelId;
+  int? seen;
+  int? userId;
   Data? data;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -52,15 +52,15 @@ class Datum {
   int? showEmployee;
 
   Datum({
-    required this.id,
-    required this.title,
-    required this.message,
-    required this.notifiableType,
-    required this.notifiableId,
-    required this.modelType,
-    required this.modelId,
-    required this.seen,
-    required this.userId,
+    this.id,
+    this.title,
+    this.message,
+    this.notifiableType,
+    this.notifiableId,
+    this.modelType,
+    this.modelId,
+    this.seen,
+    this.userId,
     this.data,
     this.createdAt,
     this.updatedAt,
@@ -72,17 +72,21 @@ class Datum {
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
-        title: Message.fromJson(json["title"]),
-        message: Message.fromJson(json["message"]),
+        title: json["title"] != null ? Message.fromJson(json["title"]) : null,
+        message: json["message"] != null ? Message.fromJson(json["message"]) : null,
         notifiableType: json["notifiable_type"],
         notifiableId: json["notifiable_id"],
         modelType: json["model_type"],
         modelId: json["model_id"],
         seen: json["seen"],
         userId: json["user_id"],
-        data: json["data"] != null ? Data.fromJson(jsonDecode(json["data"])) : null,
-        createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"]) : null,
-        updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"]) : null,
+        data: json["data"] != null
+            ? Data.fromJson(
+                json["data"] is String ? jsonDecode(json["data"]) : json["data"],
+              )
+            : null,
+        createdAt: json["created_at"] != null ? DateTime.tryParse(json["created_at"]) : null,
+        updatedAt: json["updated_at"] != null ? DateTime.tryParse(json["updated_at"]) : null,
         showClient: json["show_client"],
         showCompany: json["show_company"],
         showPuncher: json["show_puncher"],
@@ -91,8 +95,8 @@ class Datum {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "title": title.toJson(),
-        "message": message.toJson(),
+        "title": title?.toJson(),
+        "message": message?.toJson(),
         "notifiable_type": notifiableType,
         "notifiable_id": notifiableId,
         "model_type": modelType,

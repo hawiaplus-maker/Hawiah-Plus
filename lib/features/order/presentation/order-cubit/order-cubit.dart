@@ -21,15 +21,15 @@ class OrderCubit extends Cubit<OrderState> {
   OrderCubit() : super(OrderInitial());
   changeRebuild() {
     emit(OrderChange());
-  }
+  } // =================== UI Helpers ====================
 
-  // =================== UI Helpers ====================
   bool isOrderCurrent = true;
   void changeOrderCurrent() {
     isOrderCurrent = !isOrderCurrent;
     emit(OrderChange());
   }
 
+// =================== Calendar Stuff ====================
   CalendarFormat calendarFormat = CalendarFormat.month;
   RangeSelectionMode rangeSelectionMode = RangeSelectionMode.toggledOn;
   DateTime focusedDay = DateTime.now();
@@ -37,79 +37,111 @@ class OrderCubit extends Cubit<OrderState> {
   DateTime? rangeStart;
   DateTime? rangeEnd;
 
-  // =================== Orders ====================
-  OrdersModel? _orders;
-  OrdersModel? get orders => _orders;
+// =================== Orders ====================
 
-  List<Data>? currentOrders;
-  List<Data>? oldOrders;
+// current orders
+  List<Data> currentOrders = [];
+  int currentPageCurrent = 1;
+  int lastPageCurrent = 1;
+  bool isLoadingCurrent = false;
+  bool isLoadingMoreCurrent = false;
 
-  ApiResponse _ordersResponse = ApiResponse(
-    state: ResponseState.sleep,
-    data: null,
-  );
-int _currentPage = 1;
-int _lastPage = 1;
-bool _isLoadingMore = false;
-int get currentPage => _currentPage; 
-int get lastPage => _lastPage;   
-bool get canLoadMore => _currentPage < _lastPage;
+// old orders
+  List<Data> oldOrders = [];
+  int currentPageOld = 1;
+  int lastPageOld = 1;
+  bool isLoadingOld = false;
+  bool isLoadingMoreOld = false;
 
-  ApiResponse get ordersResponse => _ordersResponse;
+// Helpers
+  bool get canLoadMoreCurrent => currentPageCurrent < lastPageCurrent;
+  bool get canLoadMoreOld => currentPageOld < lastPageOld;
 
-Future<void> getOrders({
-  required int orderStatus,
-  int page = 1,
-  bool isLoadMore = false,
-}) async {
-  log("**************************** getOrders ************************* ");
-  if (isLoadMore && _isLoadingMore) return;
+// =================== Main API Function ====================
+  Future<void> getOrders({
+    required int orderStatus,
+    int page = 1,
+    bool isLoadMore = false,
+  }) async {
+    log("**************************** getOrders($orderStatus) *************************");
 
-  if (isLoadMore) {
-    _isLoadingMore = true;
-    emit(OrderPaginationLoading());
-  } else {
-    emit(OrderLoading());
-  }
+    final bool isCurrent = orderStatus == 0;
 
-  final response = await ApiHelper.instance.get(
-    Urls.orders(orderStatus),
-    queryParameters: {
-      "order_status": orderStatus,
-      "page": page,
-    },
-  );
-
-  if (response.state == ResponseState.complete) {
-    final result = OrdersModel.fromJson(response.data);
-    final newOrders = result.data?.data ?? [];
-    final pagination = result.data?.pagination;
-
-    _currentPage = pagination?.currentPage ?? 1;
-    _lastPage = pagination?.lastPage ?? 1;
-
-    if (!isLoadMore) {
-      if (orderStatus == 0) {
-        currentOrders = newOrders;
+    // prevent multiple loadMore
+    if (isLoadMore) {
+      if (isCurrent ? isLoadingMoreCurrent : isLoadingMoreOld) return;
+      if (isCurrent) {
+        isLoadingMoreCurrent = true;
       } else {
-        oldOrders = newOrders;
+        isLoadingMoreOld = true;
       }
+      emit(OrderPaginationLoading());
     } else {
-      _currentPage++;
-      if (orderStatus == 0) {
-        currentOrders?.addAll(newOrders);
+      // reset and start loading
+      if (isCurrent) {
+        isLoadingCurrent = true;
+        currentPageCurrent = 1;
+        currentOrders = [];
       } else {
-        oldOrders?.addAll(newOrders);
+        isLoadingOld = true;
+        currentPageOld = 1;
+        oldOrders = [];
       }
+      emit(OrderLoading());
     }
 
-    emit(OrderSuccess(ordersModel: result));
-  } else {
-    emit(OrderError());
-  }
+    final response = await ApiHelper.instance.get(
+      Urls.orders(orderStatus),
+      queryParameters: {
+        "order_status": orderStatus,
+        "page": page,
+      },
+    );
 
-  _isLoadingMore = false;
-}
+    if (response.state == ResponseState.complete) {
+      final result = OrdersModel.fromJson(response.data);
+      final newOrders = result.data?.data ?? [];
+      final pagination = result.data?.pagination;
+
+      if (isCurrent) {
+        currentPageCurrent = pagination?.currentPage ?? 1;
+        lastPageCurrent = pagination?.lastPage ?? 1;
+      } else {
+        currentPageOld = pagination?.currentPage ?? 1;
+        lastPageOld = pagination?.lastPage ?? 1;
+      }
+
+      // Merge or replace
+      if (isLoadMore) {
+        if (isCurrent) {
+          currentOrders.addAll(newOrders);
+          isLoadingMoreCurrent = false;
+        } else {
+          oldOrders.addAll(newOrders);
+          isLoadingMoreOld = false;
+        }
+      } else {
+        if (isCurrent) {
+          currentOrders = newOrders;
+          isLoadingCurrent = false;
+        } else {
+          oldOrders = newOrders;
+          isLoadingOld = false;
+        }
+      }
+
+      emit(OrderSuccess(ordersModel: result));
+    } else {
+      if (isCurrent) {
+        isLoadingCurrent = false;
+        isLoadingMoreCurrent = false;
+      } else {
+        isLoadingOld = false;
+        isLoadingMoreOld = false;
+      }
+      emit(OrderError());
+    }
+  }
 
   //================== get nearby provider ====================
   void initialNearbyServiceProvider() {

@@ -80,6 +80,7 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(70),
+            
             child: SingleChatAppBar(widget: widget),
           ),
           body: Column(

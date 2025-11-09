@@ -28,11 +28,6 @@ class OnBoardingContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String removeHtmlTags(String htmlText) {
-      final regex = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: true);
-      return htmlText.replaceAll(regex, '');
-    }
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
       child: Column(

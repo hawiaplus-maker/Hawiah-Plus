@@ -40,11 +40,11 @@ void main() async {
         Locale('ur'),
       ],
       path: 'assets/translations', startLocale: Locale('ar'),
-      fallbackLocale: const Locale('en'), // Add a fallback locale if you haven't
+      fallbackLocale: const Locale('en'), 
       child: BlocProvider(
         create: (context) => AppThemeCubit()..initial(),
         child: HawiahPlusApp(initialMessage: initialMessage),
-      ), // Wrap MyApp instead of PetCareHomeScreen
+      ),
     ),
   );
 }

@@ -26,8 +26,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<OnBoardingCubit, OnBoardingState>(
-        listener: (context, state) {},
+      body: BlocBuilder<OnBoardingCubit, OnBoardingState>(
         builder: (context, state) {
           final cubit = OnBoardingCubit.get(context);
 

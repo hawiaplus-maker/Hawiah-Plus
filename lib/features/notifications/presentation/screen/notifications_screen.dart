@@ -57,8 +57,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           final locale = context.locale.languageCode;
 
           final filteredNotifications = notifications.where((item) {
-            final title = (locale == 'ar' ? item.title.ar : item.title.en).toLowerCase();
-            final message = (locale == 'ar' ? item.message.ar : item.message.en).toLowerCase();
+            final title = (locale == 'ar' ? item.title?.ar : item.title?.en)?.toLowerCase()??"";
+            final message = (locale == 'ar' ? item.message?.ar : item.message?.en)?.toLowerCase()??"";
             return title.contains(_searchQuery) || message.contains(_searchQuery);
           }).toList();
 

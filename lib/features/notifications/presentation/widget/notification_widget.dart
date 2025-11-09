@@ -15,15 +15,15 @@ class NotificationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = context.locale.languageCode;
-    final title = locale == 'ar' ? item.title.ar : item.title.en;
-    final message = locale == 'ar' ? item.message.ar : item.message.en;
+    final title = locale == 'ar' ? item.title?.ar : item.title?.en;
+    final message = locale == 'ar' ? item.message?.ar : item.message?.en;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: ListTile(
         title: Row(
           children: [
             Text(
-              title,
+              title ?? "-----------",
               style: AppTextStyle.text16_700,
             ),
             Gap(10.w),
@@ -36,7 +36,7 @@ class NotificationWidget extends StatelessWidget {
           ],
         ),
         subtitle: Text(
-          message,
+          message ?? "-----------",
           style: AppTextStyle.text14_400.copyWith(
             color: AppColor.textGrayColor,
           ),

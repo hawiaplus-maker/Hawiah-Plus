@@ -19,9 +19,7 @@ class LogoutButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state is AuthError) {
-          CommonMethods.showError(message: state.message);
-        } else if (state is AuthLoading) {
+        if (state is AuthLoading) {
           CustomLoading();
         } else if (state is LogOutSuccess) {
           CommonMethods.showToast(message: state.message);
@@ -36,7 +34,6 @@ class LogoutButton extends StatelessWidget {
         return InkWell(
           onTap: () {
             NavigatorMethods.showAppDialog(context, LogOutDialog());
-
           },
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),

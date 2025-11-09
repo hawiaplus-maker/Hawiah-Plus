@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -242,9 +243,10 @@ class AuthCubit extends Cubit<AuthState> {
       final message = response.data['message'] ?? 'Login completed';
 
       if (data != null) {
-        HiveMethods.updateToken(data['api_token']);  
+        HiveMethods.updateToken(data['api_token']);
         await sl<ProfileCubit>().fetchProfile();
-
+        close();
+        log("every Text Edit Controller Disposed");
         emit(AuthSuccess(
           message: message,
         ));
@@ -509,13 +511,14 @@ class AuthCubit extends Cubit<AuthState> {
     NavigatorMethods.loadingOff();
     if (response.state == ResponseState.complete) {
       onSuccess?.call();
-      final data = response.data['data'];
+
       final message = response.data['message'] ?? 'Logout completed';
       HiveMethods.deleteToken();
       HiveMethods.updateIsVisitor(true);
       emit(LogOutSuccess(
         message: message,
       ));
+      CommonMethods.showToast(message: message);
       if (response.state == ResponseState.unauthorized) {
         emit(AuthError(response.data['message'] ?? "تم انتهاء الجلسة"));
       } else if (response.state == ResponseState.error) {

@@ -5,6 +5,7 @@ import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/app-language/presentation/screens/app-language-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-cubit.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
@@ -19,10 +20,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-   if(HiveMethods.isFirstTime() == false){
-    OnBoardingCubit.get(context).getOnboarding();
-   }
-   _initializeApp();
+
+    _initializeApp();
   }
 
   Future<void> _initializeApp() async {
@@ -30,6 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     log("is first time ${HiveMethods.isFirstTime()}");
     final cubit = sl<ProfileCubit>();
     if (HiveMethods.isFirstTime() == true) {
+      OnBoardingCubit.get(context).getOnboarding();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const AppLanguageScreen()),
@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const AppLanguageScreen()),
+          MaterialPageRoute(builder: (context) => const ValidateMobileScreen()),
         );
       }
     }

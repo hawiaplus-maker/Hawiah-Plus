@@ -1,24 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:grouped_list/grouped_list.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/extension/context_extension.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
-import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
-import 'package:hawiah_client/features/chat/cubit/chat_cubit.dart';
-import 'package:hawiah_client/features/chat/model/chat_model.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/single-chat-screen.dart';
-import 'package:hawiah_client/features/chat/presentation/widget/message_widget.dart';
-import 'package:hawiah_client/features/chat/presentation/widget/send_message_text_field_widget.dart';
 
 class SingleChatAppBar extends StatelessWidget {
   const SingleChatAppBar({
@@ -31,21 +22,18 @@ class SingleChatAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('orders')
-          .doc(widget.args.orderId)
-          .snapshots(),
+      stream: FirebaseFirestore.instance.collection('orders').doc(widget.args.orderId).snapshots(),
       builder: (context, snapshot) {
         String statusText = '';
-    
+
         if (snapshot.hasData && snapshot.data!.exists) {
           final data = snapshot.data!.data() as Map<String, dynamic>;
-    
+
           final receiverType = widget.args.receiverType;
-    
+
           final bool isOnline = data['${receiverType}_isOnline'] ?? false;
           final lastSeen = (data['${receiverType}_lastSeen'] as Timestamp?)?.toDate();
-    
+
           if (isOnline) {
             statusText = 'متصل الآن';
           } else if (lastSeen != null) {
@@ -54,7 +42,7 @@ class SingleChatAppBar extends StatelessWidget {
             statusText = 'غير متصل';
           }
         }
-    
+
         return CustomAppBar(
           appBarColor: AppColor.whiteColor,
           context,
@@ -72,8 +60,8 @@ class SingleChatAppBar extends StatelessWidget {
                   ),
                   if (snapshot.hasData &&
                       snapshot.data!.data() != null &&
-                      (snapshot.data!.data() as Map<String, dynamic>)[
-                              '${widget.args.receiverType}_isOnline'] ==
+                      (snapshot.data!.data()
+                              as Map<String, dynamic>)['${widget.args.receiverType}_isOnline'] ==
                           true)
                     Positioned(
                       bottom: 8,
@@ -96,8 +84,7 @@ class SingleChatAppBar extends StatelessWidget {
                 children: [
                   Text(
                     widget.args.receiverName,
-                    style:
-                        AppTextStyle.text14_400.copyWith(fontFamily: context.fontFamily()),
+                    style: AppTextStyle.text14_400.copyWith(fontFamily: context.fontFamily()),
                   ),
                   if (statusText.isNotEmpty)
                     Text(

@@ -2,8 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
-import 'package:hawiah_client/core/custom_widgets/no_data_widget.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
@@ -25,16 +23,20 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-
     _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => OrderCubit()
-        ..getOrders(orderStatus: 0)
-        ..getOrders(orderStatus: 1),
+      create: (_) {
+        final cubit = OrderCubit();
+        cubit.getOrders(orderStatus: 0);
+        Future.delayed(const Duration(milliseconds: 300), () {
+          cubit.getOrders(orderStatus: 1);
+        });
+        return cubit;
+      },
       child: Scaffold(
         appBar: CustomAppBar(
           context,
@@ -73,37 +75,20 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
             Expanded(
               child: BlocBuilder<OrderCubit, OrderState>(
                 builder: (context, state) {
-                  if (state is OrderLoading) {
-                    return const Center(child: CustomLoading());
-                  }
-                  if (state is OrderEmpty) {
-                    return const Center(child: NoDataWidget());
-                  }
-                  if (state is OrderError) {
-                    return const Center(child: NoDataWidget());
-                  }
-                  if (state is OrderSuccess) {
-                    return TabBarView(
-                      controller: _tabController,
-                      children: [
-                        OrderTapList(
-                          orders: state is OrderLoading &&
-                                  (context.read<OrderCubit>().currentOrders == null)
-                              ? []
-                              : context.read<OrderCubit>().currentOrders ?? [],
-                          isCurrent: true,
-                        ),
-                        OrderTapList(
-                          orders: state is OrderLoading &&
-                                  (context.read<OrderCubit>().oldOrders == null)
-                              ? []
-                              : context.read<OrderCubit>().oldOrders ?? [],
-                          isCurrent: false,
-                        ),
-                      ],
-                    );
-                  }
-                  return const Center(child: NoDataWidget());
+                  return TabBarView(
+                    controller: _tabController,
+                    physics: BouncingScrollPhysics(),
+                    children: [
+                      OrderTapList(
+                        orders: context.read<OrderCubit>().currentOrders,
+                        isCurrent: true,
+                      ),
+                      OrderTapList(
+                        orders: context.read<OrderCubit>().oldOrders,
+                        isCurrent: false,
+                      ),
+                    ],
+                  );
                 },
               ),
             ),
