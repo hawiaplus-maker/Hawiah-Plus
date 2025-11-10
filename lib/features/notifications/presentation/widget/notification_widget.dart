@@ -1,9 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gap/gap.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/notifications/model/notifications_model.dart';
@@ -26,11 +25,13 @@ class NotificationWidget extends StatelessWidget {
               title ?? "-----------",
               style: AppTextStyle.text16_700,
             ),
-            Gap(10.w),
-            Text(
-              _formatRelativeTime(item.createdAt),
-              style: AppTextStyle.text12_400.copyWith(
-                color: AppColor.textGrayColor,
+            Expanded(
+              child: Text(
+                textAlign: TextAlign.end,
+                _formatRelativeTime(item.createdAt),
+                style: AppTextStyle.text12_400.copyWith(
+                  color: AppColor.textGrayColor,
+                ),
               ),
             ),
           ],
@@ -58,11 +59,13 @@ class NotificationWidget extends StatelessWidget {
     final now = DateTime.now();
     final diff = now.difference(date);
 
-    if (diff.inSeconds < 60) return 'الآن';
-    if (diff.inMinutes < 60) return 'منذ ${diff.inMinutes} دقيقة';
-    if (diff.inHours < 24) return 'منذ ${diff.inHours} ساعة';
-    if (diff.inDays == 1) return 'أمس';
-    if (diff.inDays < 7) return 'منذ ${diff.inDays} أيام';
+    if (diff.inSeconds < 60) return AppLocaleKey.now.tr();
+    if (diff.inMinutes < 60)
+      return '${AppLocaleKey.ago.tr()} ${diff.inMinutes} ${AppLocaleKey.minute.tr()}';
+    if (diff.inHours < 24)
+      return '${AppLocaleKey.ago.tr()} ${diff.inHours} ${AppLocaleKey.hour.tr()}';
+    if (diff.inDays == 1) return AppLocaleKey.yesterday.tr();
+    if (diff.inDays < 7) return '${AppLocaleKey.ago.tr()} ${diff.inDays} ${AppLocaleKey.day.tr()}';
     return DateFormat('yyyy/MM/dd').format(date);
   }
 }

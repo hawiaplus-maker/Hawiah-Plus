@@ -23,8 +23,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       final response = await ApiHelper.instance.get("${Urls.profile}");
 
       if (response.state == ResponseState.complete) {
-        user = UserProfileModel.fromJson(
-            response.data); // Access 'message' from response
+        user = UserProfileModel.fromJson(response.data); // Access 'message' from response
         log("Profile fetched successfully");
         emit(ProfileLoaded(user!)); // Only emit once
         onSuccess?.call(); // Call success callback after state emission
@@ -32,8 +31,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           response.state == ResponseState.unauthorized) {
         log("Profile fetch failed: ${response.data}");
 
-        emit(ProfileError(
-            response.data['message'] ?? "Failed to fetch profile"));
+        emit(ProfileError(response.data['message'] ?? "Failed to fetch profile"));
         emit(ProfileUnAuthorized());
         onError?.call(); // Call error callback after state emission
       }
@@ -52,7 +50,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     String? password,
     String? password_confirmation,
   }) async {
-    emit(ProfileLoading());
+    emit(ProfileUpdating()); 
 
     try {
       final data = <String, dynamic>{
@@ -63,7 +61,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         'password_confirmation': password_confirmation
       };
 
-      // لو فيه صورة، أضفها كـ MultipartFile
       if (imageFile != null) {
         data['image'] = await MultipartFile.fromFile(
           imageFile.path,
@@ -77,16 +74,14 @@ class ProfileCubit extends Cubit<ProfileState> {
         Urls.updateProfile,
         body: formData,
         hasToken: true,
-        isMultipart: true, // ← مهم
+        isMultipart: true,
       );
 
       if (response.data != null && response.data['message'] != null) {
         final message = response.data['message'];
 
-        // إعادة تحميل البيانات بعد التحديث
-
-        // emit(ProfileLoaded(user));
         emit(ProfileUpdateSuccess(message));
+
         await fetchProfile();
       } else {
         emit(ProfileError("فشل تحديث البيانات"));

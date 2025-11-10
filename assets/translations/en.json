@@ -239,5 +239,14 @@
   "payNow": "Pay Now",
   "youhaveorder": "You have a current order ",
   "messageHint": "Write your message here",
-  "typing": " typing..."
+  "typing": " typing...",
+  "now": "Now",
+  "ago": "Ago",
+  "minute": "Minute",
+  "hour": "Hour",
+  "yesterday": "Yesterday",
+  "day": "Days",
+  "connected": "Connected",
+  "lastseen": "Last seen:",
+  "notconnected": "Not connected"
 }

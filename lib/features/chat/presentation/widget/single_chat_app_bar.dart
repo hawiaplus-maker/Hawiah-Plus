@@ -35,11 +35,11 @@ class SingleChatAppBar extends StatelessWidget {
           final lastSeen = (data['${receiverType}_lastSeen'] as Timestamp?)?.toDate();
 
           if (isOnline) {
-            statusText = 'متصل الآن';
+            statusText = AppLocaleKey.connected.tr();
           } else if (lastSeen != null) {
-            statusText = 'آخر ظهور: ${DateMethods.formatToTime(lastSeen)}';
+            statusText = '${AppLocaleKey.lastseen.tr()} ${DateMethods.formatToTime(lastSeen)}';
           } else {
-            statusText = 'غير متصل';
+            statusText = AppLocaleKey.notconnected.tr();
           }
         }
 
@@ -72,7 +72,7 @@ class SingleChatAppBar extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Colors.green,
                           shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
+                          border: Border.all(color: AppColor.whiteColor, width: 2),
                         ),
                       ),
                     ),

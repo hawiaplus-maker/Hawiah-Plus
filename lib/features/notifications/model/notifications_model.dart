@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final notificationsModel = notificationsModelFromJson(jsonString);
-
 import 'dart:convert';
 
 NotificationsModel notificationsModelFromJson(String str) =>
@@ -19,17 +15,15 @@ class NotificationsModel {
   });
 
   factory NotificationsModel.fromJson(Map<String, dynamic> json) => NotificationsModel(
-        success: json["success"],
-        notifications: List<Datum>.from(
-          json["message"].map((x) => Datum.fromJson(x)),
-        ),
+        success: json["success"] ?? false,
+        notifications: json["message"] != null
+            ? List<Datum>.from(json["message"].map((x) => Datum.fromJson(x)))
+            : [],
       );
 
   Map<String, dynamic> toJson() => {
         "success": success,
-        "message": List<dynamic>.from(
-          notifications.map((x) => x.toJson()),
-        ),
+        "message": List<dynamic>.from(notifications.map((x) => x.toJson())),
       };
 }
 
@@ -102,6 +96,7 @@ class Datum {
         "model_type": modelType,
         "model_id": modelId,
         "seen": seen,
+        // "seen_by_admin": seenByAdmin,
         "user_id": userId,
         "data": data != null ? jsonEncode(data!.toJson()) : null,
         "created_at": createdAt?.toIso8601String(),
@@ -114,9 +109,9 @@ class Datum {
 }
 
 class Data {
-  String type;
+  String? type;
 
-  Data({required this.type});
+  Data({this.type});
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         type: json["type"],

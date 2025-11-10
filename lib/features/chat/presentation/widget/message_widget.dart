@@ -141,7 +141,7 @@ class TrianglePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
-      ..color = color ?? Colors.white // Change color as needed
+      ..color = color ?? AppColor.whiteColor // Change color as needed
       ..style = PaintingStyle.fill;
 
     final path = Path();
@@ -165,7 +165,7 @@ class MeTrianglePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
-      ..color = color ?? Colors.white // Change color as needed
+      ..color = color ?? AppColor.whiteColor // Change color as needed
       ..style = PaintingStyle.fill;
 
     final path = Path();

@@ -75,30 +75,27 @@ class LanguageScreen extends StatelessWidget {
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 12.h),
-        child: Row(
-          children: [
-            Image.asset(logo, height: 26.h, width: 26.w),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 15.sp,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w500,
-                ),
+      child: Row(
+        children: [
+          Radio<String>(
+            value: language,
+            groupValue: context.read<AppLanguageCubit>().languageSelected,
+            onChanged: (_) => onTap(),
+            activeColor: AppColor.mainAppColor,
+          ),
+          Image.asset(logo, height: 26.h, width: 26.w),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 15.sp,
+                color: Colors.black87,
+                fontWeight: FontWeight.w500,
               ),
             ),
-            Radio<String>(
-              value: language,
-              groupValue: context.read<AppLanguageCubit>().languageSelected,
-              onChanged: (_) => onTap(),
-              activeColor: AppColor.mainAppColor,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

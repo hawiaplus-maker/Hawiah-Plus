@@ -146,4 +146,13 @@ class AppLocaleKey {
   static const String somethingWentWrong = 'somethingWentWrong';
   static const String messageHint = 'messageHint';
   static const String typing = 'typing';
+  static const String now = 'now';
+  static const String ago = 'ago';
+  static const String minute = 'minute';
+  static const String hour = 'hour';
+  static const String yesterday = 'yesterday';
+  static const String day = 'day';
+  static const String connected = 'connected';
+  static const String lastseen = 'lastseen';
+  static const String notconnected = 'notconnected';
 }

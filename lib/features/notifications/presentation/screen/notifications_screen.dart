@@ -81,7 +81,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     borderRadius: BorderRadius.circular(12),
                     child: CustomTextField(
                       controller: _searchController,
-                      fillColor: Colors.white,
+                      fillColor: AppColor.whiteColor,
                       hintText: AppLocaleKey.search.tr(),
                       prefixIcon: Padding(
                         padding: const EdgeInsets.all(10),

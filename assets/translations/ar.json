@@ -261,5 +261,14 @@
    "typing": "يكتب الآن...",
    "name": "الإسم",
    "mobile": "رقم الجوال",
-   "messageHint": "اكتب رسالتك هنا"
+   "messageHint": "اكتب رسالتك هنا",
+   "now": "الان",
+   "ago": "منذ",
+   "minute": "دقيقة",
+   "hour": "ساعة",
+   "yesterday": "أمس",
+   "day": "أيام",
+   "connected": "متصل الآن",
+   "lastseen": "آخر ظهور:",
+   "notconnected": "غير متصل"
 }
