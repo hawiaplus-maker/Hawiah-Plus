@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
@@ -57,13 +58,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           final locale = context.locale.languageCode;
 
           final filteredNotifications = notifications.where((item) {
-            final title = (locale == 'ar' ? item.title?.ar : item.title?.en)?.toLowerCase()??"";
-            final message = (locale == 'ar' ? item.message?.ar : item.message?.en)?.toLowerCase()??"";
+            final title = (locale == 'ar' ? item.title?.ar : item.title?.en)?.toLowerCase() ?? "";
+            final message =
+                (locale == 'ar' ? item.message?.ar : item.message?.en)?.toLowerCase() ?? "";
             return title.contains(_searchQuery) || message.contains(_searchQuery);
           }).toList();
 
           if (state is NotificationsLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CustomLoading());
           }
 
           if (state is NotificationsUpdate) {
