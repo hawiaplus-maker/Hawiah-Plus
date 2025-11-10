@@ -43,7 +43,7 @@ class _LoginButtonWidgetState extends State<LoginButtonWidget> {
                   final cleanedPhone = AuthCubit.get(context).phoneNumber.replaceFirst('+966', '0');
                   AuthCubit.get(context).login(
                       fcmToken: fcm,
-                      phoneNumber: AuthCubit.get(context).PhoneController.text,
+                      phoneNumber: AuthCubit.get(context).phoneController.text,
                       password: AuthCubit.get(context).passwordLogin);
                 }
               },

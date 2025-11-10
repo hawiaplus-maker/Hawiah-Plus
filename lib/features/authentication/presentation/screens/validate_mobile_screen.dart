@@ -56,7 +56,7 @@ class _ValidateMobileScreenState extends State<ValidateMobileScreen> {
                     ),
                     SizedBox(height: 20.h),
                     PhoneInputWidget(
-                      controller: AuthCubit.get(context).PhoneController,
+                      controller: AuthCubit.get(context).phoneController,
                     ),
                     SizedBox(height: 20.h),
                     ActionButtonsWidget(

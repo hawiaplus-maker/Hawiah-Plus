@@ -48,7 +48,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                       height: MediaQuery.of(context).size.height * 0.4,
                     ),
                     PhoneInputWidget(
-                      controller: authChange.PhoneController,
+                      controller: authChange.phoneController,
                     ),
                     SizedBox(height: 20.h),
                     CustomButton(
@@ -57,7 +57,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                       onPressed: () {
                         if (authCubit.formKeyRegister.currentState!.validate()) {
                           AuthCubit.get(context).forgotPassword(
-                            phoneNumber: authCubit.PhoneController.text,
+                            phoneNumber: authCubit.phoneController.text,
                           );
                         }
                       },

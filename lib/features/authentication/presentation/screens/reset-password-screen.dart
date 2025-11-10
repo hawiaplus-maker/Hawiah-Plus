@@ -6,6 +6,7 @@ import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
+import 'package:hawiah_client/core/utils/validation_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 
@@ -23,7 +24,7 @@ class ResetPasswordScreen extends StatelessWidget {
         appBar: AppBarAuthWidget(),
         body: BlocConsumer<AuthCubit, AuthState>(builder: (BuildContext context, AuthState state) {
           final authCubit = AuthCubit.get(context);
-          context.read<AuthCubit>().timer.cancel();
+
           String passwordReset = authCubit.passwordReset;
 
           String passwordConfirmReset = authCubit.passwordConfirmReset;
@@ -43,15 +44,9 @@ class ResetPasswordScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 30),
                     CustomTextField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "password_required".tr();
-                        }
-                        if (value.length < 8) {
-                          return "password_min_length".tr();
-                        }
-                        return null;
-                      },
+                      validator: (value) => ValidationMethods.validatePassword(
+                        value,
+                      ),
                       isPassword: context.read<AuthCubit>().isResetPassword,
                       controller: authCubit.passwordController,
                       title: 'password'.tr(),
@@ -62,15 +57,8 @@ class ResetPasswordScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 20),
                     CustomTextField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "password_required".tr();
-                        }
-                        if (value.length < 8) {
-                          return "password_min_length".tr();
-                        }
-                        return null;
-                      },
+                      validator: (value) => ValidationMethods.validateConfirmPassword(
+                          value, authCubit.passwordController.text.trim()),
                       controller: authCubit.confirmPasswordController,
                       title: 'confirm_password'.tr(),
                       hintText: 'enter_your_password'.tr(),
@@ -114,9 +102,9 @@ class ResetPasswordScreen extends StatelessWidget {
           }
 
           if (state is ResetPasswordSuccess) {
-            if (context.mounted) {
-              context.read<AuthCubit>().timer.cancel();
-            }
+            // if (context.mounted) {
+            //   context.read<AuthCubit>().timer?.cancel();
+            // }
 
             Future.microtask(() {
               if (context.mounted) {

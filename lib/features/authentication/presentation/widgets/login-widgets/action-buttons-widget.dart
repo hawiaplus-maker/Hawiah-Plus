@@ -48,7 +48,7 @@ class _ActionButtonsWidgetState extends State<ActionButtonsWidget> {
                     HiveMethods.updateIsVisitor(false);
                     if (widget.formKey.currentState!.validate()) {
                       AuthCubit.get(context).validateMobile(
-                        phoneNumber: AuthCubit.get(context).PhoneController.text,
+                        phoneNumber: AuthCubit.get(context).phoneController.text,
                       );
                     }
                   },

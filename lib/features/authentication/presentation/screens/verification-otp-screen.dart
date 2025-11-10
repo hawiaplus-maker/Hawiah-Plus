@@ -50,7 +50,7 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
   @override
   void dispose() {
     otpController.dispose();
-    context.read<AuthCubit>().timer.cancel();
+  
     super.dispose();
   }
 
@@ -62,9 +62,7 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
       body: PopScope(
         canPop: true,
         onPopInvokedWithResult: (didPop, result) {
-          if (context.mounted) {
-            context.read<AuthCubit>().timer.cancel();
-          }
+         
         },
         child: BlocConsumer<AuthCubit, AuthState>(
           builder: (BuildContext context, AuthState state) {
@@ -237,7 +235,7 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
             if (state is VerifyOTPSuccess) {
               final authCubit = AuthCubit.get(context);
               final isResetPassword = authCubit.isResetPassword;
-              context.read<AuthCubit>().timer.cancel();
+             
 
               if (isResetPassword) {
                 Navigator.push(
@@ -256,10 +254,10 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                                 phoneNumber: widget.args.phoneNumber ?? "",
                               )));
                 } else {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CompanyProfileCompletionScreen()));
+                  // Navigator.pushReplacement(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => const CompanyProfileCompletionScreen()));
                 }
               }
             } else if (state is AuthError) {

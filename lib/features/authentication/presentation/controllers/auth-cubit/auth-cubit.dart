@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -18,213 +17,200 @@ import 'package:hawiah_client/injection_container.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  // To access the Cubit instance from anywhere in the widget tree.
+  AuthCubit() : super(AuthInitial());
   static AuthCubit get(BuildContext context) => BlocProvider.of(context);
 
-  AuthCubit() : super(AuthInitial());
-
-  // Default phone number details
-  PhoneNumber fullNumber = PhoneNumber(isoCode: 'SA'); // Default country code (SA)
+  // -------------------------------------------------
+  // 🧩 Auth Data & Controllers
+  // -------------------------------------------------
+  PhoneNumber fullNumber = PhoneNumber(isoCode: 'SA');
   String phoneNumber = '';
-
-  // For managing password
   String passwordLogin = '';
   bool passwordVisibleLogin = false;
+  bool rememberMe = false;
 
-  // Account types (personal or business)
-  List<String> accountTypes = ["personal_account", "business_account"];
-  int selectedAccountType = 0; // Default to personal account
-
-  // Terms and conditions check value
+  // -------------------------------------------------
+  // 🧩 UI States
+  // -------------------------------------------------
   bool checkedValueTerms = true;
-
-  // SMS or WhatsApp selection
-  int selectedSmsOrWhatsApp = 1; // Default to SMS
-
-  // Receive notifications toggle
   bool receiveNotifications = false;
+  int selectedSmsOrWhatsApp = 1;
+  List<String> accountTypes = ["personal_account", "business_account"];
+  int selectedAccountType = 0;
 
-  void updateRememberMe(bool newValue) {
-    rememberMe = newValue;
-    emit(AuthChange());
-  }
+  // -------------------------------------------------
+  // 🧩 Form Keys & Controllers
+  // -------------------------------------------------
+  final formKey = GlobalKey<FormState>();
+  final formKeyRegister = GlobalKey<FormState>();
+  final formKeyCompleteProfile = GlobalKey<FormState>();
 
-  // Update the selected SMS or WhatsApp method
-  void updateSelectedSmsOrWhatsApp(int index) {
-    selectedSmsOrWhatsApp = index;
-    emit(AuthChange());
-  }
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController forgotPhoneController = TextEditingController();
+  final TextEditingController phoneControllerRegister = TextEditingController();
+  final TextEditingController passwordControllerCompleteProfile = TextEditingController();
+  final TextEditingController confirmPasswordControllerCompleteProfile = TextEditingController();
 
-  // Update the "receive notifications" flag
-  void updateReceiveNotifications(bool newValue) {
-    receiveNotifications = newValue;
-    emit(AuthChange());
-  }
-
-  // Update the "terms and conditions" checkbox
-  void updateCheckedValueTerms(bool newValue) {
-    checkedValueTerms = newValue;
-    emit(AuthChange());
-  }
-
-  // Update the selected account type (personal or business)
-  void updateSelectedAccountType(int index) {
-    selectedAccountType = index;
-    emit(AuthChange());
-  }
-
-  // Toggle password visibility
-  void togglePasswordVisibility() {
-    passwordVisibleLogin = !passwordVisibleLogin;
-    emit(AuthChange());
-  }
-
-  // Update the password field
-  void updatePassword(String newPassword) {
-    passwordLogin = newPassword;
-    emit(AuthChange());
-  }
-
-  // Update phone number and trigger state change
-  void onPhoneNumberChange({required PhoneNumber number}) {
-    phoneNumber = number.phoneNumber!;
-    emit(AuthChange());
-  }
-
-  // Flag to track timer completion
-  late Timer timer;
-  int remainingTime = 30;
-  bool isTimerCompleted = false;
-  bool showInvalidCodeMessage = false;
-
-  void resetInvalidCodeMessage() {
-    showInvalidCodeMessage = false;
-    emit(AuthChange());
-  }
-
-  // Start the timer
-  void startTimer() {
-    isTimerCompleted = false;
-    showInvalidCodeMessage = false; // Reset message
-    remainingTime = 59;
-
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (remainingTime > 0) {
-        remainingTime--;
-        emit(AuthTimerState(
-          remainingTime: remainingTime,
-          isTimerCompleted: false,
-        ));
-      } else {
-        isTimerCompleted = true;
-        showInvalidCodeMessage = true;
-        timer.cancel();
-        emit(AuthTimerState(
-          remainingTime: 0,
-          isTimerCompleted: true,
-        ));
-      }
-    });
-  }
-
-  // Resend the code and reset the timer
-
-  @override
-  Future<void> close() {
-    timer.cancel();
-    return super.close();
-  }
-
-  GlobalKey<FormState> formKeyCompleteProfile = GlobalKey<FormState>();
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  GlobalKey<FormState> formKeyRegister = GlobalKey<FormState>();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordControllerCompleteProfile = TextEditingController();
-  TextEditingController confirmPasswordControllerCompleteProfile = TextEditingController();
-  TextEditingController PhoneController = TextEditingController();
-  TextEditingController forgotPhoneController = TextEditingController();
-  TextEditingController phoneControllerRegister = TextEditingController();
+  // -------------------------------------------------
+  // 🧩 Complete Profile
+  // -------------------------------------------------
   String nameCompleteProfile = '';
   String emailCompleteProfile = '';
   String usernameCompleteProfile = '';
   String passwordCompleteProfile = '';
-  bool passwordVisibleCompleteProfile = false;
-  bool rememberMe = false;
   String confirmPasswordCompleteProfile = '';
+  bool passwordVisibleCompleteProfile = false;
   List<String> genders = ['male', 'female'];
   String? selectedGender;
   List<String> accountTypesCompleteProfile = ["company"];
   String? selectedAccountTypeCompleteProfile;
   int currentStepCompleteProfile = 0;
 
-  String commercialRegistrationNumber = '';
-  String tax_number = '';
-  String municipal_license = '';
-  String transport_license = '';
-  void updateCurrentStepCompleteProfile(int index) {
-    currentStepCompleteProfile = index;
-    emit(AuthChange());
-  }
+  // -------------------------------------------------
+  // 🧩 Timer Logic (OTP)
+  // -------------------------------------------------
+  Timer? timer;
 
-  void updateSelectedAccountTypeCompleteProfile(String value) {
-    selectedAccountTypeCompleteProfile = value;
-    emit(AuthChange());
-  }
+  int remainingTime = 30;
+  bool isTimerCompleted = false;
+  bool showInvalidCodeMessage = false;
 
-  void updateSelectedGender(String value) {
-    selectedGender = value;
-    emit(AuthChange());
-  }
-
-  void togglePasswordVisibilityCompleteProfile() {
-    passwordVisibleCompleteProfile = !passwordVisibleCompleteProfile;
-    emit(AuthChange());
-  }
-
-  PhoneNumber fullNumberResetPassword = PhoneNumber(isoCode: 'SA'); // Default country code (SA)
+  // -------------------------------------------------
+  // 🧩 Reset Password
+  // -------------------------------------------------
+  PhoneNumber fullNumberResetPassword = PhoneNumber(isoCode: 'SA');
   String phoneNumberResetPassword = '';
   bool isResetPassword = false;
-
   String passwordReset = '';
   String passwordConfirmReset = '';
   bool passwordVisibleReset = false;
 
-  void togglePasswordVisibilityReset() {
-    passwordVisibleReset = !passwordVisibleReset;
+  // -------------------------------------------------
+  // 🧩 Password Validation
+  // -------------------------------------------------
+  final List<PasswordCriteria> listPasswordCriteria = [
+    PasswordCriteria(description: "contains8Characters", isValid: true),
+    PasswordCriteria(description: "containsAtLeast1Number", isValid: true),
+    PasswordCriteria(description: "containsAtLeast1Uppercase", isValid: true),
+    PasswordCriteria(description: "containsAtLeast1Symbol", isValid: false),
+  ];
+
+  // -------------------------------------------------
+  // 🔹 UI Update Functions
+  // -------------------------------------------------
+  void updateRememberMe(bool newValue) {
+    rememberMe = newValue;
     emit(AuthChange());
   }
 
-  final List<PasswordCriteria> listPasswordCriteria = [
-    PasswordCriteria(
-      description: "contains8Characters",
-      isValid: true,
-    ),
-    PasswordCriteria(
-      description: "containsAtLeast1Number",
-      isValid: true,
-    ),
-    PasswordCriteria(
-      description: "containsAtLeast1Uppercase",
-      isValid: true,
-    ),
-    PasswordCriteria(
-      description: "containsAtLeast1Symbol",
-      isValid: false,
-    ),
-  ];
+  void togglePasswordVisibility() {
+    passwordVisibleLogin = !passwordVisibleLogin;
+    emit(AuthChange());
+  }
 
-  ///**************************************login*********************** */
+  void updatePassword(String newPassword) {
+    passwordLogin = newPassword;
+    emit(AuthChange());
+  }
+
+  void updateSelectedAccountType(int index) {
+    selectedAccountType = index;
+    emit(AuthChange());
+  }
+
+  void updateCheckedValueTerms(bool newValue) {
+    checkedValueTerms = newValue;
+    emit(AuthChange());
+  }
+
+  void updateSelectedSmsOrWhatsApp(int index) {
+    selectedSmsOrWhatsApp = index;
+    emit(AuthChange());
+  }
+
+  void updateReceiveNotifications(bool newValue) {
+    receiveNotifications = newValue;
+    emit(AuthChange());
+  }
+
+  void onPhoneNumberChange({required PhoneNumber number}) {
+    phoneNumber = number.phoneNumber ?? '';
+    emit(AuthChange());
+  }
+
+  void resetInvalidCodeMessage() {
+    showInvalidCodeMessage = false;
+    emit(AuthChange());
+  }
+
+  // -------------------------------------------------
+  // 🔹 Timer Logic
+  // -------------------------------------------------
+  void startTimer() {
+    isTimerCompleted = false;
+    showInvalidCodeMessage = false;
+    remainingTime = 59;
+
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (remainingTime > 0) {
+        remainingTime--;
+        emit(AuthTimerState(remainingTime: remainingTime, isTimerCompleted: false));
+      } else {
+        isTimerCompleted = true;
+        showInvalidCodeMessage = true;
+        timer.cancel();
+        emit(AuthTimerState(remainingTime: 0, isTimerCompleted: true));
+      }
+    });
+  }
+
+  Future<void> clearEC() async {
+    passwordController.clear();
+    confirmPasswordController.clear();
+    nameController.clear();
+    emailController.clear();
+    usernameController.clear();
+    phoneController.clear();
+    forgotPhoneController.clear();
+    phoneControllerRegister.clear();
+    passwordControllerCompleteProfile.clear();
+    confirmPasswordControllerCompleteProfile.clear();
+  }
+
+  @override
+  Future<void> close() {
+    // ✅ لو فيه timer شغال، اقفله
+    timer?.cancel();
+
+    // ✅ Dispose كل الـ controllers
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    nameController.dispose();
+    emailController.dispose();
+    usernameController.dispose();
+    phoneController.dispose();
+    forgotPhoneController.dispose();
+    phoneControllerRegister.dispose();
+    passwordControllerCompleteProfile.dispose();
+    confirmPasswordControllerCompleteProfile.dispose();
+
+    return super.close();
+  }
+
+  // -------------------------------------------------
+  // 🔹 Login
+  // -------------------------------------------------
   Future<void> login({
     required String? phoneNumber,
     required String? password,
     required String? fcmToken,
   }) async {
     emit(AuthLoading());
-
     final body = FormData.fromMap({
       'password': password,
       'mobile': phoneNumber,
@@ -232,11 +218,7 @@ class AuthCubit extends Cubit<AuthState> {
       'remember_me': rememberMe ? '1' : '0',
     });
 
-    final response = await ApiHelper.instance.post(
-      Urls.login,
-      body: body,
-      hasToken: false,
-    );
+    final response = await ApiHelper.instance.post(Urls.login, body: body, hasToken: false);
 
     if (response.state == ResponseState.complete && response.data['success'] == true) {
       final data = response.data['data'];
@@ -245,224 +227,130 @@ class AuthCubit extends Cubit<AuthState> {
       if (data != null) {
         HiveMethods.updateToken(data['api_token']);
         await sl<ProfileCubit>().fetchProfile();
-        close();
-        log("every Text Edit Controller Disposed");
-        emit(AuthSuccess(
-          message: message,
-        ));
+        emit(AuthSuccess(message: message));
       } else {
         emit(AuthError(message));
       }
-    } else if (response.state == ResponseState.unauthorized) {
-      emit(AuthError(response.data['message'] ?? "بيانات الدخول غير صحيحة"));
-    } else if (response.state == ResponseState.error) {
-      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
-    } else if (response.state == ResponseState.offline) {
-      emit(AuthError("لا يوجد اتصال بالإنترنت"));
     } else {
       emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
-  ///**************************************validate mobile*********************** */
-  Future<void> validateMobile({
-    required String? phoneNumber,
-  }) async {
+  // -------------------------------------------------
+  // 🔹 Validate Mobile
+  // -------------------------------------------------
+  Future<void> validateMobile({required String? phoneNumber}) async {
     emit(validateLoading());
-
-    final body = FormData.fromMap({
-      'mobile': phoneNumber,
-    });
-
     final response = await ApiHelper.instance.post(
       Urls.validateMobile,
-      body: body,
+      body: FormData.fromMap({'mobile': phoneNumber}),
       hasToken: false,
     );
 
     if (response.state == ResponseState.complete && response.data['success'] == true) {
       final message = response.data['message'];
-
-      if (response.data['message'] == "complete login") {
-        emit(ValidateMobileSuccess(
-          message: message,
-        ));
+      if (message == "complete login") {
+        emit(ValidateMobileSuccess(message: message));
       } else {
         emit(ValidateMobileError(message: message));
       }
-    } else if (response.state == ResponseState.unauthorized) {
-      emit(validateUnAuthorized());
-    } else if (response.state == ResponseState.error) {
-      emit(ValidateMobileError(message: response.data['message'] ?? "حدث خطأ أثناء العملية"));
-    } else if (response.state == ResponseState.offline) {
-      emit(ValidateMobileError(message: "لا يوجد اتصال بالإنترنت"));
     } else {
       emit(ValidateMobileError(message: response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
-  ///******************Register*********************** */
-  ///
-  Future<void> register({
-    required String? phoneNumber,
-    required String? type,
-  }) async {
+  // -------------------------------------------------
+  // 🔹 Register
+  // -------------------------------------------------
+  Future<void> register({required String? phoneNumber, required String? type}) async {
     if (type == 'company') {
-      emit(AuthError(AppLocaleKey.nocompany.tr()));
-      CommonMethods.showToast(
-        message: AppLocaleKey.nocompany.tr(),
-        type: ToastType.error,
-      );
-
+      final msg = AppLocaleKey.nocompany.tr();
+      CommonMethods.showToast(message: msg, type: ToastType.error);
+      emit(AuthError(msg));
       return;
     }
 
     emit(AuthLoading());
-
-    final body = FormData.fromMap({
-      'type': type,
-      'mobile': phoneNumber,
-    });
-
     final response = await ApiHelper.instance.post(
       Urls.register,
-      body: body,
+      body: FormData.fromMap({'type': type, 'mobile': phoneNumber}),
       hasToken: false,
     );
 
     if (response.state == ResponseState.complete && response.data['success'] == true) {
-      final data = response.data['data'];
-      final message = response.data['message'] ?? 'Login completed';
-
-      if (data != null) {
-        emit(RegisterSuccess(
-          message: message,
-          data: response.data['data'] as Map<String, dynamic>,
-        ));
-      } else {
-        emit(AuthError(message));
-      }
-    } else if (response.state == ResponseState.unauthorized) {
-      emit(AuthError(response.data['message'] ?? "بيانات الدخول غير صحيحة"));
-    } else if (response.state == ResponseState.error) {
-      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
-    } else if (response.state == ResponseState.offline) {
-      emit(AuthError("لا يوجد اتصال بالإنترنت"));
+      emit(RegisterSuccess(
+        message: response.data['message'] ?? '',
+        data: response.data['data'] as Map<String, dynamic>,
+      ));
     } else {
       emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
-  ///**************************************otp*********************** */
-  Future<void> otp({
-    required String? phoneNumber,
-    required int? otp,
-  }) async {
+  // -------------------------------------------------
+  // 🔹 OTP
+  // -------------------------------------------------
+  Future<void> otp({required String? phoneNumber, required int? otp}) async {
     emit(AuthLoading());
-
-    final body = FormData.fromMap({
-      'otp': otp,
-      'mobile': phoneNumber,
-    });
-
     final response = await ApiHelper.instance.post(
       Urls.verify,
-      body: body,
+      body: FormData.fromMap({'otp': otp, 'mobile': phoneNumber}),
       hasToken: false,
     );
 
     if (response.state == ResponseState.complete && response.data['success'] == true) {
       final data = response.data['data'];
-      final message = response.data['message'] ?? 'Login completed';
-
-      if (data != null) {
-        HiveMethods.updateToken(data['user']['api_token']);
-        emit(VerifyOTPSuccess(message: message));
-      } else {
-        emit(AuthError(message));
-      }
-    } else if (response.state == ResponseState.unauthorized) {
-      emit(AuthError(response.data['message'] ?? "بيانات الدخول غير صحيحة"));
-    } else if (response.state == ResponseState.error) {
-      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
-    } else if (response.state == ResponseState.offline) {
-      emit(AuthError("لا يوجد اتصال بالإنترنت"));
+      HiveMethods.updateToken(data['user']['api_token']);
+      timer?.cancel();
+      emit(VerifyOTPSuccess(message: response.data['message']));
     } else {
       emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
-  //*************rend code************************** */
-  Future<void> resendCodeToApi({
-    required String? phoneNumber,
-  }) async {
+  // -------------------------------------------------
+  // 🔹 Resend Code
+  // -------------------------------------------------
+  Future<void> resendCodeToApi({required String? phoneNumber}) async {
     emit(AuthCodeResentLoading());
-
-    final body = FormData.fromMap({
-      'mobile': phoneNumber,
-    });
-
     final response = await ApiHelper.instance.post(
       Urls.resend,
-      body: body,
+      body: FormData.fromMap({'mobile': phoneNumber}),
       hasToken: false,
     );
 
     if (response.state == ResponseState.complete && response.data['success'] == true) {
-      final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
-      CommonMethods.showToast(
-        message: message,
-      );
-
-      emit(AuthCodeResentSuccess(message: message));
-    } else if (response.state == ResponseState.unauthorized) {
-      emit(AuthCodeResentError(message: response.data['message'] ?? "بيانات غير صحيحة"));
-    } else if (response.state == ResponseState.error) {
-      emit(AuthCodeResentError(message: response.data['message'] ?? "حدث خطأ أثناء العملية"));
-    } else if (response.state == ResponseState.offline) {
-      emit(AuthCodeResentError(message: "لا يوجد اتصال بالإنترنت"));
+      final msg = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
+      CommonMethods.showToast(message: msg);
+      emit(AuthCodeResentSuccess(message: msg));
     } else {
-      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+      emit(AuthCodeResentError(message: response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
-  //*************forgot password************************** */
-  Future<void> forgotPassword({
-    required String? phoneNumber,
-  }) async {
+  // -------------------------------------------------
+  // 🔹 Forgot Password
+  // -------------------------------------------------
+  Future<void> forgotPassword({required String? phoneNumber}) async {
     emit(AuthLoading());
-
-    final body = FormData.fromMap({
-      'mobile': phoneNumber,
-    });
-
     final response = await ApiHelper.instance.post(
       Urls.forgetPassword,
-      body: body,
+      body: FormData.fromMap({'mobile': phoneNumber}),
       hasToken: false,
     );
 
     if (response.state == ResponseState.complete && response.data['success'] == true) {
-      final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
-      final data = response.data['data'];
-
-      CommonMethods.showToast(
-        message: message,
-      );
-
-      emit(ForgetPasswordSuccess(message: message, data: data));
-    } else if (response.state == ResponseState.unauthorized) {
-      emit(AuthError(response.data['message'] ?? "بيانات غير صحيحة"));
-    } else if (response.state == ResponseState.error) {
-      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
-    } else if (response.state == ResponseState.offline) {
-      emit(AuthError("لا يوجد اتصال بالإنترنت"));
+      final msg = response.data['message'] ?? 'تم إرسال رمز التحقق';
+      CommonMethods.showToast(message: msg);
+      emit(ForgetPasswordSuccess(message: msg, data: response.data['data']));
     } else {
       emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
-  //*************reset password************************** */
+  // -------------------------------------------------
+  // 🔹 Reset Password
+  // -------------------------------------------------
   Future<void> resetPassword({
     required String? phoneNumber,
     required int? otp,
@@ -470,68 +358,51 @@ class AuthCubit extends Cubit<AuthState> {
     required String? password_confirmation,
   }) async {
     emit(AuthLoading());
-    final body = FormData.fromMap({
-      'mobile': phoneNumber,
-      // 'otp': otp,
-      'password': password,
-      'password_confirmation': password_confirmation,
-    });
     final response = await ApiHelper.instance.post(
       Urls.resetPassword,
-      body: body,
+      body: FormData.fromMap({
+        'mobile': phoneNumber,
+        'password': password,
+        'password_confirmation': password_confirmation,
+      }),
       hasToken: false,
     );
+
     if (response.state == ResponseState.complete && response.data['success'] == true) {
-      final message = response.data['message'] ?? 'تم إرسال رمز التحقق مجددًا';
-
-      CommonMethods.showToast(
-        message: message,
-      );
-
-      emit(ResetPasswordSuccess(message: message));
-    } else if (response.state == ResponseState.unauthorized) {
-      emit(AuthError(response.data['message'] ?? "بيانات غير صحيحة"));
-    } else if (response.state == ResponseState.error) {
-      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
-    } else if (response.state == ResponseState.offline) {
-      emit(AuthError("لا يوجد اتصال بالإنترنت"));
+      final msg = response.data['message'] ?? 'تم تحديث كلمة المرور';
+      timer?.cancel();
+      CommonMethods.showToast(message: msg);
+      emit(ResetPasswordSuccess(message: msg));
     } else {
-      emit(AuthError(response.data['message'] ?? "بيانات غير صحيحة"));
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
-  ///*************logout************************** */
+  // -------------------------------------------------
+  // 🔹 Logout
+  // -------------------------------------------------
   Future<void> logout({void Function()? onSuccess}) async {
     emit(AuthLoading());
     NavigatorMethods.loading();
-    final response = await ApiHelper.instance.post(
-      Urls.logout,
-      hasToken: true,
-    );
+
+    final response = await ApiHelper.instance.post(Urls.logout, hasToken: true);
     NavigatorMethods.loadingOff();
+
     if (response.state == ResponseState.complete) {
       onSuccess?.call();
-
-      final message = response.data['message'] ?? 'Logout completed';
+      final msg = response.data['message'] ?? 'Logout completed';
       HiveMethods.deleteToken();
       HiveMethods.updateIsVisitor(true);
-      emit(LogOutSuccess(
-        message: message,
-      ));
-      CommonMethods.showToast(message: message);
-      if (response.state == ResponseState.unauthorized) {
-        emit(AuthError(response.data['message'] ?? "تم انتهاء الجلسة"));
-      } else if (response.state == ResponseState.error) {
-        emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
-      } else if (response.state == ResponseState.offline) {
-        emit(AuthError("لا يوجد اتصال بالإنترنت"));
-      } else {
-        emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
-      }
+      emit(LogOutSuccess(message: msg));
+      CommonMethods.showToast(message: msg);
+    } else {
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
-  ///*************complete profile************************** */
+  // -------------------------------------------------
+  // 🔹 Complete Register
+  // -------------------------------------------------
   Future<void> completeRegister({
     required String? phoneNumber,
     required String? name,
@@ -539,38 +410,22 @@ class AuthCubit extends Cubit<AuthState> {
     required String? password_confirmation,
   }) async {
     emit(AuthLoading());
-
-    final body = FormData.fromMap({
-      'name': name,
-      'mobile': phoneNumber,
-      'password': password,
-      "password_confirmation": password_confirmation
-    });
-
     final response = await ApiHelper.instance.post(
       Urls.completeRegister,
-      body: body,
+      body: FormData.fromMap({
+        'name': name,
+        'mobile': phoneNumber,
+        'password': password,
+        'password_confirmation': password_confirmation,
+      }),
       hasToken: false,
     );
 
     if (response.state == ResponseState.complete) {
-      final data = response.data['data'];
-      final message = response.data['message'] ?? 'Login completed';
-
-      if (data != null) {
-        emit(CompleteRegisterSuccess(
-          message: message,
-          data: response.data['data'] as Map<String, dynamic>,
-        ));
-      } else {
-        emit(AuthError(message));
-      }
-    } else if (response.state == ResponseState.unauthorized) {
-      emit(AuthError(response.data['message'] ?? "بيانات الدخول غير صحيحة"));
-    } else if (response.state == ResponseState.error) {
-      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
-    } else if (response.state == ResponseState.offline) {
-      emit(AuthError("لا يوجد اتصال بالإنترنت"));
+      emit(CompleteRegisterSuccess(
+        message: response.data['message'] ?? '',
+        data: response.data['data'] as Map<String, dynamic>,
+      ));
     } else {
       emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
@@ -581,8 +436,7 @@ class PasswordCriteria {
   final String description;
   final bool isValid;
 
-  // Constructor
-  PasswordCriteria({
+  const PasswordCriteria({
     required this.description,
     required this.isValid,
   });

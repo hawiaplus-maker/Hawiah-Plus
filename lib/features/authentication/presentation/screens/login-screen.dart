@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: MediaQuery.of(context).size.height * 0.4,
                     ),
                     PhoneInputWidget(
-                      controller: AuthCubit.get(context).PhoneController,
+                      controller: AuthCubit.get(context).phoneController,
                       isReadOnly: true,
                     ),
                     SizedBox(height: 20.h),
@@ -124,6 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
             CommonMethods.showError(message: state.message);
           }
           if (state is AuthSuccess) {
+            context.read<AuthCubit>().clearEC();
             CommonMethods.showToast(message: state.message);
             log("======================================= Navigate to Layout Screen=======================================");
             Navigator.pushAndRemoveUntil<void>(

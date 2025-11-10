@@ -25,7 +25,7 @@ class PhoneInputWidget extends StatelessWidget {
       hintText: AppLocaleKey.phoneHint.tr(),
       readOnly: isReadOnly,
       onChanged: (value) {
-        authCubit.PhoneController.text = value;
+        authCubit.phoneController.text = value;
       },
     );
   }
