@@ -14,8 +14,8 @@ import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../controllers/auth-cubit/auth-cubit.dart';
-import '../controllers/auth-cubit/auth-state.dart';
+import '../cubit/auth-cubit.dart';
+import '../cubit/auth-state.dart';
 
 class PersonalProfileCompletionScreen extends StatefulWidget {
   const PersonalProfileCompletionScreen({super.key, this.phoneNumber});

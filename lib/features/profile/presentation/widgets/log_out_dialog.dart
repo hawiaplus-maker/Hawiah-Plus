@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
+import 'package:hawiah_client/features/authentication/presentation/cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 
 class LogOutDialog extends StatelessWidget {

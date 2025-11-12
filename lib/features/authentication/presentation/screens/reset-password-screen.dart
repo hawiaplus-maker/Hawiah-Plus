@@ -10,8 +10,8 @@ import 'package:hawiah_client/core/utils/validation_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 
-import '../controllers/auth-cubit/auth-cubit.dart';
-import '../controllers/auth-cubit/auth-state.dart';
+import '../cubit/auth-cubit.dart';
+import '../cubit/auth-state.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
   const ResetPasswordScreen({super.key, required this.phone, required this.otp});

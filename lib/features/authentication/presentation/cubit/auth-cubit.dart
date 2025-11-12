@@ -1,20 +1,19 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_toast.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
-import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
+import 'package:hawiah_client/features/authentication/presentation/cubit/auth-state.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/injection_container.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+
+enum AccountType { individual, company }
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
@@ -247,43 +246,77 @@ class AuthCubit extends Cubit<AuthState> {
       hasToken: false,
     );
 
-    if (response.state == ResponseState.complete && response.data['success'] == true) {
+    if (response.state == ResponseState.complete) {
       final message = response.data['message'];
-      if (message == "complete login") {
+      if (message == "complete login" && response.data['success'] == true) {
         emit(ValidateMobileSuccess(message: message));
+      } else if (response.data["status_Code"] == 422) {
+        emit(ValidateMobilePhoneIsNotRegistered());
       } else {
         emit(ValidateMobileError(message: message));
       }
-    } else {
-      emit(ValidateMobileError(message: response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 
   // -------------------------------------------------
   // 🔹 Register
   // -------------------------------------------------
-  Future<void> register({required String? phoneNumber, required String? type}) async {
-    if (type == 'company') {
-      final msg = AppLocaleKey.nocompany.tr();
-      CommonMethods.showToast(message: msg, type: ToastType.error);
-      emit(AuthError(msg));
-      return;
-    }
+  Future<void> register(
+      {required String? phoneNumber,
+      required String? name,
+      required String? password,
+      required String? confirmPassword,
+      String? taxRecord,
+      String? commercialRegister,
+      required AccountType? type}) async {
+    switch (type) {
+      //=========================== individual ===================================
+      case AccountType.individual:
+        emit(AuthLoading());
+        final response = await ApiHelper.instance.post(
+          Urls.individualRegister,
+          body: FormData.fromMap({
+            'mobile': phoneNumber,
+            'name': name,
+            'password': password,
+            'password_confirmation': confirmPassword,
+          }),
+          hasToken: false,
+        );
 
-    emit(AuthLoading());
-    final response = await ApiHelper.instance.post(
-      Urls.register,
-      body: FormData.fromMap({'type': type, 'mobile': phoneNumber}),
-      hasToken: false,
-    );
+        if (response.state == ResponseState.complete && response.data['success'] == true) {
+          emit(RegisterSuccess(
+            message: response.data['message'] ?? '',
+            data: response.data['data'] as Map<String, dynamic>,
+          ));
+        } else {
+          emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+        }
+      //=========================== company ===================================
+      case AccountType.company:
+        emit(AuthLoading());
+        final response = await ApiHelper.instance.post(
+          Urls.companyRegister,
+          body: FormData.fromMap({
+            'name': name,
+            'password': password,
+            'password_confirmation': confirmPassword,
+            'tax_record': taxRecord,
+            'commercial_register': commercialRegister
+          }),
+          hasToken: false,
+        );
 
-    if (response.state == ResponseState.complete && response.data['success'] == true) {
-      emit(RegisterSuccess(
-        message: response.data['message'] ?? '',
-        data: response.data['data'] as Map<String, dynamic>,
-      ));
-    } else {
-      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+        if (response.state == ResponseState.complete && response.data['success'] == true) {
+          emit(RegisterSuccess(
+            message: response.data['message'] ?? '',
+            data: response.data['data'] as Map<String, dynamic>,
+          ));
+        } else {
+          emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+        }
+      default:
+        emit(AuthError("حدث خطاء"));
     }
   }
 

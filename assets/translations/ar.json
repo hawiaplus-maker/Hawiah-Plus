@@ -257,7 +257,6 @@
    "somethingWentWrong": "حدث خطأ ما ؛ حاول مرة أخري",
    "phones": "رقم الجوال",
    "map": "الموقع",
-   "messageHint": "اكتب رسالتك هنا",
    "typing": "يكتب الآن...",
    "name": "الإسم",
    "mobile": "رقم الجوال",
@@ -270,5 +269,7 @@
    "day": "أيام",
    "connected": "متصل الآن",
    "lastseen": "آخر ظهور:",
-   "notconnected": "غير متصل"
+   "notconnected": "غير متصل",
+   "loginNow": "سجل دخول الآن",
+   "toBrowseServicesRegisterNow": "لكي تتصفح خدماتنا وتطلبها بسهوله سجل الآن"
 }

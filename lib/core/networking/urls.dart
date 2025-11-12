@@ -22,6 +22,8 @@ class Urls {
 
   static const String logout = '${baseUrl}logout';
   static const String register = '${baseUrl}register';
+  static const String companyRegister = '${baseUrl}company/register';
+  static const String individualRegister = '${baseUrl}complete-register';
   static const String verify = '${baseUrl}verify-otp';
   static const String resend = '${baseUrl}resend-otp';
   static const String forgetPassword = '${baseUrl}forget-password';

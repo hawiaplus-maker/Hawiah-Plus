@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/features/app-language/presentation/controllers/app-language-cubit/app-language-cubit.dart';
-import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
+import 'package:hawiah_client/features/authentication/presentation/cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/chat/cubit/chat_cubit.dart';
 import 'package:hawiah_client/features/explore/presentation/controllers/explore-flow-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';

@@ -1,5 +1,5 @@
 
-import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
+import 'package:hawiah_client/features/authentication/presentation/cubit/auth-cubit.dart';
 import 'package:hawiah_client/injection_container.dart';
 
 

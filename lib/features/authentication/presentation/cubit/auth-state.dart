@@ -119,6 +119,10 @@ class ValidateMobileError extends AuthState {
   });
 }
 
+class ValidateMobilePhoneIsNotRegistered extends AuthState {
+  ValidateMobilePhoneIsNotRegistered();
+}
+
 class AuthCodeResentLoading extends AuthState {}
 
 class AuthCodeResentSuccess extends AuthState {

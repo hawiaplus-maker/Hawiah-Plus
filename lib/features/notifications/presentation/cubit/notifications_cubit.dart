@@ -12,7 +12,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
 
   NotificationsCubit() : super(NotificationsInitial());
 
-  void initialSetting() {
+  void initialNotifications() {
     _notificationsResponse = ApiResponse(
       state: ResponseState.sleep,
       data: null,

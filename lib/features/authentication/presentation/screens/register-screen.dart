@@ -8,8 +8,8 @@ import 'package:hawiah_client/features/authentication/presentation/widgets/commo
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/phone-input-widget.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 
-import '../controllers/auth-cubit/auth-cubit.dart';
-import '../controllers/auth-cubit/auth-state.dart';
+import '../cubit/auth-cubit.dart';
+import '../cubit/auth-state.dart';
 import '../widgets/register-widgets/account-type-toggle-widget.dart';
 import '../widgets/register-widgets/footer-register-widget.dart';
 import '../widgets/register-widgets/register-button-widget.dart';
@@ -24,7 +24,22 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  final taxRecordController = TextEditingController();
+  final commercialRegisterController = TextEditingController();
+  @override
+  void dispose() {
+    nameController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    taxRecordController.dispose();
+    commercialRegisterController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +51,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         final accountTypes = authChange.accountTypes;
         final selectedAccountType = authChange.selectedAccountType;
         final checkedValueTerms = authChange.checkedValueTerms;
-        final selectedTypeValue = selectedAccountType == 0 ? 'individual' : 'company';
+        final selectedTypeValue =
+            selectedAccountType == 0 ? AccountType.individual : AccountType.company;
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 10.w),
           child: Form(
@@ -79,7 +95,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                 ),
-           
                 FooterRegisterWidget(),
                 SizedBox(height: 20.h),
               ],

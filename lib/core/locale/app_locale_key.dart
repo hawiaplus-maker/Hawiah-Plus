@@ -155,4 +155,6 @@ class AppLocaleKey {
   static const String connected = 'connected';
   static const String lastseen = 'lastseen';
   static const String notconnected = 'notconnected';
+  static const String loginNow = 'loginNow';
+  static const String toBrowseServicesRegisterNow = 'toBrowseServicesRegisterNow';
 }

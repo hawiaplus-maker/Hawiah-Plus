@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
-import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
-import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
+import 'package:hawiah_client/features/authentication/presentation/cubit/auth-cubit.dart';
+import 'package:hawiah_client/features/authentication/presentation/cubit/auth-state.dart';
 
 class LoginButtonWidget extends StatefulWidget {
   LoginButtonWidget({Key? key, required this.formKey}) : super(key: key);

@@ -15,8 +15,8 @@ import 'package:hawiah_client/features/authentication/presentation/screens/reset
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 import 'package:pinput/pinput.dart';
 
-import '../controllers/auth-cubit/auth-cubit.dart';
-import '../controllers/auth-cubit/auth-state.dart';
+import '../cubit/auth-cubit.dart';
+import '../cubit/auth-state.dart';
 
 class VerificationOtpScreenArgs {
   final String phoneNumber;

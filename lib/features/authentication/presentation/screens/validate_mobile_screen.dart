@@ -8,12 +8,13 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-cubit.dart';
-import 'package:hawiah_client/features/authentication/presentation/controllers/auth-cubit/auth-state.dart';
+import 'package:hawiah_client/features/authentication/presentation/cubit/auth-cubit.dart';
+import 'package:hawiah_client/features/authentication/presentation/cubit/auth-state.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/phone-input-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/login-widgets/action-buttons-widget.dart';
+import 'package:hawiah_client/features/authentication/presentation/widgets/login-widgets/create_account_dialog.dart';
 
 class ValidateMobileScreen extends StatefulWidget {
   static const String routeName = '/ValidateMobileScreen';
@@ -70,14 +71,13 @@ class _ValidateMobileScreenState extends State<ValidateMobileScreen> {
           );
         },
         listener: (BuildContext context, AuthState state) {
-          if (state is ValidateMobileError) {
-            CommonMethods.showError(message: state.message);
-          }
           if (state is ValidateMobileSuccess) {
             CommonMethods.showToast(message: state.message);
             NavigatorMethods.pushNamed(context, LoginScreen.routeName);
-          } else if (state is validateUnAuthorized) {
-            CommonMethods.showAlertDialog(message: "رقم الجوال غير مسجل، يرجى التسجيل أولاً");
+          } else if (state is ValidateMobilePhoneIsNotRegistered) {
+            NavigatorMethods.showAppDialog(context, CreateAccountDialog());
+          } else if (state is ValidateMobileError) {
+            CommonMethods.showError(message: state.message);
           }
         },
       ),
