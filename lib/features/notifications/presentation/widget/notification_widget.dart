@@ -16,8 +16,12 @@ class NotificationWidget extends StatelessWidget {
     final locale = context.locale.languageCode;
     final title = locale == 'ar' ? item.title?.ar : item.title?.en;
     final message = locale == 'ar' ? item.message?.ar : item.message?.en;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 2),
+      decoration: BoxDecoration(
+        color: item.seen == 0 ? AppColor.mainAppColor.withAlpha(40) : AppColor.whiteColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: ListTile(
         title: Row(
           children: [

@@ -27,13 +27,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<NotificationsCubit>().getnotifications();
+    
+    context.read<NotificationsCubit>().getnotifications(search: '');
+  }
 
-    _searchController.addListener(() {
-      setState(() {
-        _searchQuery = _searchController.text.toLowerCase();
-      });
-    });
+ 
+  void _onSearchPressed() {
+    FocusScope.of(context).unfocus();
+    final query = _searchController.text.trim();
+    setState(() => _searchQuery = query);
+    context.read<NotificationsCubit>().getnotifications(search: query);
   }
 
   @override
@@ -61,7 +64,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             final title = (locale == 'ar' ? item.title?.ar : item.title?.en)?.toLowerCase() ?? "";
             final message =
                 (locale == 'ar' ? item.message?.ar : item.message?.en)?.toLowerCase() ?? "";
-            return title.contains(_searchQuery) || message.contains(_searchQuery);
+            final query = _searchQuery.toLowerCase();
+            return title.contains(query) || message.contains(query);
           }).toList();
 
           if (state is NotificationsLoading) {
@@ -92,13 +96,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           width: 16,
                         ),
                       ),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.all(11),
-                        child: SvgPicture.asset(
-                          AppImages.filter,
-                          color: AppColor.mainAppColor,
-                          height: 10,
-                          width: 16,
+                      suffixIcon: GestureDetector(
+                        onTap: _onSearchPressed,
+                        child: Padding(
+                          padding: const EdgeInsets.all(11),
+                          child: SvgPicture.asset(
+                            AppImages.filter,
+                            color: AppColor.mainAppColor,
+                            height: 10,
+                            width: 16,
+                          ),
                         ),
                       ),
                     ),
@@ -108,15 +115,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   Expanded(
                     child: filteredNotifications.isEmpty
                         ? _buildEmptyState()
-                        : ListView.builder(
+                        : ListView.separated(
                             itemCount: filteredNotifications.length,
                             itemBuilder: (context, index) {
                               final item = filteredNotifications[index];
-
-                              return NotificationWidget(
-                                item: item,
-                              );
+                              return NotificationWidget(item: item);
                             },
+                            separatorBuilder: (context, index) => Divider(
+                              height: 1,
+                              color: AppColor.greyColor.withOpacity(0.2),
+                            ),
                           ),
                   ),
                 ],
