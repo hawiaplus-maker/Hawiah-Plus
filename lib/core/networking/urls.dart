@@ -44,5 +44,6 @@ class Urls {
   static String neighborhoodsByCity(int id) => '${baseUrl}neighborhoods/$id';
   static String updateAddress(int id) => '${baseUrl}user-addresses/$id';
   static String payment(int orderId) => '${baseUrl}paymob-paid/?order_id=$orderId';
-  static const String notifications = '${baseUrl}notifications';
+  static String notifications(int seen, String search) =>
+      '${baseUrl}notifications?search=$search&seen=$seen';
 }
