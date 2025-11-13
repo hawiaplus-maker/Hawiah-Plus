@@ -5,51 +5,41 @@ import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/features/notifications/model/notifications_model.dart';
 import 'package:hawiah_client/features/notifications/presentation/cubit/notifications_state.dart';
 
-
 class NotificationsCubit extends Cubit<NotificationsState> {
-  static NotificationsCubit get(BuildContext context) =>
-      BlocProvider.of(context);
+  static NotificationsCubit get(BuildContext context) => BlocProvider.of(context);
 
   NotificationsCubit() : super(NotificationsInitial());
 
-  void initialNotifications() {
-    _notificationsResponse = ApiResponse(
-      state: ResponseState.sleep,
-      data: null,
-    );
-    _notifications = null;
-    emit(NotificationsUpdate());
-  }
-
-  ApiResponse _notificationsResponse = ApiResponse(
-    state: ResponseState.sleep,
-    data: null,
-  );
+  ApiResponse _notificationsResponse = ApiResponse(state: ResponseState.sleep, data: null);
   ApiResponse get notificationsResponse => _notificationsResponse;
 
   NotificationsModel? _notifications;
   NotificationsModel? get setting => _notifications;
 
-  Future<void> getnotifications() async {
-    emit(NotificationsLoading());
-    _notificationsResponse = ApiResponse(
-      state: ResponseState.loading,
-      data: null,
-    );
-    _notifications = null;
+  bool _firstLoad = true;
+
+  Future<void> getnotifications({required String search}) async {
+    final seen = _firstLoad ? 0 : 1;
+    _firstLoad = false;
+
     emit(NotificationsLoading());
 
     _notificationsResponse = await ApiHelper.instance.get(
-      "${Urls.notifications}",
+      "${Urls.notifications(seen, search)}",
     );
-
-    emit(NotificationsLoading());
 
     if (_notificationsResponse.state == ResponseState.complete) {
       _notifications = NotificationsModel.fromJson(_notificationsResponse.data);
       emit(NotificationsUpdate());
-    } else if (_notificationsResponse.state == ResponseState.unauthorized) {
+    } else {
       emit(NotificationsUpdate());
     }
+  }
+
+  void initialSetting() {
+    _notificationsResponse = ApiResponse(state: ResponseState.sleep, data: null);
+    _notifications = null;
+    _firstLoad = true;
+    emit(NotificationsUpdate());
   }
 }
