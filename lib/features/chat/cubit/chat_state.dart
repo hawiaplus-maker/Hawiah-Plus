@@ -11,6 +11,8 @@ class ChatInitial extends ChatState {}
 
 class ChatLoading extends ChatState {}
 
+class ChatEmpty extends ChatState {}
+
 class ChatLoaded extends ChatState {
   final List<ChatMessageModel> messages;
 

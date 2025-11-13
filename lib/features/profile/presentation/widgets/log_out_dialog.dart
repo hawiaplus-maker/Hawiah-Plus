@@ -8,6 +8,8 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
+import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
+import 'package:hawiah_client/injection_container.dart';
 
 class LogOutDialog extends StatelessWidget {
   const LogOutDialog({
@@ -50,6 +52,7 @@ class LogOutDialog extends StatelessWidget {
                     AuthCubit.get(context).logout(
                       onSuccess: () {
                         HiveMethods.deleteToken();
+                        sl<ProfileCubit>().user = null;
                         NavigatorMethods.pushNamedAndRemoveUntil(
                             context, ValidateMobileScreen.routeName);
                       },

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,6 +32,17 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController taxNumberController = TextEditingController();
   final TextEditingController commercialRegistration = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _getFcm();
+  }
+
+  String fcm = '';
+  void _getFcm() async {
+    fcm = await FirebaseMessaging.instance.getToken() ?? "";
+  }
+
   @override
   void dispose() {
     passwordController.dispose();
@@ -150,6 +162,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                 confirmPassword: confirmPasswordController.text,
                                 taxRecord: taxNumberController.text,
                                 commercialRegister: commercialRegistration.text,
+                                fcm: fcm,
                                 type: accountType);
                           }
                         },
@@ -164,6 +177,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         },
         listener: (BuildContext context, AuthState state) {
           if (state is RegisterSuccess) {
+            context.read<AuthCubit>().clearEC();
             CommonMethods.showToast(message: state.message);
             NavigatorMethods.pushNamedAndRemoveUntil(context, LayoutScreen.routeName);
           }

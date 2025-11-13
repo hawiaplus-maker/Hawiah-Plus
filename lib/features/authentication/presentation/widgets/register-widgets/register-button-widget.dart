@@ -69,6 +69,7 @@ class _RegisterButtonWidgetState extends State<RegisterButtonWidget> {
                       confirmPassword: widget.passwordConfirmation,
                       taxRecord: widget.taxRecord,
                       commercialRegister: widget.commercialRegister,
+                      fcm: "",
                     );
                   }
                 },

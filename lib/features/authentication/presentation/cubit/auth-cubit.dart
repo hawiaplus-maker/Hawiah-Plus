@@ -292,6 +292,7 @@ class AuthCubit extends Cubit<AuthState> {
       required String? name,
       required String? password,
       required String? confirmPassword,
+      required String? fcm,
       String? taxRecord,
       String? commercialRegister,
       required AccountType? type}) async {
@@ -306,17 +307,18 @@ class AuthCubit extends Cubit<AuthState> {
             'name': name,
             'password': password,
             'password_confirmation': confirmPassword,
+            'fcm_token': fcm
           }),
           hasToken: false,
         );
 
         if (response.state == ResponseState.complete && response.data['success'] == true) {
+          HiveMethods.updateToken(response.data['data']['api_token']);
+          await sl<ProfileCubit>().fetchProfile();
           emit(RegisterSuccess(
             message: response.data['message'] ?? '',
             data: response.data['data'] as Map<String, dynamic>,
           ));
-          HiveMethods.updateToken(response.data['data']['api_token']);
-          await sl<ProfileCubit>().fetchProfile();
         } else {
           emit(RegisterFailed(response.data['message'] ?? "حدث خطأ أثناء العملية"));
         }
@@ -331,19 +333,19 @@ class AuthCubit extends Cubit<AuthState> {
             'password': password,
             'password_confirmation': confirmPassword,
             'tax_record': taxRecord,
-            'commercial_register': commercialRegister
+            'tax_number': commercialRegister,
+            'fcm_token': fcm
           }),
           hasToken: false,
         );
 
         if (response.state == ResponseState.complete && response.data['success'] == true) {
+          HiveMethods.updateToken(response.data['data']['api_token']);
+          await sl<ProfileCubit>().fetchProfile();
           emit(RegisterSuccess(
             message: response.data['message'] ?? '',
             data: response.data['data'] as Map<String, dynamic>,
           ));
-
-          await sl<ProfileCubit>().fetchProfile();
-          HiveMethods.updateToken(response.data['data']['api_token']);
         } else {
           emit(RegisterFailed(response.data['message'] ?? "حدث خطأ أثناء العملية"));
         }

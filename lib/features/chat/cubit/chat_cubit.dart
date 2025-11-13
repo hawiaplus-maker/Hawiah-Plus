@@ -129,6 +129,7 @@ class ChatCubit extends Cubit<ChatState> {
       }).toList();
 
       emit(RecentChatsLoaded(chats));
+      if (chats.isEmpty) emit(ChatEmpty());
     }, onError: (error) {
       emit(ChatError('فشل تحميل المحادثات: $error'));
     });

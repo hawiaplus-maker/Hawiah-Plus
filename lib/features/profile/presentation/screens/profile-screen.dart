@@ -21,12 +21,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Future.microtask(() => context.read<ProfileCubit>().fetchProfile());
-  // }
-
   Widget build(BuildContext context) {
     final isGuest = HiveMethods.getToken() == null;
     final profileCubit = sl<ProfileCubit>();
@@ -45,35 +39,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           )
         : profileCubit.user;
     log('user profile screen build, isGuest: $isGuest, user: $user');
-    // // لو المستخدم مش ضيف ولسه البيانات مش جاهزة
-    // if (!isGuest && user == null) {
-    //   return const Scaffold(
-    //     body: Center(
-    //       child: CircularProgressIndicator(),
-    //     ),
-    //   );
-    // }
 
     return Scaffold(
       appBar: CustomAppBar(
         context,
         titleText: AppLocaleKey.profileFile.tr(),
-        actions: [
-          // IconButton(
-          //   onPressed: () => Navigator.push(
-          //     context,
-          //     MaterialPageRoute(builder: (_) => const NotificationsScreen()),
-          //   ),
-          //   icon: Card(
-          //     shape: const CircleBorder(),
-          //     color: AppColor.whiteColor,
-          //     child: Padding(
-          //       padding: const EdgeInsets.all(8.0),
-          //       child: SvgPicture.asset(AppImages.bellIcon),
-          //     ),
-          //   ),
-          //  )
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(

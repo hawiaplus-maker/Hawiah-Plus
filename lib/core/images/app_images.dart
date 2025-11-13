@@ -81,4 +81,6 @@ class AppImages {
   static const String phoneCallIcon = 'assets/svg/phoneCallIcon.svg';
   static const String noMessages = 'assets/svg/noMessages.svg';
   static const String signInIcon = 'assets/icons/signInIcon.png';
+  static const String chatIcon = 'assets/svg/chatIcon.svg';
+  static const String noChatIcon = 'assets/images/nochatIcon.png';
 }

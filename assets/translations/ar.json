@@ -278,5 +278,8 @@
    "taxNumber": "الرقم الضريبي",
    "commercialRegistration": "السجل التجاري",
    "individual": "فرد",
-   "company": "شركة"
+   "company": "شركة",
+   "noChatyet": "لا يوجد محادثات حتي الأن",
+   "noCurrentOrders": "لايوجد طلبات حالية",
+   "noOldOrders": "لايوجد طلبات منتهية"
 }

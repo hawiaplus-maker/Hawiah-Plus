@@ -165,4 +165,7 @@ class AppLocaleKey {
   static const String taxNumber = 'taxNumber';
   static const String commercialRegistration = 'commercialRegistration';
   static const String individual = 'individual';
+  static const String noChatyet = 'noChatyet';
+  static const String noCurrentOrders = 'noCurrentOrders';
+  static const String noOldOrders = 'noOldOrders';
 }

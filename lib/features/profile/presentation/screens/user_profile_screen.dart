@@ -77,15 +77,9 @@ class _UserProfileState extends State<UserProfile> {
         children: [
           CircleAvatar(radius: 60, backgroundImage: imageProvider),
           CircleAvatar(
-            radius: 18,
-            backgroundColor: AppColor.whiteColor,
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColor.mainAppColor,
-              ),
-              child: Icon(Icons.camera_alt_outlined, color: AppColor.whiteColor, size: 18),
-            ),
+            radius: 14,
+            backgroundColor: AppColor.mainAppColor,
+            child: Icon(Icons.camera_alt_outlined, color: AppColor.whiteColor, size: 18),
           ),
         ],
       ),
@@ -116,7 +110,6 @@ class _UserProfileState extends State<UserProfile> {
               builder: (ctx) => CustomConfirmDialog(
                 content: AppLocaleKey.saveChangesSuccess.tr(),
                 image: AppImages.successGif,
-                
               ),
             );
 
@@ -156,8 +149,6 @@ class _UserProfileState extends State<UserProfile> {
                   const SizedBox(height: 30),
                   ..._buildTextFields(),
                   Gap(40.h),
-
-                 
                   state is ProfileUpdating
                       ? const CustomLoading()
                       : CustomButton(
@@ -167,7 +158,6 @@ class _UserProfileState extends State<UserProfile> {
                             style: AppTextStyle.text16_600.copyWith(color: AppColor.whiteColor),
                           ),
                         ),
-
                   const SizedBox(height: 20),
                 ],
               ),

@@ -6,8 +6,10 @@ import 'package:gap/gap.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/chat/cubit/chat_cubit.dart';
 import 'package:hawiah_client/features/chat/model/chat_model.dart';
 import 'package:hawiah_client/features/chat/presentation/widget/conversation_list_tile.dart';
@@ -77,7 +79,14 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
           padding: EdgeInsets.symmetric(horizontal: 18),
           child: Column(
             children: [
-              _buildSearchField(),
+              BlocBuilder<ChatCubit, ChatState>(
+                builder: (context, state) {
+                  if (state is RecentChatsLoaded) {
+                    return _buildSearchField();
+                  }
+                  return const SizedBox();
+                },
+              ),
               Gap(10.h),
               Divider(color: Colors.grey.shade300),
               Expanded(
@@ -103,6 +112,18 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
                             return ConversationListTile(
                                 chat: chat, userId: userId, chatCubit: chatCubit);
                           },
+                        );
+                      } else if (state is ChatEmpty) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset(AppImages.noChatIcon),
+                            Text(
+                              AppLocaleKey.noChatyet.tr(),
+                              style: AppTextStyle.text20_500,
+                            ),
+                          ],
                         );
                       } else if (state is ChatError) {
                         return Center(child: Text(state.message));

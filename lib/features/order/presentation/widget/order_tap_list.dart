@@ -2,8 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
@@ -64,6 +66,25 @@ class _OrderTapListState extends State<OrderTapList> {
         // لو لسه أول تحميل
         if (orders.isEmpty && state is OrderLoading) {
           return const Center(child: CustomLoading());
+        }
+        if (orders.isEmpty && state is OrderSuccess) {
+          return Center(
+              child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                AppImages.containerIcon,
+                height: 120,
+                colorFilter: ColorFilter.mode(AppColor.mainAppColor, BlendMode.srcIn),
+              ),
+              Text(
+                widget.isCurrent
+                    ? AppLocaleKey.noCurrentOrders.tr()
+                    : AppLocaleKey.noOldOrders.tr(),
+                style: AppTextStyle.text16_700,
+              ),
+            ],
+          ));
         }
 
         return ListView.builder(
