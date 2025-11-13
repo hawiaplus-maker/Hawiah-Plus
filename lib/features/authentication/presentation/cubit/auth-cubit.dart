@@ -47,6 +47,8 @@ class AuthCubit extends Cubit<AuthState> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController taxNumberController = TextEditingController();
+  final TextEditingController commercialRegistration = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -245,20 +247,44 @@ class AuthCubit extends Cubit<AuthState> {
       body: FormData.fromMap({'mobile': phoneNumber}),
       hasToken: false,
     );
-
+    final message = response.data['message'];
     if (response.state == ResponseState.complete) {
-      final message = response.data['message'];
       if (message == "complete login" && response.data['success'] == true) {
         emit(ValidateMobileSuccess(message: message));
-      } else if (response.data["status_Code"] == 422) {
+      } else if (response.data["status_Code"] == 422 || response.data["status_Code"] == 401) {
         emit(ValidateMobilePhoneIsNotRegistered());
-      } else {
-        emit(ValidateMobileError(message: message));
       }
+    } else {
+      emit(ValidateMobileError(message: message));
     }
   }
 
   // -------------------------------------------------
+  Future<void> validateMobileForRegister(
+      {required String? phoneNumber, required VoidCallback onSuccess}) async {
+    NavigatorMethods.loading();
+    final response = await ApiHelper.instance.post(
+      Urls.register,
+      body: FormData.fromMap({
+        'mobile': phoneNumber,
+      }),
+      hasToken: false,
+    );
+    NavigatorMethods.loadingOff();
+
+    if (response.state == ResponseState.complete && response.data['success'] == true) {
+      onSuccess.call();
+      emit(validateMobileForRegisterSuccess(
+        response.data['message'] ?? '',
+        response.data['data'] as Map<String, dynamic>,
+      ));
+    } else {
+      CommonMethods.showError(
+          message: response.data['message'] ?? 'حدث خطاء', apiResponse: response);
+      emit(validateMobileForRegisterFailed(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+    }
+  }
+
   // 🔹 Register
   // -------------------------------------------------
   Future<void> register(
@@ -269,10 +295,10 @@ class AuthCubit extends Cubit<AuthState> {
       String? taxRecord,
       String? commercialRegister,
       required AccountType? type}) async {
+    emit(RegisterLoading());
     switch (type) {
       //=========================== individual ===================================
       case AccountType.individual:
-        emit(AuthLoading());
         final response = await ApiHelper.instance.post(
           Urls.individualRegister,
           body: FormData.fromMap({
@@ -289,16 +315,19 @@ class AuthCubit extends Cubit<AuthState> {
             message: response.data['message'] ?? '',
             data: response.data['data'] as Map<String, dynamic>,
           ));
+          HiveMethods.updateToken(response.data['data']['api_token']);
+          await sl<ProfileCubit>().fetchProfile();
         } else {
-          emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+          emit(RegisterFailed(response.data['message'] ?? "حدث خطأ أثناء العملية"));
         }
+        break;
       //=========================== company ===================================
       case AccountType.company:
-        emit(AuthLoading());
         final response = await ApiHelper.instance.post(
           Urls.companyRegister,
           body: FormData.fromMap({
             'name': name,
+            'mobile': phoneNumber,
             'password': password,
             'password_confirmation': confirmPassword,
             'tax_record': taxRecord,
@@ -312,11 +341,15 @@ class AuthCubit extends Cubit<AuthState> {
             message: response.data['message'] ?? '',
             data: response.data['data'] as Map<String, dynamic>,
           ));
+
+          await sl<ProfileCubit>().fetchProfile();
+          HiveMethods.updateToken(response.data['data']['api_token']);
         } else {
-          emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+          emit(RegisterFailed(response.data['message'] ?? "حدث خطأ أثناء العملية"));
         }
+        break;
       default:
-        emit(AuthError("حدث خطاء"));
+        emit(RegisterFailed("حدث خطاء"));
     }
   }
 
@@ -324,7 +357,7 @@ class AuthCubit extends Cubit<AuthState> {
   // 🔹 OTP
   // -------------------------------------------------
   Future<void> otp({required String? phoneNumber, required int? otp}) async {
-    emit(AuthLoading());
+    emit(VerifyOTPLoading());
     final response = await ApiHelper.instance.post(
       Urls.verify,
       body: FormData.fromMap({'otp': otp, 'mobile': phoneNumber}),
@@ -337,7 +370,7 @@ class AuthCubit extends Cubit<AuthState> {
       timer?.cancel();
       emit(VerifyOTPSuccess(message: response.data['message']));
     } else {
-      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+      emit(VerifyOTPError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
 

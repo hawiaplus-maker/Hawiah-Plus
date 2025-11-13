@@ -45,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBarAuthWidget(),
+      appBar: CustomAuthAppBar(),
       body: BlocConsumer<AuthCubit, AuthState>(builder: (BuildContext context, AuthState state) {
         final authChange = AuthCubit.get(context);
         final accountTypes = authChange.accountTypes;

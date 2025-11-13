@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
@@ -48,6 +49,7 @@ class LogOutDialog extends StatelessWidget {
                   onTap: () {
                     AuthCubit.get(context).logout(
                       onSuccess: () {
+                        HiveMethods.deleteToken();
                         NavigatorMethods.pushNamedAndRemoveUntil(
                             context, ValidateMobileScreen.routeName);
                       },

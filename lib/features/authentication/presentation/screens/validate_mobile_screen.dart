@@ -31,7 +31,7 @@ class _ValidateMobileScreenState extends State<ValidateMobileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBarAuthWidget(),
+      appBar: CustomAuthAppBar(),
       body: BlocConsumer<AuthCubit, AuthState>(
         builder: (BuildContext context, AuthState state) {
           return Form(
@@ -75,7 +75,11 @@ class _ValidateMobileScreenState extends State<ValidateMobileScreen> {
             CommonMethods.showToast(message: state.message);
             NavigatorMethods.pushNamed(context, LoginScreen.routeName);
           } else if (state is ValidateMobilePhoneIsNotRegistered) {
-            NavigatorMethods.showAppDialog(context, CreateAccountDialog());
+            NavigatorMethods.showAppDialog(
+                context,
+                CreateAccountDialog(
+                  phoneNumber: AuthCubit.get(context).phoneController.text,
+                ));
           } else if (state is ValidateMobileError) {
             CommonMethods.showError(message: state.message);
           }

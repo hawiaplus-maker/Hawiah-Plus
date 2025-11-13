@@ -71,7 +71,6 @@
    "step1_title": "أساسية",
    "step2_title": "مستندات الشركة",
    "step3_title": "نجاح",
-   "company": "شركة",
    "commercial_registration_number": "رقم السجل التجاري",
    "commercial_registration_image": "صورة السجل التجاري",
    "tax_number": "الرقم الضريبي",
@@ -271,5 +270,13 @@
    "lastseen": "آخر ظهور:",
    "notconnected": "غير متصل",
    "loginNow": "سجل دخول الآن",
-   "toBrowseServicesRegisterNow": "لكي تتصفح خدماتنا وتطلبها بسهوله سجل الآن"
+   "notRegisteredYet": "لازلت غير مسجل معنا",
+   "toBrowseServicesRegisterNow": "لكي تتصفح خدماتنا وتطلبها بسهوله سجل الآن",
+   "createAccount": "إنشاء حساب",
+   "createYourAccount": "انشئ حسابك",
+   "companyName": "اسم الشركة",
+   "taxNumber": "الرقم الضريبي",
+   "commercialRegistration": "السجل التجاري",
+   "individual": "فرد",
+   "company": "شركة"
 }

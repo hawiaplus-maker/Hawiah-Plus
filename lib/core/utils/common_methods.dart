@@ -191,7 +191,7 @@ class CommonMethods {
     int seconds = 3,
   }) {
     BotToast.showCustomText(
-      align: Alignment.center,
+      align: Alignment.topCenter,
       duration: Duration(seconds: seconds),
       toastBuilder: (cancelFunc) => CustomToast(
         type: type,
@@ -214,7 +214,7 @@ class CommonMethods {
     int seconds = 3,
   }) {
     BotToast.showCustomText(
-      align: Alignment.center,
+      align: Alignment.topCenter,
       duration: Duration(seconds: seconds),
       toastBuilder: (context) => CustomToast(
         title: title,
@@ -226,7 +226,7 @@ class CommonMethods {
       ),
     );
   }
-  
+
   static Future<bool> hasConnection() async {
     bool isConnected = await InternetConnectionChecker().hasConnection;
     if (isConnected) {

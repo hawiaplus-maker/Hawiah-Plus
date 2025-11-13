@@ -21,7 +21,7 @@ class ResetPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: AppBarAuthWidget(),
+        appBar: CustomAuthAppBar(),
         body: BlocConsumer<AuthCubit, AuthState>(builder: (BuildContext context, AuthState state) {
           final authCubit = AuthCubit.get(context);
 

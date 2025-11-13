@@ -1,16 +1,22 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/authentication/presentation/cubit/auth-cubit.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/verification-otp-screen.dart';
 
 class CreateAccountDialog extends StatelessWidget {
   const CreateAccountDialog({
     super.key,
+    required this.phoneNumber,
   });
+  final String phoneNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +39,10 @@ class CreateAccountDialog extends StatelessWidget {
             AppImages.signInIcon,
             height: 90,
           ),
-          Text(AppLocaleKey.loginNow.tr(), style: AppTextStyle.text16_700),
-          Text(AppLocaleKey.toBrowseServicesRegisterNow.tr(), style: AppTextStyle.textG16_500),
+          Text(AppLocaleKey.notRegisteredYet.tr(), style: AppTextStyle.text16_700),
+          Text(AppLocaleKey.toBrowseServicesRegisterNow.tr(),
+              style: AppTextStyle.textG16_500.copyWith(fontSize: 14)),
+          SizedBox(height: 15),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 5),
             child: CustomButton(
@@ -42,7 +50,14 @@ class CreateAccountDialog extends StatelessWidget {
               text: "login".tr(),
               style: AppTextStyle.buttonStyle.copyWith(color: AppColor.whiteColor, fontSize: 16),
               onPressed: () {
-                Navigator.pop(context);
+                
+                context.read<AuthCubit>().validateMobileForRegister(
+                      phoneNumber: phoneNumber,
+                      onSuccess: () {
+                        NavigatorMethods.pushNamed(context, VerificationOtpScreen.routeName,
+                            arguments: VerificationOtpScreenArgs(phoneNumber: phoneNumber, otp: 0));
+                      },
+                    );
               },
             ),
           ),
@@ -58,6 +73,7 @@ class CreateAccountDialog extends StatelessWidget {
               },
             ),
           ),
+          SizedBox(height: 20),
         ],
       ),
     );

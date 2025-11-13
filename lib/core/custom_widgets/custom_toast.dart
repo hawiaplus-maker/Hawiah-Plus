@@ -26,13 +26,13 @@ class CustomToast extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 80,
+      height: 90,
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: _backgroundColor(),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: backgroundColor ?? _backgroundColor()),
+        // border: Border.all(color: backgroundColor ?? _backgroundColor()),
       ),
       child: Row(
         children: [
@@ -42,6 +42,7 @@ class CustomToast extends StatelessWidget {
                     AppImages.successGif,
                     height: 30,
                     width: 30,
+                    color: Colors.white,
                   )
                 : CircleAvatar(
                     radius: 24,
@@ -67,8 +68,8 @@ class CustomToast extends StatelessWidget {
                   Text(
                     title!,
                     style: TextStyle(
-                      color: textColor ?? Colors.black,
-                      fontSize: 14,
+                      color: textColor ?? Colors.white,
+                      fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
                     maxLines: 1,
@@ -78,8 +79,8 @@ class CustomToast extends StatelessWidget {
                 Text(
                   message,
                   style: TextStyle(
-                    color: textColor ?? Colors.black,
-                    fontSize: 12,
+                    color: textColor ?? Colors.white,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
                   maxLines: 2,
@@ -97,7 +98,7 @@ class CustomToast extends StatelessWidget {
   Color _backgroundColor() {
     switch (type) {
       case ToastType.success:
-        return const Color(0xff5FB95F);
+        return const Color.fromARGB(255, 94, 224, 94);
       case ToastType.error:
         return const Color(0xffff3333);
       case ToastType.offline:
