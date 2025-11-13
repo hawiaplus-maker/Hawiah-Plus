@@ -248,5 +248,7 @@
   "day": "Days",
   "connected": "Connected",
   "lastseen": "Last seen:",
-  "notconnected": "Not connected"
+  "notconnected": "Not connected",
+  "notificationDeleted": "Notification deleted successfully",
+  "notificationDeleteFailed": "Notification delete failed"
 }

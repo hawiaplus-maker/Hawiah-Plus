@@ -271,5 +271,7 @@
    "lastseen": "آخر ظهور:",
    "notconnected": "غير متصل",
    "loginNow": "سجل دخول الآن",
-   "toBrowseServicesRegisterNow": "لكي تتصفح خدماتنا وتطلبها بسهوله سجل الآن"
+   "toBrowseServicesRegisterNow": "لكي تتصفح خدماتنا وتطلبها بسهوله سجل الآن",
+   "notificationDeleted": "تم حذف الإشعار بنجاح",
+   "notificationDeleteFailed": "فشل حذف الإشعار"
 }
