@@ -6,6 +6,7 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/notifications/model/notifications_model.dart';
 import 'package:hawiah_client/features/notifications/presentation/cubit/notifications_state.dart';
 
@@ -41,6 +42,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   }
 
   Future<void> deleteNotification(int id) async {
+    NavigatorMethods.loading();
     if (_notifications == null) return;
 
     final oldNotifications = List<Datum>.from(_notifications!.notifications);
@@ -51,6 +53,8 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     _notificationsResponse = await ApiHelper.instance.delete(
       "${Urls.deleteNotification(id)}",
     );
+
+    NavigatorMethods.loadingOff();
 
     if (_notificationsResponse.state == ResponseState.complete) {
       CommonMethods.showToast(
