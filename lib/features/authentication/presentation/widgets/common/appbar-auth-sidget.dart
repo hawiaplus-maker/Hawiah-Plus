@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 
-class AppBarAuthWidget extends StatelessWidget implements PreferredSizeWidget {
-  const AppBarAuthWidget({
+class CustomAuthAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const CustomAuthAppBar({
     super.key,
   });
 

@@ -20,7 +20,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     emit(ProfileLoading());
     try {
-      final response = await ApiHelper.instance.get("${Urls.profile}");
+      final response = await ApiHelper.instance.get(Urls.profile);
 
       if (response.state == ResponseState.complete) {
         user = UserProfileModel.fromJson(response.data); // Access 'message' from response
@@ -50,7 +50,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     String? password,
     String? password_confirmation,
   }) async {
-    emit(ProfileUpdating()); 
+    emit(ProfileUpdating());
 
     try {
       final data = <String, dynamic>{

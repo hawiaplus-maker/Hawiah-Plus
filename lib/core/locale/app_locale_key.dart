@@ -159,4 +159,12 @@ class AppLocaleKey {
   static const String toBrowseServicesRegisterNow = 'toBrowseServicesRegisterNow';
   static const String notificationDeleted = 'notificationDeleted';
   static const String notificationDeleteFailed = 'notificationDeleteFailed';
+  static const String notRegisteredYet = 'notRegisteredYet';
+  static const String createYourAccount = 'createYourAccount';
+  static const String companyName = 'companyName';
+  static const String company = 'company';
+
+  static const String taxNumber = 'taxNumber';
+  static const String commercialRegistration = 'commercialRegistration';
+  static const String individual = 'individual';
 }

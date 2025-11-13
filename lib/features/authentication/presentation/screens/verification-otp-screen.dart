@@ -9,8 +9,7 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
-import 'package:hawiah_client/features/authentication/presentation/screens/company-profile-completion-screen.dart';
-import 'package:hawiah_client/features/authentication/presentation/screens/personal-profile-completion-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/create_account_screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/reset-password-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 import 'package:pinput/pinput.dart';
@@ -50,7 +49,7 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
   @override
   void dispose() {
     otpController.dispose();
-  
+
     super.dispose();
   }
 
@@ -58,12 +57,10 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBarAuthWidget(),
+      appBar: CustomAuthAppBar(),
       body: PopScope(
         canPop: true,
-        onPopInvokedWithResult: (didPop, result) {
-         
-        },
+        onPopInvokedWithResult: (didPop, result) {},
         child: BlocConsumer<AuthCubit, AuthState>(
           builder: (BuildContext context, AuthState state) {
             int remainingTime = 59;
@@ -211,7 +208,7 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                     ),
                     SizedBox(height: 20),
                     CustomButton(
-                      isLoading: state is AuthLoading,
+                      isLoading: state is VerifyOTPLoading,
                       text: AppLocaleKey.check.tr(),
                       onPressed: () {
                         final otpText = otpController.text;
@@ -229,13 +226,13 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
             );
           },
           listener: (BuildContext context, AuthState state) {
-            if (state is AuthError) {
+            if (state is VerifyOTPError) {
               CommonMethods.showError(message: state.message);
             }
             if (state is VerifyOTPSuccess) {
+              CommonMethods.showToast(message: state.message);
               final authCubit = AuthCubit.get(context);
               final isResetPassword = authCubit.isResetPassword;
-             
 
               if (isResetPassword) {
                 Navigator.push(
@@ -250,7 +247,7 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PersonalProfileCompletionScreen(
+                          builder: (context) => CreateAccountScreen(
                                 phoneNumber: widget.args.phoneNumber ?? "",
                               )));
                 } else {
@@ -260,7 +257,7 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                   //         builder: (context) => const CompanyProfileCompletionScreen()));
                 }
               }
-            } else if (state is AuthError) {
+            } else if (state is VerifyOTPError) {
               CommonMethods.showError(message: state.message);
             } else if (state is AuthCodeResentSuccess) {
               CommonMethods.showToast(message: state.message);

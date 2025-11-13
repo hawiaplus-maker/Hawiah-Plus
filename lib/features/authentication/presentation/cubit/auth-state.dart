@@ -33,6 +33,13 @@ class ForgetPasswordSuccess extends AuthState {
   });
 }
 
+class VerifyOTPLoading extends AuthState {}
+
+class VerifyOTPError extends AuthState {
+  final String message;
+  VerifyOTPError(this.message);
+}
+
 class VerifyOTPSuccess extends AuthState {
   final String message;
   final Map<String, dynamic>? data;
@@ -93,6 +100,13 @@ class CompleteRegisterSuccess extends AuthState {
   });
 }
 
+class RegisterLoading extends AuthState {}
+
+class RegisterFailed extends AuthState {
+  final String message;
+  RegisterFailed(this.message);
+}
+
 class RegisterSuccess extends AuthState {
   final String message;
   final Map<String, dynamic>? data;
@@ -121,6 +135,21 @@ class ValidateMobileError extends AuthState {
 
 class ValidateMobilePhoneIsNotRegistered extends AuthState {
   ValidateMobilePhoneIsNotRegistered();
+}
+
+class validateMobileForRegisterSuccess extends AuthState {
+  final String message;
+  final Map<String, dynamic>? data;
+  validateMobileForRegisterSuccess(this.message, this.data);
+}
+
+class validateMobileForRegisterFailed extends AuthState {
+  final String message;
+  validateMobileForRegisterFailed(this.message);
+}
+
+class validateMobileForRegisterloading extends AuthState {
+  validateMobileForRegisterloading();
 }
 
 class AuthCodeResentLoading extends AuthState {}

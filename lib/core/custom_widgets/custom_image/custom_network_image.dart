@@ -137,50 +137,68 @@ class CustomNetworkImage extends StatelessWidget {
   }
 
   Widget _buildPlaceholder() {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
-        color: Colors.grey[200],
-      ),
-      child: Center(
-        child: Icon(
-          Icons.image,
-          size: _calculateIconSize(),
-          color: Colors.grey[400],
+    return LayoutBuilder(builder: (context, constraints) {
+      // حاول استخدام القيمة الممررة أولًا، وإلا استخدم قيود اللياؤت لو finite،
+      // وإلا fallback على 48.0
+      final rawBase = width ??
+          height ??
+          (constraints.maxWidth.isFinite && constraints.maxWidth > 0
+              ? constraints.maxWidth
+              : (constraints.maxHeight.isFinite && constraints.maxHeight > 0
+                  ? constraints.maxHeight
+                  : 48.0));
+
+      final baseSize = (rawBase.isFinite && rawBase > 0) ? rawBase : 48.0;
+      final iconSize = baseSize * 0.4;
+
+      return Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius),
+          color: Colors.grey[200],
         ),
-      ),
-    );
+        child: Center(
+          child: Icon(
+            Icons.image,
+            size: iconSize,
+            color: Colors.grey[400],
+          ),
+        ),
+      );
+    });
   }
 
   Widget _buildErrorWidget() {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
-        color: Colors.grey[100],
-      ),
-      child: Center(
-        child: Image.asset(
-          imagePlaceHolder ?? AppImages.hawiahPlus,
-          width: _calculatePlaceholderSize(),
-          height: _calculatePlaceholderSize(),
-          fit: BoxFit.contain,
+    return LayoutBuilder(builder: (context, constraints) {
+      final rawBase = width ??
+          height ??
+          (constraints.maxWidth.isFinite && constraints.maxWidth > 0
+              ? constraints.maxWidth
+              : (constraints.maxHeight.isFinite && constraints.maxHeight > 0
+                  ? constraints.maxHeight
+                  : 48.0));
+
+      final baseSize = (rawBase.isFinite && rawBase > 0) ? rawBase : 48.0;
+      final placeholderSize = baseSize * 0.6;
+
+      return Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius),
+          color: Colors.grey[100],
         ),
-      ),
-    );
-  }
-
-  double _calculateIconSize() {
-    final baseSize = width ?? height ?? 48.0;
-    return baseSize * 0.4;
-  }
-
-  double _calculatePlaceholderSize() {
-    final baseSize = width ?? height ?? 48.0;
-    return baseSize * 0.6;
+        child: Center(
+          child: Image.asset(
+            imagePlaceHolder ?? AppImages.hawiahPlus,
+            width: placeholderSize,
+            height: placeholderSize,
+            fit: BoxFit.contain,
+          ),
+        ),
+      );
+    });
   }
 
   /// Helper to prefetch a list of images (call during data load)
