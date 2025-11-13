@@ -1,7 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_toast.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/features/notifications/model/notifications_model.dart';
 import 'package:hawiah_client/features/notifications/presentation/cubit/notifications_state.dart';
 
@@ -33,6 +37,33 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       emit(NotificationsUpdate());
     } else {
       emit(NotificationsUpdate());
+    }
+  }
+
+  Future<void> deleteNotification(int id) async {
+    if (_notifications == null) return;
+
+    final oldNotifications = List<Datum>.from(_notifications!.notifications);
+
+    _notifications!.notifications.removeWhere((n) => n.id == id);
+    emit(NotificationsUpdate());
+
+    _notificationsResponse = await ApiHelper.instance.delete(
+      "${Urls.deleteNotification(id)}",
+    );
+
+    if (_notificationsResponse.state == ResponseState.complete) {
+      CommonMethods.showToast(
+        message: AppLocaleKey.notificationDeleted.tr(),
+        type: ToastType.success,
+      );
+    } else {
+      _notifications!.notifications = oldNotifications;
+      emit(NotificationsUpdate());
+      CommonMethods.showToast(
+        message: AppLocaleKey.notificationDeleteFailed.tr(),
+        type: ToastType.error,
+      );
     }
   }
 

@@ -270,5 +270,7 @@
    "day": "أيام",
    "connected": "متصل الآن",
    "lastseen": "آخر ظهور:",
-   "notconnected": "غير متصل"
+   "notconnected": "غير متصل",
+   "notificationDeleted": "تم حذف الإشعار بنجاح",
+   "notificationDeleteFailed": "فشل حذف الإشعار"
 }

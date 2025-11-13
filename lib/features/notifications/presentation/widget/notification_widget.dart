@@ -6,6 +6,7 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/notifications/model/notifications_model.dart';
+import 'package:hawiah_client/features/notifications/presentation/cubit/notifications_cubit.dart';
 
 class NotificationWidget extends StatelessWidget {
   const NotificationWidget({super.key, required this.item});
@@ -47,7 +48,10 @@ class NotificationWidget extends StatelessWidget {
           ),
         ),
         trailing: GestureDetector(
-          onTap: () {},
+          onTap: () async {
+            final cubit = NotificationsCubit.get(context);
+            await cubit.deleteNotification(item.id!);
+          },
           child: SvgPicture.asset(
             AppImages.trash,
             height: 24,
