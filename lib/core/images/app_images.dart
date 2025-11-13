@@ -83,4 +83,6 @@ class AppImages {
   static const String signInIcon = 'assets/icons/signInIcon.png';
   static const String chatIcon = 'assets/svg/chatIcon.svg';
   static const String noChatIcon = 'assets/images/nochatIcon.png';
+  static const String megaphoneoff = 'assets/svg/megaphoneoff.svg';
+  static const String megaphone = 'assets/svg/megaphone.svg';
 }

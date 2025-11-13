@@ -170,4 +170,6 @@ class AppLocaleKey {
   static const String noChatyet = 'noChatyet';
   static const String noCurrentOrders = 'noCurrentOrders';
   static const String noOldOrders = 'noOldOrders';
+  static const String read = 'read';
+  static const String unread = 'unread';
 }

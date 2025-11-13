@@ -250,5 +250,7 @@
   "lastseen": "Last seen:",
   "notconnected": "Not connected",
   "notificationDeleted": "Notification deleted successfully",
-  "notificationDeleteFailed": "Notification delete failed"
+  "notificationDeleteFailed": "Notification delete failed",
+  "read": "Read",
+  "unread": "unread"
 }
