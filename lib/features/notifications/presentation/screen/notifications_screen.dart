@@ -27,11 +27,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     context.read<NotificationsCubit>().getnotifications(search: '');
   }
 
- 
   void _onSearchPressed() {
     FocusScope.of(context).unfocus();
     final query = _searchController.text.trim();
@@ -115,15 +114,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   Expanded(
                     child: filteredNotifications.isEmpty
                         ? _buildEmptyState()
-                        : ListView.separated(
-                            itemCount: filteredNotifications.length,
-                            itemBuilder: (context, index) {
-                              final item = filteredNotifications[index];
-                              return NotificationWidget(item: item);
+                        : RefreshIndicator(
+                            onRefresh: () {
+                              return cubit.getnotifications(search: _searchQuery);
                             },
-                            separatorBuilder: (context, index) => Divider(
-                              height: 1,
-                              color: AppColor.greyColor.withOpacity(0.2),
+                            child: ListView.separated(
+                              itemCount: filteredNotifications.length,
+                              itemBuilder: (context, index) {
+                                final item = filteredNotifications[index];
+                                return NotificationWidget(item: item);
+                              },
+                              separatorBuilder: (context, index) => Divider(
+                                height: 1,
+                                color: AppColor.greyColor.withOpacity(0.2),
+                              ),
                             ),
                           ),
                   ),

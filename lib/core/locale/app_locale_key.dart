@@ -157,6 +157,8 @@ class AppLocaleKey {
   static const String notconnected = 'notconnected';
   static const String loginNow = 'loginNow';
   static const String toBrowseServicesRegisterNow = 'toBrowseServicesRegisterNow';
+  static const String notificationDeleted = 'notificationDeleted';
+  static const String notificationDeleteFailed = 'notificationDeleteFailed';
   static const String notRegisteredYet = 'notRegisteredYet';
   static const String createYourAccount = 'createYourAccount';
   static const String companyName = 'companyName';

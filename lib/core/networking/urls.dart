@@ -48,4 +48,6 @@ class Urls {
   static String payment(int orderId) => '${baseUrl}paymob-paid/?order_id=$orderId';
   static String notifications(int seen, String search) =>
       '${baseUrl}notifications?search=$search&seen=$seen';
+
+  static String deleteNotification(int id) => '${baseUrl}notifications/$id';
 }
