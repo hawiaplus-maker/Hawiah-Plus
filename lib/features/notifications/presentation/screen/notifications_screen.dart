@@ -23,19 +23,15 @@ class NotificationsScreen extends StatefulWidget {
 class _NotificationsScreenState extends State<NotificationsScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  int? _seen;
 
   @override
   void initState() {
     super.initState();
 
-    context.read<NotificationsCubit>().getnotifications(search: '');
-  }
-
-  void _onSearchPressed() {
-    FocusScope.of(context).unfocus();
-    final query = _searchController.text.trim();
-    setState(() => _searchQuery = query);
-    context.read<NotificationsCubit>().getnotifications(search: query);
+    context.read<NotificationsCubit>().getnotifications(
+          search: _searchQuery,
+        );
   }
 
   @override
@@ -53,91 +49,150 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         titleText: AppLocaleKey.notifications.tr(),
         centerTitle: true,
       ),
-      body: BlocBuilder<NotificationsCubit, NotificationsState>(
-        builder: (context, state) {
-          final cubit = context.read<NotificationsCubit>();
-          final notifications = cubit.setting?.notifications ?? [];
-          final locale = context.locale.languageCode;
-
-          final filteredNotifications = notifications.where((item) {
-            final title = (locale == 'ar' ? item.title?.ar : item.title?.en)?.toLowerCase() ?? "";
-            final message =
-                (locale == 'ar' ? item.message?.ar : item.message?.en)?.toLowerCase() ?? "";
-            final query = _searchQuery.toLowerCase();
-            return title.contains(query) || message.contains(query);
-          }).toList();
-
-          if (state is NotificationsLoading) {
-            return const Center(child: CustomLoading());
-          }
-
-          if (state is NotificationsUpdate) {
-            if (notifications.isEmpty) return _buildEmptyState();
-
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
-              child: Column(
-                children: [
-                  Material(
-                    elevation: 4,
-                    shadowColor: Colors.black26,
-                    borderRadius: BorderRadius.circular(12),
-                    child: CustomTextField(
-                      controller: _searchController,
-                      fillColor: AppColor.whiteColor,
-                      hintText: AppLocaleKey.search.tr(),
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: SvgPicture.asset(
-                          AppImages.search,
-                          color: AppColor.mainAppColor,
-                          height: 16,
-                          width: 16,
-                        ),
-                      ),
-                      suffixIcon: GestureDetector(
-                        onTap: _onSearchPressed,
-                        child: Padding(
-                          padding: const EdgeInsets.all(11),
-                          child: SvgPicture.asset(
-                            AppImages.filter,
-                            color: AppColor.mainAppColor,
-                            height: 10,
-                            width: 16,
-                          ),
-                        ),
-                      ),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Material(
+              elevation: 4,
+              shadowColor: Colors.black26,
+              borderRadius: BorderRadius.circular(12),
+              child: CustomTextField(
+                controller: _searchController,
+                fillColor: AppColor.whiteColor,
+                hintText: AppLocaleKey.search.tr(),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: SvgPicture.asset(
+                    AppImages.search,
+                    color: AppColor.mainAppColor,
+                    height: 16,
+                    width: 16,
+                  ),
+                ),
+                onChanged: (value) {
+                  setState(() => _searchQuery = value.trim());
+                  context.read<NotificationsCubit>().getnotifications(
+                        search: value.trim(),
+                        seen: _seen,
+                      );
+                },
+                suffixIcon: PopupMenuButton<int?>(
+                  color: AppColor.whiteColor,
+                  elevation: 4,
+                  icon: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: SvgPicture.asset(
+                      AppImages.filter,
+                      color: AppColor.mainAppColor,
+                      height: 16,
+                      width: 16,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Divider(thickness: 1, color: Colors.grey.shade300),
-                  Expanded(
-                    child: filteredNotifications.isEmpty
-                        ? _buildEmptyState()
-                        : RefreshIndicator(
-                            onRefresh: () {
-                              return cubit.getnotifications(search: _searchQuery);
-                            },
-                            child: ListView.separated(
-                              itemCount: filteredNotifications.length,
-                              itemBuilder: (context, index) {
-                                final item = filteredNotifications[index];
-                                return NotificationWidget(item: item);
-                              },
-                              separatorBuilder: (context, index) => Divider(
-                                height: 1,
-                                color: AppColor.greyColor.withOpacity(0.2),
-                              ),
+                  onSelected: (value) {
+                    setState(() => _seen = value);
+                    context.read<NotificationsCubit>().getnotifications(
+                          search: _searchQuery,
+                          seen: _seen,
+                        );
+                  },
+                  itemBuilder: (context) => [
+                    PopupMenuItem<int?>(
+                      value: 0,
+                      child: Builder(builder: (context) {
+                        return Row(
+                          children: [
+                            SvgPicture.asset(AppImages.megaphoneoff),
+                            const SizedBox(width: 10),
+                            Text(
+                              AppLocaleKey.unread.tr(),
+                              style: AppTextStyle.text18_500.copyWith(color: AppColor.mainAppColor),
                             ),
-                          ),
-                  ),
-                ],
+                          ],
+                        );
+                      }),
+                    ),
+                    PopupMenuItem<int?>(
+                      value: 1,
+                      child: Builder(builder: (context) {
+                        return Row(
+                          children: [
+                            SvgPicture.asset(AppImages.megaphone),
+                            const SizedBox(width: 10),
+                            Text(
+                              AppLocaleKey.read.tr(),
+                              style: AppTextStyle.text18_500,
+                            ),
+                          ],
+                        );
+                      }),
+                    ),
+                  ],
+                ),
               ),
-            );
-          }
+            ),
+            Expanded(
+              child: BlocBuilder<NotificationsCubit, NotificationsState>(
+                builder: (context, state) {
+                  final cubit = context.read<NotificationsCubit>();
+                  final notifications = cubit.setting?.notifications ?? [];
+                  final locale = context.locale.languageCode;
 
-          return const SizedBox();
-        },
+                  final filteredNotifications = notifications.where((item) {
+                    final title =
+                        (locale == 'ar' ? item.title?.ar : item.title?.en)?.toLowerCase() ?? "";
+                    final message =
+                        (locale == 'ar' ? item.message?.ar : item.message?.en)?.toLowerCase() ?? "";
+                    final query = _searchQuery.toLowerCase();
+                    return title.contains(query) || message.contains(query);
+                  }).toList();
+
+                  if (state is NotificationsLoading) {
+                    return const Center(child: CustomLoading());
+                  }
+
+                  if (state is NotificationsUpdate) {
+                    if (notifications.isEmpty) return _buildEmptyState();
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 10),
+                          Divider(thickness: 1, color: Colors.grey.shade300),
+                          Expanded(
+                            child: filteredNotifications.isEmpty
+                                ? _buildEmptyState()
+                                : RefreshIndicator(
+                                    onRefresh: () async {
+                                      await cubit.getnotifications(
+                                        search: _searchQuery,
+                                      );
+                                    },
+                                    child: ListView.separated(
+                                      itemCount: filteredNotifications.length,
+                                      itemBuilder: (context, index) {
+                                        final item = filteredNotifications[index];
+                                        return NotificationWidget(item: item);
+                                      },
+                                      separatorBuilder: (context, index) => Divider(
+                                        height: 1,
+                                        color: AppColor.greyColor.withOpacity(0.2),
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return const SizedBox();
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
