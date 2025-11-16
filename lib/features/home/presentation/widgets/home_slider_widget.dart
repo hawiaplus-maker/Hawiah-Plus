@@ -35,7 +35,7 @@ class _HomeSliderWidgetsState extends State<HomeSliderWidgets> {
                       child: CustomNetworkImage(
                         fit: BoxFit.contain,
                         height: 200.h,
-                        width: double.infinity,
+                        width: MediaQuery.of(context).size.width,
                         imageUrl: SettingCubit.get(context).setting?.mobileSlider?[index].img ?? '',
                       ),
                     ))

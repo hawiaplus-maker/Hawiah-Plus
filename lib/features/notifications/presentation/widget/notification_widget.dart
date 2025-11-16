@@ -49,6 +49,7 @@ class NotificationWidget extends StatelessWidget {
         ),
         trailing: GestureDetector(
           onTap: () async {
+            
             final cubit = NotificationsCubit.get(context);
             await cubit.deleteNotification(item.id!);
           },
