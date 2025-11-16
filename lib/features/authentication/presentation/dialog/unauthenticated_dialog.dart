@@ -46,7 +46,7 @@ class UnauthenticatedDialog extends StatelessWidget {
               text: "login".tr(),
               style: AppTextStyle.buttonStyle.copyWith(color: AppColor.whiteColor, fontSize: 16),
               onPressed: () {
-                NavigatorMethods.pushNamed(context, ValidateMobileScreen.routeName);
+                NavigatorMethods.pushNamedAndRemoveUntil(context, ValidateMobileScreen.routeName);
               },
             ),
           ),
