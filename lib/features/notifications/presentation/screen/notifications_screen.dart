@@ -22,16 +22,14 @@ class NotificationsScreen extends StatefulWidget {
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
   final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
+  String? _searchQuery;
   int? _seen;
 
   @override
   void initState() {
     super.initState();
 
-    context.read<NotificationsCubit>().getnotifications(
-          search: _searchQuery,
-        );
+    context.read<NotificationsCubit>().getnotifications();
   }
 
   @override
@@ -143,8 +141,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         (locale == 'ar' ? item.title?.ar : item.title?.en)?.toLowerCase() ?? "";
                     final message =
                         (locale == 'ar' ? item.message?.ar : item.message?.en)?.toLowerCase() ?? "";
-                    final query = _searchQuery.toLowerCase();
-                    return title.contains(query) || message.contains(query);
+                    final query = _searchQuery?.toLowerCase();
+                    return title.contains(query??"") || message.contains(query??"");
                   }).toList();
 
                   if (state is NotificationsLoading) {

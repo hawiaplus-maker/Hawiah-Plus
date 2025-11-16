@@ -131,6 +131,8 @@ class OrderCubit extends Cubit<OrderState> {
       }
 
       emit(OrderSuccess(ordersModel: result));
+    } else if (response.state == ResponseState.unauthorized && isCurrent) {
+      emit(Unauthenticated());
     } else {
       if (isCurrent) {
         isLoadingCurrent = false;

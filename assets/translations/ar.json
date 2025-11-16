@@ -174,7 +174,7 @@
    "ViewWebsite": "عرض الموقع",
    "order": "الطلبات",
    "Current": "حالية",
-   "End": "إنتهت",
+   "End": "منتهية",
    "loadingrequests": "حدث خطأ أثناء تحميل الطلبات",
    "states": "حالة:",
    "Confirmedsuccessfully": "تم التأكيد بنجاح",
@@ -285,5 +285,7 @@
    "noCurrentOrders": "لايوجد طلبات حالية",
    "noOldOrders": "لايوجد طلبات منتهية",
    "read": "المقروء",
-   "unread": "غير مقروء "
+   "unread": "غير مقروء ",
+   "showDetails": "عرض التفاصيل",
+   "endAtDay": "تنتهي يوم"
 }

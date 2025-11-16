@@ -1,17 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
-import 'package:hawiah_client/core/utils/date_methods.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/authentication/presentation/dialog/unauthenticated_dialog.dart';
 import 'package:hawiah_client/features/order/presentation/screens/current-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/old-order-screen.dart';
+import 'package:hawiah_client/features/order/presentation/widget/order_card_widget.dart';
 
 import '../order-cubit/order-cubit.dart';
 import '../order-cubit/order-state.dart';
@@ -56,18 +57,24 @@ class _OrderTapListState extends State<OrderTapList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OrderCubit, OrderState>(
+    return BlocConsumer<OrderCubit, OrderState>(
+      bloc: context.read<OrderCubit>(),
+      listener: (context, state) {
+        if (state is Unauthenticated) {
+          NavigatorMethods.showAppDialog(
+              context,
+             UnauthenticatedDialog());
+        }
+      },
       builder: (context, state) {
         final cubit = context.read<OrderCubit>();
         final orders = widget.isCurrent ? cubit.currentOrders : cubit.oldOrders;
         final isPaginating = widget.isCurrent ? cubit.isLoadingMoreCurrent : cubit.isLoadingMoreOld;
-        final canLoadMore = widget.isCurrent ? cubit.canLoadMoreCurrent : cubit.canLoadMoreOld;
 
         // لو لسه أول تحميل
         if (orders.isEmpty && state is OrderLoading) {
           return const Center(child: CustomLoading());
-        }
-        if (orders.isEmpty && state is OrderSuccess) {
+        } else if (orders.isEmpty && state is OrderSuccess) {
           return Center(
               child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -83,17 +90,21 @@ class _OrderTapListState extends State<OrderTapList> {
                     : AppLocaleKey.noOldOrders.tr(),
                 style: AppTextStyle.text16_700,
               ),
+              const SizedBox(height: 10),
+              CustomButton(
+                width: MediaQuery.of(context).size.width / 2.5,
+                radius: 5,
+                text: "request_hawaia".tr(),
+              )
             ],
           ));
         }
 
-        return ListView.builder(
+        return ListView.separated(
+          separatorBuilder: (context, index) => SizedBox(height: 7),
           controller: _scrollController,
           itemCount: orders.length + (isPaginating ? 1 : 0),
-          padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           itemBuilder: (context, index) {
             if (index < orders.length) {
               final order = orders[index];
@@ -108,7 +119,7 @@ class _OrderTapListState extends State<OrderTapList> {
                     ),
                   );
                 },
-                child: _buildOrderCard(context, order),
+                child: OrderCardWidget(order: order),
               );
             } else {
               return const Padding(
@@ -120,92 +131,5 @@ class _OrderTapListState extends State<OrderTapList> {
         );
       },
     );
-  }
-
-  Widget _buildOrderCard(BuildContext context, dynamic order) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade100,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                CustomNetworkImage(
-                  imageUrl: order.image ?? "",
-                  height: 60.h,
-                  width: 60.h,
-                  radius: 10,
-                  hasShadow: false,
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(order.product ?? '---', style: AppTextStyle.text16_700),
-                    const SizedBox(height: 5),
-                    Text(
-                      DateMethods.formatToFullData(
-                        DateTime.tryParse(order.createdAt ?? "") ?? DateTime.now(),
-                      ),
-                      style: AppTextStyle.text16_500.copyWith(
-                        color: AppColor.darkGreyColor,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Text(AppLocaleKey.states.tr(), style: AppTextStyle.text16_600),
-                        const SizedBox(width: 5),
-                        Text(
-                          context.locale.languageCode == 'ar'
-                              ? (order.status?['ar'] ?? '')
-                              : (order.status?['en'] ?? ''),
-                          style: AppTextStyle.text16_700.copyWith(
-                            color: gtOrderStatusColor(order.status?['en'] ?? ''),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  AppLocaleKey.orderDetails.tr(),
-                  style: AppTextStyle.text16_700.copyWith(color: AppColor.mainAppColor),
-                ),
-                const SizedBox(width: 5),
-                Icon(Icons.arrow_forward_ios, color: AppColor.mainAppColor, size: 15),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Color gtOrderStatusColor(String status) {
-    switch (status) {
-      case "Delivered":
-        return AppColor.mainAppColor;
-      case "Processing":
-        return AppColor.greenColor;
-      case "New order":
-        return AppColor.greyColor;
-      default:
-        return AppColor.blackColor;
-    }
   }
 }

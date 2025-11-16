@@ -278,4 +278,16 @@ class AppColor {
         light: const Color(0xffECEBEE),
         dark: const Color(0xffECEBEE),
       );
+  static Color get statusOrangeColor => AppTheme.getByTheme(
+        light: const Color(0xffFF9800),
+        dark: const Color(0xffFF9800),
+      );
+  static Color get statusPurpleColor => AppTheme.getByTheme(
+        light: const Color(0xff3F51B5),
+        dark: const Color(0xff3F51B5),
+      );
+  static Color get statusBlueColor => AppTheme.getByTheme(
+        light: const Color(0xff2196F3),
+        dark: const Color(0xff2196F3),
+      );
 }

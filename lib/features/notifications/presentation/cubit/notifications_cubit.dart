@@ -23,18 +23,11 @@ class NotificationsCubit extends Cubit<NotificationsState> {
 
   bool _firstLoad = true;
 
-  Future<void> getnotifications({required String search, int? seen}) async {
+  Future<void> getnotifications({String? search, int? seen}) async {
     emit(NotificationsLoading());
 
-    String url;
-
-    if (seen == null) {
-      url = "${Urls.notifications(null, search)}";
-    } else {
-      url = "${Urls.notifications(seen, search)}";
-    }
-
-    _notificationsResponse = await ApiHelper.instance.get(url);
+    _notificationsResponse = await ApiHelper.instance.get(Urls.getNotifications,
+        queryParameters: {if (search != null) "search": search, if (seen != null) "seen": seen});
 
     if (_notificationsResponse.state == ResponseState.complete) {
       _notifications = NotificationsModel.fromJson(_notificationsResponse.data);

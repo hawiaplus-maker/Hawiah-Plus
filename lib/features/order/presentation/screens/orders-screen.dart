@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
@@ -46,29 +47,43 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
           children: [
             const SizedBox(height: 12),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  color: AppColor.selectedLightBlueColor,
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: TabBar(
-                  controller: _tabController,
-                  labelColor: AppColor.whiteColor,
-                  unselectedLabelColor: AppColor.greyColor,
-                  labelStyle: AppTextStyle.text20_700.copyWith(fontFamily: "DINNextLTArabic"),
-                  indicator: BoxDecoration(
-                    color: AppColor.mainAppColor,
-                    borderRadius: BorderRadius.circular(14),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: TabBar(
+                controller: _tabController,
+                labelColor: AppColor.whiteColor,
+                labelStyle: AppTextStyle.text20_700.copyWith(fontFamily: "DINNextLTArabic"),
+                indicatorColor: Colors.transparent,
+                dividerHeight: 0,
+                labelPadding: const EdgeInsets.symmetric(horizontal: 3),
+                onTap: (value) {
+                  _tabController.index = value;
+                  setState(() {});
+                },
+                tabs: [
+                  Tab(
+                    iconMargin: EdgeInsets.all(0),
+                    child: CustomButton(
+                      radius: 5,
+                      color: _tabController.index == 0
+                          ? AppColor.mainAppColor
+                          : AppColor.secondAppColor,
+                      text: AppLocaleKey.current.tr(),
+                      style: AppTextStyle.buttonStyle
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.w400),
+                    ),
                   ),
-                  dividerHeight: 0,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  tabs: [
-                    Tab(text: AppLocaleKey.current.tr()),
-                    Tab(text: AppLocaleKey.end.tr()),
-                  ],
-                ),
+                  Tab(
+                    iconMargin: EdgeInsets.all(0),
+                    child: CustomButton(
+                      radius: 5,
+                      color: _tabController.index == 1
+                          ? AppColor.mainAppColor
+                          : AppColor.secondAppColor,
+                      text: AppLocaleKey.end.tr(),style: AppTextStyle.buttonStyle
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 10),

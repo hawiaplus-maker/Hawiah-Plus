@@ -425,6 +425,7 @@ class ApiHelper {
               ValidateMobileScreen.routeName,
             );
           }
+          
         });
         return ApiResponse(
           state: ResponseState.unauthorized,

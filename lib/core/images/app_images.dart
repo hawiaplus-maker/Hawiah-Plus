@@ -85,4 +85,5 @@ class AppImages {
   static const String noChatIcon = 'assets/images/nochatIcon.png';
   static const String megaphoneoff = 'assets/svg/megaphoneoff.svg';
   static const String megaphone = 'assets/svg/megaphone.svg';
+  static const String unauthenticatedImage = 'assets/images/unauthenticatedImage.png';
 }

@@ -46,6 +46,7 @@ class Urls {
   static String neighborhoodsByCity(int id) => '${baseUrl}neighborhoods/$id';
   static String updateAddress(int id) => '${baseUrl}user-addresses/$id';
   static String payment(int orderId) => '${baseUrl}paymob-paid/?order_id=$orderId';
+  static String getNotifications = '${baseUrl}notifications';
   static String notifications(int? seen, String search) {
     if (seen == null) {
       return "${baseUrl}notifications?search=$search";

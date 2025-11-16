@@ -172,4 +172,6 @@ class AppLocaleKey {
   static const String noOldOrders = 'noOldOrders';
   static const String read = 'read';
   static const String unread = 'unread';
+  static const String showDetails = 'showDetails';
+  static const String endAtDay = 'endAtDay';
 }

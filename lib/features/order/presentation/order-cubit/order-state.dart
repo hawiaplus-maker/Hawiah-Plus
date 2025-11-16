@@ -22,3 +22,5 @@ class OrderError extends OrderState {}
 class CurrentOrderEmpty extends OrderState {}
 
 class OldOrderEmpty extends OrderState {}
+
+class Unauthenticated extends OrderState {}
