@@ -86,4 +86,5 @@ class AppImages {
   static const String megaphoneoff = 'assets/svg/megaphoneoff.svg';
   static const String megaphone = 'assets/svg/megaphone.svg';
   static const String unauthenticatedImage = 'assets/images/unauthenticatedImage.png';
+  static const String notificationDot = 'assets/svg/bell-dot.svg';
 }

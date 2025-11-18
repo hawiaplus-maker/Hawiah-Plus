@@ -48,70 +48,51 @@ class HomeAppBarTitle extends StatelessWidget {
           );
         }
         if (user != null) {
-          return Row(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColor.mainAppColor, width: 1.5)),
-                child: CustomNetworkImage(
-                  radius: 30,
-                  fit: BoxFit.fill,
-                  imageUrl: user.image,
-                  height: 45.h,
-                  width: 45.w,
-                ),
+          return ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Container(
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColor.mainAppColor, width: 1.5)),
+              child: CustomNetworkImage(
+                radius: 30,
+                fit: BoxFit.fill,
+                imageUrl: user.image,
+                height: 45.h,
+                width: 45.w,
               ),
-              SizedBox(width: 10.w),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'welcome_2'.tr(),
-                    style: AppTextStyle.text16_700.copyWith(fontFamily: "DINNextLTArabic"),
-                  ),
-                  Text(
-                    user.name,
-                    style: AppTextStyle.text16_500
-                        .copyWith(color: AppColor.greyColor, fontFamily: "DINNextLTArabic"),
-                  ),
-                ],
-              ),
-              Spacer(),
-              InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const NotificationsScreen();
-                  }));
-                },
-                child: Card(
-                  color: AppColor.whiteColor,
-                  shape: CircleBorder(),
-                  elevation: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SvgPicture.asset(AppImages.bellIcon),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+            ),
+            title: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'welcome_2'.tr(),
+                  style: AppTextStyle.text20_500
+                      .copyWith(fontFamily: "DINNextLTArabic", color: AppColor.mainAppColor),
                 ),
-              )
-            ],
+                Text(
+                  user.name,
+                  style: AppTextStyle.text20_500
+                      .copyWith(color: AppColor.mainAppColor, fontFamily: "DINNextLTArabic"),
+                ),
+              ],
+            ),
+            subtitle: Text(
+              "966${user.mobile.replaceFirst('0', '')}+",
+              style: AppTextStyle.text14_400
+                  .copyWith(color: AppColor.greyColor, fontFamily: "DINNextLTArabic"),
+            ),
+            trailing: InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const NotificationsScreen();
+                }));
+              },
+              child: SvgPicture.asset(
+                AppImages.notificationDot,
+               
+              ),
+            ),
           );
         }
         return SizedBox();
