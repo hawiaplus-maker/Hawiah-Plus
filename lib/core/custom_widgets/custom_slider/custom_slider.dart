@@ -27,6 +27,7 @@ class CustomSlider extends StatefulWidget {
   final double? sliderHeight;
   final BoxFit fit;
   final bool hasShare;
+  final Color? backgroundColor;
 
   const CustomSlider({
     super.key,
@@ -42,6 +43,7 @@ class CustomSlider extends StatefulWidget {
     this.hasShare = false,
     this.sliderWidth,
     this.sliderHeight,
+    this.backgroundColor,
   });
 
   @override
@@ -76,7 +78,7 @@ class _CustomSliderState extends State<CustomSlider> {
                     ),
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
-                      color: AppColor.whiteColor,
+                      color: widget.backgroundColor ?? AppColor.whiteColor,
                       borderRadius: BorderRadius.circular(widget.radius),
                     ),
                     child: item.child ??

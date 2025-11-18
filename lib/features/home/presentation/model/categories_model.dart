@@ -27,15 +27,17 @@ class CategoriesModel {
 class Message {
   int? id;
   String? title;
+  String? subtitle;
   String? image;
   List<Services>? services;
 
-  Message({this.id, this.title, this.image, this.services});
+  Message({this.id, this.title, this.image, this.services, this.subtitle});
 
   Message.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     image = json['image'];
+    subtitle = json['subtitle'];
     if (json['services'] != null) {
       services = <Services>[];
       json['services'].forEach((v) {
@@ -49,6 +51,7 @@ class Message {
     data['id'] = this.id;
     data['title'] = this.title;
     data['image'] = this.image;
+    data['subtitle'] = this.subtitle;
     if (this.services != null) {
       data['services'] = this.services!.map((v) => v.toJson()).toList();
     }
@@ -59,14 +62,16 @@ class Message {
 class Services {
   int? id;
   String? title;
+  String? unit;
   String? image;
 
-  Services({this.id, this.title, this.image});
+  Services({this.id, this.title, this.image, this.unit});
 
   Services.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     image = json['image'];
+    unit = json['unit'];
   }
 
   Map<String, dynamic> toJson() {
@@ -74,6 +79,7 @@ class Services {
     data['id'] = this.id;
     data['title'] = this.title;
     data['image'] = this.image;
+    data['unit'] = this.unit;
     return data;
   }
 }

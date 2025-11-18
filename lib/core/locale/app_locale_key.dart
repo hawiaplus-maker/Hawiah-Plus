@@ -174,4 +174,10 @@ class AppLocaleKey {
   static const String unread = 'unread';
   static const String showDetails = 'showDetails';
   static const String endAtDay = 'endAtDay';
+  static const String sections = 'sections';
+  static const String showMore = 'showMore';
+  static const String showLess = 'showLess';
+  static const String bestseller = 'bestseller';
+  static const String requestnow = 'requestnow';
+  static const String allSections = 'allSections';
 }

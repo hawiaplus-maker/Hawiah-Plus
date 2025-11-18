@@ -1,8 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/features/home/presentation/widgets/best_seller_list_widget.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/home_app_bar_title.dart';
-import 'package:hawiah_client/features/home/presentation/widgets/home_bottom_floating_order_widget.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/home_categories_list_widget.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/home_slider_widget.dart';
 
@@ -17,36 +21,76 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // final homeCubit = context.read<HomeCubit>();
-    // if (homeCubit.categories.isEmpty) {
-    //   homeCubit.getCategories();
-    // }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBody: true,
-        appBar: CustomAppBar(
-          context,
-          height: 80,
-          leadingWidth: 0,
-          leading: SizedBox.shrink(),
-          title: HomeAppBarTitle(),
+      extendBody: true,
+      appBar: CustomAppBar(
+        context,
+        height: 80,
+        leadingWidth: 0,
+        leading: SizedBox.shrink(),
+        title: HomeAppBarTitle(),
+      ),
+      body: Container(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10.h),
+                  const HomeSliderWidgets(),
+                  Stack(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height - 280.h,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerRight,
+                            end: Alignment.centerLeft,
+                            colors: [
+                              AppColor.mainAppColor.withAlpha(35),
+                              AppColor.mainAppColor.withAlpha(15),
+                              AppColor.mainAppColor.withAlpha(15),
+                              AppColor.mainAppColor.withAlpha(5),
+                              AppColor.mainAppColor.withAlpha(0),
+                            ],
+                            stops: const [
+                              0.0,
+                              0.1,
+                              0.5,
+                              0.7,
+                              1.0,
+                            ],
+                          ),
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 20.h),
+                          HomeCategoriesListWidget(),
+                          SizedBox(height: 20.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.w),
+                            child:
+                                Text(AppLocaleKey.bestseller.tr(), style: AppTextStyle.text18_500),
+                          ),
+                          BestsellerListWidget(),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
         ),
-        body: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20.w),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 10.h),
-                const HomeSliderWidgets(),
-                SizedBox(height: 10.h),
-                HomeCategoriesListWidget(),
-                SizedBox(height: 10.h),
-              ],
-            ),
-          ),
-        ),
-        bottomNavigationBar: HomeBottomFloatingOrderCardWidget());
+      ),
+    );
   }
 }

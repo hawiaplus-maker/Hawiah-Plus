@@ -99,7 +99,7 @@
   "containsAtLeast1Symbol": "Contains at least 1 symbol (!@#$%^&*)",
   "enterVerificationCode": "Enter verification code",
   "verificationCodeSent": "We've sent verification code to your WhatsApp",
-  "welcome_2": "Welcome 👋",
+  "welcome_2": "Welcome :",
   "new_request": "New Request",
   "search": "Search for",
   "warehouse": "Flatbed",
@@ -252,5 +252,11 @@
   "notificationDeleted": "Notification deleted successfully",
   "notificationDeleteFailed": "Notification delete failed",
   "read": "Read",
-  "unread": "unread"
+  "unread": "unread",
+  "sections": "Sections",
+  "showMore": "Show more",
+  "showLess": "Show less",
+  "bestseller": "bestseller ",
+  "requestnow": "Order now",
+  "allSections": "All Sections"
 }
