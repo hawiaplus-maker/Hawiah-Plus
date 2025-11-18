@@ -228,7 +228,7 @@ class CommonMethods {
   }
 
   static Future<bool> hasConnection() async {
-    bool isConnected = await InternetConnectionChecker().hasConnection;
+    bool isConnected = await InternetConnectionChecker.instance.hasConnection;
     if (isConnected) {
       return true;
     } else {

@@ -16,8 +16,10 @@ import 'firebase_options.dart';
 
 late BuildContext genContext;
 final bool isGuest = HiveMethods.getToken() == null;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await AppInjector.init();
   await EasyLocalization.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
@@ -39,8 +41,9 @@ void main() async {
         Locale('en'),
         Locale('ur'),
       ],
-      path: 'assets/translations', startLocale: Locale('ar'),
-      fallbackLocale: const Locale('en'), 
+      path: 'assets/translations',
+      startLocale: Locale('ar'),
+      fallbackLocale: const Locale('en'),
       child: BlocProvider(
         create: (context) => AppThemeCubit()..initial(),
         child: HawiahPlusApp(initialMessage: initialMessage),

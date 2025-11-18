@@ -43,7 +43,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 style: TextStyle(fontSize: 18),
               ),
               trailing: Switch(
-                activeColor: Colors.white,
+                activeThumbColor: Colors.white,
                 inactiveThumbColor: Colors.red,
                 activeTrackColor: Color(0xff32D74B),
                 inactiveTrackColor: Color(0xffF5F6FF),
@@ -58,8 +58,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Divider(),
             ListTile(
               onTap: () {
-                appThemeCubit.theme =
-                    isLightMode ? ThemeEnum.dark : ThemeEnum.light;
+                appThemeCubit.theme = isLightMode ? ThemeEnum.dark : ThemeEnum.light;
               },
               contentPadding: EdgeInsets.zero,
               leading: Image.asset(
@@ -69,9 +68,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 fit: BoxFit.fill,
               ),
               title: Text(
-                isLightMode
-                    ? AppLocaleKey.nightMode.tr()
-                    : AppLocaleKey.dayMode.tr(),
+                isLightMode ? AppLocaleKey.nightMode.tr() : AppLocaleKey.dayMode.tr(),
                 style: TextStyle(fontSize: 18),
               ),
               trailing: SizedBox(

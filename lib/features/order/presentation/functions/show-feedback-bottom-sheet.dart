@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_emoji_feedback/flutter_emoji_feedback.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/features/order/presentation/functions/show-feedback-bad-bottom-sheet.dart';
@@ -41,11 +40,10 @@ void showFeedbackBottomSheet(BuildContext context) {
                           setState(() {
                             currentRating = 1;
                           });
-                           Future.delayed(Duration(seconds: 1), () {
+                          Future.delayed(Duration(seconds: 1), () {
                             Navigator.pop(context);
                             showFeedbackBadBottomSheet(context);
                           });
-                          
                         },
                         index: 1,
                         currentRating: currentRating),
@@ -121,15 +119,9 @@ Widget ItemFeedback(
             shape: BoxShape.circle,
             gradient: LinearGradient(
               colors: [
-                index != currentRating
-                    ? Color(0xffEFF0F6)
-                    : Color(0xFFFF00FF), // #FF00FF
-                index != currentRating
-                    ? Color(0xffEFF0F6)
-                    : Color(0xFF9116F9), // #9116F9
-                index != currentRating
-                    ? Color(0xffEFF0F6)
-                    : Color(0xFF3199FF), // #3199FF
+                index != currentRating ? Color(0xffEFF0F6) : Color(0xFFFF00FF), // #FF00FF
+                index != currentRating ? Color(0xffEFF0F6) : Color(0xFF9116F9), // #9116F9
+                index != currentRating ? Color(0xffEFF0F6) : Color(0xFF3199FF), // #3199FF
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
