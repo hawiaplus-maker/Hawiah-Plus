@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_shimmer.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
@@ -61,9 +61,7 @@ class _OrderTapListState extends State<OrderTapList> {
       bloc: context.read<OrderCubit>(),
       listener: (context, state) {
         if (state is Unauthenticated) {
-          NavigatorMethods.showAppDialog(
-              context,
-             UnauthenticatedDialog());
+          NavigatorMethods.showAppDialog(context, UnauthenticatedDialog());
         }
       },
       builder: (context, state) {
@@ -73,7 +71,23 @@ class _OrderTapListState extends State<OrderTapList> {
 
         // لو لسه أول تحميل
         if (orders.isEmpty && state is OrderLoading) {
-          return const Center(child: CustomLoading());
+          return Center(
+              child: SingleChildScrollView(
+            child: Column(
+              children: [
+                ...List.generate(
+                    6,
+                    (index) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 3.5, horizontal: 16),
+                          child: CustomShimmer(
+                            height: 120,
+                            width: double.infinity,
+                            radius: 15,
+                          ),
+                        ))
+              ],
+            ),
+          ));
         } else if (orders.isEmpty && state is OrderSuccess) {
           return Center(
               child: Column(
@@ -124,7 +138,12 @@ class _OrderTapListState extends State<OrderTapList> {
             } else {
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 20),
-                child: Center(child: CustomLoading()),
+                child: Center(
+                    child: CustomShimmer(
+                  height: 120,
+                  width: double.infinity,
+                  radius: 15,
+                )),
               );
             }
           },

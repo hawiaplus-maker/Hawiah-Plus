@@ -1,15 +1,15 @@
 class CategoriesModel {
   bool? success;
-  List<Message>? message;
+  List<SingleCategoryModel>? message;
 
   CategoriesModel({this.success, this.message});
 
   CategoriesModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['message'] != null) {
-      message = <Message>[];
+      message = <SingleCategoryModel>[];
       json['message'].forEach((v) {
-        message!.add(new Message.fromJson(v));
+        message!.add(new SingleCategoryModel.fromJson(v));
       });
     }
   }
@@ -24,16 +24,16 @@ class CategoriesModel {
   }
 }
 
-class Message {
+class SingleCategoryModel {
   int? id;
   String? title;
   String? subtitle;
   String? image;
   List<Services>? services;
 
-  Message({this.id, this.title, this.image, this.services, this.subtitle});
+  SingleCategoryModel({this.id, this.title, this.image, this.services, this.subtitle});
 
-  Message.fromJson(Map<String, dynamic> json) {
+  SingleCategoryModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     image = json['image'];

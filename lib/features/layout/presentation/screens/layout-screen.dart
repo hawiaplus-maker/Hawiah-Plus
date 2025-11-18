@@ -25,6 +25,7 @@ class LayoutScreen extends StatefulWidget {
 class _LayoutScreenState extends State<LayoutScreen> {
   @override
   initState() {
+    sl<HomeCubit>()..getHomeCategories();
     sl<HomeCubit>()..getCategories();
     if (HiveMethods.isVisitor() == false) {
       sl<SettingCubit>()..getsetting();

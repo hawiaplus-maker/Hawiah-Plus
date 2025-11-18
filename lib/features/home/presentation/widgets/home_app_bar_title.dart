@@ -67,12 +67,12 @@ class HomeAppBarTitle extends StatelessWidget {
               children: [
                 Text(
                   'welcome_2'.tr(),
-                  style: AppTextStyle.text20_500
+                  style: AppTextStyle.text18_500
                       .copyWith(fontFamily: "DINNextLTArabic", color: AppColor.mainAppColor),
                 ),
                 Text(
                   user.name,
-                  style: AppTextStyle.text20_500
+                  style: AppTextStyle.text18_500
                       .copyWith(color: AppColor.mainAppColor, fontFamily: "DINNextLTArabic"),
                 ),
               ],
@@ -90,7 +90,6 @@ class HomeAppBarTitle extends StatelessWidget {
               },
               child: SvgPicture.asset(
                 AppImages.notificationDot,
-               
               ),
             ),
           );

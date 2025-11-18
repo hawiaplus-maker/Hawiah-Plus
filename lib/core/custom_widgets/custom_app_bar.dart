@@ -38,6 +38,7 @@ class CustomAppBar extends PreferredSize {
   }) : super(
           preferredSize: Size.fromHeight(height),
           child: AppBar(
+            scrolledUnderElevation: 0,
             elevation: elevation,
             backgroundColor: appBarColor ?? Colors.white,
             toolbarHeight: height,

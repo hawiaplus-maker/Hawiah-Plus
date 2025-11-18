@@ -7,6 +7,10 @@ class AppColor {
         light: const Color(0xFF2AD352),
         dark: const Color(0xff2AD352),
       );
+  static Color get lightMainAppColor => AppTheme.getByTheme(
+        light: const Color(0xFF05DF72),
+        dark: const Color(0xFF05DF72),
+      );
   static Color get secondAppColor => AppTheme.getByTheme(
         light: const Color(0xff0F172A),
         dark: const Color(0xff0F172A),
@@ -16,8 +20,8 @@ class AppColor {
         dark: const Color(0xffFFCB97),
       );
   static Color get darkMainAppColor => AppTheme.getByTheme(
-        light: const Color(0xff2AD352),
-        dark: const Color(0xff2AD352),
+        light: const Color(0xff00A63E),
+        dark: const Color(0xff00A63E),
       );
   static Color get lightSecondAppColor => AppTheme.getByTheme(
         light: const Color(0xffF3F1EB),

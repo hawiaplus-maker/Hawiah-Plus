@@ -16,7 +16,7 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
   String? languageSelected;
 
-  List<String> categories = [
+  List<String> categorieS = [
     "warehouse",
     "box",
   ];
@@ -67,8 +67,7 @@ class HomeCubit extends Cubit<HomeState> {
 
     _sliderResponse = await ApiHelper.instance.get(Urls.showServices(81));
 
-    if (_sliderResponse.state == ResponseState.complete &&
-        _sliderResponse.data != null) {
+    if (_sliderResponse.state == ResponseState.complete && _sliderResponse.data != null) {
       _slider = ShowservicesModel.fromJson(_sliderResponse.data);
       emit(HomeChange());
     } else if (_sliderResponse.state == ResponseState.unauthorized) {
@@ -104,8 +103,7 @@ class HomeCubit extends Cubit<HomeState> {
 
     _servicesResponse = await ApiHelper.instance.get(Urls.services);
 
-    if (_servicesResponse.state == ResponseState.complete &&
-        _servicesResponse.data != null) {
+    if (_servicesResponse.state == ResponseState.complete && _servicesResponse.data != null) {
       _services = ServicesModel.fromJson(_servicesResponse.data);
       emit(HomeChange());
     } else if (_servicesResponse.state == ResponseState.unauthorized) {
@@ -119,7 +117,7 @@ class HomeCubit extends Cubit<HomeState> {
       state: ResponseState.sleep,
       data: null,
     );
-    _services = null;
+    _categories = [];
     emit(HomeChange());
   }
 
@@ -129,23 +127,64 @@ class HomeCubit extends Cubit<HomeState> {
   );
   ApiResponse get categoriesResponse => _categoriesResponse;
 
-  CategoriesModel? _categories;
-  CategoriesModel? get categorieS => _categories;
-  Future<void> getCategories() async {
-    _sliderResponse = ApiResponse(
+  List<SingleCategoryModel> _categories = [];
+  List<SingleCategoryModel> get categories => _categories;
+  Future<void> getCategories({bool? inHome}) async {
+    _categoriesResponse = ApiResponse(
       state: ResponseState.loading,
       data: null,
     );
-    _slider = null;
+    _categories = [];
     emit(HomeChange());
 
-    _categoriesResponse = await ApiHelper.instance.get(Urls.categories);
+    _categoriesResponse = await ApiHelper.instance
+        .get(Urls.categories, queryParameters: {if (inHome == true) "show_on_main_page": 1});
 
-    if (categoriesResponse.state == ResponseState.complete &&
-        _categoriesResponse.data != null) {
-      _categories = CategoriesModel.fromJson(_categoriesResponse.data);
+    if (categoriesResponse.state == ResponseState.complete && _categoriesResponse.data != null) {
+      Iterable iterable = _categoriesResponse.data['message'];
+      _categories = iterable.map((e) => SingleCategoryModel.fromJson(e)).toList();
       emit(HomeChange());
     } else if (_categoriesResponse.state == ResponseState.unauthorized) {
+      emit(HomeChange());
+    }
+  }
+  //*======================== in home category ===================
+
+  void initialInHomeCategories() {
+    _homeCategoriesResponse = ApiResponse(
+      state: ResponseState.sleep,
+      data: null,
+    );
+
+    emit(HomeChange());
+  }
+
+  ApiResponse _homeCategoriesResponse = ApiResponse(
+    state: ResponseState.sleep,
+    data: null,
+  );
+  ApiResponse get homeCategoriesResponse => _homeCategoriesResponse;
+
+  List<SingleCategoryModel> _homeCategories = [];
+  List<SingleCategoryModel> get homeCategorieS => _homeCategories;
+  Future<void> getHomeCategories() async {
+    _homeCategoriesResponse = ApiResponse(
+      state: ResponseState.loading,
+      data: null,
+    );
+    _homeCategories = [];
+    emit(HomeChange());
+
+    _homeCategoriesResponse =
+        await ApiHelper.instance.get(Urls.categories, queryParameters: {"show_on_main_page": 1});
+
+    if (homeCategoriesResponse.state == ResponseState.complete &&
+        _homeCategoriesResponse.data != null) {
+      Iterable iterable = _homeCategoriesResponse.data['message'];
+      _homeCategories = iterable.map((e) => SingleCategoryModel.fromJson(e)).toList();
+
+      emit(HomeChange());
+    } else if (_homeCategoriesResponse.state == ResponseState.unauthorized) {
       emit(HomeChange());
     }
   }
@@ -176,13 +215,11 @@ class HomeCubit extends Cubit<HomeState> {
     _showCategories = null;
     emit(HomeChange());
 
-    _showCategoriesResponse =
-        await ApiHelper.instance.get(Urls.showCategory(id));
+    _showCategoriesResponse = await ApiHelper.instance.get(Urls.showCategory(id));
 
     if (_showCategoriesResponse.state == ResponseState.complete &&
         _showCategoriesResponse.data != null) {
-      _showCategories =
-          ShowCategoriesModel.fromJson(_showCategoriesResponse.data);
+      _showCategories = ShowCategoriesModel.fromJson(_showCategoriesResponse.data);
       emit(HomeChange());
     } else if (_showCategoriesResponse.state == ResponseState.unauthorized) {
       emit(HomeChange());

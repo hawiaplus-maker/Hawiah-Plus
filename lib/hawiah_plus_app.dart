@@ -103,6 +103,9 @@ class _HawiahPlusAppState extends State<HawiahPlusApp> {
             navigatorObservers: [BotToastNavigatorObserver()],
             onGenerateRoute: AppRouters.onGenerateRoute,
             navigatorKey: AppRouters.navigatorKey,
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              overscroll: false,
+            ),
           ),
         );
       },

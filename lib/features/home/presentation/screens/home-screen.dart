@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
@@ -25,66 +24,46 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      appBar: CustomAppBar(
-        context,
-        height: 80,
-        leadingWidth: 0,
-        leading: SizedBox.shrink(),
-        title: HomeAppBarTitle(),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppColor.mainAppColor.withAlpha(0),
+            AppColor.mainAppColor.withAlpha(5),
+            AppColor.mainAppColor.withAlpha(15),
+            AppColor.mainAppColor.withAlpha(15),
+            AppColor.mainAppColor.withAlpha(35),
+          ],
+        ),
       ),
-      body: Container(
-        child: LayoutBuilder(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        extendBody: true,
+        appBar: CustomAppBar(
+          context,
+          height: 80,
+          leadingWidth: 0,
+          leading: SizedBox.shrink(),
+          title: HomeAppBarTitle(),
+        ),
+        body: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 10.h),
+                  SizedBox(height: 10),
                   const HomeSliderWidgets(),
-                  Stack(
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height - 280.h,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerRight,
-                            end: Alignment.centerLeft,
-                            colors: [
-                              AppColor.mainAppColor.withAlpha(35),
-                              AppColor.mainAppColor.withAlpha(15),
-                              AppColor.mainAppColor.withAlpha(15),
-                              AppColor.mainAppColor.withAlpha(5),
-                              AppColor.mainAppColor.withAlpha(0),
-                            ],
-                            stops: const [
-                              0.0,
-                              0.1,
-                              0.5,
-                              0.7,
-                              1.0,
-                            ],
-                          ),
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 20.h),
-                          HomeCategoriesListWidget(),
-                          SizedBox(height: 20.h),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.w),
-                            child:
-                                Text(AppLocaleKey.bestseller.tr(), style: AppTextStyle.text18_500),
-                          ),
-                          BestsellerListWidget(),
-                        ],
-                      ),
-                    ],
+                  SizedBox(height: 20),
+                  HomeCategoriesListWidget(),
+                  SizedBox(height: 15),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                    child: Text(AppLocaleKey.bestseller.tr(), style: AppTextStyle.text18_500),
                   ),
+                  BestsellerListWidget(),
                 ],
               ),
             );
