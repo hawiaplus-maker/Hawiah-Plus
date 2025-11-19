@@ -36,8 +36,8 @@ class AppTextStyle {
       );
 
   static TextStyle get formTitleStyle => TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
         color: AppColor.textBlackColor,
       );
 
@@ -125,7 +125,6 @@ class AppTextStyle {
         color: AppColor.textPrimaryColor,
       );
   static TextStyle get text16_500 => TextStyle(
-    
         fontSize: 16,
         fontWeight: FontWeight.w500,
         color: AppColor.textPrimaryColor,

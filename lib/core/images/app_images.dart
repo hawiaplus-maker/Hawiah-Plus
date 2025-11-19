@@ -87,4 +87,8 @@ class AppImages {
   static const String megaphone = 'assets/svg/megaphone.svg';
   static const String unauthenticatedImage = 'assets/images/unauthenticatedImage.png';
   static const String notificationDot = 'assets/svg/bell-dot.svg';
+  static const String badgeCheckIcon = 'assets/svg/badgeCheckIcon.svg';
+  static const String mapPinCheckIcon = 'assets/svg/mapPinCheckIcon.svg';
+  static const String mapPinCheckMainIcon = 'assets/svg/mapPinCheckMainIcon.svg';
+  static const String mapPinPlusIcon = 'assets/svg/mapPinPlusIcon.svg';
 }

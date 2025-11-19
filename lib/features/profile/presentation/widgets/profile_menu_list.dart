@@ -32,7 +32,7 @@ class ProfileMenuList extends StatelessWidget {
           ),
         PersonProfileListTile(
           title: AppLocaleKey.addresses.tr(),
-          logo: AppImages.user,
+          logo: AppImages.mapPinCheckIcon,
           onTap: () {
             NavigatorMethods.pushNamed(context, AllAddressesScreen.routeName);
           },

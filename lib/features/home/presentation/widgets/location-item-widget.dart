@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart'; // If you're using ScreenUtil
 
 class LocationItemWidget extends StatelessWidget {
@@ -26,29 +27,21 @@ class LocationItemWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.all(16),
-        padding: EdgeInsets.all(16),
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColor.whiteColor : AppColor.cardColor,
-          border: Border.all(
-              color: isSelected ? AppColor.greenColor : Colors.transparent),
+          color: isSelected ? AppColor.mainAppColor.withAlpha(100) : Colors.transparent,
+          border: Border.all(color: isSelected ? AppColor.greenColor : AppColor.lightGreyColor),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (isSVG)
               SvgPicture.asset(
-                imagePath, // Path to the image asset
-                height: 70.h, // You can adjust the size with ScreenUtil
-                width: 70.w, // You can adjust the size with ScreenUtil
-              ),
-            if (!isSVG)
-              Image.asset(
-                imagePath, // Path to the image asset
-                height: 70.h, // You can adjust the size with ScreenUtil
-                width: 100.w, // You can adjust the size with ScreenUtil
-                fit: BoxFit.fill,
+                AppImages.mapPinCheckMainIcon, // Path to the image asset
+                height: 35, // You can adjust the size with ScreenUtil
+                width: 25, // You can adjust the size with ScreenUtil
               ),
             Gap(10.w),
             Column(
@@ -72,12 +65,7 @@ class LocationItemWidget extends StatelessWidget {
               ],
             ),
             Spacer(),
-            isSelected
-                ? Icon(
-                    Icons.check_circle,
-                    color: AppColor.greenColor,
-                  )
-                : SizedBox.shrink(),
+            isSelected ? SvgPicture.asset(AppImages.badgeCheckIcon) : SizedBox.shrink(),
           ],
         ),
       ),

@@ -48,7 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: CustomAuthAppBar(),
       body: BlocConsumer<AuthCubit, AuthState>(builder: (BuildContext context, AuthState state) {
         final authChange = AuthCubit.get(context);
-        final accountTypes = authChange.accountTypes;
+
         final selectedAccountType = authChange.selectedAccountType;
         final checkedValueTerms = authChange.checkedValueTerms;
         final selectedTypeValue =

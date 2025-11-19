@@ -28,7 +28,7 @@ class ForgetPasswordScreen extends StatelessWidget {
       body: BlocConsumer<AuthCubit, AuthState>(
         builder: (BuildContext context, AuthState state) {
           final authCubit = AuthCubit.get(context);
-          final fullNumberResetPassword = authCubit.fullNumberResetPassword;
+
           final authChange = AuthCubit.get(context);
           return Padding(
             padding: EdgeInsets.all(10.w),

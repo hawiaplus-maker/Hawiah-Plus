@@ -6,8 +6,6 @@ import 'package:hawiah_client/core/custom_widgets/choose_gallery_or_camera_botto
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:image_picker/image_picker.dart';
 
-
-
 class ImageMethods {
   static Future<void> pickImage({
     required ImageSource source,

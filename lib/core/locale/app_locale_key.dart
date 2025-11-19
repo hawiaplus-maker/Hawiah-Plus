@@ -180,4 +180,12 @@ class AppLocaleKey {
   static const String bestseller = 'bestseller';
   static const String requestnow = 'requestnow';
   static const String allSections = 'allSections';
+  static const String continueing = 'continue';
+  static const String letContinue = 'letContinue';
+  static const String map = 'map';
+  static const String location = 'location';
+  static const String locationName = 'locationName';
+  static const String locationNameHint = 'locationNameHint';
+  static const String cityHint = 'cityHint';
+  static const String saveTitle = 'saveTitle';
 }

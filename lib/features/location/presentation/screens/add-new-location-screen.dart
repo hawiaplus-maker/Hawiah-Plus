@@ -9,12 +9,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hawiah_client/core/custom_widgets/api_response_widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_shimmer.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_select/custom_select_item.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_select/custom_single_select.dart';
-import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
-import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/core/utils/validation_methods.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
@@ -93,71 +94,44 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
           titleText: AppLocaleKey.addNewAddress.tr(),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
           child: SingleChildScrollView(
             child: Form(
               key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AppLocaleKey.currentAddress.tr(),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15.sp,
+              child: Container(
+                margin: EdgeInsets.all(5),
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColor.lightGreyColor),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppLocaleKey.map.tr(),
+                      style: AppTextStyle.text14_600,
                     ),
-                  ),
-                  SizedBox(height: 10.h),
-                  _buildCurrentAddress(),
-                  SizedBox(height: 10.h),
-                  CustomTextField(
-                    validator: ValidationMethods.validateEmptyField,
-                    controller: titleController,
-                    labelText: AppLocaleKey.address.tr(),
-                    onChanged: (String value) => {},
-                  ),
-                  SizedBox(height: 20.h),
-                  _buildLocationSelectors(),
-                  SizedBox(height: 20.h),
-                  _buildMapSection(),
-                ],
+                    SizedBox(height: 10.h),
+                    _buildMapSection(),
+                    SizedBox(height: 10.h),
+                    CustomTextField(
+                      title: AppLocaleKey.locationName.tr(),
+                      validator: ValidationMethods.validateEmptyField,
+                      controller: titleController,
+                      hintText: AppLocaleKey.address.tr(),
+                      onChanged: (String value) => {},
+                    ),
+                    SizedBox(height: 15.h),
+                    _buildLocationSelectors(),
+                    SizedBox(height: 15.h),
+                  ],
+                ),
               ),
             ),
           ),
         ),
         bottomNavigationBar: _buildBottomActions(),
-      ),
-    );
-  }
-
-  Widget _buildCurrentAddress() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xffF9F9F9),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xffF9F9F9)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            AppImages.locationMapIcon,
-            height: 20,
-            width: 20,
-          ),
-          SizedBox(width: 10.w),
-          Expanded(
-            child: Text(
-              currentAddress,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.sp,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -174,14 +148,29 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
       builder: (BuildContext context, AddressState state) {
         final AddressCubit addressCubit = context.read<AddressCubit>();
         return ApiResponseWidget(
-          loadingWidget: const SizedBox(),
+          loadingWidget: Column(mainAxisSize: MainAxisSize.min, children: [
+            ...List.generate(
+                2,
+                (index) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomShimmer(radius: 5, height: 10.h, width: 70),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        CustomShimmer(radius: 12, height: 50.h),
+                        SizedBox(height: 15.h),
+                      ],
+                    ))
+          ]),
           apiResponse: addressCubit.citysResponse,
           onReload: () => addressCubit.getcitys(),
           isEmpty: addressCubit.citys.isEmpty,
           child: Column(
             children: [
               CustomSingleSelect(
-                hintText: AppLocaleKey.city.tr(),
+                title: AppLocaleKey.city.tr(),
+                hintText: AppLocaleKey.cityHint.tr(),
                 value: selectedCity,
                 items: addressCubit.citys
                     .map((e) => CustomSelectItem(
@@ -199,9 +188,10 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
                   }
                 },
               ),
-              SizedBox(height: 20.h),
+              SizedBox(height: 15.h),
               CustomSingleSelect(
-                hintText: AppLocaleKey.neighborhood.tr(),
+                title: AppLocaleKey.neighborhood.tr(),
+                hintText: AppLocaleKey.cityHint.tr(),
                 apiResponse: addressCubit.neighborhoodsResponse,
                 value: selectedNeighborhood,
                 items: addressCubit.neighborhoods
@@ -229,14 +219,13 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: SizedBox(
-        height: 300.h,
+        height: 200.h,
         child: GoogleMap(
           onMapCreated: (GoogleMapController controller) {
             mapController.complete(controller);
           },
           onTap: (LatLng argument) async {
-            NavigatorMethods.pushNamed(context, MapScreen.routeName,
-                arguments: MapScreenArgs(
+            NavigatorMethods.pushNamed(context, MapScreen.routeName, arguments: MapScreenArgs(
               onLocationSelected: (lat, lng, locality) {
                 safeLocationSelected(lat, lng, locality);
               },
@@ -262,26 +251,31 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   }
 
   Widget _buildBottomActions() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-     
-        SizedBox(height: 20.h),
-        GlobalElevatedButton(
-          label: AppLocaleKey.addtitle.tr(),
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              _saveAddress();
-            }
-          },
-          backgroundColor: AppColor.mainAppColor,
-          textColor: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          borderRadius: BorderRadius.circular(10),
-          fixedWidth: 0.80,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CustomButton(
+              text: AppLocaleKey.saveTitle.tr(),
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  _saveAddress();
+                }
+              },
+            ),
+            SizedBox(height: 10.h),
+            CustomButton(
+              color: AppColor.secondAppColor,
+              text: AppLocaleKey.cancel.tr(),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
-        SizedBox(height: 20.h),
-      ],
+      ),
     );
   }
 
@@ -322,4 +316,3 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
     });
   }
 }
-

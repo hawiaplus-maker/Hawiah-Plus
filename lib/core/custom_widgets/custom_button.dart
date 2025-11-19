@@ -55,7 +55,7 @@ class CustomButton extends StatelessWidget {
             width: width ?? double.infinity,
             height: height,
             decoration: BoxDecoration(
-              color: color ?? (isMainColor ? AppColor.darkMainAppColor : AppColor.secondAppColor),
+              color: color ?? (isMainColor ? AppColor.mainAppColor : AppColor.secondAppColor),
               borderRadius: borderRadius ?? BorderRadius.circular(radius),
               border: Border.all(color: borderColor ?? Colors.transparent),
               boxShadow: boxShadow ??
@@ -85,7 +85,7 @@ class CustomButton extends StatelessWidget {
                               Text(
                                 text ?? "",
                                 textAlign: TextAlign.center,
-                                style: style ?? AppTextStyle.buttonStyle,
+                                style: style ?? AppTextStyle.buttonStyle.copyWith(height: -0.5),
                               ),
                         ),
                         if (suffixIcon != null) ...{

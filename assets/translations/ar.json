@@ -56,7 +56,7 @@
    "send_code_via_sms": "ارسال كود التحقق عن طريق SMS",
    "send_code_via_whatsapp": "ارسال كود التحقق عن طريق واتساب",
    "receive_notifications_whatsapp": "أريد إستقبال إشعارات على الواتساب الخاص بي",
-   "continue": "المتابعة",
+   "letContinue": "المتابعة",
    "resend_code": "اعد ارسال الرمز",
    "cream_name": "اسم الكريم",
    "cream_name_feminine": "اسم الكريمة",
@@ -255,7 +255,7 @@
    "saveChangesSuccess": "تم حفظ التغييرات بنجاح",
    "somethingWentWrong": "حدث خطأ ما ؛ حاول مرة أخري",
    "phones": "رقم الجوال",
-   "map": "الموقع",
+   "location": "الموقع",
    "typing": "يكتب الآن...",
    "name": "الإسم",
    "mobile": "رقم الجوال",
@@ -293,5 +293,12 @@
    "showLess": "عرض اقل",
    "bestseller": "الأكثر مبيعاً",
    "requestnow": "اطلب الأن",
-   "allSections": "جميع الاقسام"
+   "allSections": "جميع الاقسام",
+   "continue":"متابعة",
+   "map":"الخريطة",
+   "locationName":"اسم العنوان",
+   "locationNameHint":"مثال: المنزل، العمل، الموقع",
+   "cityHint":"مثال:الرياض",
+   "saveTitle":"حفظ العنوان"
+
 }

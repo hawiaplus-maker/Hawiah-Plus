@@ -22,7 +22,6 @@ class LanguageListViewWidget extends StatelessWidget {
         separatorBuilder: (_, __) => const Divider(height: 1),
         itemBuilder: (context, index) {
           final language = appLanguageCubit.languages[index];
-          final isSelected = selectedLang == language;
 
           return ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 8),

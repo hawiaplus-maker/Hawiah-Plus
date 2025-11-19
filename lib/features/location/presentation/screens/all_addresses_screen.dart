@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hawiah_client/core/custom_widgets/api_response_widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
@@ -9,6 +10,7 @@ import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/no_data_widget.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/register-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
@@ -114,19 +116,31 @@ class AllAddressesScreen extends StatelessWidget {
                       },
                     );
                   } else {
-                    return LocationItemWidget(
-                        imagePath: AppImages.addAddressImage,
-                        isSVG: false,
-                        title: "add_new_address".tr(),
-                        address: "",
-                        isSelected: false,
-                        onTap: () =>
-                            NavigatorMethods.pushNamed(context, AddNewLocationScreen.routeName,
-                                arguments: AddNewLocationScreenArgs(
-                              onAddressAdded: () {
-                                addressCubit.getaddresses();
-                              },
-                            )));
+                    return Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CustomButton(
+                              height: 60,
+                              color: AppColor.secondAppColor,
+                              prefixIcon: SvgPicture.asset(AppImages.mapPinPlusIcon),
+                              text: "add_new_address".tr(),
+                              onPressed: () => NavigatorMethods.pushNamed(
+                                      context, AddNewLocationScreen.routeName,
+                                      arguments: AddNewLocationScreenArgs(
+                                    onAddressAdded: () {
+                                      addressCubit.getaddresses();
+                                    },
+                                  ))),
+                          const SizedBox(height: 10),
+                          CustomButton(
+                              height: 60,
+                              text: AppLocaleKey.continueing.tr(),
+                              onPressed: () => Navigator.pop(context)),
+                        ],
+                      ),
+                    );
                   }
                 },
               ),

@@ -62,8 +62,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         builder: (BuildContext context, AuthState state) {
           final authCubit = AuthCubit.get(context);
 
-          bool passwordVisibleCompleteProfile = authCubit.passwordVisibleCompleteProfile;
-
           return SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(18),
