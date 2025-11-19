@@ -185,7 +185,13 @@ class AppLocaleKey {
   static const String map = 'map';
   static const String location = 'location';
   static const String locationName = 'locationName';
+
   static const String locationNameHint = 'locationNameHint';
   static const String cityHint = 'cityHint';
   static const String saveTitle = 'saveTitle';
+  static const String spHint = 'spHint';
+  static const String selectServiceProvider = 'selectServiceProvider';
+  static const String spDiscription = 'spDiscription';
+  static const String serviceProviders = 'serviceProviders';
+  static const String requistNow = 'requistNow';
 }
