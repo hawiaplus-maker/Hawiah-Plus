@@ -62,24 +62,49 @@ class SingleCategoryModel {
 class Services {
   int? id;
   String? title;
+  String? description;
   String? unit;
+  int? size;
+  int? length;
+  int? width;
+  int? height;
   String? image;
 
-  Services({this.id, this.title, this.image, this.unit});
+  Services({
+    this.id,
+    this.title,
+    this.description,
+    this.image,
+    this.unit,
+    this.size,
+    this.length,
+    this.width,
+    this.height,
+  });
 
   Services.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
+    description = json['description'];
     image = json['image'];
     unit = json['unit'];
+    size = json['size'];
+    length = json['length'];
+    width = json['width'];
+    height = json['height'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['image'] = this.image;
-    data['unit'] = this.unit;
+    final Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['title'] = title;
+    data['description'] = description;
+    data['image'] = image;
+    data['unit'] = unit;
+    data['size'] = size;
+    data['length'] = length;
+    data['width'] = width;
+    data['height'] = height;
     return data;
   }
 }

@@ -294,11 +294,14 @@
    "bestseller": "الأكثر مبيعاً",
    "requestnow": "اطلب الأن",
    "allSections": "جميع الاقسام",
-   "continue":"متابعة",
-   "map":"الخريطة",
-   "locationName":"اسم العنوان",
-   "locationNameHint":"مثال: المنزل، العمل، الموقع",
-   "cityHint":"مثال:الرياض",
-   "saveTitle":"حفظ العنوان"
-
+   "continue": "متابعة",
+   "map": "الخريطة",
+   "locationName": "اسم العنوان",
+   "locationNameHint": "مثال: المنزل، العمل، الموقع",
+   "cityHint": "مثال:الرياض",
+   "saveTitle": "حفظ العنوان",
+   "meter": "م³",
+   "cubicMeter": " متر مكعب",
+   "Dimensions": "الأبعاد:",
+   "Capacity": "السعة:"
 }
