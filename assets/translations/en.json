@@ -258,5 +258,9 @@
   "showLess": "Show less",
   "bestseller": "bestseller ",
   "requestnow": "Order now",
-  "allSections": "All Sections"
+  "allSections": "All Sections",
+  "meter": "m³",
+  "cubicMeter": "cubic meters ",
+  "Dimensions": "Dimensions:",
+  "Capacity": "Capacity:"
 }

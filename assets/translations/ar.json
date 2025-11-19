@@ -293,5 +293,9 @@
    "showLess": "عرض اقل",
    "bestseller": "الأكثر مبيعاً",
    "requestnow": "اطلب الأن",
-   "allSections": "جميع الاقسام"
+   "allSections": "جميع الاقسام",
+   "meter": "م³",
+   "cubicMeter": " متر مكعب",
+   "Dimensions": "الأبعاد:",
+   "Capacity": "السعة:"
 }
