@@ -180,6 +180,7 @@ class AppLocaleKey {
   static const String bestseller = 'bestseller';
   static const String requestnow = 'requestnow';
   static const String allSections = 'allSections';
+
   static const String continueing = 'continue';
   static const String letContinue = 'letContinue';
   static const String map = 'map';
@@ -189,9 +190,15 @@ class AppLocaleKey {
   static const String locationNameHint = 'locationNameHint';
   static const String cityHint = 'cityHint';
   static const String saveTitle = 'saveTitle';
+
   static const String spHint = 'spHint';
   static const String selectServiceProvider = 'selectServiceProvider';
   static const String spDiscription = 'spDiscription';
   static const String serviceProviders = 'serviceProviders';
   static const String requistNow = 'requistNow';
+
+  static const String meter = 'meter';
+  static const String cubicMeter = 'cubicMeter';
+  static const String dimensions = 'Dimensions';
+  static const String Capacity = 'Capacity';
 }

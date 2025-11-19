@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +10,11 @@ import '../../presentation/controllers/home-cubit/home-cubit.dart';
 import '../../presentation/controllers/home-cubit/home-state.dart';
 
 class CategoryDetailsScreen extends StatefulWidget {
-  const CategoryDetailsScreen({super.key, required this.id});
+  const CategoryDetailsScreen({
+    super.key,
+    required this.id,
+  });
+
   final int id;
 
   @override
@@ -21,44 +24,64 @@ class CategoryDetailsScreen extends StatefulWidget {
 class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
   @override
   void initState() {
-    context.read<HomeCubit>().getshowCategories(widget.id);
     super.initState();
+    context.read<HomeCubit>().getshowCategories(widget.id);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: CustomAppBar(
-          context,
-          titleText: "new_request".tr(),
-        ),
-        body: BlocConsumer<HomeCubit, HomeState>(
-          builder: (BuildContext context, HomeState state) {
-            final homeCubit = HomeCubit.get(context);
-            if (homeCubit.showCategories == null) {
-              return Center(child: CustomLoading());
-            }
-            if (homeCubit.showCategories?.message?.services?.isEmpty ?? true) {
-              return Center(child: NoDataWidget());
-            }
-            return Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        return CategoryCardWidget(
-                            homeCubit: homeCubit, widget: widget, index: index);
-                      },
-                      itemCount: homeCubit.showCategories?.message?.services?.length ?? 0,
-                    ),
-                  )
-                ],
-              ),
-            );
-          },
-          listener: (BuildContext context, HomeState state) {},
-        ));
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        final cubit = HomeCubit.get(context);
+        final data = cubit.showCategories?.message;
+
+        final services = data?.services ?? [];
+
+        return Scaffold(
+          appBar: CustomAppBar(
+            context,
+            titleText: data?.title ?? "",
+            centerTitle: true,
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back),
+            ),
+          ),
+          body: Builder(
+            builder: (_) {
+              if (cubit.showCategories == null) {
+                return const Center(child: CustomLoading());
+              }
+
+              final services = data?.services ?? [];
+
+              if (services.isEmpty) {
+                return const Center(child: NoDataWidget());
+              }
+
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                child: GridView.builder(
+                  itemCount: services.length,
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200.w,
+                    crossAxisSpacing: 10.w,
+                    mainAxisSpacing: 10.h,
+                    childAspectRatio: .53,
+                  ),
+                  itemBuilder: (context, index) {
+                    return CategoryCardWidget(
+                      homeCubit: cubit,
+                      widget: widget,
+                      index: index,
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }

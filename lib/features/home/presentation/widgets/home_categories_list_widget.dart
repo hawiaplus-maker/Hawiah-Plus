@@ -71,7 +71,7 @@ class _HomeCategoriesListWidgetState extends State<HomeCategoriesListWidget> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10.w,
                     mainAxisSpacing: 10.h,
-                    childAspectRatio: 1.5),
+                    childAspectRatio: 1.2),
                 itemBuilder: (context, index) {
                   final item = homeCubit.homeCategorieS[index];
                   return GestureDetector(
@@ -79,7 +79,9 @@ class _HomeCategoriesListWidgetState extends State<HomeCategoriesListWidget> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CategoryDetailsScreen(id: item.id ?? 0),
+                          builder: (context) => CategoryDetailsScreen(
+                            id: item.id ?? 0,
+                          ),
                         ),
                       );
                     },
