@@ -201,4 +201,7 @@ class AppLocaleKey {
   static const String cubicMeter = 'cubicMeter';
   static const String dimensions = 'Dimensions';
   static const String Capacity = 'Capacity';
+  static const String deliveryTime = 'deliveryTime';
+  static const String trusted = 'trusted';
+  static const String responseSpeed = 'responseSpeed';
 }

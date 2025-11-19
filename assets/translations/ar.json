@@ -305,11 +305,11 @@
    "spDiscription":"تم ترتيب المزودين حسب التقييم والسعر",
    "serviceProviders":"مزودي الخدمة",
    "requistNow":"أطلب الآن",
-
-
-
    "meter": "م³",
    "cubicMeter": " متر مكعب",
    "Dimensions": "الأبعاد:",
-   "Capacity": "السعة:"
+   "Capacity": "السعة:",
+   "deliveryTime":"مدة التوصيل : {} يوم",
+   "trusted":"موثق",
+   "responseSpeed":"سرعة الاستجابة :{}"
 }

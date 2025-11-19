@@ -94,5 +94,6 @@ class AppImages {
   static const String starIcon = 'assets/svg/starIcon.svg';
   static const String timerIcon = 'assets/svg/timerIcon.svg';
   static const String trustedIcon = 'assets/svg/trustedIcon.svg';
+  static const String trustedImage = 'assets/images/trustedImage.png';
   static const String bowArrowIcon = 'assets/svg/bowArrowIcon.svg';
 }
