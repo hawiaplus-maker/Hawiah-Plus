@@ -194,5 +194,4 @@ class AppLocaleKey {
   static const String cubicMeter = 'cubicMeter';
   static const String dimensions = 'Dimensions';
   static const String Capacity = 'Capacity';
-
 }
