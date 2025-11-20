@@ -31,7 +31,7 @@ class LocationItemWidget extends StatelessWidget {
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: isSelected ? AppColor.mainAppColor.withAlpha(100) : Colors.transparent,
-          border: Border.all(color: isSelected ? AppColor.greenColor : AppColor.lightGreyColor),
+          border: Border.all(color: isSelected ? AppColor.mainAppColor : AppColor.lightGreyColor),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(

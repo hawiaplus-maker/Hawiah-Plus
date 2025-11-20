@@ -42,10 +42,6 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
             context,
             titleText: data?.title ?? "",
             centerTitle: true,
-            leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back),
-            ),
           ),
           body: Builder(
             builder: (_) {

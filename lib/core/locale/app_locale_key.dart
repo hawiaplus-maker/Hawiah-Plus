@@ -186,14 +186,26 @@ class AppLocaleKey {
   static const String map = 'map';
   static const String location = 'location';
   static const String locationName = 'locationName';
+
   static const String locationNameHint = 'locationNameHint';
   static const String cityHint = 'cityHint';
   static const String saveTitle = 'saveTitle';
+
+  static const String spHint = 'spHint';
+  static const String selectServiceProvider = 'selectServiceProvider';
+  static const String spDiscription = 'spDiscription';
+  static const String serviceProviders = 'serviceProviders';
+  static const String requistNow = 'requistNow';
 
   static const String meter = 'meter';
   static const String cubicMeter = 'cubicMeter';
   static const String dimensions = 'Dimensions';
   static const String Capacity = 'Capacity';
+
+  static const String deliveryTime = 'deliveryTime';
+  static const String trusted = 'trusted';
+  static const String responseSpeed = 'responseSpeed';
+
   static const String timePeriod = 'timePeriod';
   static const String whenYouNeedBox = 'whenYouNeedBox';
   static const String whenYouNeedBoxHint = 'whenYouNeedBoxHint';
@@ -229,4 +241,5 @@ class AppLocaleKey {
   static const String evaluationAdditionalNotes = 'evaluationAdditionalNotes';
   static const String evaluationHint = 'evaluationHint';
   static const String evaluationSend = 'evaluationSend';
+  static const String notTrusted = 'notTrusted';
 }

@@ -91,6 +91,13 @@ class AppImages {
   static const String mapPinCheckIcon = 'assets/svg/mapPinCheckIcon.svg';
   static const String mapPinCheckMainIcon = 'assets/svg/mapPinCheckMainIcon.svg';
   static const String mapPinPlusIcon = 'assets/svg/mapPinPlusIcon.svg';
+
+  static const String starIcon = 'assets/svg/starIcon.svg';
+  static const String timerIcon = 'assets/svg/timerIcon.svg';
+  static const String trustedIcon = 'assets/svg/trustedIcon.svg';
+  static const String trustedImage = 'assets/images/trustedImage.png';
+  static const String bowArrowIcon = 'assets/svg/bowArrowIcon.svg';
+
   static const String calendar = 'assets/svg/calendar-fold.svg';
   static const String requestCode = 'assets/images/request_code.png';
   static const String requestName = 'assets/images/request_name.png';
