@@ -37,7 +37,7 @@ class CategoryCardWidget extends StatelessWidget {
       },
       child: Card(
         elevation: 5,
-        color: Colors.white,
+        color: AppColor.whiteColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -120,7 +120,15 @@ class CategoryCardWidget extends StatelessWidget {
                         .copyWith(color: AppColor.whiteColor, fontWeight: FontWeight.bold),
                   ),
                   color: AppColor.mainAppColor,
-                  onPressed: () {},
+                  onPressed: () {
+                    NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
+                        arguments: ChooseAddressScreenArgs(
+                          showCategoriesModel: homeCubit.showCategories!,
+                          catigoryId: widget.id,
+                          serviceProviderId:
+                              homeCubit.showCategories?.message?.services?[index].id ?? 0,
+                        ));
+                  },
                 )
               ],
             ),

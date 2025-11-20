@@ -91,4 +91,5 @@ class AppImages {
   static const String mapPinCheckIcon = 'assets/svg/mapPinCheckIcon.svg';
   static const String mapPinCheckMainIcon = 'assets/svg/mapPinCheckMainIcon.svg';
   static const String mapPinPlusIcon = 'assets/svg/mapPinPlusIcon.svg';
+  static const String calendar = 'assets/svg/calendar-fold.svg';
 }

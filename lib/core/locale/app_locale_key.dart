@@ -194,4 +194,15 @@ class AppLocaleKey {
   static const String cubicMeter = 'cubicMeter';
   static const String dimensions = 'Dimensions';
   static const String Capacity = 'Capacity';
+  static const String timePeriod = 'timePeriod';
+  static const String whenYouNeedBox = 'whenYouNeedBox';
+  static const String whenYouNeedBoxHint = 'whenYouNeedBoxHint';
+  static const String startdate = 'startdate';
+  static const String enddate = 'enddate';
+  static const String selectStartDate = 'selectStartDate';
+  static const String selectEndDate = 'selectEndDate';
+  static const String rentalPeriod = 'rentalPeriod';
+  static const String dayss = 'dayss';
+  static const String quickSelection = 'quickSelection';
+  static const String continueToServiceProviders = 'continueToServiceProviders';
 }

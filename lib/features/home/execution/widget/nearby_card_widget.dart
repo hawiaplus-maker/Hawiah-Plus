@@ -6,7 +6,7 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/home/execution/screen/request_hawia_screen.dart';
+import 'package:hawiah_client/features/location/presentation/screens/time_period_screen.dart';
 
 class NearbyCardWidget extends StatelessWidget {
   const NearbyCardWidget({super.key, this.providers, this.args, required this.index});
@@ -23,13 +23,14 @@ class NearbyCardWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
         child: ListTile(
           onTap: () {
-            NavigatorMethods.pushNamed(context, RequestHawiahScreen.routeName,
-                arguments: RequestHawiahScreenArgs(
-                    address: args.address,
-                    catigoryId: args.catigoryId,
-                    serviceProviderId: args.serviceProviderId,
-                    nearbyServiceProviderModel: providers.nearbyServiceProvider[index],
-                    showCategoriesModel: args.showCategoriesModel));
+            NavigatorMethods.pushNamed(context, TimePeriodScreen.routeName);
+            // NavigatorMethods.pushNamed(context, RequestHawiahScreen.routeName,
+            //     arguments: RequestHawiahScreenArgs(
+            //         address: args.address,
+            //         catigoryId: args.catigoryId,
+            //         serviceProviderId: args.serviceProviderId,
+            //         nearbyServiceProviderModel: providers.nearbyServiceProvider[index],
+            //         showCategoriesModel: args.showCategoriesModel));
           },
           leading: CustomNetworkImage(
             imageUrl: "",
