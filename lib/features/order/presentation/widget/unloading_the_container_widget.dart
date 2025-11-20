@@ -1,0 +1,113 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/features/order/presentation/widget/evaluation_result_widget.dart';
+
+class UnloadingTheContainerWidget extends StatefulWidget {
+  const UnloadingTheContainerWidget({super.key});
+
+  @override
+  State<UnloadingTheContainerWidget> createState() => _UnloadingTheContainerWidgetState();
+}
+
+class _UnloadingTheContainerWidgetState extends State<UnloadingTheContainerWidget> {
+  bool isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      decoration: BoxDecoration(
+        color: AppColor.whiteColor,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: AppColor.mainAppColor, width: .3),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            isPressed ? AppLocaleKey.emptySuccess.tr() : AppLocaleKey.readyToEmpty.tr(),
+            style: AppTextStyle.text16_700,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            isPressed ? AppLocaleKey.repeatOrder.tr() : AppLocaleKey.readyToEmptyHint.tr(),
+            style: AppTextStyle.text16_500,
+          ),
+          Gap(10.h),
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isPressed = true;
+                    });
+                  },
+                  child: Container(
+                    height: 45.h,
+                    decoration: BoxDecoration(
+                      color: isPressed ? AppColor.mainAppColor : const Color(0xffFF8B7B),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          isPressed ? AppImages.recycling : AppImages.bakst,
+                          height: 20.h,
+                          width: 20.w,
+                        ),
+                        Gap(5.w),
+                        Text(
+                          isPressed
+                              ? AppLocaleKey.repeatOrderTitle.tr()
+                              : AppLocaleKey.emptytheContainer.tr(),
+                          style: AppTextStyle.text12_500.copyWith(
+                            color: isPressed ? AppColor.whiteColor : AppColor.redColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Gap(10.w),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () async {
+                    showEvaluationDialog(context);
+                  },
+                  child: Container(
+                    height: 45.h,
+                    decoration: BoxDecoration(
+                      color: AppColor.warning400.withAlpha(50),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(AppImages.evaluate, height: 20.h, width: 20.w),
+                        Gap(5.w),
+                        Text(
+                          AppLocaleKey.delegateEvaluation.tr(),
+                          style: AppTextStyle.text14_500.copyWith(color: AppColor.warning400),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}

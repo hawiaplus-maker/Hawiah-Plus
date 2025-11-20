@@ -92,4 +92,12 @@ class AppImages {
   static const String mapPinCheckMainIcon = 'assets/svg/mapPinCheckMainIcon.svg';
   static const String mapPinPlusIcon = 'assets/svg/mapPinPlusIcon.svg';
   static const String calendar = 'assets/svg/calendar-fold.svg';
+  static const String requestCode = 'assets/images/request_code.png';
+  static const String requestName = 'assets/images/request_name.png';
+  static const String whatsappSupport = 'assets/images/whatsapp_support.png';
+  static const String phoneSupport = 'assets/images/phone_support.png';
+  static const String chats = 'assets/images/chats.png';
+  static const String recycling = 'assets/images/recycling.png';
+  static const String evaluate = 'assets/images/Evaluate.png';
+  static const String bakst = 'assets/images/bakst.png';
 }

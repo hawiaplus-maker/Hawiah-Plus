@@ -205,4 +205,28 @@ class AppLocaleKey {
   static const String dayss = 'dayss';
   static const String quickSelection = 'quickSelection';
   static const String continueToServiceProviders = 'continueToServiceProviders';
+  static const String orderdata = 'orderdata';
+  static const String orderCode = 'orderCode';
+  static const String confirmNumber = 'confirmNumber';
+  static const String technicalsupport = 'technicalsupport';
+  static const String connectede = 'connectede';
+  static const String whatsab = 'whatsab';
+  static const String agentInfo = 'agentInfo';
+  static const String vehicleNumber = 'vehicleNumber';
+  static const String contactDriver = 'contactDriver';
+  static const String chats = 'chats';
+  static const String name = 'name';
+  static const String priceDetails = 'priceDetails';
+  static const String total = 'total';
+  static const String readyToEmpty = 'readyToEmpty';
+  static const String readyToEmptyHint = 'readyToEmptyHint';
+  static const String emptySuccess = 'emptySuccess';
+  static const String repeatOrder = 'repeatOrder';
+  static const String repeatOrderTitle = 'repeatOrderTitle';
+
+  static const String evaluationTitle = 'evaluationTitle';
+  static const String evaluationHelpText = 'evaluationHelpText';
+  static const String evaluationAdditionalNotes = 'evaluationAdditionalNotes';
+  static const String evaluationHint = 'evaluationHint';
+  static const String evaluationSend = 'evaluationSend';
 }
