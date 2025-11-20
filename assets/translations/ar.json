@@ -309,7 +309,20 @@
    "cubicMeter": " متر مكعب",
    "Dimensions": "الأبعاد:",
    "Capacity": "السعة:",
+
    "deliveryTime":"مدة التوصيل : {} يوم",
    "trusted":"موثق",
-   "responseSpeed":"سرعة الاستجابة :{}"
+   "responseSpeed":"سرعة الاستجابة :{}",
+
+   "timePeriod": "الفترة الزمنية",
+   "whenYouNeedBox": "متى تحتاج الحاوية؟",
+   "whenYouNeedBoxHint": "اختر تاريخ البداية والنهاية لاستئجار الحاوية",
+   "startdate": "تاريخ البداية",
+   "enddate": "تاريخ النهاية",
+   "selectStartDate": " اختر تاريخ البداية",
+   "selectEndDate": "اختر تاريخ النهاية",
+   "rentalPeriod": "مدة الاستئجار:",
+   "dayss": "يوم",
+   "quickSelection": "اختيار سريع ",
+   "continueToServiceProviders": "متابعة إلى مزودي الخدمة"
 }

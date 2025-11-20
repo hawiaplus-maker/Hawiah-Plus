@@ -262,5 +262,16 @@
   "meter": "m³",
   "cubicMeter": "cubic meters ",
   "Dimensions": "Dimensions:",
-  "Capacity": "Capacity:"
+  "Capacity": "Capacity:",
+  "timePeriod": "Time period",
+  "whenYouNeedBox": "When do you need the container?",
+  "whenYouNeedBoxHint": "Choose the start and end dates for renting the container.",
+  "startdate": "Start date",
+  "enddate": "End date",
+  "selectStartDate": "Select start date",
+  "selectEndDate": "Select end date",
+  "rentalPeriod": "Rental period:",
+  "dayss": "day",
+  "quickSelection": "Quick selection ",
+  "continueToServiceProviders": "Continue to service providers"
 }

@@ -18,152 +18,151 @@ class NearbyCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        color: AppColor.whiteColor,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColor.mainAppColor.withAlpha(50)),
-      ),
-      child: GestureDetector(
-        onTap: () {
-          NavigatorMethods.pushNamed(context, RequestHawiahScreen.routeName,
-              arguments: RequestHawiahScreenArgs(
-                  address: args.address,
-                  catigoryId: args.catigoryId,
-                  serviceProviderId: args.serviceProviderId,
-                  nearbyServiceProviderModel: providers.nearbyServiceProvider[index],
-                  showCategoriesModel: args.showCategoriesModel));
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: CustomNetworkImage(
-                  imageUrl: Urls.testBlueCarImage,
-                  width: MediaQuery.of(context).size.width / 5,
+        margin: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColor.whiteColor,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: AppColor.mainAppColor.withAlpha(50)),
+        ),
+        child: GestureDetector(
+          onTap: () {
+            NavigatorMethods.pushNamed(context, RequestHawiahScreen.routeName,
+                arguments: RequestHawiahScreenArgs(
+                    address: args.address,
+                    catigoryId: args.catigoryId,
+                    serviceProviderId: args.serviceProviderId,
+                    nearbyServiceProviderModel: providers.nearbyServiceProvider[index],
+                    showCategoriesModel: args.showCategoriesModel));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: CustomNetworkImage(
+                    imageUrl: Urls.testBlueCarImage,
+                    width: MediaQuery.of(context).size.width / 5,
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        providers.nearbyServiceProvider[index].serviceProviderName ?? "",
+                        style: AppTextStyle.text16_700,
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(AppImages.starIcon, height: 15, width: 15),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "5.0",
+                            style: AppTextStyle.text10_400.copyWith(
+                              color: AppColor.greyTextColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(AppImages.trustedImage, height: 15, width: 15),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            AppLocaleKey.trusted.tr(),
+                            style: AppTextStyle.text10_400.copyWith(
+                              color: AppColor.mainAppColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(AppImages.timerIcon, height: 15, width: 15),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            " ${AppLocaleKey.deliveryTime.tr(args: [
+                                  providers.nearbyServiceProvider[index].duration.toString(),
+                                ])}",
+                            style: AppTextStyle.text10_400.copyWith(
+                              color: AppColor.greyTextColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(AppImages.bowArrowIcon, height: 15, width: 15),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            " ${AppLocaleKey.responseSpeed.tr(args: ["سريع جدا"])}",
+                            style: AppTextStyle.text10_400.copyWith(
+                              color: AppColor.greyTextColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Column(
                   children: [
                     Text(
-                      providers.nearbyServiceProvider[index].serviceProviderName ?? "",
-                      style: AppTextStyle.text16_700,
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(AppImages.starIcon, height: 15, width: 15),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "5.0",
-                          style: AppTextStyle.text10_400.copyWith(
-                            color: AppColor.greyTextColor,
-                          ),
-                        ),
-                      ],
+                      AppLocaleKey.sar
+                          .tr(args: [providers.nearbyServiceProvider[index].dailyPrice ?? ""]),
+                      style: AppTextStyle.text12_600.copyWith(color: AppColor.redColor),
                     ),
                     SizedBox(
                       height: 5,
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.asset(AppImages.trustedImage, height: 15, width: 15),
-                        SizedBox(
-                          width: 5,
+                    Card(
+                      color: AppColor.mainAppColor,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        child: Text(
+                          AppLocaleKey.requestnow.tr(),
+                          style: AppTextStyle.text12_500.copyWith(color: AppColor.whiteColor),
                         ),
-                        Text(
-                          AppLocaleKey.trusted.tr(),
-                          style: AppTextStyle.text10_400.copyWith(
-                            color: AppColor.mainAppColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(AppImages.timerIcon, height: 15, width: 15),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          " ${AppLocaleKey.deliveryTime.tr(args: [
-                                providers.nearbyServiceProvider[index].duration.toString(),
-                              ])}",
-                          style: AppTextStyle.text10_400.copyWith(
-                            color: AppColor.greyTextColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(AppImages.bowArrowIcon, height: 15, width: 15),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          " ${AppLocaleKey.responseSpeed.tr(args: ["سريع جدا"])}",
-                          style: AppTextStyle.text10_400.copyWith(
-                            color: AppColor.greyTextColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
+                      ),
+                    )
                   ],
                 ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                children: [
-                  Text(
-                    AppLocaleKey.sar
-                        .tr(args: [providers.nearbyServiceProvider[index].dailyPrice ?? ""]),
-                    style: AppTextStyle.text12_600.copyWith(color: AppColor.redColor),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Card(
-                    color: AppColor.mainAppColor,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                      child: Text(
-                        AppLocaleKey.requestnow.tr(),
-                        style: AppTextStyle.text12_500.copyWith(color: AppColor.whiteColor),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

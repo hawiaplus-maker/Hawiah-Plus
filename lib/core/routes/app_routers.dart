@@ -121,6 +121,10 @@ class AppRouters {
         return MaterialPageRoute(
           builder: (_) => const AllChatsScreen(),
         );
+      case TimePeriodScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const TimePeriodScreen(),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const ValidateMobileScreen(),
