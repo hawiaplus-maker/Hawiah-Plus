@@ -72,7 +72,7 @@ class NearbyServiceProviderScreen extends StatelessWidget {
                       child: ListView.builder(
                           itemCount: providers.nearbyServiceProvider.length,
                           itemBuilder: (context, index) => NearbyCardWidget(
-                                providers: providers,
+                                providers: providers.nearbyServiceProvider[index],
                                 index: index,
                                 args: args,
                               )),

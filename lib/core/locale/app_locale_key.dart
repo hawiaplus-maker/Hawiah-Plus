@@ -217,4 +217,5 @@ class AppLocaleKey {
   static const String dayss = 'dayss';
   static const String quickSelection = 'quickSelection';
   static const String continueToServiceProviders = 'continueToServiceProviders';
+  static const String notTrusted = 'notTrusted';
 }
