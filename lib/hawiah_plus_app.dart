@@ -11,7 +11,9 @@ import 'package:hawiah_client/core/bloc-config/bloc_providers.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/notifications/messaging_config.dart';
 import 'package:hawiah_client/core/routes/app_routers_import.dart';
+import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/splash/presentation/screens/splash-screen.dart';
+import 'package:hawiah_client/injection_container.dart';
 import 'package:hawiah_client/main.dart';
 
 class HawiahPlusApp extends StatefulWidget {
@@ -30,7 +32,9 @@ class HawiahPlusApp extends StatefulWidget {
 class _HawiahPlusAppState extends State<HawiahPlusApp> {
   @override
   void initState() {
-    _initializeMessaging();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeMessaging();
+    });
     _appToken();
     super.initState();
     _handleInitialNotification();
@@ -109,7 +113,10 @@ class _HawiahPlusAppState extends State<HawiahPlusApp> {
           ),
         );
       },
-      child: SplashScreen(),
+      child: BlocProvider(
+        create: (context) => sl<ProfileCubit>(),
+        child: SplashScreen(),
+      ),
     );
   }
 }

@@ -12,7 +12,7 @@ import 'package:hawiah_client/features/order/presentation/model/orders_model.dar
 
 class OldOrderHeaderSection extends StatelessWidget {
   const OldOrderHeaderSection({required this.data});
-  final Data data;
+  final SingleOrderData data;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class OldOrderHeaderSection extends StatelessWidget {
 
 class OrderInfoTexts extends StatelessWidget {
   const OrderInfoTexts({required this.data});
-  final Data data;
+  final SingleOrderData data;
 
   @override
   Widget build(BuildContext context) {

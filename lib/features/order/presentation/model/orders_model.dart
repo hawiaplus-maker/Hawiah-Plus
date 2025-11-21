@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-OrdersModel ordersModelFromJson(String str) =>
-    OrdersModel.fromJson(json.decode(str));
+OrdersModel ordersModelFromJson(String str) => OrdersModel.fromJson(json.decode(str));
 
 String ordersModelToJson(OrdersModel data) => json.encode(data.toJson());
 
@@ -30,19 +29,15 @@ class OrdersModel {
 }
 
 class OrdersData {
-  List<Data>? data;
+  List<SingleOrderData>? data;
   Pagination? pagination;
 
   OrdersData({this.data, this.pagination});
 
   factory OrdersData.fromJson(Map<String, dynamic> json) {
     return OrdersData(
-      data: (json['data'] as List?)
-          ?.map((v) => Data.fromJson(v))
-          .toList(),
-      pagination: json['pagination'] != null
-          ? Pagination.fromJson(json['pagination'])
-          : null,
+      data: (json['data'] as List?)?.map((v) => SingleOrderData.fromJson(v)).toList(),
+      pagination: json['pagination'] != null ? Pagination.fromJson(json['pagination']) : null,
     );
   }
 
@@ -81,9 +76,9 @@ class Pagination {
   }
 }
 
-class Data {
+class SingleOrderData {
   int? id;
-  String? referenceNumber;
+  dynamic referenceNumber;
   String? address;
   double? latitude;
   double? longitude;
@@ -113,7 +108,7 @@ class Data {
   String? contract;
   String? invoice;
 
-  Data({
+  SingleOrderData({
     this.id,
     this.referenceNumber,
     this.address,
@@ -146,8 +141,8 @@ class Data {
     this.invoice,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) {
-    return Data(
+  factory SingleOrderData.fromJson(Map<String, dynamic> json) {
+    return SingleOrderData(
       id: json['id'],
       referenceNumber: json['reference_number'],
       address: json['address'],
@@ -155,9 +150,7 @@ class Data {
       longitude: double.tryParse(json['longitude']?.toString() ?? ''),
       orderStatus: json['order_status'],
       paidStatus: json['paid_status'],
-      status: json['status'] != null
-          ? Map<String, String>.from(json['status'])
-          : null,
+      status: json['status'] != null ? Map<String, String>.from(json['status']) : null,
       priceId: json['price_id'],
       duration: json['duration'],
       totalPrice: json['total_price'],
@@ -179,9 +172,7 @@ class Data {
       fcmToken: json['fcm_token'],
       contract: json['contract'],
       invoice: json['invoice'],
-      vehicles: (json['vehicles'] as List?)
-          ?.map((v) => VehicleModel.fromJson(v))
-          .toList(),
+      vehicles: (json['vehicles'] as List?)?.map((v) => VehicleModel.fromJson(v)).toList(),
     );
   }
 

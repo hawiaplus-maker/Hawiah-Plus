@@ -15,7 +15,7 @@ class OldOrderScreen extends StatelessWidget {
     required this.ordersData,
   }) : super(key: key);
 
-  final Data ordersData;
+  final SingleOrderData ordersData;
 
   @override
   Widget build(BuildContext context) {

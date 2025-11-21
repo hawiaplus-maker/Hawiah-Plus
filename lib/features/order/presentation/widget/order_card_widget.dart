@@ -8,7 +8,7 @@ import 'package:hawiah_client/features/order/presentation/model/orders_model.dar
 
 class OrderCardWidget extends StatelessWidget {
   const OrderCardWidget({super.key, required this.order});
-  final Data order;
+  final SingleOrderData order;
   @override
   Widget build(BuildContext context) {
     return Container(

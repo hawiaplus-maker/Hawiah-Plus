@@ -7,6 +7,7 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
+
 //!الشاشة دي مش مستخدمة يا أبوعمو
 class PaymentScreenArgs {
   final int catigoryId;
@@ -124,7 +125,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   priceId: widget.args.priceId,
                   addressId: widget.args.addressId,
                   fromDate: widget.args.fromDate,
-                  onSuccess: () {
+                  onSuccess: (v) {
                     NavigatorMethods.pushReplacementNamed(
                       context,
                       LayoutScreen.routeName,

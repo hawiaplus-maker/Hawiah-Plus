@@ -10,6 +10,7 @@ import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/presentation/model/nearby_service-provider_model.dart';
+import 'package:hawiah_client/features/order/presentation/model/order_details_model.dart';
 import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -40,14 +41,14 @@ class OrderCubit extends Cubit<OrderState> {
 // =================== Orders ====================
 
 // current orders
-  List<Data> currentOrders = [];
+  List<SingleOrderData> currentOrders = [];
   int currentPageCurrent = 1;
   int lastPageCurrent = 1;
   bool isLoadingCurrent = false;
   bool isLoadingMoreCurrent = false;
 
 // old orders
-  List<Data> oldOrders = [];
+  List<SingleOrderData> oldOrders = [];
   int currentPageOld = 1;
   int lastPageOld = 1;
   bool isLoadingOld = false;
@@ -205,7 +206,7 @@ class OrderCubit extends Cubit<OrderState> {
     required int priceId,
     required int addressId,
     required String fromDate,
-    required VoidCallback onSuccess,
+    required Function(OrderDetailsModel? order) onSuccess,
   }) async {
     NavigatorMethods.loading();
     FormData body = FormData.fromMap({
@@ -223,7 +224,8 @@ class OrderCubit extends Cubit<OrderState> {
       CommonMethods.showToast(
         message: response.data['message'] ?? "تم انشاء الطلب بنجاح",
       );
-      onSuccess.call();
+      onSuccess.call(
+          response.data['data'] != null ? OrderDetailsModel.fromJson(response.data['data']) : null);
     } else if (response.state == ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(
         message: tr(AppLocaleKey.youMustLogInFirst),

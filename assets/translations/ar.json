@@ -165,7 +165,7 @@
    "logout": "تسجيل خروج",
    "FrequentlyAskedQuestions": "الاسئلة الشائعة",
    "Contactus": "تواصل معنا",
-   "ordernumber": "طلب رقم:",
+   "ordernumber": "رقم الطلب : {}",
    "customerData": "بيانات العميل",
    "SendMessage": "إرسال رسالة ....",
    "WhatsApp": "واتساب",
@@ -213,7 +213,7 @@
    "Chooseaction": "اختر الإجراء",
    "Viewinvoice": "عرض الفاتورة",
    "Invoicecannotbedisplayed": "لا يمكن عرض الفاتورة",
-   "Downloadinvoice": "تحميل الفاتورة",
+
    "Emptythecontainer": "إفراغ الحاوية",
    "Contactthedriver": "تواصل مع السائق",
    "ContactSupport": "تواصل مع الدعم",
@@ -323,5 +323,45 @@
    "dayss": "يوم",
    "quickSelection": "اختيار سريع ",
    "continueToServiceProviders": "متابعة إلى مزودي الخدمة",
-   "notTrusted":"غير موثق"
+   "notTrusted":"غير موثق",
+   "threeDays":"3 أيام",
+   "week":"أسبوع",
+   "twoWeeks":"أسبوعين",
+   "month":"شهر",
+   "twoMonths":"شهرين",
+   "threeMonths":"3 أشهر",
+   "confirmOrder":"تأكيد الطلب",
+   "orderConfirmedSuccessfully":"تم تأكيد طلبك بنجاح!",
+   "invoice":"الفاتورة",
+   "contract":"العقد",
+   "viewAndDownloadOrderInvoice":"عرض وتحميل فاتورة الطلب",
+   "viewAndDownloadServiceContract":"عرض وتحميل عقد الخدمة",
+   "downloadInvoice":"تحميل الفاتورة",
+   "downloadContract":"تحميل العقد",
+   "viewInvoice":"عرض الفاتورة",
+   "viewContract":"عرض العقد",
+   "nextSteps":"الخطوات القادمة",
+   "youWillReceiveNotification":"ستتلقى إشعاراً عند تأكيد الطلب",
+   "youWillReceiveNotificationDescription":"سيتم تعيين سائق لطلبك خلال 24 ساعة",
+   "youWillReceiveNotificationDescription2":"يمكنك تتبع حالة الطلب من صفحة تفاصيل الطلب",
+   "viewOrderDetails":"عرض تفاصيل الطلب",
+   "backToHome":"العودة للرئيسية",
+   "orderSummary":"ملخص الطلب",
+   "orderDetails":"بيانات الطلب",
+   "hawiahType":"نوع الحاوية",
+   "serviceProvider":"مزود الخدمة",
+   "theAddress":"العنوان",
+   "rentalPeriority":"فترة الإستئجار",
+   "discountCoupon":"كوبون الخصم",
+   "enterDiscountCoupon":"أدخل كوبون الخصم",
+   "apply":"تطبيق",
+   "allTransactionsSecureAndEncrypted":"🔒 جميع المعاملات آمنة ومشفرة",
+   "paymentDetails":"تفاصيل الدفع",
+   "mainPrice":"السعر الأساسي",
+   "tax":"الضريبة ({}%)",
+   "totalPrice":"السعر الاجمالي",
+   "fromxToY":"من {} الى {}",
+   "payXSar":"دفع {} ريال"
+
+
 }

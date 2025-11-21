@@ -17,7 +17,7 @@ class PaymentButtonWidget extends StatelessWidget {
     required this.ordersData,
   });
 
-  final Data ordersData;
+  final SingleOrderData ordersData;
 
   @override
   Widget build(BuildContext context) {

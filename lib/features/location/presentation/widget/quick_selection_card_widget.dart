@@ -19,18 +19,18 @@ class QuickSelectionCard extends StatelessWidget {
       height: 36.h,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isSelected ? Color(0x802AD352) : AppColor.whiteColor,
-        borderRadius: BorderRadius.circular(12),
+        color: isSelected ? AppColor.lightMainAppColor.withAlpha(70) : AppColor.whiteColor,
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: isSelected ? AppColor.mainAppColor : AppColor.lightGreyColor,
+          width: isSelected ? 1.5 : 1,
         ),
       ),
       child: Center(
         child: Text(
           day,
           style: AppTextStyle.text14_400.copyWith(
-            color: isSelected ? AppColor.mainAppColor : AppColor.blackColor,
-          ),
+              color: isSelected ? AppColor.mainAppColor : AppColor.blackColor, height: -0.5),
         ),
       ),
     );

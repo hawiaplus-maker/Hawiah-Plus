@@ -1,11 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/features/home/presentation/model/categories_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/services_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/show_services_model.dart';
+import 'package:hawiah_client/features/location/presentation/model/quick_selection_card_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'home-state.dart';
@@ -28,6 +31,20 @@ class HomeCubit extends Cubit<HomeState> {
   DateTime? selectedDay;
   DateTime? rangeStart;
   DateTime? rangeEnd;
+
+  int selectedIndex = -1;
+  List<QuickSelectionCardModel> quickList = [
+    QuickSelectionCardModel(day: AppLocaleKey.threeDays.tr(), days: 3),
+    QuickSelectionCardModel(day: AppLocaleKey.week.tr(), days: 7),
+    QuickSelectionCardModel(day: AppLocaleKey.twoWeeks.tr(), days: 14),
+    QuickSelectionCardModel(day: AppLocaleKey.month.tr(), days: 30),
+    QuickSelectionCardModel(day: AppLocaleKey.twoMonths.tr(), days: 60),
+    QuickSelectionCardModel(day: AppLocaleKey.threeMonths.tr(), days: 90),
+  ];
+  void clearRanges() {
+    rangeStart = null;
+    rangeEnd = null;
+  }
 
   changeRebuild() {
     emit(HomeChange());

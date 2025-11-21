@@ -48,7 +48,7 @@ class CustomAppBar extends PreferredSize {
             title: title ??
                 Text(
                   titleText ?? "",
-                  style: AppTextStyle.text18_700.copyWith(
+                  style: AppTextStyle.text18_500.copyWith(
                     fontFamily: context.fontFamily(),
                   ),
                 ),

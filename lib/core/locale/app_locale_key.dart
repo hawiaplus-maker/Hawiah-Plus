@@ -104,7 +104,6 @@ class AppLocaleKey {
   static const String chooseAction = "Chooseaction";
   static const String viewInvoice = "Viewinvoice";
   static const String invoiceCannotBeDisplayed = "Invoicecannotbedisplayed";
-  static const String downloadInvoice = "Downloadinvoice";
   static const String emptytheContainer = "Emptythecontainer";
   static const String contactTheDriver = "Contactthedriver";
   static const String contactSupport = "ContactSupport";
@@ -218,4 +217,44 @@ class AppLocaleKey {
   static const String quickSelection = 'quickSelection';
   static const String continueToServiceProviders = 'continueToServiceProviders';
   static const String notTrusted = 'notTrusted';
+  static const String threeDays = 'threeDays';
+  static const String week = 'week';
+  static const String twoWeeks = 'twoWeeks';
+  static const String month = 'month';
+  static const String twoMonths = 'twoMonths';
+  static const String threeMonths = 'threeMonths';
+  static const String viewOrderDetails = 'viewOrderDetails';
+  static const String orderConfirmedSuccessfully = 'orderConfirmedSuccessfully';
+  static const String confirmOrder = 'confirmOrder';
+  static const String youWillReceiveNotificationDescription2 =
+      'youWillReceiveNotificationDescription2';
+  static const String youWillReceiveNotificationDescription =
+      'youWillReceiveNotificationDescription';
+  static const String youWillReceiveNotification = 'youWillReceiveNotification';
+  static const String nextSteps = 'nextSteps';
+  static const String downloadContract = 'downloadContract';
+  static const String downloadInvoice = 'downloadInvoice';
+  static const String viewAndDownloadServiceContract = 'viewAndDownloadServiceContract';
+  static const String viewAndDownloadOrderInvoice = 'viewAndDownloadOrderInvoice';
+  static const String contract = 'contract';
+  static const String invoice = 'invoice';
+  static const String ordernumber = 'ordernumber';
+  static const String backToHome = 'backToHome';
+
+  static const String viewContract = 'viewContract';
+  static const String allTransactionsSecureAndEncrypted = 'allTransactionsSecureAndEncrypted';
+  static const String apply = 'apply';
+  static const String enterDiscountCoupon = 'enterDiscountCoupon';
+  static const String discountCoupon = 'discountCoupon';
+  static const String rentalPeriority = 'rentalPeriority';
+  static const String theAddress = 'theAddress';
+  static const String serviceProvider = 'serviceProvider';
+  static const String hawiahType = 'hawiahType';
+  static const String orderSummary = 'orderSummary';
+  static const String paymentDetails = 'paymentDetails';
+  static const String mainPrice = 'mainPrice';
+  static const String tax = 'tax';
+  static const String totalPrice = 'totalPrice';
+  static const String fromxToY = 'fromxToY';
+  static const String payXSar = 'payXSar';
 }

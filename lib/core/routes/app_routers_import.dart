@@ -7,8 +7,10 @@ import 'package:hawiah_client/features/authentication/presentation/screens/verif
 import 'package:hawiah_client/features/chat/presentation/screens/chat-screen.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/single-chat-screen.dart';
 import 'package:hawiah_client/features/home/execution/screen/nearby_service_provider_screen.dart';
+import 'package:hawiah_client/features/home/execution/screen/order_review_detailes.dart';
 import 'package:hawiah_client/features/home/execution/screen/payment-screen.dart';
 import 'package:hawiah_client/features/home/execution/screen/request_hawia_screen.dart';
+import 'package:hawiah_client/features/home/execution/screen/success_order_confirmation_screen.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/add-new-location-screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/all_addresses_screen.dart';
@@ -23,6 +25,5 @@ import 'package:hawiah_client/features/profile/presentation/screens/privacy-poli
 import 'package:hawiah_client/features/profile/presentation/screens/support_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/terms-and-conditions.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
-import 'package:timeago/timeago.dart';
 
 part 'app_routers.dart';

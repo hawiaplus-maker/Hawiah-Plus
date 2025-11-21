@@ -99,4 +99,12 @@ class AppImages {
   static const String bowArrowIcon = 'assets/svg/bowArrowIcon.svg';
 
   static const String calendar = 'assets/svg/calendar-fold.svg';
+  static const String successCheckImage = 'assets/images/successCheckImage.png';
+  static const String contractImage = 'assets/images/contractImage.png';
+  static const String invoiceImage = 'assets/images/invoiceImage.png';
+  static const String locationMainImage = 'assets/images/locationMainImage.png';
+  static const String contactMainImage = 'assets/images/contactMainImage.png';
+  static const String calednderMainImage = 'assets/images/calednderMainImage.png';
+  static const String boxMainImage = 'assets/images/boxMainImage.png';
+  static const String copunImage = 'assets/images/copunImage.png';
 }

@@ -5,7 +5,7 @@ import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/execution/screen/request_hawia_screen.dart';
-import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
+import 'package:hawiah_client/features/home/execution/screen/success_order_confirmation_screen.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 
 import '../../presentation/controllers/home-cubit/home-cubit.dart';
@@ -33,10 +33,9 @@ class RequestHawiahExecuteOrderWidget extends StatelessWidget {
             priceId: args.nearbyServiceProviderModel.id!,
             addressId: args.address.id!,
             fromDate: DateFormat('yyyy-MM-dd', 'en').format(homeCubit.rangeStart ?? DateTime.now()),
-            onSuccess: () => NavigatorMethods.pushReplacementNamed(
-              context,
-              LayoutScreen.routeName,
-            ),
+            onSuccess: (order) => NavigatorMethods.pushNamed(
+                context, SuccessOrderConfirmationScreen.routeName,
+                arguments: order),
           );
         },
       ),

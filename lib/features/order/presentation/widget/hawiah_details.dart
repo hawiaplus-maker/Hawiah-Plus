@@ -8,10 +8,9 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
 import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
 
-
 class HawiahDetails extends StatelessWidget {
   const HawiahDetails({super.key, required this.ordersDate});
-  final Data ordersDate;
+  final SingleOrderData ordersDate;
   @override
   Widget build(BuildContext context) {
     return Padding(

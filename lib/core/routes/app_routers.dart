@@ -125,6 +125,18 @@ class AppRouters {
         return MaterialPageRoute(
           builder: (_) => const TimePeriodScreen(),
         );
+      case SuccessOrderConfirmationScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => SuccessOrderConfirmationScreen(
+            ordersModel: args,
+          ),
+        );
+      case OrderReviewDetailes.routeName:
+        return MaterialPageRoute(
+          builder: (_) => OrderReviewDetailes(
+            ordersModel: args,
+          ),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const ValidateMobileScreen(),

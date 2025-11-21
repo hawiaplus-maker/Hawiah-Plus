@@ -8,7 +8,7 @@ import 'package:hawiah_client/features/order/presentation/model/orders_model.dar
 
 class OldDriverInfoSection extends StatelessWidget {
   const OldDriverInfoSection({required this.data});
-  final Data data;
+  final SingleOrderData data;
 
   @override
   Widget build(BuildContext context) {

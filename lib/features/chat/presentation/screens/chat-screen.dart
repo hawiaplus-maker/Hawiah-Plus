@@ -17,7 +17,7 @@ import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.
 
 class AllChatsScreen extends StatefulWidget {
   const AllChatsScreen({super.key});
-  static const String routeName = '/support-screen';
+  static const String routeName = '/AllChatsScreen';
   @override
   State<AllChatsScreen> createState() => _AllChatsScreenState();
 }

@@ -16,7 +16,7 @@ class CurrentOrderScreen extends StatefulWidget {
     Key? key,
     required this.ordersData,
   }) : super(key: key);
-  final Data ordersData;
+  final SingleOrderData ordersData;
 
   @override
   State<CurrentOrderScreen> createState() => _CurrentOrderScreenState();

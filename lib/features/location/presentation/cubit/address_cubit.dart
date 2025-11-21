@@ -11,7 +11,6 @@ import 'package:hawiah_client/features/location/presentation/cubit/address_state
 import 'package:hawiah_client/features/location/presentation/model/address_model.dart';
 import 'package:hawiah_client/features/location/presentation/model/city_model.dart';
 import 'package:hawiah_client/features/location/presentation/model/neighborhood_model.dart';
-import 'package:hawiah_client/features/location/presentation/model/quick_selection_card_model.dart';
 
 class AddressCubit extends Cubit<AddressState> {
   static AddressCubit get(BuildContext context) => BlocProvider.of(context);
@@ -198,6 +197,4 @@ class AddressCubit extends Cubit<AddressState> {
       emit(AddressUpdate());
     }
   }
-
- 
 }

@@ -19,7 +19,7 @@ class DriverCardWidget extends StatelessWidget {
     required this.ordersData,
   });
 
-  final Data ordersData;
+  final SingleOrderData ordersData;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,6 @@ class DriverCardWidget extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _buildDriverInfo(String driverName, dynamic vehicle) {
     return Row(
