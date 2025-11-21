@@ -16,19 +16,25 @@ class BestsellerListWidget extends StatefulWidget {
 
 class _BestsellerListWidgetState extends State<BestsellerListWidget> {
   bool expanded = false;
+  void initState() {
+    super.initState();
+
+    final homeCubit = HomeCubit.get(context);
+    homeCubit.getBestSeller();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
       final homeCubit = HomeCubit.get(context);
 
-      final list = homeCubit.categories;
+      final list = homeCubit.bestSeller;
       final int itemCount = expanded ? list.length : list.length.clamp(0, 4);
 
       return ApiResponseWidget(
-        apiResponse: homeCubit.categoriesResponse,
-        onReload: () async => homeCubit.getCategories(),
-        isEmpty: homeCubit.categories.isEmpty,
+        apiResponse: homeCubit.bestSellerResponse,
+        onReload: () async => homeCubit.getBestSeller(),
+        isEmpty: homeCubit.bestSeller.isEmpty,
         loadingWidget: Padding(
           padding: const EdgeInsets.all(14.0),
           child: GridView.builder(
@@ -58,7 +64,10 @@ class _BestsellerListWidgetState extends State<BestsellerListWidget> {
           ),
           itemBuilder: (context, index) {
             final item = list[index];
-            return BestSellerWidgt(item: item);
+            return BestSellerWidgt(
+              item: item,
+              index: index,
+            );
           },
         ),
       );

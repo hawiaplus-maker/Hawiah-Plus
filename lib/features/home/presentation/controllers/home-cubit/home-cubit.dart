@@ -154,8 +154,9 @@ class HomeCubit extends Cubit<HomeState> {
     _categories = [];
     emit(HomeChange());
 
-    _categoriesResponse = await ApiHelper.instance
-        .get(Urls.categories, queryParameters: {if (inHome == true) "show_on_main_page": 1});
+    _categoriesResponse = await ApiHelper.instance.get(Urls.categories, queryParameters: {
+      if (inHome == true) "show_on_main_page": 1,
+    });
 
     if (categoriesResponse.state == ResponseState.complete && _categoriesResponse.data != null) {
       Iterable iterable = _categoriesResponse.data['message'];
@@ -165,6 +166,44 @@ class HomeCubit extends Cubit<HomeState> {
       emit(HomeChange());
     }
   }
+
+  void initialbestSeller() {
+    _bestSellerResponse = ApiResponse(
+      state: ResponseState.sleep,
+      data: null,
+    );
+    _bestSeller = [];
+    emit(HomeChange());
+  }
+
+  ApiResponse _bestSellerResponse = ApiResponse(
+    state: ResponseState.sleep,
+    data: null,
+  );
+  ApiResponse get bestSellerResponse => _bestSellerResponse;
+
+  List<SingleCategoryModel> _bestSeller = [];
+  List<SingleCategoryModel> get bestSeller => _bestSeller;
+  Future<void> getBestSeller({bool? inHome}) async {
+    _bestSellerResponse = ApiResponse(
+      state: ResponseState.loading,
+      data: null,
+    );
+    _bestSeller = [];
+    emit(HomeChange());
+
+    _bestSellerResponse =
+        await ApiHelper.instance.get(Urls.categories, queryParameters: {"best_seller": 1});
+
+    if (bestSellerResponse.state == ResponseState.complete && _bestSellerResponse.data != null) {
+      Iterable iterable = _bestSellerResponse.data['message'];
+      _bestSeller = iterable.map((e) => SingleCategoryModel.fromJson(e)).toList();
+      emit(HomeChange());
+    } else if (_bestSellerResponse.state == ResponseState.unauthorized) {
+      emit(HomeChange());
+    }
+  }
+
   //*======================== in home category ===================
 
   void initialInHomeCategories() {

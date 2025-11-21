@@ -104,8 +104,8 @@ class _RequestHawiahScreenState extends State<RequestHawiahScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomTextField(
-                        onTap: () => DateMethods.pickDate(context, initialDate: DateTime.now(),
-                            onSuccess: (v) {
+                        onTap: () => DateMethods.pickDate(context,
+                            initialDate: DateTime.now(), firstDate: DateTime.now(), onSuccess: (v) {
                           homeCubit.rangeStart = v;
                           setState(() {});
                         }),

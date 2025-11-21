@@ -6,19 +6,25 @@ import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_im
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/execution/screen/category_detailes_screen.dart';
+import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/model/categories_model.dart';
+import 'package:hawiah_client/features/location/presentation/screens/choose_address_screen.dart';
 
 class BestSellerWidgt extends StatelessWidget {
   const BestSellerWidgt({
     super.key,
     required this.item,
+    required this.index,
   });
 
   final SingleCategoryModel item;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
+    final homeCubit = HomeCubit.get(context);
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -32,7 +38,7 @@ class BestSellerWidgt extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColor.whiteColor,
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
@@ -57,7 +63,7 @@ class BestSellerWidgt extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
             Text(
-              'حاوية نفايات 10 متر مكعب' ?? '',
+              item.title ?? '',
               style: AppTextStyle.text12_500,
             ),
             SizedBox(height: 10.h),
@@ -86,7 +92,15 @@ class BestSellerWidgt extends StatelessWidget {
                     .copyWith(color: AppColor.whiteColor, fontWeight: FontWeight.bold),
               ),
               color: AppColor.mainAppColor,
-              onPressed: () {},
+              onPressed: () {
+                NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
+                    arguments: ChooseAddressScreenArgs(
+                      showCategoriesModel: homeCubit.showCategories!,
+                      catigoryId: item.id ?? 0,
+                      serviceProviderId:
+                          homeCubit.showCategories?.message?.services?[index].id ?? 0,
+                    ));
+              },
             )
           ],
         ),
