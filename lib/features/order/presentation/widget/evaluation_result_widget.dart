@@ -36,8 +36,8 @@ Future<EvaluationResult?> showEvaluationDialog(BuildContext context) {
               padding: EdgeInsets.symmetric(horizontal: 4.w),
               child: Icon(
                 filled ? Icons.star : Icons.star_border,
-                size: 32.sp,
-                color: filled ? AppColor.warning400 : AppColor.greyColor,
+                size: 35.sp,
+                color: filled ? AppColor.warning400 : AppColor.hintColor.withAlpha(50),
               ),
             ),
           );
@@ -45,6 +45,7 @@ Future<EvaluationResult?> showEvaluationDialog(BuildContext context) {
 
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          backgroundColor: AppColor.whiteColor,
           title: Column(
             children: [
               Align(
@@ -54,7 +55,8 @@ Future<EvaluationResult?> showEvaluationDialog(BuildContext context) {
                   child: Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle, border: Border.all(color: AppColor.blackColor)),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColor.blackColor, width: 2)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
