@@ -67,7 +67,9 @@ class _CouponeWidgetState extends State<CouponeWidget> {
                   if (_formkey.currentState!.validate()) {
                     context.read<OrderCubit>().applyCoupon(
                           code: controller.text,
-                          onSuccess: () {},
+                          onSuccess: () {
+                            controller.clear();
+                          },
                         );
                   }
                 },
