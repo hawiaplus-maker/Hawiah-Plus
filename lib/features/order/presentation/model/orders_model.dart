@@ -20,7 +20,7 @@ class OrdersModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> map = {};
+    final map = <String, dynamic>{};
     map['success'] = success;
     map['message'] = message;
     if (data != null) map['data'] = data!.toJson();
@@ -42,7 +42,7 @@ class OrdersData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> map = {};
+    final map = <String, dynamic>{};
     if (data != null) map['data'] = data!.map((v) => v.toJson()).toList();
     if (pagination != null) map['pagination'] = pagination!.toJson();
     return map;
@@ -67,7 +67,7 @@ class Pagination {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> map = {};
+    final map = <String, dynamic>{};
     map['current_page'] = currentPage;
     map['last_page'] = lastPage;
     map['per_page'] = perPage;
@@ -84,7 +84,7 @@ class SingleOrderData {
   double? longitude;
   int? orderStatus;
   int? paidStatus;
-  Map<String, String>? status;
+  Map<String, String>? status; // سيبها كما هي
   int? priceId;
   int? duration;
   String? totalPrice;
@@ -98,15 +98,21 @@ class SingleOrderData {
   String? driver;
   int? driverId;
   String? driverMobile;
+  String? serviceProvider;
+  String? serviceProviderMobile;
   List<VehicleModel>? vehicles;
   String? otp;
   String? user;
   int? userId;
   String? userMobile;
   String? userImage;
+  String? driverFcmToken;
+  String? userFcmToken;
+  String? serviceProviderFcmToken;
   String? fcmToken;
   String? contract;
   String? invoice;
+  String? support;
 
   SingleOrderData({
     this.id,
@@ -130,15 +136,21 @@ class SingleOrderData {
     this.driver,
     this.driverId,
     this.driverMobile,
+    this.serviceProvider,
+    this.serviceProviderMobile,
     this.vehicles,
     this.otp,
     this.user,
     this.userId,
     this.userMobile,
     this.userImage,
+    this.driverFcmToken,
+    this.userFcmToken,
+    this.serviceProviderFcmToken,
     this.fcmToken,
     this.contract,
     this.invoice,
+    this.support,
   });
 
   factory SingleOrderData.fromJson(Map<String, dynamic> json) {
@@ -164,20 +176,26 @@ class SingleOrderData {
       driver: json['driver'],
       driverId: json['driver_id'],
       driverMobile: json['driver_mobile'],
+      serviceProvider: json['service_provider'],
+      serviceProviderMobile: json['service_provider_mobile'],
+      vehicles: (json['vehicles'] as List?)?.map((v) => VehicleModel.fromJson(v)).toList(),
       otp: json['otp'],
       user: json['user'],
       userId: json['user_id'],
       userMobile: json['user_mobile'],
       userImage: json['user_image'],
+      driverFcmToken: json['driver_fcm_token'],
+      userFcmToken: json['user_fcm_token'],
+      serviceProviderFcmToken: json['service_provider_fcm_token'],
       fcmToken: json['fcm_token'],
       contract: json['contract'],
       invoice: json['invoice'],
-      vehicles: (json['vehicles'] as List?)?.map((v) => VehicleModel.fromJson(v)).toList(),
+      support: json['support'],
     );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> map = {};
+    final map = <String, dynamic>{};
     map['id'] = id;
     map['reference_number'] = referenceNumber;
     map['address'] = address;
@@ -199,17 +217,21 @@ class SingleOrderData {
     map['driver'] = driver;
     map['driver_id'] = driverId;
     map['driver_mobile'] = driverMobile;
+    map['service_provider'] = serviceProvider;
+    map['service_provider_mobile'] = serviceProviderMobile;
+    if (vehicles != null) map['vehicles'] = vehicles!.map((v) => v.toJson()).toList();
     map['otp'] = otp;
     map['user'] = user;
     map['user_id'] = userId;
     map['user_mobile'] = userMobile;
     map['user_image'] = userImage;
+    map['driver_fcm_token'] = driverFcmToken;
+    map['user_fcm_token'] = userFcmToken;
+    map['service_provider_fcm_token'] = serviceProviderFcmToken;
     map['fcm_token'] = fcmToken;
     map['contract'] = contract;
     map['invoice'] = invoice;
-    if (vehicles != null) {
-      map['vehicles'] = vehicles!.map((v) => v.toJson()).toList();
-    }
+    map['support'] = support;
     return map;
   }
 }
@@ -251,26 +273,5 @@ class VehicleModel {
       'car_model': carModel,
       'car_year': carYear,
     };
-  }
-}
-
-class Status {
-  String? en;
-  String? ar;
-
-  Status({this.en, this.ar});
-
-  factory Status.fromJson(Map<String, dynamic> json) {
-    return Status(
-      en: json['en'],
-      ar: json['ar'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> map = {};
-    map['en'] = en;
-    map['ar'] = ar;
-    return map;
   }
 }

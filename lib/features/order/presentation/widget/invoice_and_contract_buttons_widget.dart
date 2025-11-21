@@ -20,24 +20,24 @@ class InvoiceAndContractButtonsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (ordersData.invoice != null)
-          _buildPdfButton(
-            context,
-            label: AppLocaleKey.downloadPDF.tr(),
-            url: ordersData.invoice!,
-            backgroundColor: const Color(0xff1A3C98),
-            textColor: Colors.white,
-          ),
-        const SizedBox(height: 10),
         if (ordersData.contract != null)
           _buildPdfButton(
             context,
             label: AppLocaleKey.downloadThePDFContract.tr(),
             url: ordersData.contract!,
-            backgroundColor: Colors.white,
-            textColor: const Color(0xff1A3C98),
-            borderSide: const BorderSide(color: Color(0xff1A3C98)),
+            backgroundColor: AppColor.secondAppColor,
+            textColor: AppColor.whiteColor,
           ),
+        const SizedBox(height: 10),
+        if (ordersData.invoice != null)
+          _buildPdfButton(
+            context,
+            label: AppLocaleKey.downloadPDF.tr(),
+            url: ordersData.invoice!,
+            backgroundColor: AppColor.mainAppColor,
+            textColor: AppColor.whiteColor,
+          ),
+        const SizedBox(height: 10),
       ],
     );
   }

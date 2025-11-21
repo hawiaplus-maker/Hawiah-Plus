@@ -2,13 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
+import 'package:gap/gap.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/core/utils/url_luncher_methods.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/single-chat-screen.dart';
 import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
@@ -27,22 +28,23 @@ class DriverCardWidget extends StatelessWidget {
     final driverName = ordersData.driver ?? '';
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
-        borderRadius: BorderRadius.circular(12),
+        color: AppColor.whiteColor,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: AppColor.mainAppColor, width: .3),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildDriverInfo(driverName, vehicle),
-          SizedBox(height: 16.h),
-          _buildMessageButton(context, driverName),
+          Text(AppLocaleKey.agentInfo.tr(), style: AppTextStyle.text16_700),
+          _buildDriverInfo(driverName, vehicle, context),
         ],
       ),
     );
   }
 
-  Widget _buildDriverInfo(String driverName, dynamic vehicle) {
+  Widget _buildDriverInfo(String driverName, dynamic vehicle, BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -52,37 +54,104 @@ class DriverCardWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(driverName, style: AppTextStyle.text16_700),
+                Text("${AppLocaleKey.name.tr()}:${driverName}", style: AppTextStyle.text16_400),
                 if (vehicle != null) ...[
                   SizedBox(height: 10.h),
-                  Text(
-                    "${vehicle.plateLetters} ${vehicle.plateNumbers}",
-                    style: AppTextStyle.text16_700,
-                  ),
-                  SizedBox(height: 10.h),
-                  Text(
-                    "${vehicle.carModel} ${vehicle.carType} ${vehicle.carBrand}",
-                    style: AppTextStyle.text14_600.copyWith(color: const Color(0xff545454)),
+                  Row(
+                    children: [
+                      Text("${AppLocaleKey.vehicleNumber.tr()}: ", style: AppTextStyle.text16_400),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: Color(0xffFF8B7B).withAlpha(50),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text(
+                          "${vehicle.plateLetters} ${vehicle.plateNumbers}",
+                          style: AppTextStyle.text16_500.copyWith(color: Color(0xffFF8B7B)),
+                        ),
+                      )
+                    ],
                   ),
                 ],
+                Gap(20.h),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: AppColor.mainAppColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(AppImages.phoneSupport,
+                          height: 14.h, width: 14.w, fit: BoxFit.cover),
+                      Gap(5.w),
+                      Text(AppLocaleKey.contactDriver.tr(),
+                          style: AppTextStyle.text14_500.copyWith(color: AppColor.whiteColor)),
+                    ],
+                  ),
+                ),
+                Gap(10.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () =>
+                            UrlLauncherMethods.launchURL(ordersData.driverMobile, isWhatsapp: true),
+                        child: Container(
+                          height: 45.h,
+                          decoration: BoxDecoration(
+                            color: AppColor.secondAppColor,
+                            border: Border.all(color: AppColor.mainAppColor, width: 1.5),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(AppImages.whatsappSupport, height: 14.h, width: 14.w),
+                              Gap(5.w),
+                              Text(AppLocaleKey.whatsab.tr(),
+                                  style: AppTextStyle.text16_600
+                                      .copyWith(color: AppColor.mainAppColor)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Gap(10.w),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _navigateToChat(context, driverName),
+                        child: Container(
+                          height: 45.h,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.mainAppColor, width: 1.5),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(AppImages.chats, height: 14.h, width: 14.w),
+                              Gap(5.w),
+                              Text(AppLocaleKey.chats.tr(),
+                                  style: AppTextStyle.text16_600
+                                      .copyWith(color: AppColor.mainAppColor)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
         ),
-        Image.asset(AppImages.hawiahDriver, height: 100, width: 100),
       ],
-    );
-  }
-
-  ///  Message button section
-  Widget _buildMessageButton(BuildContext context, String driverName) {
-    return CustomButton(
-      width: MediaQuery.of(context).size.width / 2.5,
-      text: AppLocaleKey.sendMessage.tr(),
-      style: AppTextStyle.text14_500,
-      color: AppColor.lightGreyColor,
-      suffixIcon: Image.asset(AppImages.send, height: 30.h, width: 30.w),
-      onPressed: () => _navigateToChat(context, driverName),
     );
   }
 
