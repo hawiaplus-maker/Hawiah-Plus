@@ -12,7 +12,7 @@ import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/
 import 'package:hawiah_client/features/home/presentation/model/categories_model.dart';
 import 'package:hawiah_client/features/location/presentation/screens/choose_address_screen.dart';
 
-class BestSellerWidgt extends StatelessWidget {
+class BestSellerWidgt extends StatefulWidget {
   const BestSellerWidgt({
     super.key,
     required this.item,
@@ -23,6 +23,11 @@ class BestSellerWidgt extends StatelessWidget {
   final int index;
 
   @override
+  State<BestSellerWidgt> createState() => _BestSellerWidgtState();
+}
+
+class _BestSellerWidgtState extends State<BestSellerWidgt> {
+  @override
   Widget build(BuildContext context) {
     final homeCubit = HomeCubit.get(context);
     return GestureDetector(
@@ -30,7 +35,7 @@ class BestSellerWidgt extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CategoryDetailsScreen(id: item.id ?? 0),
+            builder: (context) => CategoryDetailsScreen(id: widget.item.id ?? 0),
           ),
         );
       },
@@ -57,13 +62,13 @@ class BestSellerWidgt extends StatelessWidget {
               child: CustomNetworkImage(
                 height: 95.h,
                 width: 150.w,
-                imageUrl: item.image ?? "",
+                imageUrl: widget.item.image ?? "",
                 fit: BoxFit.contain,
               ),
             ),
             SizedBox(height: 20.h),
             Text(
-              item.title ?? '',
+              widget.item.title ?? '',
               style: AppTextStyle.text12_500,
             ),
             SizedBox(height: 10.h),
@@ -93,13 +98,18 @@ class BestSellerWidgt extends StatelessWidget {
               ),
               color: AppColor.mainAppColor,
               onPressed: () {
-                NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
-                    arguments: ChooseAddressScreenArgs(
-                      showCategoriesModel: homeCubit.showCategories!,
-                      catigoryId: item.id ?? 0,
-                      serviceProviderId:
-                          homeCubit.showCategories?.message?.services?[index].id ?? 0,
-                    ));
+                homeCubit.getshowCategories(
+                  widget.item.id ?? 0,
+                  onSuccess: () {
+                    NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
+                        arguments: ChooseAddressScreenArgs(
+                          showCategoriesModel: homeCubit.showCategories!,
+                          catigoryId: widget.item.id ?? 0,
+                          serviceProviderId:
+                              homeCubit.showCategories?.message?.services?[widget.index].id ?? 0,
+                        ));
+                  },
+                );
               },
             )
           ],
