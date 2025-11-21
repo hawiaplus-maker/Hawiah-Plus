@@ -278,12 +278,40 @@ class OrderCubit extends Cubit<OrderState> {
     required Function(String) onSuccess,
   }) async {
     NavigatorMethods.loading();
+
     final response = await ApiHelper.instance.get(
       Urls.payment(orderId),
     );
+
     NavigatorMethods.loadingOff();
+
     if (response.state == ResponseState.complete) {
-      onSuccess.call(response.data['payment_url']);
+      final paymentUrl = response.data['payment_url'];
+
+      if (paymentUrl == null || paymentUrl is! String) {
+        CommonMethods.showError(
+          message: "خطأ في رابط الدفع من السيرفر",
+        );
+        return;
+      }
+
+      final url = paymentUrl.trim();
+
+      final bool looksLikeJsonError = url.startsWith("{") && url.endsWith("}");
+
+      if (looksLikeJsonError) {
+        CommonMethods.showError(
+          message: "خطأ في الدفع: ${url}",
+        );
+        return;
+      }
+
+      if (!url.startsWith("http")) {
+        CommonMethods.showError(message: "رابط الدفع غير صالح");
+        return;
+      }
+
+      onSuccess.call(url);
     } else if (response.state == ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(
         message: tr(AppLocaleKey.youMustLogInFirst),
@@ -291,6 +319,37 @@ class OrderCubit extends Cubit<OrderState> {
     } else {
       CommonMethods.showError(
         message: response.data['message'] ?? 'حدث خطاء',
+        apiResponse: response,
+      );
+    }
+  }
+
+  // =================== applay coupon ====================
+  Future<void> applyCoupon({
+    required String code,
+    required VoidCallback onSuccess,
+  }) async {
+    NavigatorMethods.loading();
+    FormData body = FormData.fromMap({
+      'code': code,
+    });
+    final response = await ApiHelper.instance.post(
+      Urls.applayCoupon,
+      body: body,
+    );
+    NavigatorMethods.loadingOff();
+    if (response.state == ResponseState.complete) {
+      CommonMethods.showToast(
+        message: response.data['message'] ?? "تم  بنجاح",
+      );
+      onSuccess.call();
+    } else if (response.state == ResponseState.unauthorized) {
+      CommonMethods.showAlertDialog(
+        message: tr(AppLocaleKey.youMustLogInFirst),
+      );
+    } else {
+      CommonMethods.showError(
+        message: response.data['message'] ?? 'حدث خطأ',
         apiResponse: response,
       );
     }

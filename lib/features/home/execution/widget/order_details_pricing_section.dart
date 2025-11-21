@@ -10,6 +10,11 @@ class OrderDetailsPricingSection extends StatelessWidget {
   final OrderDetailsModel ordersModel;
   @override
   Widget build(BuildContext context) {
+    final rawValue = ordersModel.totalPrice.toString().replaceAll(',', '');
+    final double mainPrice = double.tryParse(rawValue) ?? 0.0;
+
+    final double tax = mainPrice * 0.15;
+    final double total = mainPrice + tax;
     return Container(
       padding: const EdgeInsets.all(10),
       width: double.infinity,
@@ -26,7 +31,7 @@ class OrderDetailsPricingSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocaleKey.mainPrice.tr(), style: AppTextStyle.text16_400),
-              Text(AppLocaleKey.sar.tr(args: [ordersModel.totalPrice.toString()]),
+              Text(AppLocaleKey.sar.tr(args: [mainPrice.toString()]),
                   style: AppTextStyle.text16_400),
             ],
           ),
@@ -35,8 +40,7 @@ class OrderDetailsPricingSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocaleKey.tax.tr(args: [15.toString()]), style: AppTextStyle.text16_400),
-              Text(AppLocaleKey.sar.tr(args: [ordersModel.totalPrice.toString()]),
-                  style: AppTextStyle.text16_400),
+              Text(AppLocaleKey.sar.tr(args: [tax.toString()]), style: AppTextStyle.text16_400),
             ],
           ),
           Divider(),
@@ -44,7 +48,7 @@ class OrderDetailsPricingSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocaleKey.totalPrice.tr(), style: AppTextStyle.text16_400),
-              Text(AppLocaleKey.sar.tr(args: [ordersModel.totalPrice.toString()]),
+              Text(AppLocaleKey.sar.tr(args: [total.toString()]),
                   style: AppTextStyle.text16_400.copyWith(color: AppColor.mainAppColor)),
             ],
           ),

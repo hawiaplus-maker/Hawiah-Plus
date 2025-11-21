@@ -1,13 +1,20 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/execution/widget/coupone_widget.dart';
 import 'package:hawiah_client/features/home/execution/widget/order_detailes_widget.dart';
 import 'package:hawiah_client/features/home/execution/widget/order_details_pricing_section.dart';
 import 'package:hawiah_client/features/order/presentation/model/order_details_model.dart';
+import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
+import 'package:hawiah_client/features/order/presentation/screens/payment_web_view.dart';
 
 class OrderReviewDetailes extends StatelessWidget {
   const OrderReviewDetailes({super.key, required this.ordersModel});
@@ -15,6 +22,11 @@ class OrderReviewDetailes extends StatelessWidget {
   final OrderDetailsModel ordersModel;
   @override
   Widget build(BuildContext context) {
+    final rawValue = ordersModel.totalPrice.toString().replaceAll(',', '');
+    final double mainPrice = double.tryParse(rawValue) ?? 0.0;
+
+    final double tax = mainPrice * 0.15;
+    final double total = mainPrice + tax;
     return Scaffold(
       appBar: CustomAppBar(context, titleText: AppLocaleKey.orderSummary.tr()),
       body: SingleChildScrollView(
@@ -33,21 +45,44 @@ class OrderReviewDetailes extends StatelessWidget {
             SizedBox(
               height: 15,
             ),
-            SizedBox(
-              width: double.infinity,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                color: AppColor.mainAppColor,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      AppLocaleKey.payXSar.tr(
-                        args: [ordersModel.totalPrice.toString()],
+            GestureDetector(
+              onTap: () {
+                log("get payment link");
+                context.read<OrderCubit>().getPaymentLink(
+                    orderId: ordersModel.id!,
+                    onSuccess: (url) {
+                      if (url.contains('already exists') == true) {
+                        CommonMethods.showError(message: url);
+                      } else {
+                        NavigatorMethods.pushNamed(context, CustomPaymentWebViewScreen.routeName,
+                            arguments: PaymentArgs(
+                                url: url,
+                                onFailed: () {
+                                  CommonMethods.showError(message: AppLocaleKey.paymentFailed.tr());
+                                },
+                                onSuccess: () {
+                                  CommonMethods.showToast(
+                                      message: AppLocaleKey.paymentSuccess.tr());
+                                }));
+                      }
+                    });
+              },
+              child: SizedBox(
+                width: double.infinity,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  color: AppColor.mainAppColor,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        AppLocaleKey.payXSar.tr(
+                          args: [total.toString()],
+                        ),
+                        style: AppTextStyle.text18_700.copyWith(color: AppColor.whiteColor),
                       ),
-                      style: AppTextStyle.text18_700.copyWith(color: AppColor.whiteColor),
                     ),
                   ),
                 ),
