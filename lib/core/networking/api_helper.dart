@@ -15,6 +15,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../extension/context_extension.dart';
 import '../utils/common_methods.dart';
 
+// -------------------- ENUM --------------------
 enum ResponseState {
   sleep,
   offline,
@@ -28,14 +29,15 @@ enum ResponseState {
 
 class ApiResponse {
   ResponseState state;
-
   dynamic data;
+
   ApiResponse({
     required this.state,
     required this.data,
   });
 }
 
+// -------------------- API HELPER --------------------
 class ApiHelper {
   static ApiHelper? _instance;
 
@@ -43,51 +45,53 @@ class ApiHelper {
 
   static ApiHelper get instance {
     _instance ??= ApiHelper._();
-
     return _instance!;
   }
 
-  MediaType appMediaType(String path) {
-    List<String> list = "${lookupMimeType(path)}".split('/');
+  MediaType appMediaType(String filePath) {
+    var list = "${lookupMimeType(filePath)}".split('/');
     return MediaType(
-      '${list.firstOrNull}',
-      '${list.lastOrNull}',
+      list.firstOrNull ?? 'application',
+      list.lastOrNull ?? 'octet-stream',
     );
   }
 
-  final Dio _dio = Dio()
-    ..interceptors.addAll(kDebugMode
-        ? [
-            PrettyDioLogger(
-              requestHeader: true,
-              requestBody: true,
-              responseBody: true,
-              responseHeader: false,
-              compact: false,
-              error: true,
-              request: true,
-            ),
-          ]
-        : []);
+  // -------------------- DIO SETUP --------------------
+  final Dio _dio = Dio(
+    BaseOptions(
+      connectTimeout: Duration(seconds: 7),
+      receiveTimeout: Duration(seconds: 10),
+      sendTimeout: Duration(seconds: 10),
+    ),
+  )
+    ..interceptors.add(ConnectionInterceptor())
+    ..interceptors.addAll(
+      kDebugMode
+          ? [
+              PrettyDioLogger(
+                request: true,
+                requestHeader: true,
+                requestBody: true,
+                responseBody: true,
+                responseHeader: false,
+                compact: false,
+              ),
+            ]
+          : [],
+    );
 
-  Options _options(
-    Map<String, String>? headers,
-    bool hasToken,
-  ) {
+  // -------------------- COMMON OPTIONS --------------------
+  Options _options(Map<String, String>? headers, bool hasToken) {
     return Options(
       contentType: 'application/json',
       followRedirects: true,
-      validateStatus: (status) {
-        return true;
-      },
+      validateStatus: (_) => true,
       headers: {
         "Content-Type": "application/json",
         'Accept': 'application/json',
-        // 'Accept-Language': HiveMethods.getLang(),
         'Accept-Language': HiveMethods.getLang(),
-        if (HiveMethods.getToken() != null && hasToken) ...{
+        if (HiveMethods.getToken() != null && hasToken)
           'Authorization': "Bearer ${HiveMethods.getToken()}",
-        },
         ...?headers,
       },
     );
@@ -111,6 +115,7 @@ class ApiHelper {
     };
   }
 
+  // -------------------- GET --------------------
   Future<ApiResponse> get(
     String url, {
     Map<String, dynamic>? queryParameters,
@@ -119,42 +124,18 @@ class ApiHelper {
     void Function(int, int)? onReceiveProgress,
     bool hasToken = true,
   }) async {
-    ApiResponse responseJson;
-    if (await CommonMethods.hasConnection() == false) {
-      responseJson = ApiResponse(
-        state: ResponseState.offline,
-        data: _offlineMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-      return responseJson;
-    }
-
-    try {
-      final response = await _dio.get(
-        url,
-        queryParameters: queryParameters,
-        options: _options(headers, hasToken),
-        onReceiveProgress: onReceiveProgress,
-      );
-      responseJson = _buildResponse(response);
-      Future.delayed(Duration.zero, onFinish);
-    } on DioException {
-      responseJson = ApiResponse(
-        state: ResponseState.error,
-        data: _errorMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-    } on SocketException {
-      responseJson = ApiResponse(
-        state: ResponseState.offline,
-        data: _offlineMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-      return responseJson;
-    }
-    return responseJson;
+    return _sendRequest(
+      type: "GET",
+      url: url,
+      queryParameters: queryParameters,
+      headers: headers,
+      onFinish: onFinish,
+      hasToken: hasToken,
+      onReceiveProgress: onReceiveProgress,
+    );
   }
 
+  // -------------------- POST --------------------
   Future<ApiResponse> post(
     String url, {
     Map<String, dynamic>? queryParameters,
@@ -164,7 +145,7 @@ class ApiHelper {
     void Function(int, int)? onReceiveProgress,
     void Function(int, int)? onSendProgress,
     bool hasToken = true,
-    bool? isMultipart,
+    bool isMultipart = false,
   }) async {
     ApiResponse responseJson;
 
@@ -176,15 +157,19 @@ class ApiHelper {
       Future.delayed(Duration.zero, onFinish);
       return responseJson;
     }
+
     try {
+      final dataToSend = isMultipart ? FormData.fromMap(body) : body;
+
       final response = await _dio.post(
         url,
         queryParameters: queryParameters,
-        data: body,
+        data: dataToSend,
         options: _options(headers, hasToken),
         onReceiveProgress: onReceiveProgress,
         onSendProgress: onSendProgress,
       );
+
       responseJson = _buildResponse(response);
       Future.delayed(Duration.zero, onFinish);
     } on DioException {
@@ -202,9 +187,11 @@ class ApiHelper {
       Future.delayed(Duration.zero, onFinish);
       return responseJson;
     }
+
     return responseJson;
   }
 
+  // -------------------- PUT --------------------
   Future<ApiResponse> put(
     String url, {
     Map<String, dynamic>? queryParameters,
@@ -215,44 +202,20 @@ class ApiHelper {
     void Function(int, int)? onSendProgress,
     bool hasToken = true,
   }) async {
-    ApiResponse responseJson;
-
-    if (await CommonMethods.hasConnection() == false) {
-      responseJson = ApiResponse(
-        state: ResponseState.offline,
-        data: _offlineMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-      return responseJson;
-    }
-    try {
-      final response = await _dio.put(
-        url,
-        queryParameters: queryParameters,
-        data: body,
-        options: _options(headers, hasToken),
-        onReceiveProgress: onReceiveProgress,
-        onSendProgress: onSendProgress,
-      );
-      responseJson = _buildResponse(response);
-      Future.delayed(Duration.zero, onFinish);
-    } on DioException {
-      responseJson = ApiResponse(
-        state: ResponseState.error,
-        data: _errorMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-    } on SocketException {
-      responseJson = ApiResponse(
-        state: ResponseState.offline,
-        data: _offlineMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-      return responseJson;
-    }
-    return responseJson;
+    return _sendRequest(
+      type: "PUT",
+      url: url,
+      queryParameters: queryParameters,
+      body: body,
+      headers: headers,
+      onFinish: onFinish,
+      hasToken: hasToken,
+      onReceiveProgress: onReceiveProgress,
+      onSendProgress: onSendProgress,
+    );
   }
 
+  // -------------------- PATCH --------------------
   Future<ApiResponse> patch(
     String url, {
     Map<String, dynamic>? queryParameters,
@@ -263,44 +226,20 @@ class ApiHelper {
     void Function(int, int)? onSendProgress,
     bool hasToken = true,
   }) async {
-    ApiResponse responseJson;
-
-    if (await CommonMethods.hasConnection() == false) {
-      responseJson = ApiResponse(
-        state: ResponseState.offline,
-        data: _offlineMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-      return responseJson;
-    }
-    try {
-      final response = await _dio.patch(
-        url,
-        queryParameters: queryParameters,
-        data: body,
-        options: _options(headers, hasToken),
-        onReceiveProgress: onReceiveProgress,
-        onSendProgress: onSendProgress,
-      );
-      responseJson = _buildResponse(response);
-      Future.delayed(Duration.zero, onFinish);
-    } on DioException {
-      responseJson = ApiResponse(
-        state: ResponseState.error,
-        data: _errorMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-    } on SocketException {
-      responseJson = ApiResponse(
-        state: ResponseState.offline,
-        data: _offlineMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-      return responseJson;
-    }
-    return responseJson;
+    return _sendRequest(
+      type: "PATCH",
+      url: url,
+      queryParameters: queryParameters,
+      body: body,
+      headers: headers,
+      onFinish: onFinish,
+      hasToken: hasToken,
+      onReceiveProgress: onReceiveProgress,
+      onSendProgress: onSendProgress,
+    );
   }
 
+  // -------------------- DELETE --------------------
   Future<ApiResponse> delete(
     String url, {
     Map<String, dynamic>? queryParameters,
@@ -309,160 +248,186 @@ class ApiHelper {
     void Function()? onFinish,
     bool hasToken = true,
   }) async {
-    ApiResponse responseJson;
-
-    if (await CommonMethods.hasConnection() == false) {
-      responseJson = ApiResponse(
-        state: ResponseState.offline,
-        data: _offlineMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-      return responseJson;
-    }
-    try {
-      final response = await _dio.delete(
-        url,
-        queryParameters: queryParameters,
-        data: body,
-        options: _options(headers, hasToken),
-      );
-      responseJson = _buildResponse(response);
-      Future.delayed(Duration.zero, onFinish);
-    } on DioException {
-      responseJson = ApiResponse(
-        state: ResponseState.error,
-        data: _errorMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-    } on SocketException {
-      responseJson = ApiResponse(
-        state: ResponseState.offline,
-        data: _offlineMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-      return responseJson;
-    }
-    return responseJson;
+    return _sendRequest(
+      type: "DELETE",
+      url: url,
+      queryParameters: queryParameters,
+      body: body,
+      headers: headers,
+      onFinish: onFinish,
+      hasToken: hasToken,
+    );
   }
 
+  // -------------------- DOWNLOAD --------------------
   Future<ApiResponse> download(
     String url, {
+    Map<String, dynamic>? queryParameters,
+    Map<String, String>? headers,
+    void Function()? onFinish,
+    void Function(int, int)? onReceiveProgress,
+    bool hasToken = true,
+  }) async {
+    if (!await CommonMethods.hasConnection()) {
+      return ApiResponse(
+        state: ResponseState.offline,
+        data: _offlineMessage(),
+      );
+    }
+
+    final fileName = path.basename(url);
+    final savePath = await _getFilePath(fileName);
+
+    try {
+      final response = await _dio.download(
+        url,
+        savePath,
+        queryParameters: queryParameters,
+        options: _options(headers, hasToken),
+        onReceiveProgress: onReceiveProgress,
+      );
+
+      Future.delayed(Duration.zero, onFinish);
+      return _buildResponse(response);
+    } catch (_) {
+      Future.delayed(Duration.zero, onFinish);
+      return ApiResponse(state: ResponseState.error, data: _errorMessage());
+    }
+  }
+
+  // -------------------- SHARED REQUEST HANDLER --------------------
+  Future<ApiResponse> _sendRequest({
+    required String type,
+    required String url,
     Map<String, dynamic>? queryParameters,
     dynamic body,
     Map<String, String>? headers,
     void Function()? onFinish,
     void Function(int, int)? onReceiveProgress,
     void Function(int, int)? onSendProgress,
-    bool hasToken = true,
+    required bool hasToken,
   }) async {
-    ApiResponse responseJson;
+    if (!await CommonMethods.hasConnection()) {
+      return ApiResponse(state: ResponseState.offline, data: _offlineMessage());
+    }
 
-    if (await CommonMethods.hasConnection() == false) {
-      responseJson = ApiResponse(
-        state: ResponseState.offline,
-        data: _offlineMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-      return responseJson;
-    }
-    final fileName = path.basename(url);
-    final savePath = await _getFilePath(fileName);
     try {
-      final response = await _dio.download(
-        url,
-        savePath,
-        queryParameters: queryParameters,
-        data: body,
-        options: _options(headers, hasToken),
-        onReceiveProgress: onReceiveProgress,
-      );
-      responseJson = _buildResponse(response);
+      late Response response;
+
+      switch (type) {
+        case "GET":
+          response = await _dio.get(
+            url,
+            queryParameters: queryParameters,
+            options: _options(headers, hasToken),
+            onReceiveProgress: onReceiveProgress,
+          );
+          break;
+        case "POST":
+          response = await _dio.post(
+            url,
+            queryParameters: queryParameters,
+            data: body,
+            options: _options(headers, hasToken),
+            onReceiveProgress: onReceiveProgress,
+            onSendProgress: onSendProgress,
+          );
+          break;
+        case "PUT":
+          response = await _dio.put(
+            url,
+            queryParameters: queryParameters,
+            data: body,
+            options: _options(headers, hasToken),
+            onReceiveProgress: onReceiveProgress,
+            onSendProgress: onSendProgress,
+          );
+          break;
+        case "PATCH":
+          response = await _dio.patch(
+            url,
+            queryParameters: queryParameters,
+            data: body,
+            options: _options(headers, hasToken),
+            onReceiveProgress: onReceiveProgress,
+            onSendProgress: onSendProgress,
+          );
+          break;
+        case "DELETE":
+          response = await _dio.delete(
+            url,
+            queryParameters: queryParameters,
+            data: body,
+            options: _options(headers, hasToken),
+          );
+          break;
+      }
+
       Future.delayed(Duration.zero, onFinish);
-    } on DioException {
-      responseJson = ApiResponse(
-        state: ResponseState.error,
-        data: _errorMessage(),
-      );
+      return _buildResponse(response);
+    } catch (_) {
       Future.delayed(Duration.zero, onFinish);
-    } on SocketException {
-      responseJson = ApiResponse(
-        state: ResponseState.offline,
-        data: _offlineMessage(),
-      );
-      Future.delayed(Duration.zero, onFinish);
-      return responseJson;
+      return ApiResponse(state: ResponseState.error, data: _errorMessage());
     }
-    return responseJson;
   }
 
-  ApiResponse _buildResponse(Response<dynamic> response) {
+  // -------------------- RESPONSE BUILDER --------------------
+  ApiResponse _buildResponse(Response response) {
+    final data = response.data;
+
     switch (response.statusCode) {
       case 200:
-        var responseJson = response.data;
-        return ApiResponse(
-          state: ResponseState.complete,
-          data: responseJson,
-        );
       case 201:
-        var responseJson = response.data;
-        return ApiResponse(
-          state: ResponseState.complete,
-          data: responseJson,
-        );
-      case 400:
-        var responseJson = response.data;
-        return ApiResponse(
-          state: ResponseState.error,
-          data: responseJson,
-        );
+        return ApiResponse(state: ResponseState.complete, data: data);
+
       case 401:
-        var responseJson = response.data;
         Future.delayed(Duration.zero, () {
           HiveMethods.deleteToken();
-          if (HiveMethods.isVisitor() == false) {
+          if (!HiveMethods.isVisitor()) {
             NavigatorMethods.pushNamedAndRemoveUntil(
               AppRouters.navigatorKey.currentContext!,
               ValidateMobileScreen.routeName,
             );
           }
-          
         });
-        return ApiResponse(
-          state: ResponseState.unauthorized,
-          data: responseJson,
-        );
+        return ApiResponse(state: ResponseState.unauthorized, data: data);
+
+      case 400:
       case 422:
-        var responseJson = response.data;
-        return ApiResponse(
-          state: ResponseState.error,
-          data: responseJson,
-        );
       case 403:
-        var responseJson = response.data;
-        return ApiResponse(
-          state: ResponseState.error,
-          data: responseJson,
-        );
+        return ApiResponse(state: ResponseState.error, data: data);
+
       case 404:
-        var responseJson = response.data;
-        return ApiResponse(
-          state: ResponseState.badRequest,
-          data: responseJson,
-        );
-      case 500:
+        return ApiResponse(state: ResponseState.badRequest, data: data);
+
       default:
-        var responseJson = response.data;
-        return ApiResponse(
-          state: ResponseState.error,
-          data: responseJson,
-        );
+        return ApiResponse(state: ResponseState.error, data: data);
     }
   }
 
-  Future<String> _getFilePath(uniqueFileName) async {
-    String path = '';
+  // -------------------- SAVE PATH --------------------
+  Future<String> _getFilePath(String fileName) async {
     Directory dir = await path_provider.getApplicationDocumentsDirectory();
-    path = '${dir.path}/$uniqueFileName.pdf';
-    return path;
+    return '${dir.path}/$fileName.pdf';
+  }
+}
+
+// -------------------- CONNECTION INTERCEPTOR --------------------
+class ConnectionInterceptor extends Interceptor {
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    final hasConnection = await CommonMethods.hasConnectionFast();
+
+    if (!hasConnection) {
+      return handler.reject(
+        DioException(
+          requestOptions: options,
+          error: "No internet connection",
+          type: DioExceptionType.connectionError,
+        ),
+      );
+    }
+
+    handler.next(options);
   }
 }

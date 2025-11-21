@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -232,6 +234,15 @@ class CommonMethods {
     if (isConnected) {
       return true;
     } else {
+      return false;
+    }
+  }
+
+  static Future<bool> hasConnectionFast() async {
+    try {
+      final result = await InternetAddress.lookup('google.com').timeout(const Duration(seconds: 2));
+      return result.isNotEmpty && result.first.rawAddress.isNotEmpty;
+    } catch (_) {
       return false;
     }
   }

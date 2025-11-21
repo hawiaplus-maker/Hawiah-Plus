@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/presentation/model/categories_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/services_model.dart';
@@ -264,8 +265,11 @@ class HomeCubit extends Cubit<HomeState> {
 
   ShowCategoriesModel? _showCategories;
   ShowCategoriesModel? get showCategories => _showCategories;
-  Future<void> getshowCategories(int id, {VoidCallback? onSuccess}) async {
-    NavigatorMethods.loading();
+  Future<void> getshowCategories(
+    int id, {
+    VoidCallback? onSuccess,
+  }) async {
+    if (onSuccess != null) NavigatorMethods.loading();
     _showCategoriesResponse = ApiResponse(
       state: ResponseState.loading,
       data: null,
@@ -274,11 +278,16 @@ class HomeCubit extends Cubit<HomeState> {
     emit(HomeChange());
 
     _showCategoriesResponse = await ApiHelper.instance.get(Urls.showCategory(id));
-    NavigatorMethods.loadingOff();
+    if (onSuccess != null) NavigatorMethods.loadingOff();
     if (_showCategoriesResponse.state == ResponseState.complete &&
         _showCategoriesResponse.data != null) {
       _showCategories = ShowCategoriesModel.fromJson(_showCategoriesResponse.data);
-      onSuccess?.call();
+      if (_showCategories?.message?.services?.isNotEmpty ?? false) {
+        onSuccess?.call();
+      } else {
+        CommonMethods.showError(message: "لا يوجد خدمات");
+      }
+
       emit(HomeChange());
     } else if (_showCategoriesResponse.state == ResponseState.unauthorized) {
       emit(HomeChange());
