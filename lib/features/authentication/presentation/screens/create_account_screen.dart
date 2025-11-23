@@ -12,6 +12,7 @@ import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/core/utils/validation_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
+import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 
 import '../cubit/auth-cubit.dart';
@@ -173,10 +174,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             ),
           );
         },
-        listener: (BuildContext context, AuthState state) {
+        listener: (BuildContext context, AuthState state) async {
           if (state is RegisterSuccess) {
             context.read<AuthCubit>().clearEC();
             CommonMethods.showToast(message: state.message);
+            LayoutMethouds.getdata();
             NavigatorMethods.pushNamedAndRemoveUntil(context, LayoutScreen.routeName);
           }
           if (state is RegisterFailed) {

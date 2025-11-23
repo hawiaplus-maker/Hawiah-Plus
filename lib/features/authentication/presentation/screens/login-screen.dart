@@ -18,6 +18,7 @@ import 'package:hawiah_client/features/authentication/presentation/widgets/commo
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/phone-input-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/login-widgets/login_button.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/login-widgets/password-input-widget.dart';
+import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -119,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           );
         },
-        listener: (BuildContext context, AuthState state) {
+        listener: (BuildContext context, AuthState state) async {
           if (state is AuthError) {
             CommonMethods.showError(message: state.message);
           }
@@ -127,6 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
             context.read<AuthCubit>().clearEC();
             CommonMethods.showToast(message: state.message);
             log("======================================= Navigate to Layout Screen=======================================");
+            LayoutMethouds.getdata();
             Navigator.pushAndRemoveUntil<void>(
               context,
               MaterialPageRoute<void>(

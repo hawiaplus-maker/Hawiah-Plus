@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
@@ -66,9 +67,49 @@ class OrderCubit extends Cubit<OrderState> {
   }) async {
     log("**************************** getOrders($orderStatus) *************************");
 
+    // =================== Check if user is visitor =====================
+    if (HiveMethods.isVisitor() || HiveMethods.getToken() == null) {
+      emit(Unauthenticated()); // فورًا emit
+      return; // وممنوع أي تحميل أكتر
+    }
+
     final bool isCurrent = orderStatus == 0;
 
-    // prevent multiple loadMore
+    // =================== Prevent Re-fetching =====================
+    if (!isLoadMore) {
+      if (isCurrent && currentOrders.isNotEmpty) {
+        log("✔ Skipping fetch: current orders already loaded");
+        emit(OrderSuccess(
+          ordersModel: OrdersModel(
+            data: OrdersData(
+              data: currentOrders,
+              pagination: Pagination(
+                currentPage: currentPageCurrent,
+                lastPage: lastPageCurrent,
+              ),
+            ),
+          ),
+        ));
+        return;
+      }
+
+      if (!isCurrent && oldOrders.isNotEmpty) {
+        log("✔ Skipping fetch: old orders already loaded");
+        emit(OrderSuccess(
+          ordersModel: OrdersModel(
+            data: OrdersData(
+              data: oldOrders,
+              pagination: Pagination(
+                currentPage: currentPageOld,
+                lastPage: lastPageOld,
+              ),
+            ),
+          ),
+        ));
+        return;
+      }
+    }
+    // =================== Load =====================
     if (isLoadMore) {
       if (isCurrent ? isLoadingMoreCurrent : isLoadingMoreOld) return;
       if (isCurrent) {
@@ -78,19 +119,15 @@ class OrderCubit extends Cubit<OrderState> {
       }
       emit(OrderPaginationLoading());
     } else {
-      // reset and start loading
       if (isCurrent) {
         isLoadingCurrent = true;
-        currentPageCurrent = 1;
-        currentOrders = [];
       } else {
         isLoadingOld = true;
-        currentPageOld = 1;
-        oldOrders = [];
       }
       emit(OrderLoading());
     }
 
+    // =================== API =====================
     final response = await ApiHelper.instance.get(
       Urls.orders(orderStatus),
       queryParameters: {
@@ -112,7 +149,6 @@ class OrderCubit extends Cubit<OrderState> {
         lastPageOld = pagination?.lastPage ?? 1;
       }
 
-      // Merge or replace
       if (isLoadMore) {
         if (isCurrent) {
           currentOrders.addAll(newOrders);
@@ -132,8 +168,8 @@ class OrderCubit extends Cubit<OrderState> {
       }
 
       emit(OrderSuccess(ordersModel: result));
-    } else if (response.state == ResponseState.unauthorized && isCurrent) {
-      emit(Unauthenticated());
+    } else if (response.state == ResponseState.unauthorized) {
+      if (state != Unauthenticated()) emit(Unauthenticated());
     } else {
       if (isCurrent) {
         isLoadingCurrent = false;

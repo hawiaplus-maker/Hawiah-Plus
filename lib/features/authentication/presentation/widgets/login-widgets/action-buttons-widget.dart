@@ -10,6 +10,7 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/cubit/auth-state.dart';
+import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 
 class ActionButtonsWidget extends StatefulWidget {
@@ -59,8 +60,9 @@ class _ActionButtonsWidgetState extends State<ActionButtonsWidget> {
             height: 55,
             text: "login_as_guest".tr(),
             style: AppTextStyle.buttonStyle.copyWith(color: AppColor.whiteColor),
-            onPressed: () {
+            onPressed: () async {
               HiveMethods.updateIsVisitor(true);
+              LayoutMethouds.getdata();
               NavigatorMethods.pushNamed(context, LayoutScreen.routeName);
             },
           ),

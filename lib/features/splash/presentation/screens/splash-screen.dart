@@ -6,6 +6,7 @@ import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/app-language/presentation/screens/app-language-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
+import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-cubit.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
@@ -37,8 +38,10 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       if (HiveMethods.getToken() != null) {
         await cubit.fetchProfile(
-          onSuccess: () {
+          onSuccess: () async {
             log("Navigation to LayoutScreen");
+
+            LayoutMethouds.getdata();
             NavigatorMethods.pushReplacementNamed(
               context,
               LayoutScreen.routeName,

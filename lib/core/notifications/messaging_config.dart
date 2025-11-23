@@ -6,11 +6,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 
 @pragma('vm:entry-point')
-final FlutterLocalNotificationsPlugin _localNotifications =
-    FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
 @pragma('vm:entry-point')
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 late final GlobalKey<NavigatorState> navigatorKey;
@@ -93,10 +93,11 @@ void handleNotificationTap(Map<String, dynamic> data) {
   }
 }
 
-void _performNavigation(NotificationData data) {
+void _performNavigation(NotificationData data) async {
   final ctx = navigatorKey.currentContext!;
   switch (data.type) {
     case NotificationType.trackOrder:
+      LayoutMethouds.getdata();
       NavigatorMethods.pushNamed(
         ctx,
         LayoutScreen.routeName,
@@ -159,8 +160,7 @@ class MessagingService {
       sound: RawResourceAndroidNotificationSound('custom_sound'),
     );
     await _localNotifications
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
   }
 }

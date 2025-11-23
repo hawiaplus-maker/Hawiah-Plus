@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/custom_widgets/global-elevated-button-widget.dart';
-import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
+import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
+
 class CompanyNavigationButtons extends StatelessWidget {
   final int currentStepCompleteProfile;
   final Function onNextPressed;
@@ -20,7 +22,8 @@ class CompanyNavigationButtons extends StatelessWidget {
     return currentStepCompleteProfile == 2
         ? GlobalElevatedButton(
             label: "home_screen".tr(),
-            onPressed: () {
+            onPressed: () async {
+              LayoutMethouds.getdata();
               Navigator.pushAndRemoveUntil<void>(
                 context,
                 MaterialPageRoute<void>(

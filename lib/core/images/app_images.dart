@@ -115,4 +115,5 @@ class AppImages {
   static const String recycling = 'assets/images/recycling.png';
   static const String evaluate = 'assets/images/Evaluate.png';
   static const String bakst = 'assets/images/bakst.png';
+  static const String emptyDataImage = 'assets/images/emptyDataImage.png';
 }

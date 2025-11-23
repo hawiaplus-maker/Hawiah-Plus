@@ -29,9 +29,9 @@ class NoDataWidget extends StatelessWidget {
             child: Row(
               children: [
                 Image.asset(
-                  assetImage ?? AppImages.noDataImage,
-                  width: 100,
-                  height: 100,
+                  assetImage ?? AppImages.emptyDataImage,
+                  width: 80,
+                  height: 80,
                   fit: BoxFit.contain,
                 ),
                 const SizedBox(width: 10),
@@ -73,15 +73,14 @@ class NoDataWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                AppImages.noDataImage,
-                width: 200.h,
-                height: 200.h,
+                AppImages.emptyDataImage,
+                width: 100.h,
+                height: 100.h,
                 fit: BoxFit.contain,
               ),
               const SizedBox(height: 10),
               Text(
-                message ??
-                    context.apiTr(ar: "لا توجد بيانات", en: "There is no data"),
+                message ?? context.apiTr(ar: "لا توجد بيانات", en: "There is no data"),
                 style: TextStyle(
                   color: AppTheme.getByTheme(
                     light: Colors.black,

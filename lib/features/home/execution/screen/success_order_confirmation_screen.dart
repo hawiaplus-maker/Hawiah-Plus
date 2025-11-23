@@ -9,6 +9,7 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/execution/screen/order_review_detailes.dart';
 import 'package:hawiah_client/features/home/execution/widget/success_confirmation_invoice_and_contract_widget.dart';
+import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/features/order/presentation/model/order_details_model.dart';
 
@@ -110,7 +111,8 @@ class SuccessOrderConfirmationScreen extends StatelessWidget {
               ),
               CustomButton(
                 text: AppLocaleKey.backToHome.tr(),
-                onPressed: () {
+                onPressed: () async {
+                  LayoutMethouds.getdata();
                   NavigatorMethods.pushNamedAndRemoveUntil(context, LayoutScreen.routeName);
                 },
               ),

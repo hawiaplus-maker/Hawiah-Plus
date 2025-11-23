@@ -8,18 +8,17 @@ import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
-import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/authentication/presentation/dialog/unauthenticated_dialog.dart';
 import 'package:hawiah_client/features/order/presentation/screens/current-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/old-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/widget/order_card_widget.dart';
+import 'package:hawiah_client/injection_container.dart';
 
 import '../order-cubit/order-cubit.dart';
 import '../order-cubit/order-state.dart';
 
 class OrderTapList extends StatefulWidget {
-  const OrderTapList({super.key, required this.orders, required this.isCurrent});
-  final List<dynamic> orders;
+  const OrderTapList({super.key, required this.isCurrent});
+
   final bool isCurrent;
 
   @override
@@ -36,7 +35,7 @@ class _OrderTapListState extends State<OrderTapList> {
   }
 
   void _onScroll() {
-    final cubit = context.read<OrderCubit>();
+    final cubit = sl<OrderCubit>();
     // تحميل الصفحة التالية عند الاقتراب من النهاية
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 150 &&
         cubit.canLoadMoreCurrent &&
@@ -57,16 +56,12 @@ class _OrderTapListState extends State<OrderTapList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<OrderCubit, OrderState>(
+    return BlocBuilder<OrderCubit, OrderState>(
       bloc: context.read<OrderCubit>(),
-      listener: (context, state) {
-        if (state is Unauthenticated) {
-          NavigatorMethods.showAppDialog(context, UnauthenticatedDialog());
-        }
-      },
       builder: (context, state) {
-        final cubit = context.read<OrderCubit>();
+        final cubit = context.watch<OrderCubit>();
         final orders = widget.isCurrent ? cubit.currentOrders : cubit.oldOrders;
+
         final isPaginating = widget.isCurrent ? cubit.isLoadingMoreCurrent : cubit.isLoadingMoreOld;
 
         // لو لسه أول تحميل

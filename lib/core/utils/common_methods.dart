@@ -238,6 +238,10 @@ class CommonMethods {
     }
   }
 
+  static Future<bool> get isConnected async {
+    return await InternetConnectionChecker.instance.hasConnection;
+  }
+
   static Future<bool> hasConnectionFast() async {
     try {
       final result = await InternetAddress.lookup('google.com').timeout(const Duration(seconds: 2));

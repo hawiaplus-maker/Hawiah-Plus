@@ -1,15 +1,12 @@
-
 import 'package:hawiah_client/injection_container.dart';
 
 import 'presentation/order-cubit/order-cubit.dart';
-
-
 
 class OrderInjection {
   static void init() {
     //cubit
 
-     sl.registerFactory(() => OrderCubit());
+    sl.registerLazySingleton(() => OrderCubit());
 
     //use cases
 

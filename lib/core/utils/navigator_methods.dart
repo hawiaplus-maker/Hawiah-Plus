@@ -6,8 +6,7 @@ import 'package:hawiah_client/core/routes/app_routers_import.dart';
 import '../theme/app_colors.dart';
 
 class NavigatorMethods {
-  static void pushNamed(BuildContext context, String routeName,
-      {dynamic arguments}) {
+  static void pushNamed(BuildContext context, String routeName, {dynamic arguments}) {
     Navigator.pushNamed(
       context,
       routeName,
@@ -15,8 +14,7 @@ class NavigatorMethods {
     );
   }
 
-  static void pushReplacementNamed(BuildContext context, String routeName,
-      {dynamic arguments}) {
+  static void pushReplacementNamed(BuildContext context, String routeName, {dynamic arguments}) {
     Navigator.pushReplacementNamed(
       context,
       routeName,
@@ -24,8 +22,7 @@ class NavigatorMethods {
     );
   }
 
-  static void pushNamedAndRemoveUntil(BuildContext context, String routeName,
-      {dynamic arguments}) {
+  static void pushNamedAndRemoveUntil(BuildContext context, String routeName, {dynamic arguments}) {
     Navigator.pushNamedAndRemoveUntil(
       context,
       routeName,
@@ -34,12 +31,12 @@ class NavigatorMethods {
     );
   }
 
-  static void showAppDialog(
+  static Future<T?> showAppDialog<T>(
     BuildContext context,
     Widget dialog, {
     bool willPop = true,
   }) {
-    showDialog(
+    return showDialog<T>(
       context: context,
       barrierDismissible: willPop,
       builder: (context) {
@@ -81,8 +78,7 @@ class NavigatorMethods {
     Color? backgroundColor,
     Color? loadingColor,
   }) {
-    FocusScope.of(AppRouters.navigatorKey.currentContext!)
-        .requestFocus(FocusNode());
+    FocusScope.of(AppRouters.navigatorKey.currentContext!).requestFocus(FocusNode());
     BotToast.showCustomLoading(
       toastBuilder: (cancelFunc) => Container(
         width: size,

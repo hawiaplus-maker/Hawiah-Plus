@@ -6,10 +6,13 @@ import 'package:gap/gap.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/authentication/presentation/dialog/unauthenticated_dialog.dart';
 import 'package:hawiah_client/features/chat/cubit/chat_cubit.dart';
 import 'package:hawiah_client/features/chat/model/chat_model.dart';
 import 'package:hawiah_client/features/chat/presentation/widget/conversation_list_tile.dart';
@@ -28,23 +31,38 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<RecentChatModel> _allChats = [];
   List<RecentChatModel> _filteredChats = [];
+  bool isVesetor = false;
 
   @override
   void initState() {
     super.initState();
-    userId = context.read<ProfileCubit>().user!.id.toString();
-    chatCubit = ChatCubit();
-    chatCubit.fetchRecentChats(
-      currentId: userId,
-      currentType: 'user',
-    );
     _searchController.addListener(_onSearchChanged);
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (HiveMethods.isVisitor() || HiveMethods.getToken() == null) {
+      isVesetor = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        NavigatorMethods.showAppDialog(context, UnauthenticatedDialog());
+      });
+    } else {
+      userId = context.read<ProfileCubit>().user!.id.toString();
+      chatCubit = ChatCubit();
+      chatCubit.fetchRecentChats(
+        currentId: userId,
+        currentType: 'user',
+      );
+    }
+  }
+
+  @override
   void dispose() {
-    chatCubit.close();
-    _searchController.removeListener(_onSearchChanged);
+    if (!isVesetor) {
+      chatCubit.close();
+    }
     _searchController.dispose();
     super.dispose();
   }
@@ -66,6 +84,9 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (isVesetor) {
+      return EmptyChatWidget();
+    }
     return BlocProvider.value(
       value: chatCubit,
       child: Scaffold(
@@ -114,17 +135,7 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
                           },
                         );
                       } else if (state is ChatEmpty) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset(AppImages.noChatIcon),
-                            Text(
-                              AppLocaleKey.noChatyet.tr(),
-                              style: AppTextStyle.text20_500,
-                            ),
-                          ],
-                        );
+                        return EmptyChatWidget();
                       } else if (state is ChatError) {
                         return Center(child: Text(state.message));
                       } else {
@@ -152,6 +163,30 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
         hintStyle: TextStyle(color: const Color(0xff979797), fontSize: 15.sp),
         fillColor: AppColor.whiteColor,
         prefixIcon: Icon(Icons.search, color: AppColor.mainAppColor, size: 25),
+      ),
+    );
+  }
+}
+
+class EmptyChatWidget extends StatelessWidget {
+  const EmptyChatWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(AppImages.noChatIcon),
+          Text(
+            AppLocaleKey.noChatyet.tr(),
+            style: AppTextStyle.text20_500,
+          ),
+        ],
       ),
     );
   }

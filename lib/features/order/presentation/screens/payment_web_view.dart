@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
@@ -107,7 +108,8 @@ class _CustomPaymentWebViewScreenState extends State<CustomPaymentWebViewScreen>
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
+      onPopInvokedWithResult: (didPop, result) async {
+        LayoutMethouds.getdata();
         NavigatorMethods.pushNamedAndRemoveUntil(
           context,
           LayoutScreen.routeName,
