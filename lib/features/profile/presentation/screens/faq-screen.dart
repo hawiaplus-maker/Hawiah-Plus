@@ -40,23 +40,21 @@ class _FaqScreenState extends State<FaqScreen> {
             return const Center(child: CircularProgressIndicator());
           } else if (state is ProfileLoadedQuestions) {
             final questions = state.questions;
-            return Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(12),
-                itemCount: questions.length,
-                itemBuilder: (context, index) {
-                  final item = questions[index];
-                  return CustomExpandableTile(
-                    title: locale == 'ar' ? item.question.ar : item.question.en,
-                    children: [
-                      Text(
-                        locale == 'ar' ? item.answer.ar : item.answer.en,
-                        style: AppTextStyle.text16_400.copyWith(color: AppColor.textGrayColor),
-                      ),
-                    ],
-                  );
-                },
-              ),
+            return ListView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: questions.length,
+              itemBuilder: (context, index) {
+                final item = questions[index];
+                return CustomExpandableTile(
+                  title: locale == 'ar' ? item.question.ar : item.question.en,
+                  children: [
+                    Text(
+                      locale == 'ar' ? item.answer.ar : item.answer.en,
+                      style: AppTextStyle.text16_400.copyWith(color: AppColor.textGrayColor),
+                    ),
+                  ],
+                );
+              },
             );
           } else if (state is ProfileError) {
             return Center(child: Text(state.message));
