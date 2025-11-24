@@ -10,6 +10,7 @@ import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart'
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-cubit.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
+import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:hawiah_client/injection_container.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,10 +27,13 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initializeApp() async {
-    await Future.delayed(Duration(seconds: 2));
+    final settingCubit = sl<SettingCubit>();
+    settingCubit.getsetting();
+
     log("is first time ${HiveMethods.isFirstTime()}");
     final cubit = sl<ProfileCubit>();
     if (HiveMethods.isFirstTime() == true) {
+      await Future.delayed(Duration(seconds: 2));
       OnBoardingCubit.get(context).getOnboarding();
       Navigator.pushReplacement(
         context,
@@ -41,7 +45,6 @@ class _SplashScreenState extends State<SplashScreen> {
           onSuccess: () async {
             log("Navigation to LayoutScreen");
 
-            LayoutMethouds.getdata();
             NavigatorMethods.pushReplacementNamed(
               context,
               LayoutScreen.routeName,
@@ -52,6 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
           },
         );
       } else {
+        await LayoutMethouds.getdata(showLoading: false);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const ValidateMobileScreen()),

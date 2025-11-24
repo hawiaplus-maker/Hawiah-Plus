@@ -178,7 +178,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           if (state is RegisterSuccess) {
             context.read<AuthCubit>().clearEC();
             CommonMethods.showToast(message: state.message);
-            LayoutMethouds.getdata();
+            await LayoutMethouds.getdata();
             NavigatorMethods.pushNamedAndRemoveUntil(context, LayoutScreen.routeName);
           }
           if (state is RegisterFailed) {

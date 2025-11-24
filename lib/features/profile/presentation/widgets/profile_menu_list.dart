@@ -30,13 +30,15 @@ class ProfileMenuList extends StatelessWidget {
               NavigatorMethods.pushNamed(context, UserProfile.routeName);
             },
           ),
-        PersonProfileListTile(
-          title: AppLocaleKey.addresses.tr(),
-          logo: AppImages.mapPinCheckIcon,
-          onTap: () {
-            NavigatorMethods.pushNamed(context, AllAddressesScreen.routeName);
-          },
-        ),
+        isGuest
+            ? SizedBox()
+            : PersonProfileListTile(
+                title: AppLocaleKey.addresses.tr(),
+                logo: AppImages.mapPinCheckIcon,
+                onTap: () {
+                  NavigatorMethods.pushNamed(context, AllAddressesScreen.routeName);
+                },
+              ),
         PersonProfileListTile(
           title: AppLocaleKey.support.tr(),
           logo: AppImages.handFist,

@@ -7,11 +7,13 @@ import 'package:hawiah_client/core/custom_widgets/api_response_widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/no_data_widget.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/authentication/presentation/dialog/unauthenticated_dialog.dart';
 import 'package:hawiah_client/features/home/execution/screen/nearby_service_provider_screen.dart';
 import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/location-item-widget.dart';
@@ -41,117 +43,136 @@ class ChooseAddressScreen extends StatefulWidget {
 }
 
 class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
+  bool isVesetor = false;
+  @override
+  initState() {
+    super.initState();
+    if (HiveMethods.isVisitor() || HiveMethods.getToken() == null) {
+      isVesetor = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        NavigatorMethods.showAppDialog(context, UnauthenticatedDialog());
+      });
+    }
+  }
+
   AddressModel? address;
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => AddressCubit()
-        ..initialaddresses()
-        ..getaddresses(),
-      child: BlocBuilder<AddressCubit, AddressState>(builder: (context, state) {
-        AddressCubit addressCubit = context.read<AddressCubit>();
-        return Scaffold(
-          appBar: CustomAppBar(
-            context,
-            titleText: "choose_address".tr(),
-          ),
-          body: ApiResponseWidget(
-            apiResponse: addressCubit.addressesResponse,
-            onReload: () => addressCubit.getaddresses(),
-            isEmpty: addressCubit.addresses.isEmpty,
-            emptyWidget: ListView(
-              children: [
-                SizedBox(
-                  height: 100.h,
-                ),
-                NoDataWidget(
-                  message: AppLocaleKey.noAddresses.tr(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: CustomButton(
-                    text: "add_new_address".tr(),
-                    onPressed: () {
-                      NavigatorMethods.pushNamed(context, AddNewLocationScreen.routeName,
-                          arguments: AddNewLocationScreenArgs(
-                        onAddressAdded: () {
-                          addressCubit.getaddresses();
-                        },
-                      ));
-                    },
-                  ),
-                ),
-              ],
+    return isVesetor
+        ? Scaffold(
+            appBar: CustomAppBar(
+              context,
+              titleText: "choose_address".tr(),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: addressCubit.addresses.length,
-                      itemBuilder: (context, index) {
-                        return LocationItemWidget(
-                          imagePath: AppImages.addressLocationIcon,
-                          title: addressCubit.addresses[index].title ?? "",
-                          address:
-                              "${addressCubit.addresses[index].city ?? ""} - ${addressCubit.addresses[index].neighborhood ?? ""}",
-                          isSelected: address == addressCubit.addresses[index],
-                          onTap: () {
-                            address = addressCubit.addresses[index];
-                            setState(() {});
+            body: Center(child: NoDataWidget()),
+          )
+        : BlocProvider(
+            create: (BuildContext context) => AddressCubit()..getaddresses(),
+            child: BlocBuilder<AddressCubit, AddressState>(builder: (context, state) {
+              AddressCubit addressCubit = context.read<AddressCubit>();
+              return Scaffold(
+                appBar: CustomAppBar(
+                  context,
+                  titleText: "choose_address".tr(),
+                ),
+                body: ApiResponseWidget(
+                  apiResponse: addressCubit.addressesResponse,
+                  onReload: () => addressCubit.getaddresses(),
+                  isEmpty: addressCubit.addresses.isEmpty,
+                  emptyWidget: ListView(
+                    children: [
+                      SizedBox(
+                        height: 100.h,
+                      ),
+                      NoDataWidget(
+                        message: AppLocaleKey.noAddresses.tr(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: CustomButton(
+                          text: "add_new_address".tr(),
+                          onPressed: () {
+                            NavigatorMethods.pushNamed(context, AddNewLocationScreen.routeName,
+                                arguments: AddNewLocationScreenArgs(
+                              onAddressAdded: () {
+                                addressCubit.getaddresses();
+                              },
+                            ));
                           },
-                        );
-                      }),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                  child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        CustomButton(
-                          color: AppColor.secondAppColor,
-                          text: "add_new_address".tr(),
-                          prefixIcon: SvgPicture.asset(AppImages.mapPinPlusIcon),
-                          onPressed: () =>
-                              NavigatorMethods.pushNamed(context, AddNewLocationScreen.routeName,
-                                  arguments: AddNewLocationScreenArgs(
-                            onAddressAdded: () {
-                              addressCubit.getaddresses();
-                            },
-                          )),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        addressCubit.addresses.isEmpty == true
-                            ? SizedBox()
-                            : CustomButton(
-                                text: "confirm_address".tr(),
-                                onPressed: () {
-                                  if (address == null) {
-                                    return CommonMethods.showError(
-                                        message: AppLocaleKey.youHaveToChooseAddress.tr());
-                                  } else {
-                                    NavigatorMethods.pushNamed(
-                                      context,
-                                      NearbyServiceProviderScreen.routeName,
-                                      arguments: NearbyServiceProviderArguments(
-                                          showCategoriesModel: widget.args.showCategoriesModel,
-                                          catigoryId: widget.args.catigoryId,
-                                          serviceProviderId: widget.args.serviceProviderId,
-                                          address: address!),
-                                    );
-                                  }
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: addressCubit.addresses.length,
+                            itemBuilder: (context, index) {
+                              return LocationItemWidget(
+                                imagePath: AppImages.addressLocationIcon,
+                                title: addressCubit.addresses[index].title ?? "",
+                                address:
+                                    "${addressCubit.addresses[index].city ?? ""} - ${addressCubit.addresses[index].neighborhood ?? ""}",
+                                isSelected: address == addressCubit.addresses[index],
+                                onTap: () {
+                                  address = addressCubit.addresses[index];
+                                  setState(() {});
                                 },
-                              )
+                              );
+                            }),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            children: [
+                              CustomButton(
+                                color: AppColor.secondAppColor,
+                                text: "add_new_address".tr(),
+                                prefixIcon: SvgPicture.asset(AppImages.mapPinPlusIcon),
+                                onPressed: () => NavigatorMethods.pushNamed(
+                                    context, AddNewLocationScreen.routeName,
+                                    arguments: AddNewLocationScreenArgs(
+                                  onAddressAdded: () {
+                                    addressCubit.getaddresses();
+                                  },
+                                )),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              addressCubit.addresses.isEmpty == true
+                                  ? SizedBox()
+                                  : CustomButton(
+                                      text: "confirm_address".tr(),
+                                      onPressed: () {
+                                        if (address == null) {
+                                          return CommonMethods.showError(
+                                              message: AppLocaleKey.youHaveToChooseAddress.tr());
+                                        } else {
+                                          NavigatorMethods.pushNamed(
+                                            context,
+                                            NearbyServiceProviderScreen.routeName,
+                                            arguments: NearbyServiceProviderArguments(
+                                                showCategoriesModel:
+                                                    widget.args.showCategoriesModel,
+                                                catigoryId: widget.args.catigoryId,
+                                                serviceProviderId: widget.args.serviceProviderId,
+                                                address: address!),
+                                          );
+                                        }
+                                      },
+                                    )
+                            ],
+                          ),
+                        )
                       ],
                     ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      }),
-    );
+                  ),
+                ),
+              );
+            }),
+          );
   }
 }

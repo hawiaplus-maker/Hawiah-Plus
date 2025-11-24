@@ -42,6 +42,7 @@ void main() async {
         Locale('ur'),
       ],
       path: 'assets/translations',
+      startLocale: const Locale('ar'),
       fallbackLocale: const Locale('en'),
       child: BlocProvider(
         create: (context) => AppThemeCubit()..initial(),

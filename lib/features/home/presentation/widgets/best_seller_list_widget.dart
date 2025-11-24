@@ -18,12 +18,6 @@ class _BestsellerListWidgetState extends State<BestsellerListWidget> {
   bool expanded = false;
 
   @override
-  void initState() {
-    super.initState();
-    final homeCubit = HomeCubit.get(context);
-    homeCubit.getservices();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(

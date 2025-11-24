@@ -109,7 +109,7 @@ class _CustomPaymentWebViewScreenState extends State<CustomPaymentWebViewScreen>
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
-        LayoutMethouds.getdata();
+        await LayoutMethouds.getdata();
         NavigatorMethods.pushNamedAndRemoveUntil(
           context,
           LayoutScreen.routeName,
