@@ -120,7 +120,8 @@ class HomeCubit extends Cubit<HomeState> {
     _slider = null;
     emit(HomeChange());
 
-    _servicesResponse = await ApiHelper.instance.get(Urls.services);
+    _servicesResponse =
+        await ApiHelper.instance.get(Urls.services, queryParameters: {"best_seller": 1});
 
     if (_servicesResponse.state == ResponseState.complete && _servicesResponse.data != null) {
       _services = ServicesModel.fromJson(_servicesResponse.data);

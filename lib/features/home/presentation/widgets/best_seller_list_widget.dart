@@ -16,61 +16,62 @@ class BestsellerListWidget extends StatefulWidget {
 
 class _BestsellerListWidgetState extends State<BestsellerListWidget> {
   bool expanded = false;
+
+  @override
   void initState() {
     super.initState();
-
     final homeCubit = HomeCubit.get(context);
-    homeCubit.getBestSeller();
+    homeCubit.getservices();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
-      final homeCubit = HomeCubit.get(context);
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        final homeCubit = HomeCubit.get(context);
 
-      final list = homeCubit.bestSeller;
-      final int itemCount = expanded ? list.length : list.length.clamp(0, 4);
+        final list = homeCubit.services?.message ?? [];
+        final int itemCount = expanded ? list.length : list.length.clamp(0, 4);
 
-      return ApiResponseWidget(
-        apiResponse: homeCubit.bestSellerResponse,
-        onReload: () async => homeCubit.getBestSeller(),
-        isEmpty: homeCubit.bestSeller.isEmpty,
-        loadingWidget: Padding(
-          padding: const EdgeInsets.all(14.0),
+        return ApiResponseWidget(
+          apiResponse: homeCubit.servicesResponse,
+          onReload: () async => homeCubit.getservices(),
+          isEmpty: list.isEmpty,
+          loadingWidget: Padding(
+            padding: const EdgeInsets.all(14.0),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 2,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+                childAspectRatio: .74,
+              ),
+              itemBuilder: (context, index) => CustomShimmer(radius: 12),
+            ),
+          ),
           child: GridView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: 2,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: itemCount,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 5,
               mainAxisSpacing: 5,
-              childAspectRatio: .74,
+              childAspectRatio: .8,
             ),
-            itemBuilder: (context, index) => CustomShimmer(
-              radius: 12,
-            ),
+            itemBuilder: (context, index) {
+              final item = list[index];
+              return BestSellerWidgt(
+                item: item,
+                index: index,
+              );
+            },
           ),
-        ),
-        child: GridView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: itemCount,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5,
-            childAspectRatio: .74,
-          ),
-          itemBuilder: (context, index) {
-            final item = list[index];
-            return BestSellerWidgt(
-              item: item,
-              index: index,
-            );
-          },
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

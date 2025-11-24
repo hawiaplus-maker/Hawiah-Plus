@@ -5,7 +5,6 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 
 class CustomExpandableTile extends StatefulWidget {
   final String title;
-
   final List<Widget> children;
   final bool initiallyExpanded;
 
@@ -33,6 +32,7 @@ class _CustomExpandableTileState extends State<CustomExpandableTile>
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 15.h),
         ListTile(
@@ -44,18 +44,16 @@ class _CustomExpandableTileState extends State<CustomExpandableTile>
             turns: _isExpanded ? 0.5 : 0,
             duration: const Duration(milliseconds: 200),
             child: Container(
-                height: 26.h,
-                width: 26.w,
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  color: AppColor.mainAppColor.withAlpha(50),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.green, size: 24),
-                  ],
-                )),
+              height: 26.h,
+              width: 26.w,
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: AppColor.mainAppColor.withAlpha(50),
+              ),
+              child: Center(
+                child: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.green, size: 24),
+              ),
+            ),
           ),
           onTap: () {
             setState(() {
@@ -65,9 +63,15 @@ class _CustomExpandableTileState extends State<CustomExpandableTile>
         ),
         AnimatedCrossFade(
           firstChild: const SizedBox.shrink(),
-          secondChild: Padding(
-            padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
-            child: Column(children: widget.children),
+          secondChild: ClipRect(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: widget.children,
+              ),
+            ),
           ),
           crossFadeState: _isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
           duration: const Duration(milliseconds: 250),

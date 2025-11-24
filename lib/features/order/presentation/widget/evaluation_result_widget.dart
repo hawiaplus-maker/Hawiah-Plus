@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
@@ -7,6 +8,7 @@ import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 
 class EvaluationResult {
   final int rating;
@@ -14,8 +16,9 @@ class EvaluationResult {
   EvaluationResult({required this.rating, required this.comment});
 }
 
-Future<EvaluationResult?> showEvaluationDialog(BuildContext context) {
+Future<EvaluationResult?> showEvaluationDialog(BuildContext context, {required int userId}) {
   int currentRating = 0;
+
   final TextEditingController commentController = TextEditingController();
 
   return showDialog<EvaluationResult>(
@@ -113,6 +116,14 @@ Future<EvaluationResult?> showEvaluationDialog(BuildContext context) {
               height: 60.h,
               radius: 12,
               text: AppLocaleKey.evaluationSend.tr(),
+              onPressed: () {
+                context.read<OrderCubit>().rateDiver(
+                      userId: userId,
+                      rate: currentRating,
+                      onSuccess: () => Navigator.pop(context,
+                          EvaluationResult(rating: currentRating, comment: commentController.text)),
+                    );
+              },
             )
           ],
         );

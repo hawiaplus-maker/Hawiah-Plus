@@ -71,7 +71,7 @@ class _HomeCategoriesListWidgetState extends State<HomeCategoriesListWidget> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10.w,
                     mainAxisSpacing: 10.h,
-                    childAspectRatio: 1.2),
+                    childAspectRatio: .9),
                 itemBuilder: (context, index) {
                   final item = homeCubit.homeCategorieS[index];
                   return GestureDetector(

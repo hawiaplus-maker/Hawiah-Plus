@@ -124,7 +124,9 @@ class _OrderTapListState extends State<OrderTapList> {
                     MaterialPageRoute(
                       builder: (_) => widget.isCurrent
                           ? CurrentOrderScreen(ordersData: order)
-                          : OldOrderScreen(ordersData: order),
+                          : OldOrderScreen(
+                              ordersData: order,
+                            ),
                     ),
                   );
                 },

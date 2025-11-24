@@ -9,7 +9,7 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/execution/screen/category_detailes_screen.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
-import 'package:hawiah_client/features/home/presentation/model/categories_model.dart';
+import 'package:hawiah_client/features/home/presentation/model/services_model.dart';
 import 'package:hawiah_client/features/location/presentation/screens/choose_address_screen.dart';
 
 class BestSellerWidgt extends StatefulWidget {
@@ -19,7 +19,7 @@ class BestSellerWidgt extends StatefulWidget {
     required this.index,
   });
 
-  final SingleCategoryModel item;
+  final Message item;
   final int index;
 
   @override
@@ -72,28 +72,12 @@ class _BestSellerWidgtState extends State<BestSellerWidgt> {
               style: AppTextStyle.text12_500,
             ),
             SizedBox(height: 10.h),
-            Text(
-              'تم الطلب 189 مرة',
-              style: AppTextStyle.text10_500.copyWith(color: Colors.red),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 10.h),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Text(
-                '  650 ر.س',
-                style: AppTextStyle.text10_500
-                    .copyWith(color: Color(0xffF3BC00), fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(height: 10.h),
             CustomButton(
-              height: 20.h,
+              height: 30.h,
               radius: 5,
               child: Text(
                 AppLocaleKey.requestnow.tr(),
-                style: AppTextStyle.text10_500
+                style: AppTextStyle.text12_500
                     .copyWith(color: AppColor.whiteColor, fontWeight: FontWeight.bold),
               ),
               color: AppColor.mainAppColor,

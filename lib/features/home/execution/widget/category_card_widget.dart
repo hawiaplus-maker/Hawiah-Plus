@@ -112,7 +112,7 @@ class CategoryCardWidget extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 CustomButton(
-                  height: 20.h,
+                  height: 30.h,
                   radius: 5,
                   child: Text(
                     AppLocaleKey.requestnow.tr(),

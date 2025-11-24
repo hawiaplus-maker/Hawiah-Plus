@@ -308,6 +308,67 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
+// =================== empty-order ====================
+  Future<void> emptyOrder({
+    required int orderId,
+    required VoidCallback onSuccess,
+  }) async {
+    NavigatorMethods.loading();
+    FormData body = FormData.fromMap({
+      'order_id': orderId,
+    });
+    final response = await ApiHelper.instance.post(
+      Urls.emptyOrder,
+      body: body,
+    );
+    NavigatorMethods.loadingOff();
+    if (response.state == ResponseState.complete) {
+      CommonMethods.showToast(
+        message: response.data['message'] ?? "تم افراغ الطلب بنجاح",
+      );
+      onSuccess.call();
+    } else if (response.state == ResponseState.unauthorized) {
+      CommonMethods.showAlertDialog(
+        message: tr(AppLocaleKey.youMustLogInFirst),
+      );
+    } else {
+      CommonMethods.showError(
+        message: response.data['message'] ?? 'حدث خطأ',
+        apiResponse: response,
+      );
+    }
+  }
+
+  // =================== rate-Diver ====================
+  Future<void> rateDiver({
+    required int userId,
+    required int rate,
+    required VoidCallback onSuccess,
+  }) async {
+    NavigatorMethods.loading();
+    FormData body = FormData.fromMap({'user_id': userId, 'rating': rate});
+    final response = await ApiHelper.instance.post(
+      Urls.rateDiver,
+      body: body,
+    );
+    NavigatorMethods.loadingOff();
+    if (response.state == ResponseState.complete) {
+      CommonMethods.showToast(
+        message: response.data['message'] ?? "تم التقييم بنجاح",
+      );
+      onSuccess.call();
+    } else if (response.state == ResponseState.unauthorized) {
+      CommonMethods.showAlertDialog(
+        message: tr(AppLocaleKey.youMustLogInFirst),
+      );
+    } else {
+      CommonMethods.showError(
+        message: response.data['message'] ?? 'حدث خطأ',
+        apiResponse: response,
+      );
+    }
+  }
+
   // =================== get payment link ====================
   Future<void> getPaymentLink({
     required int orderId,

@@ -5,7 +5,6 @@ import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-state.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/model/on_boarding_model.dart';
 
-
 class OnBoardingCubit extends Cubit<OnBoardingState> {
   static OnBoardingCubit get(BuildContext context) => BlocProvider.of(context);
 
@@ -16,16 +15,14 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   PageController pageController = PageController(initialPage: 0);
 
   OnBoardingModel? onboarding;
-  ApiResponse _onboardingResponse =
-      ApiResponse(state: ResponseState.sleep, data: null);
+  ApiResponse _onboardingResponse = ApiResponse(state: ResponseState.sleep, data: null);
   ApiResponse get onboardingResponse => _onboardingResponse;
 
   List<Data> get onBoardingList => onboarding?.data ?? [];
 
   void changePageController(int index) {
     currentIndex = index;
-    progressValue =
-        (index + 1) / (onBoardingList.isEmpty ? 1 : onBoardingList.length);
+    progressValue = (index + 1) / (onBoardingList.isEmpty ? 1 : onBoardingList.length);
     pageController.animateToPage(
       currentIndex,
       duration: Duration(milliseconds: 300),
@@ -36,9 +33,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
 
   void skipPage() {
     if (onBoardingList.isNotEmpty) {
-      currentIndex = onBoardingList.length - 1;
-      pageController.jumpToPage(currentIndex);
-      emit(OnBoardingChange());
+      changePageController(onBoardingList.length - 1);
     }
   }
 

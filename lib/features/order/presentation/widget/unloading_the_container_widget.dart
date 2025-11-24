@@ -1,16 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_toast.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
+import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 import 'package:hawiah_client/features/order/presentation/widget/evaluation_result_widget.dart';
 
 class UnloadingTheContainerWidget extends StatefulWidget {
-  const UnloadingTheContainerWidget({super.key});
-
+  const UnloadingTheContainerWidget({super.key, required this.orderId, required this.userId});
+  final int orderId;
+  final int userId;
   @override
   State<UnloadingTheContainerWidget> createState() => _UnloadingTheContainerWidgetState();
 }
@@ -46,9 +51,33 @@ class _UnloadingTheContainerWidgetState extends State<UnloadingTheContainerWidge
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    setState(() {
-                      isPressed = true;
-                    });
+                    final orderCubit = context.read<OrderCubit>();
+
+                    if (!isPressed) {
+                      orderCubit.emptyOrder(
+                        orderId: widget.orderId,
+                        onSuccess: () {
+                          setState(() {
+                            isPressed = true;
+                          });
+                          CommonMethods.showToast(
+                            message: AppLocaleKey.emptySuccess.tr(),
+                            type: ToastType.success,
+                          );
+                        },
+                      );
+                    } else {
+                      orderCubit.repeatOrder(
+                        fromDate: DateTime.now().toString(),
+                        orderId: widget.orderId,
+                        onSuccess: () {
+                          CommonMethods.showToast(
+                            message: AppLocaleKey.orderReordered.tr(),
+                            type: ToastType.success,
+                          );
+                        },
+                      );
+                    }
                   },
                   child: Container(
                     height: 45.h,
@@ -82,7 +111,7 @@ class _UnloadingTheContainerWidgetState extends State<UnloadingTheContainerWidge
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
-                    showEvaluationDialog(context);
+                    showEvaluationDialog(context, userId: widget.userId);
                   },
                   child: Container(
                     height: 45.h,

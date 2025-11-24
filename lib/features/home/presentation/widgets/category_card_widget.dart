@@ -27,8 +27,8 @@ class HomeCategoryCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomNetworkImage(
-              height: 40,
-              width: 40,
+              height: 95.h,
+              width: 150.w,
               imageUrl: item.image ?? "",
               fit: BoxFit.contain,
             ),

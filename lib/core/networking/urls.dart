@@ -43,6 +43,8 @@ class Urls {
   static const String addresses = '${baseUrl}user-addresses';
   static const String storeAddress = '${baseUrl}user-addresses';
   static String repeateOrder = '${baseUrl}users/orders/repeate-order';
+  static String emptyOrder = '${baseUrl}users/orders/empty-order';
+  static String rateDiver = '${baseUrl}rate-driver';
   static String neighborhoodsByCity(int id) => '${baseUrl}neighborhoods/$id';
   static String updateAddress(int id) => '${baseUrl}user-addresses/$id';
   static String payment(int orderId) => '${baseUrl}paymob-paid/?order_id=$orderId';
@@ -56,4 +58,5 @@ class Urls {
 
   static String deleteNotification(int id) => '${baseUrl}notifications/$id';
   static String applayCoupon = '${baseUrl}coupon/check';
+  static String questions = '${baseUrl}faq';
 }

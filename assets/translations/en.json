@@ -296,5 +296,6 @@
   "evaluationHelpText": "Help us improve the service by evaluating ",
   "evaluationAdditionalNotes": "Additional notes (optional)",
   "evaluationHint": "Write your notes here...",
-  "evaluationSend": "Send Evaluation"
+  "evaluationSend": "Send Evaluation",
+   "orderReordered": "Order Reordered"
 }

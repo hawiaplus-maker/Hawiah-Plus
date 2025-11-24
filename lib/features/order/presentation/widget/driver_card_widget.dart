@@ -75,23 +75,27 @@ class DriverCardWidget extends StatelessWidget {
                   ),
                 ],
                 Gap(20.h),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: AppColor.mainAppColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(AppImages.phoneSupport,
-                          height: 14.h, width: 14.w, fit: BoxFit.cover),
-                      Gap(5.w),
-                      Text(AppLocaleKey.contactDriver.tr(),
-                          style: AppTextStyle.text14_500.copyWith(color: AppColor.whiteColor)),
-                    ],
+                GestureDetector(
+                  onTap: () =>
+                      UrlLauncherMethods.launchURL(ordersData.driverMobile, isWhatsapp: false),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: AppColor.mainAppColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(AppImages.phoneSupport,
+                            height: 14.h, width: 14.w, fit: BoxFit.cover),
+                        Gap(5.w),
+                        Text(AppLocaleKey.contactDriver.tr(),
+                            style: AppTextStyle.text14_500.copyWith(color: AppColor.whiteColor)),
+                      ],
+                    ),
                   ),
                 ),
                 Gap(10.h),

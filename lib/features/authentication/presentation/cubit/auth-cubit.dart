@@ -226,7 +226,11 @@ class AuthCubit extends Cubit<AuthState> {
       final message = response.data['message'] ?? 'Login completed';
 
       if (data != null) {
-        HiveMethods.updateToken(data['api_token']);
+        HiveMethods.updateToken(
+          data['api_token'],
+        );
+        HiveMethods.updateUserId(data['id']);
+
         await sl<ProfileCubit>().fetchProfile();
         emit(AuthSuccess(message: message));
       } else {
