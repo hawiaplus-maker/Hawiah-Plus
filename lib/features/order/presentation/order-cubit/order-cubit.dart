@@ -341,12 +341,19 @@ class OrderCubit extends Cubit<OrderState> {
 
   // =================== rate-Diver ====================
   Future<void> rateDiver({
-    required int userId,
+    int? orderId,
     required int rate,
+    required int serviceProviderId,
+    String? message,
     required VoidCallback onSuccess,
   }) async {
     NavigatorMethods.loading();
-    FormData body = FormData.fromMap({'user_id': userId, 'rating': rate});
+    FormData body = FormData.fromMap({
+      'service_provider_id': serviceProviderId,
+      'rating': rate,
+      'order_id': orderId,
+      'message': message
+    });
     final response = await ApiHelper.instance.post(
       Urls.rateDiver,
       body: body,

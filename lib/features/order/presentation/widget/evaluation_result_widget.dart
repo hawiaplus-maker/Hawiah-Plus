@@ -16,7 +16,8 @@ class EvaluationResult {
   EvaluationResult({required this.rating, required this.comment});
 }
 
-Future<EvaluationResult?> showEvaluationDialog(BuildContext context, {required int userId}) {
+Future<EvaluationResult?> showEvaluationDialog(BuildContext context,
+    {required int orderId, required int serviceProviderId}) {
   int currentRating = 0;
 
   final TextEditingController commentController = TextEditingController();
@@ -118,7 +119,9 @@ Future<EvaluationResult?> showEvaluationDialog(BuildContext context, {required i
               text: AppLocaleKey.evaluationSend.tr(),
               onPressed: () {
                 context.read<OrderCubit>().rateDiver(
-                      userId: userId,
+                      orderId: orderId,
+                      serviceProviderId: serviceProviderId,
+                      message: commentController.text,
                       rate: currentRating,
                       onSuccess: () => Navigator.pop(context,
                           EvaluationResult(rating: currentRating, comment: commentController.text)),

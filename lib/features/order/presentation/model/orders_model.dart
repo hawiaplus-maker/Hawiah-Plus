@@ -86,6 +86,7 @@ class SingleOrderData {
   int? paidStatus;
   Map<String, String>? status; // سيبها كما هي
   int? priceId;
+  int? serviceProviderId;
   int? duration;
   String? totalPrice;
   String? fromDate;
@@ -151,6 +152,7 @@ class SingleOrderData {
     this.contract,
     this.invoice,
     this.support,
+    this.serviceProviderId,
   });
 
   factory SingleOrderData.fromJson(Map<String, dynamic> json) {
@@ -191,6 +193,7 @@ class SingleOrderData {
       contract: json['contract'],
       invoice: json['invoice'],
       support: json['support'],
+      serviceProviderId: json['service_provider_id'],
     );
   }
 
@@ -232,6 +235,7 @@ class SingleOrderData {
     map['contract'] = contract;
     map['invoice'] = invoice;
     map['support'] = support;
+    map['service_provider_id'] = serviceProviderId;
     return map;
   }
 }
