@@ -127,7 +127,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   addressId: widget.args.addressId,
                   fromDate: widget.args.fromDate,
                   onSuccess: (v) async {
-                    LayoutMethouds.getdata();
+                    await LayoutMethouds.getdata();
                     NavigatorMethods.pushReplacementNamed(
                       context,
                       LayoutScreen.routeName,

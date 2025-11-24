@@ -128,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
             context.read<AuthCubit>().clearEC();
             CommonMethods.showToast(message: state.message);
             log("======================================= Navigate to Layout Screen=======================================");
-            LayoutMethouds.getdata();
+            await LayoutMethouds.getdata();
             Navigator.pushAndRemoveUntil<void>(
               context,
               MaterialPageRoute<void>(

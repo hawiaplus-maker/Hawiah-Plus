@@ -19,11 +19,6 @@ class LayoutScreen extends StatefulWidget {
 }
 
 class _LayoutScreenState extends State<LayoutScreen> {
-  @override
-  initState() {
-    super.initState();
-  }
-
   int selectedIndex = 0;
 
   List<Widget> get _screens => [

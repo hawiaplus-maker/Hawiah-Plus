@@ -97,7 +97,7 @@ void _performNavigation(NotificationData data) async {
   final ctx = navigatorKey.currentContext!;
   switch (data.type) {
     case NotificationType.trackOrder:
-      LayoutMethouds.getdata();
+      await LayoutMethouds.getdata();
       NavigatorMethods.pushNamed(
         ctx,
         LayoutScreen.routeName,

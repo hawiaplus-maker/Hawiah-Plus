@@ -23,7 +23,7 @@ class CompanyNavigationButtons extends StatelessWidget {
         ? GlobalElevatedButton(
             label: "home_screen".tr(),
             onPressed: () async {
-              LayoutMethouds.getdata();
+              await LayoutMethouds.getdata();
               Navigator.pushAndRemoveUntil<void>(
                 context,
                 MaterialPageRoute<void>(

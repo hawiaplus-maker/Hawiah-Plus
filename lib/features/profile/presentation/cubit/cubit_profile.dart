@@ -52,20 +52,25 @@ class ProfileCubit extends Cubit<ProfileState> {
   List<QuestionModel> get questions => _questions;
 
   Future<void> getQuestions() async {
-    _questionsResponse = ApiResponse(state: ResponseState.loading, data: null);
+    // 1. لو البيانات موجودة خلاص متحملش ولا تعمل emit
+    if (_questions.isNotEmpty) {
+      emit(ProfileLoadedQuestions(_questions));
+      return;
+    }
+
+    // 2. أول تحميل فقط
     emit(ProfileLoading());
+    _questionsResponse = ApiResponse(state: ResponseState.loading, data: null);
 
     try {
       final response = await ApiHelper.instance.get(Urls.questions);
 
       _questionsResponse = response;
 
-      if (_questionsResponse.state == ResponseState.complete && _questionsResponse.data != null) {
-        _questions = questionModelFromJson(
-          jsonEncode(_questionsResponse.data),
-        );
+      if (response.state == ResponseState.complete && response.data != null) {
+        _questions = questionModelFromJson(jsonEncode(response.data));
         emit(ProfileLoadedQuestions(_questions));
-      } else if (_questionsResponse.state == ResponseState.unauthorized) {
+      } else if (response.state == ResponseState.unauthorized) {
         emit(ProfileUnAuthorized());
       } else {
         emit(ProfileError("Failed to fetch questions"));

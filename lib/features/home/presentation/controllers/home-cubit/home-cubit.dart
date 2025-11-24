@@ -9,7 +9,7 @@ import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/presentation/model/categories_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/services_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
-import 'package:hawiah_client/features/home/presentation/model/show_services_model.dart';
+import 'package:hawiah_client/features/home/presentation/model/slider_model.dart';
 import 'package:hawiah_client/features/location/presentation/model/quick_selection_card_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -59,37 +59,41 @@ class HomeCubit extends Cubit<HomeState> {
     changeRebuild();
   }
 
-  void initialSlider() {
-    _sliderResponse = ApiResponse(
+  void initialInHomeSliders() {
+    _homeSlidersResponse = ApiResponse(
       state: ResponseState.sleep,
       data: null,
     );
-    _slider = null;
+
     emit(HomeChange());
   }
 
-  ApiResponse _sliderResponse = ApiResponse(
+  ApiResponse _homeSlidersResponse = ApiResponse(
     state: ResponseState.sleep,
     data: null,
   );
-  ApiResponse get sliderResponse => _sliderResponse;
+  ApiResponse get homeSlidersResponse => _homeSlidersResponse;
 
-  ShowservicesModel? _slider;
-  ShowservicesModel? get setting => _slider;
-  Future<void> getslider() async {
-    _sliderResponse = ApiResponse(
+  List<SliderModel> _homeSliders = [];
+  List<SliderModel> get homeSliders => _homeSliders;
+  Future<void> getHomeSliders() async {
+    _homeSlidersResponse = ApiResponse(
       state: ResponseState.loading,
       data: null,
     );
-    _slider = null;
+    _homeSliders = [];
     emit(HomeChange());
 
-    _sliderResponse = await ApiHelper.instance.get(Urls.showServices(81));
+    _homeSlidersResponse = await ApiHelper.instance.get(
+      Urls.sliders,
+    );
 
-    if (_sliderResponse.state == ResponseState.complete && _sliderResponse.data != null) {
-      _slider = ShowservicesModel.fromJson(_sliderResponse.data);
+    if (homeSlidersResponse.state == ResponseState.complete && _homeSlidersResponse.data != null) {
+      Iterable iterable = _homeSlidersResponse.data['data'];
+      _homeSliders = iterable.map((e) => SliderModel.fromJson(e)).toList();
+
       emit(HomeChange());
-    } else if (_sliderResponse.state == ResponseState.unauthorized) {
+    } else if (_homeSlidersResponse.state == ResponseState.unauthorized) {
       emit(HomeChange());
     }
   }
@@ -113,11 +117,11 @@ class HomeCubit extends Cubit<HomeState> {
   ServicesModel? _services;
   ServicesModel? get services => _services;
   Future<void> getservices() async {
-    _sliderResponse = ApiResponse(
+    _servicesResponse = ApiResponse(
       state: ResponseState.loading,
       data: null,
     );
-    _slider = null;
+    _services = null;
     emit(HomeChange());
 
     _servicesResponse =
@@ -262,7 +266,7 @@ class HomeCubit extends Cubit<HomeState> {
     state: ResponseState.sleep,
     data: null,
   );
-  ApiResponse get showCategoriesResponse => _sliderResponse;
+  ApiResponse get showCategoriesResponse => _showCategoriesResponse;
 
   ShowCategoriesModel? _showCategories;
   ShowCategoriesModel? get showCategories => _showCategories;

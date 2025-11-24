@@ -82,16 +82,18 @@ class HomeAppBarTitle extends StatelessWidget {
               style: AppTextStyle.text14_400
                   .copyWith(color: AppColor.greyColor, fontFamily: "DINNextLTArabic"),
             ),
-            trailing: InkWell(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const NotificationsScreen();
-                }));
-              },
-              child: SvgPicture.asset(
-                AppImages.notificationDot,
-              ),
-            ),
+            trailing: HiveMethods.isVisitor() == true
+                ? const SizedBox()
+                : InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return const NotificationsScreen();
+                      }));
+                    },
+                    child: SvgPicture.asset(
+                      AppImages.notificationDot,
+                    ),
+                  ),
           );
         }
         return SizedBox();

@@ -112,7 +112,7 @@ class SuccessOrderConfirmationScreen extends StatelessWidget {
               CustomButton(
                 text: AppLocaleKey.backToHome.tr(),
                 onPressed: () async {
-                  LayoutMethouds.getdata();
+                  await LayoutMethouds.getdata();
                   NavigatorMethods.pushNamedAndRemoveUntil(context, LayoutScreen.routeName);
                 },
               ),

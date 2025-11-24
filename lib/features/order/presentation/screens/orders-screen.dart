@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/no_data_widget.dart';
+import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
@@ -30,13 +31,20 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
   void initState() {
     super.initState();
     super.initState();
-
+    if (HiveMethods.isVisitor() || HiveMethods.getToken() == null) {
+      isVesetor = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        NavigatorMethods.showAppDialog(context, UnauthenticatedDialog());
+      });
+    }
     final cubit = sl<OrderCubit>();
 
     cubit.getOrders(orderStatus: 0);
     cubit.getOrders(orderStatus: 1);
     _tabController = TabController(length: 2, vsync: this);
   }
+
+  bool isVesetor = false;
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +111,10 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
                 },
                 builder: (context, state) {
                   if (state is Unauthenticated) {
-                    return Center(child: NoDataWidget());
+                    return Center(
+                        child: NoDataWidget(
+                      message: AppLocaleKey.noCurrentOrders.tr(),
+                    ));
                   }
                   return TabBarView(
                     controller: _tabController,
