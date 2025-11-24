@@ -13,9 +13,10 @@ import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubi
 import 'package:hawiah_client/features/order/presentation/widget/evaluation_result_widget.dart';
 
 class UnloadingTheContainerWidget extends StatefulWidget {
-  const UnloadingTheContainerWidget({super.key, required this.orderId, required this.userId});
+  const UnloadingTheContainerWidget(
+      {super.key, required this.orderId, required this.serviceProviderId});
   final int orderId;
-  final int userId;
+  final int serviceProviderId;
   @override
   State<UnloadingTheContainerWidget> createState() => _UnloadingTheContainerWidgetState();
 }
@@ -111,7 +112,8 @@ class _UnloadingTheContainerWidgetState extends State<UnloadingTheContainerWidge
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
-                    showEvaluationDialog(context, userId: widget.userId);
+                    showEvaluationDialog(context,
+                        orderId: widget.orderId, serviceProviderId: widget.serviceProviderId);
                   },
                   child: Container(
                     height: 45.h,
