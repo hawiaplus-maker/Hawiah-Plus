@@ -35,7 +35,7 @@ class _BestSellerWidgtState extends State<BestSellerWidgt> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CategoryDetailsScreen(id: widget.item.id ?? 0),
+            builder: (context) => CategoryDetailsScreen(id: widget.item.categoryId.first),
           ),
         );
       },
