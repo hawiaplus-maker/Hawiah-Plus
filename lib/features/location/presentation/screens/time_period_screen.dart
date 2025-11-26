@@ -159,7 +159,7 @@ class _TimePeriodScreenState extends State<TimePeriodScreen> {
             ),
             Gap(30.h),
             Text(
-              AppLocaleKey.quickSelection.tr(),
+              AppLocaleKey.requestLater.tr(),
               style: AppTextStyle.text18_500,
             ),
             Gap(20.h),

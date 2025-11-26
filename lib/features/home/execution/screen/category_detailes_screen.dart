@@ -35,7 +35,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
         final cubit = HomeCubit.get(context);
         final data = cubit.showCategories?.message;
 
-        final services = data?.services ?? [];
+        //final services = data?.services ?? [];
 
         return Scaffold(
           appBar: CustomAppBar(

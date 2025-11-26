@@ -59,6 +59,7 @@ class CategoryCardWidget extends StatelessWidget {
                         '${homeCubit.showCategories?.message?.services?[index].size.toString() ?? ""} ${AppLocaleKey.meter.tr()}',
                         textAlign: TextAlign.center,
                         style: AppTextStyle.text10_400.copyWith(color: AppColor.whiteColor),
+                        maxLines: 1,
                       ),
                     )),
                 SizedBox(height: 20.h),
@@ -74,11 +75,13 @@ class CategoryCardWidget extends StatelessWidget {
                 Text(
                   homeCubit.showCategories?.message?.services?[index].title ?? "",
                   style: AppTextStyle.text14_500,
+                  maxLines: 1,
                 ),
                 SizedBox(height: 5.h),
                 Text(
                   homeCubit.showCategories?.message?.services?[index].description ?? "",
                   style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
+                  maxLines: 1,
                 ),
                 SizedBox(height: 10.h),
                 Row(

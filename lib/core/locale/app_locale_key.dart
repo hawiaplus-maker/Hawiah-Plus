@@ -201,7 +201,7 @@ class AppLocaleKey {
   static const String dimensions = 'Dimensions';
   static const String Capacity = 'Capacity';
 
-  static const String deliveryTime = 'deliveryTime';
+  static const String numberOfDayes = 'numberOfDayes';
   static const String trusted = 'trusted';
   static const String responseSpeed = 'responseSpeed';
 
@@ -214,7 +214,7 @@ class AppLocaleKey {
   static const String selectEndDate = 'selectEndDate';
   static const String rentalPeriod = 'rentalPeriod';
   static const String dayss = 'dayss';
-  static const String quickSelection = 'quickSelection';
+  static const String requestLater = 'requestLater';
   static const String continueToServiceProviders = 'continueToServiceProviders';
   static const String orderdata = 'orderdata';
   static const String orderCode = 'orderCode';

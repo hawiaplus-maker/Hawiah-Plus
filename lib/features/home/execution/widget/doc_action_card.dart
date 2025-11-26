@@ -56,13 +56,15 @@ class DocumentActionCard extends StatelessWidget {
           border: Border.all(color: AppColor.lightMainAppColor.withAlpha(80)),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(height: 10),
             Image.asset(image, height: 40),
             Text(title, style: AppTextStyle.text14_500),
-            Text(
-              subtitle,
-              style: AppTextStyle.text14_400.copyWith(color: AppColor.greyTextColor),
-            ),
+            // Text(
+            //   subtitle,
+            //   style: AppTextStyle.text14_400.copyWith(color: AppColor.greyTextColor),
+            // ),
             const SizedBox(height: 5),
             SizedBox(
               width: double.infinity,

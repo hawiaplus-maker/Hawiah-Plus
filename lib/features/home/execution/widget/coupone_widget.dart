@@ -39,42 +39,55 @@ class _CouponeWidgetState extends State<CouponeWidget> {
       ),
       child: Form(
         key: _formkey,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 2,
-              child: CustomTextField(
-                controller: controller,
-                title: AppLocaleKey.discountCoupon.tr(),
-                hintText: AppLocaleKey.enterDiscountCoupon.tr(),
-                validator: ValidationMethods.validateEmptyField,
-              ),
+            Text(
+              AppLocaleKey.discountCoupon.tr(),
+              style: AppTextStyle.textFormStyle,
             ),
-            const SizedBox(
-              width: 10,
+            SizedBox(
+              height: 10,
             ),
-            Expanded(
-              flex: 1,
-              child: CustomButton(
-                height: 45,
-                radius: 5,
-                prefixIcon: Image.asset(AppImages.copunImage, height: 20, width: 20),
-                color: AppColor.secondAppColor,
-                text: AppLocaleKey.apply.tr(),
-                style: AppTextStyle.text14_600.copyWith(color: AppColor.whiteColor, height: -0.5),
-                onPressed: () {
-                  if (_formkey.currentState!.validate()) {
-                    context.read<OrderCubit>().applyCoupon(
-                          code: controller.text,
-                          onSuccess: () {
-                            controller.clear();
-                          },
-                        );
-                  }
-                },
-              ),
-            )
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: CustomTextField(
+                    controller: controller,
+                    hintText: AppLocaleKey.enterDiscountCoupon.tr(),
+                    validator: ValidationMethods.validateEmptyField,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: CustomButton(
+                    height: 45,
+                    radius: 5,
+                    prefixIcon: Image.asset(AppImages.copunImage, height: 20, width: 20),
+                    color: AppColor.secondAppColor,
+                    text: AppLocaleKey.apply.tr(),
+                    style:
+                        AppTextStyle.text14_600.copyWith(color: AppColor.whiteColor, height: -0.5),
+                    onPressed: () {
+                      if (_formkey.currentState!.validate()) {
+                        context.read<OrderCubit>().applyCoupon(
+                              code: controller.text,
+                              onSuccess: () {
+                                controller.clear();
+                              },
+                            );
+                      }
+                    },
+                  ),
+                )
+              ],
+            ),
           ],
         ),
       ),

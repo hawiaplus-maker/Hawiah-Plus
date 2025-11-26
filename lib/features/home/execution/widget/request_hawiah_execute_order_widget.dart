@@ -20,24 +20,27 @@ class RequestHawiahExecuteOrderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: CustomButton(
-        text: AppLocaleKey.executeorder.tr(),
-        onPressed: () {
-          final homeCubit = context.read<HomeCubit>();
-          final orderCubit = context.read<OrderCubit>();
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: CustomButton(
+          text: AppLocaleKey.executeorder.tr(),
+          onPressed: () {
+            final homeCubit = context.read<HomeCubit>();
+            final orderCubit = context.read<OrderCubit>();
 
-          orderCubit.createOrder(
-            serviceProviderId: args.serviceProviderId,
-            priceId: args.nearbyServiceProviderModel.id!,
-            addressId: args.address.id!,
-            fromDate: DateFormat('yyyy-MM-dd', 'en').format(homeCubit.rangeStart ?? DateTime.now()),
-            onSuccess: (order) => NavigatorMethods.pushNamed(
-                context, SuccessOrderConfirmationScreen.routeName,
-                arguments: order),
-          );
-        },
+            orderCubit.createOrder(
+              serviceProviderId: args.serviceProviderId,
+              priceId: args.nearbyServiceProviderModel.id!,
+              addressId: args.address.id!,
+              fromDate:
+                  DateFormat('yyyy-MM-dd', 'en').format(homeCubit.rangeStart ?? DateTime.now()),
+              onSuccess: (order) => NavigatorMethods.pushNamed(
+                  context, SuccessOrderConfirmationScreen.routeName,
+                  arguments: order),
+            );
+          },
+        ),
       ),
     );
   }
