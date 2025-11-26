@@ -86,7 +86,7 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/appLogoImage.png"
+  image_path: "assets/images/appWhiteLogoImage.png"
   min_sdk_android: 21
 
 flutter:
@@ -110,7 +110,7 @@ flutter:
           weight: 700
 
 flutter_native_splash:
-  image: "assets/images/appLogoImage.png"
+  image: "assets/images/appWhiteLogoImage.png"
   color: "FFFFFF"
   android: true
   ios: true
