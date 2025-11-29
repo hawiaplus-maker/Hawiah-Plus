@@ -117,18 +117,18 @@ class NearbyCardWidget extends StatelessWidget {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SvgPicture.asset(AppImages.bowArrowIcon, height: 15, width: 15),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            " ${AppLocaleKey.responseSpeed.tr(args: [
-                                  providers.responseSpeed.toString(),
-                                ])}",
-                            style: AppTextStyle.text10_400.copyWith(
-                              color: AppColor.greyTextColor,
-                            ),
-                          ),
+                          // SvgPicture.asset(AppImages.bowArrowIcon, height: 15, width: 15),
+                          // SizedBox(
+                          //   width: 5,
+                          // ),
+                          // Text(
+                          //   " ${AppLocaleKey.responseSpeed.tr(args: [
+                          //         providers.responseSpeed.toString(),
+                          //       ])}",
+                          //   style: AppTextStyle.text10_400.copyWith(
+                          //     color: AppColor.greyTextColor,
+                          //   ),
+                          // ),
                         ],
                       ),
                       SizedBox(

@@ -65,7 +65,7 @@ class AllCategoriesScreen extends StatelessWidget {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10.w,
                     mainAxisSpacing: 10.h,
-                    childAspectRatio: 1),
+                    childAspectRatio: .85),
                 itemBuilder: (context, index) {
                   final item = categories[index];
                   return GestureDetector(

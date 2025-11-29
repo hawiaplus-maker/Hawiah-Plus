@@ -77,25 +77,25 @@ class NearbyServiceProviderScreen extends StatelessWidget {
                                 args: args,
                               )),
                     ),
-                    SafeArea(
-                      bottom: true,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: AppColor.redColor.withAlpha(35),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          child: Text(
-                            AppLocaleKey.spHint.tr(),
-                            style: AppTextStyle.text14_400.copyWith(
-                              color: AppColor.redColor,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    )
+                    // SafeArea(
+                    //   bottom: true,
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //       color: AppColor.redColor.withAlpha(35),
+                    //     ),
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    //       child: Text(
+                    //         AppLocaleKey.spHint.tr(),
+                    //         style: AppTextStyle.text14_400.copyWith(
+                    //           color: AppColor.redColor,
+                    //         ),
+                    //         textAlign: TextAlign.center,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               ),

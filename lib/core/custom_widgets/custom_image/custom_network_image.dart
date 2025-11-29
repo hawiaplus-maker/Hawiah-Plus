@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/zoom_image_screen.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
@@ -108,13 +108,10 @@ class CustomNetworkImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
-
       memCacheWidth: w.toInt(),
       memCacheHeight: h.toInt(),
-
       placeholder: (_, __) => _buildPlaceholder(),
       errorWidget: (_, __, ___) => _buildErrorWidget(),
-
       useOldImageOnUrlChange: true,
       fadeInDuration: Duration.zero,
       fadeOutDuration: Duration.zero,
@@ -131,7 +128,11 @@ class CustomNetworkImage extends StatelessWidget {
         color: Colors.grey.shade200,
       ),
       child: const Center(
-        child: Icon(Icons.image, size: 28, color: Colors.grey),
+        child: Image(
+          image: AssetImage(
+            AppImages.hawiahPlus,
+          ),
+        ),
       ),
     );
   }
@@ -151,7 +152,6 @@ class CustomNetworkImage extends StatelessWidget {
           height: (height ?? width ?? 60) * 0.6,
         ),
       ),
-
     );
   }
 

@@ -309,7 +309,7 @@
    "cubicMeter": " متر مكعب",
    "Dimensions": "الأبعاد:",
    "Capacity": "السعة:",
-   "deliveryTime": "مدة التوصيل : {} يوم",
+   "deliveryTime": " عدد الايام : {} يوم",
    "trusted": "موثق",
    "responseSpeed": "سرعة الاستجابة :{}",
    "timePeriod": "الفترة الزمنية",
