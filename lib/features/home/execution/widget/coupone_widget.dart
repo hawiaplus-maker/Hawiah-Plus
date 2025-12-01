@@ -13,8 +13,9 @@ import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubi
 class CouponeWidget extends StatefulWidget {
   const CouponeWidget({
     super.key,
+    required this.orderId,
   });
-
+  final int orderId;
   @override
   State<CouponeWidget> createState() => _CouponeWidgetState();
 }
@@ -78,6 +79,7 @@ class _CouponeWidgetState extends State<CouponeWidget> {
                       if (_formkey.currentState!.validate()) {
                         context.read<OrderCubit>().applyCoupon(
                               code: controller.text,
+                              orderId: widget.orderId,
                               onSuccess: () {
                                 controller.clear();
                               },

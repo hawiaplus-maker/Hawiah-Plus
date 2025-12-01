@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/home/execution/screen/order_review_detailes.dart';
 import 'package:hawiah_client/features/home/execution/screen/request_hawia_screen.dart';
-import 'package:hawiah_client/features/home/execution/screen/success_order_confirmation_screen.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 
 import '../../presentation/controllers/home-cubit/home-cubit.dart';
@@ -36,7 +36,7 @@ class RequestHawiahExecuteOrderWidget extends StatelessWidget {
               fromDate:
                   DateFormat('yyyy-MM-dd', 'en').format(homeCubit.rangeStart ?? DateTime.now()),
               onSuccess: (order) => NavigatorMethods.pushNamed(
-                  context, SuccessOrderConfirmationScreen.routeName,
+                  context, OrderReviewDetailes.routeName,
                   arguments: order),
             );
           },
