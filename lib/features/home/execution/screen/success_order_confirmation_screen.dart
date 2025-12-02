@@ -7,24 +7,19 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/home/execution/screen/order_review_detailes.dart';
-import 'package:hawiah_client/features/home/execution/widget/success_confirmation_invoice_and_contract_widget.dart';
 import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
-import 'package:hawiah_client/features/order/presentation/model/order_details_model.dart';
 
 class SuccessOrderConfirmationScreen extends StatelessWidget {
   static const String routeName = 'SuccessOrderConfirmation';
-  const SuccessOrderConfirmationScreen({super.key, required this.ordersModel});
-  final OrderDetailsModel ordersModel;
+  const SuccessOrderConfirmationScreen({
+    super.key,
+    // required this.ordersModel
+  });
+  //final OrderDetailsModel ordersModel;
 
   @override
   Widget build(BuildContext context) {
-    final rawValue = ordersModel.totalPrice.toString().replaceAll(',', '');
-    final double mainPrice = double.tryParse(rawValue) ?? 0.0;
-
-    final double tax = mainPrice * 0.15;
-    final double total = mainPrice + tax;
     return Scaffold(
       appBar: CustomAppBar(
         context,
@@ -51,17 +46,17 @@ class SuccessOrderConfirmationScreen extends StatelessWidget {
                 AppLocaleKey.orderConfirmedSuccessfully.tr(),
                 style: AppTextStyle.text18_700,
               ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                AppLocaleKey.ordernumber.tr(args: [ordersModel.referenceNumber.toString()]),
-                style: AppTextStyle.text18_400.copyWith(color: AppColor.greyTextColor),
-              ),
+              // SizedBox(
+              //   height: 10,
+              // ),
+              // Text(
+              //   AppLocaleKey.ordernumber.tr(args: [ordersModel.referenceNumber.toString()]),
+              //   style: AppTextStyle.text18_400.copyWith(color: AppColor.greyTextColor),
+              // ),
               SizedBox(
                 height: 40,
               ),
-              SuccessConfirmationInvoiceAndContractWidget(ordersModel: ordersModel),
+              //  SuccessConfirmationInvoiceAndContractWidget(ordersModel: ordersModel),
               SizedBox(
                 height: 40,
               ),
@@ -127,7 +122,7 @@ class SuccessOrderConfirmationScreen extends StatelessWidget {
               //         });
               //   },
               //   text: AppLocaleKey.payXSar.tr(
-              //     args: [total.toStringAsFixed(2).toString()],
+              //      args: [ordersModel.totalPrice ?? ""],
               //   ),
               // ),
               // SizedBox(
@@ -135,28 +130,24 @@ class SuccessOrderConfirmationScreen extends StatelessWidget {
               // ),
               Row(
                 children: [
+                  // Expanded(
+                  //   child: CustomButton(
+                  //     color: AppColor.secondAppColor,
+                  //     text: AppLocaleKey.viewOrderDetails.tr(),
+                  //     style: AppTextStyle.text14_600
+                  //         .copyWith(color: AppColor.whiteColor, height: -0.5),
+                  //     onPressed: () {
+                  //       NavigatorMethods.pushNamed(context, OrderReviewDetailes.routeName,
+                  //           arguments: ordersModel);
+                  //     },
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   width: 20,
+                  // ),
                   Expanded(
                     child: CustomButton(
-                      color: AppColor.secondAppColor,
-                      text: AppLocaleKey.viewOrderDetails.tr(),
-                      style: AppTextStyle.text14_600
-                          .copyWith(color: AppColor.whiteColor, height: -0.5),
-                      onPressed: () {
-                        NavigatorMethods.pushNamed(context, OrderReviewDetailes.routeName,
-                            arguments: ordersModel);
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                    child: CustomButton(
-                      borderColor: AppColor.orangeColor,
-                      color: AppColor.orangeColor.withAlpha(80),
                       text: AppLocaleKey.backToHome.tr(),
-                      style: AppTextStyle.text16_600
-                          .copyWith(color: AppColor.orangeColor, height: -0.5),
                       onPressed: () async {
                         await LayoutMethouds.getdata();
                         NavigatorMethods.pushNamedAndRemoveUntil(context, LayoutScreen.routeName);

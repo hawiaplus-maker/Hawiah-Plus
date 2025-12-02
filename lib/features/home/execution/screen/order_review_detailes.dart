@@ -16,32 +16,49 @@ import 'package:hawiah_client/features/order/presentation/model/order_details_mo
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 import 'package:hawiah_client/features/order/presentation/screens/payment_web_view.dart';
 
-class OrderReviewDetailes extends StatelessWidget {
+class OrderReviewDetailes extends StatefulWidget {
   const OrderReviewDetailes({super.key, required this.ordersModel});
   static const String routeName = 'OrderReviewDetailes';
   final OrderDetailsModel ordersModel;
+
+  @override
+  State<OrderReviewDetailes> createState() => _OrderReviewDetailesState();
+}
+
+class _OrderReviewDetailesState extends State<OrderReviewDetailes> {
+  String? discountValue;
+  int? discount;
   @override
   Widget build(BuildContext context) {
-    final rawValue = ordersModel.totalPrice.toString().replaceAll(',', '');
-    final double mainPrice = double.tryParse(rawValue) ?? 0.0;
+    final rawValue = widget.ordersModel.totalPrice.toString().replaceAll(',', '');
 
-    final double tax = mainPrice * 0.15;
-    final double total = mainPrice + tax;
     return Scaffold(
       appBar: CustomAppBar(context, titleText: AppLocaleKey.orderSummary.tr()),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(children: [
-            OrderDetailesWidget(ordersModel: ordersModel),
+            OrderDetailesWidget(ordersModel: widget.ordersModel),
             SizedBox(
               height: 15,
             ),
-            OrderDetailsPricingSection(ordersModel: ordersModel),
+            OrderDetailsPricingSection(
+              ordersModel: widget.ordersModel,
+              discount: discount,
+              discountValue: discountValue,
+            ),
             SizedBox(
               height: 15,
             ),
-            CouponeWidget(orderId: ordersModel.id ?? 0),
+            CouponeWidget(
+              orderId: widget.ordersModel.id ?? 0,
+              onCouponeAppLayed: (discountValue, discount) {
+                setState(() {
+                  this.discountValue = discountValue;
+                  this.discount = discount;
+                });
+              },
+            ),
             SizedBox(
               height: 15,
             ),
@@ -49,12 +66,13 @@ class OrderReviewDetailes extends StatelessWidget {
               onTap: () {
                 log("get payment link");
                 context.read<OrderCubit>().getPaymentLink(
-                    orderId: ordersModel.id!,
+                    orderId: widget.ordersModel.id!,
                     onSuccess: (url) {
                       if (url.contains('already exists') == true) {
                         CommonMethods.showError(message: url);
                       } else {
-                        NavigatorMethods.pushNamed(context, CustomPaymentWebViewScreen.routeName,
+                        NavigatorMethods.pushReplacementNamed(
+                            context, CustomPaymentWebViewScreen.routeName,
                             arguments: PaymentArgs(
                                 url: url,
                                 onFailed: () {
@@ -79,7 +97,13 @@ class OrderReviewDetailes extends StatelessWidget {
                       padding: const EdgeInsets.all(15.0),
                       child: Text(
                         AppLocaleKey.payXSar.tr(
-                          args: [total.toStringAsFixed(2).toString()],
+                          args: [
+                            discountValue != null
+                                ? ((double.tryParse(widget.ordersModel.totalPrice ?? "0") ?? 0) -
+                                        (double.tryParse(discountValue ?? "0") ?? 0))
+                                    .toStringAsFixed(2)
+                                : widget.ordersModel.totalPrice ?? ""
+                          ],
                         ),
                         style: AppTextStyle.text18_700.copyWith(color: AppColor.whiteColor),
                       ),

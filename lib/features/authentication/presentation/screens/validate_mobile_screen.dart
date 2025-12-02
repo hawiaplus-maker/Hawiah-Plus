@@ -10,6 +10,7 @@ import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/cubit/auth-state.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/create_account_screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/phone-input-widget.dart';
@@ -80,6 +81,16 @@ class _ValidateMobileScreenState extends State<ValidateMobileScreen> {
                 CreateAccountDialog(
                   phoneNumber: AuthCubit.get(context).phoneController.text,
                 ));
+          } else if (state is ValidateFirestLoginSuccess) {
+            CommonMethods.showToast(message: state.message);
+            AuthCubit.get(context).otp(
+              phoneNumber: AuthCubit.get(context).phoneController.text,
+              otp: state.otp,
+              onSuccess: () {
+                NavigatorMethods.pushNamed(context, CreateAccountScreen.routeName,
+                    arguments: AuthCubit.get(context).phoneController.text);
+              },
+            );
           } else if (state is ValidateMobileError) {
             CommonMethods.showError(message: state.message);
           }

@@ -30,15 +30,16 @@ class RequestHawiahExecuteOrderWidget extends StatelessWidget {
             final orderCubit = context.read<OrderCubit>();
 
             orderCubit.createOrder(
-              serviceProviderId: args.serviceProviderId,
-              priceId: args.nearbyServiceProviderModel.id!,
-              addressId: args.address.id!,
-              fromDate:
-                  DateFormat('yyyy-MM-dd', 'en').format(homeCubit.rangeStart ?? DateTime.now()),
-              onSuccess: (order) => NavigatorMethods.pushNamed(
-                  context, OrderReviewDetailes.routeName,
-                  arguments: order),
-            );
+                serviceProviderId: args.serviceProviderId,
+                priceId: args.nearbyServiceProviderModel.id!,
+                addressId: args.address.id!,
+                fromDate:
+                    DateFormat('yyyy-MM-dd', 'en').format(homeCubit.rangeStart ?? DateTime.now()),
+                onSuccess: (order) {
+                  homeCubit.selectedIndex = -1;
+                  NavigatorMethods.pushNamed(context, OrderReviewDetailes.routeName,
+                      arguments: order);
+                });
           },
         ),
       ),

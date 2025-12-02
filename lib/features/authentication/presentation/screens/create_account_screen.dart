@@ -20,6 +20,7 @@ import '../cubit/auth-state.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key, this.phoneNumber});
+  static const String routeName = '/CreateAccountScreen';
   final String? phoneNumber;
 
   State<CreateAccountScreen> createState() => _CreateAccountScreenState();

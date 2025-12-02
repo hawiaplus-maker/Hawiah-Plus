@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/zoom_image_screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/create_account_screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/forget-password-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';

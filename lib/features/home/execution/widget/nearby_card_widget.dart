@@ -143,7 +143,7 @@ class NearbyCardWidget extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      AppLocaleKey.sar.tr(args: [providers.dailyPrice ?? ""]),
+                      AppLocaleKey.sar.tr(args: [providers.price ?? ""]),
                       style: AppTextStyle.text12_600.copyWith(color: AppColor.redColor),
                     ),
                     SizedBox(

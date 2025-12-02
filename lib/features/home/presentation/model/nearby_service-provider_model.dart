@@ -2,7 +2,7 @@ class NearbyServiceProviderModel {
   int? id;
   int? productId;
   String? image;
-  String? dailyPrice;
+  String? price;
   String? yearlyPrice;
   int? duration;
   int? deliveryTime;
@@ -15,7 +15,7 @@ class NearbyServiceProviderModel {
     this.id,
     this.productId,
     this.image,
-    this.dailyPrice,
+    this.price,
     this.yearlyPrice,
     this.duration,
     this.deliveryTime,
@@ -29,7 +29,7 @@ class NearbyServiceProviderModel {
     id = json['id'];
     productId = json['product_id'];
     image = json['image'];
-    dailyPrice = json['daily_price'];
+    price = json['price'];
     yearlyPrice = json['yearly_price'];
     duration = json['duration'];
     deliveryTime = json['delivery_time'];
@@ -44,7 +44,7 @@ class NearbyServiceProviderModel {
     data['id'] = id;
     data['product_id'] = productId;
     data['image'] = image;
-    data['daily_price'] = dailyPrice;
+    data['price'] = price;
     data['yearly_price'] = yearlyPrice;
     data['duration'] = duration;
     data['delivery_time'] = deliveryTime;

@@ -257,6 +257,11 @@ class AuthCubit extends Cubit<AuthState> {
         emit(ValidateMobileSuccess(message: message));
       } else if (response.data["status_Code"] == 422 || response.data["status_Code"] == 401) {
         emit(ValidateMobilePhoneIsNotRegistered());
+      } else if (message == "messages.first_login") {
+        emit(ValidateFirestLoginSuccess(
+            message: message, otp: response.data['data']['user']['otp']));
+      } else {
+        emit(ValidateMobileError(message: message ?? "حدث خطأ أثناء العملية"));
       }
     } else {
       emit(ValidateMobileError(message: message));
@@ -362,7 +367,8 @@ class AuthCubit extends Cubit<AuthState> {
   // -------------------------------------------------
   // 🔹 OTP
   // -------------------------------------------------
-  Future<void> otp({required String? phoneNumber, required int? otp}) async {
+  Future<void> otp(
+      {required String? phoneNumber, required int? otp, required VoidCallback onSuccess}) async {
     emit(VerifyOTPLoading());
     final response = await ApiHelper.instance.post(
       Urls.verify,
@@ -374,7 +380,9 @@ class AuthCubit extends Cubit<AuthState> {
       final data = response.data['data'];
       HiveMethods.updateToken(data['user']['api_token']);
       timer?.cancel();
+
       emit(VerifyOTPSuccess(message: response.data['message']));
+      onSuccess.call();
     } else {
       emit(VerifyOTPError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }

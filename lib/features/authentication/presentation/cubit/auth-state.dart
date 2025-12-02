@@ -125,6 +125,16 @@ class ValidateMobileSuccess extends AuthState {
   });
 }
 
+class ValidateFirestLoginSuccess extends AuthState {
+  final String message;
+  final int? otp;
+
+  ValidateFirestLoginSuccess({
+    required this.message,
+    required this.otp,
+  });
+}
+
 class ValidateMobileError extends AuthState {
   final String message;
 

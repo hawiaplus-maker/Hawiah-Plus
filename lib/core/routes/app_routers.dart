@@ -87,6 +87,12 @@ class AppRouters {
             args: args,
           ),
         );
+      case CreateAccountScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => CreateAccountScreen(
+            phoneNumber: args,
+          ),
+        );
       case CustomPaymentWebViewScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => CustomPaymentWebViewScreen(
@@ -128,8 +134,8 @@ class AppRouters {
       case SuccessOrderConfirmationScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => SuccessOrderConfirmationScreen(
-            ordersModel: args,
-          ),
+              //  ordersModel: args,
+              ),
         );
       case OrderReviewDetailes.routeName:
         return MaterialPageRoute(

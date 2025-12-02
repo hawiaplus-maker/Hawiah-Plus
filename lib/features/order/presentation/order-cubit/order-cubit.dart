@@ -432,7 +432,7 @@ class OrderCubit extends Cubit<OrderState> {
   Future<void> applyCoupon({
     required String code,
     required int orderId,
-    required VoidCallback onSuccess,
+    dynamic Function(String discountValue, int discount)? onSuccess,
   }) async {
     NavigatorMethods.loading();
     FormData body = FormData.fromMap({
@@ -448,7 +448,10 @@ class OrderCubit extends Cubit<OrderState> {
       CommonMethods.showToast(
         message: response.data['message'] ?? "تم  بنجاح",
       );
-      onSuccess.call();
+      onSuccess?.call(
+        response.data['0']['discount_value'].toString(),
+        response.data['0']['discount'],
+      );
     } else if (response.state == ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(
         message: tr(AppLocaleKey.youMustLogInFirst),

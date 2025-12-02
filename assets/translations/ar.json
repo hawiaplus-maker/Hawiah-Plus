@@ -354,6 +354,8 @@
    "rentalPeriority":"فترة الإستئجار",
    "discountCoupon":"كوبون الخصم",
    "enterDiscountCoupon":"أدخل كوبون الخصم",
+   "discount":"الخصم",
+   "priceAfterDiscount":"السعر بعد الخصم",
    "apply":"تطبيق",
    "allTransactionsSecureAndEncrypted":"🔒 جميع المعاملات آمنة ومشفرة",
    "paymentDetails":"تفاصيل الدفع",

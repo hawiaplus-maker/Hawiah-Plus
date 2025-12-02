@@ -10,7 +10,14 @@ class OrderDetailsModel {
   StatusModel? status;
   String? priceId;
   int? duration;
+
+  // --- الحقول المالية الجديدة ---
   String? totalPrice;
+  String? priceBeforeTax; // جديد
+  num? vat; // جديد (num يقبل int و double)
+  String? vatValue; // جديد
+  // ---------------------------
+
   String? fromDate;
   String? toDate;
   String? discount;
@@ -24,8 +31,12 @@ class OrderDetailsModel {
 
   List<VehicleModel>? vehicles;
 
+  // --- حقول مقدم الخدمة الجديدة ---
+  int? serviceProviderId; // جديد
   String? serviceProvider;
   String? serviceProviderMobile;
+  num? serviceProviderRating; // جديد
+  // ------------------------------
 
   String? user;
   String? userMobile;
@@ -51,6 +62,9 @@ class OrderDetailsModel {
     this.priceId,
     this.duration,
     this.totalPrice,
+    this.priceBeforeTax,
+    this.vat,
+    this.vatValue,
     this.fromDate,
     this.toDate,
     this.discount,
@@ -61,8 +75,10 @@ class OrderDetailsModel {
     this.driver,
     this.driverMobile,
     this.vehicles,
+    this.serviceProviderId,
     this.serviceProvider,
     this.serviceProviderMobile,
+    this.serviceProviderRating,
     this.user,
     this.userMobile,
     this.driverFcmToken,
@@ -76,17 +92,24 @@ class OrderDetailsModel {
   factory OrderDetailsModel.fromJson(Map<String, dynamic> json) {
     return OrderDetailsModel(
       id: json['id'],
-      otp: json['otp'],
+      otp: json['otp']?.toString(), // تحويل آمن لسترينج
       referenceNumber: json['reference_number'],
       address: json['address'],
+      // تحويل آمن للإحداثيات سواء كانت سترينج أو رقم
       latitude: double.tryParse(json['latitude']?.toString() ?? ''),
       longitude: double.tryParse(json['longitude']?.toString() ?? ''),
-      orderStatus: json['order_status'],
+      orderStatus: int.tryParse(json['order_status']?.toString() ?? ''),
       paidStatus: json['paid_status']?.toString(),
       status: json['status'] != null ? StatusModel.fromJson(json['status']) : null,
       priceId: json['price_id']?.toString(),
-      duration: json['duration'],
-      totalPrice: json['total_price'],
+      duration: int.tryParse(json['duration']?.toString() ?? ''),
+
+      // الحقول المالية
+      totalPrice: json['total_price']?.toString(),
+      priceBeforeTax: json['price_before_tax']?.toString(),
+      vat: json['vat'], // num يقبل (15) أو (15.0)
+      vatValue: json['vat_value']?.toString(),
+
       fromDate: json['from_date'],
       toDate: json['to_date'],
       discount: json['discount']?.toString(),
@@ -94,23 +117,33 @@ class OrderDetailsModel {
       createdAt: json['created_at'],
       product: json['product'],
       image: json['image'],
+
       driver: json['driver'],
-      driverMobile: json['driver_mobile'],
+      driverMobile: json['driver_mobile']?.toString(),
+
       vehicles: (json['vehicles'] as List?)?.map((e) => VehicleModel.fromJson(e)).toList() ?? [],
+
+      // حقول مقدم الخدمة
+      serviceProviderId: json['service_provider_id'],
       serviceProvider: json['service_provider'],
-      serviceProviderMobile: json['service_provider_mobile'],
+      serviceProviderMobile: json['service_provider_mobile']?.toString(),
+      serviceProviderRating: json['service_provider_rating'], // num يقبل (4.25)
+
       user: json['user'],
-      userMobile: json['user_mobile'],
+      userMobile: json['user_mobile']?.toString(),
+
       driverFcmToken: json['driver_fcm_token'],
       userFcmToken: json['user_fcm_token'],
       serviceProviderFcmToken: json['service_provider_fcm_token'],
+
       contract: json['contract'],
       invoice: json['invoice'],
-      support: json['support'],
+      support: json['support']?.toString(),
     );
   }
 }
 
+// الكلاسات الفرعية كما هي، فقط تأكدنا من صحتها
 class StatusModel {
   String? en;
   String? ar;
@@ -123,11 +156,6 @@ class StatusModel {
       ar: json['ar'],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        'en': en,
-        'ar': ar,
-      };
 }
 
 class VehicleModel {
@@ -149,12 +177,12 @@ class VehicleModel {
 
   factory VehicleModel.fromJson(Map<String, dynamic> json) {
     return VehicleModel(
-      plateLetters: json['plate_letters'] ?? '',
-      plateNumbers: json['plate_numbers'] ?? '',
-      carType: json['car_type'] ?? '',
-      carBrand: json['car_brand'] ?? '',
-      carModel: json['car_model'] ?? '',
-      carYear: json['car_year'] ?? '',
+      plateLetters: json['plate_letters']?.toString() ?? '',
+      plateNumbers: json['plate_numbers']?.toString() ?? '',
+      carType: json['car_type']?.toString() ?? '',
+      carBrand: json['car_brand']?.toString() ?? '',
+      carModel: json['car_model']?.toString() ?? '',
+      carYear: json['car_year']?.toString() ?? '',
     );
   }
 }

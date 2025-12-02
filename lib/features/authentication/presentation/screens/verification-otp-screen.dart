@@ -170,6 +170,7 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                             final otpText = otpController.text;
                             if (otpText.length == 5) {
                               AuthCubit.get(context).otp(
+                                onSuccess: () {},
                                 phoneNumber: widget.args.phoneNumber,
                                 otp: int.parse(otpText),
                               );
@@ -214,6 +215,7 @@ class _VerificationOtpScreenState extends State<VerificationOtpScreen> {
                         final otpText = otpController.text;
                         if (otpText.length == 5) {
                           AuthCubit.get(context).otp(
+                            onSuccess: () {},
                             phoneNumber: widget.args.phoneNumber,
                             otp: int.parse(otpText),
                           );

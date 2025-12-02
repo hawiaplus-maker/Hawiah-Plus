@@ -92,7 +92,7 @@ class SingleOrderData {
   String? fromDate;
   String? toDate;
   int? discount;
-  int? discountValue;
+  dynamic discountValue;
   String? createdAt;
   String? product;
   String? image;

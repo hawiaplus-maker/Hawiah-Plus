@@ -7,15 +7,17 @@ import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
-import 'package:hawiah_client/core/utils/validation_methods.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 
 class CouponeWidget extends StatefulWidget {
   const CouponeWidget({
     super.key,
     required this.orderId,
+    this.onCouponeAppLayed,
   });
   final int orderId;
+  final dynamic Function(String discountValue, int discount)? onCouponeAppLayed;
   @override
   State<CouponeWidget> createState() => _CouponeWidgetState();
 }
@@ -59,7 +61,7 @@ class _CouponeWidgetState extends State<CouponeWidget> {
                   child: CustomTextField(
                     controller: controller,
                     hintText: AppLocaleKey.enterDiscountCoupon.tr(),
-                    validator: ValidationMethods.validateEmptyField,
+                    //validator: ValidationMethods.validateEmptyField,
                   ),
                 ),
                 const SizedBox(
@@ -76,11 +78,16 @@ class _CouponeWidgetState extends State<CouponeWidget> {
                     style:
                         AppTextStyle.text14_600.copyWith(color: AppColor.whiteColor, height: -0.5),
                     onPressed: () {
+                      if (controller.text.isEmpty) {
+                        CommonMethods.showError(message: AppLocaleKey.enterDiscountCoupon.tr());
+                        return;
+                      }
                       if (_formkey.currentState!.validate()) {
                         context.read<OrderCubit>().applyCoupon(
                               code: controller.text,
                               orderId: widget.orderId,
-                              onSuccess: () {
+                              onSuccess: (discountValue, discount) {
+                                widget.onCouponeAppLayed?.call(discountValue, discount);
                                 controller.clear();
                               },
                             );
