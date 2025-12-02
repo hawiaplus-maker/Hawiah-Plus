@@ -23,7 +23,7 @@ class SuccessConfirmationInvoiceAndContractWidget extends StatelessWidget {
           child: DocumentActionCard(
             image: AppImages.invoiceImage,
             title: AppLocaleKey.invoice.tr(),
-            subtitle: AppLocaleKey.viewAndDownloadOrderInvoice.tr(),
+            subtitle: "",
             downloadText: AppLocaleKey.downloadInvoice.tr(),
             pdfUrl: ordersModel.invoice ?? "",
             actions: [
@@ -45,7 +45,7 @@ class SuccessConfirmationInvoiceAndContractWidget extends StatelessWidget {
           child: DocumentActionCard(
             image: AppImages.contractImage,
             title: AppLocaleKey.contract.tr(),
-            subtitle: AppLocaleKey.viewAndDownloadServiceContract.tr(),
+            subtitle: "",
             downloadText: AppLocaleKey.downloadContract.tr(),
             pdfUrl: ordersModel.contract ?? "",
             actions: [

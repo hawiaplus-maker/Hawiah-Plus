@@ -74,6 +74,21 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                 appBar: CustomAppBar(
                   context,
                   titleText: "choose_address".tr(),
+                  actions: [
+                    IconButton(
+                        onPressed: () {
+                          NavigatorMethods.pushNamed(context, AddNewLocationScreen.routeName,
+                              arguments: AddNewLocationScreenArgs(
+                            onAddressAdded: () {
+                              addressCubit.getaddresses();
+                            },
+                          ));
+                        },
+                        icon: SvgPicture.asset(
+                          AppImages.mapPinPlusIcon,
+                          colorFilter: ColorFilter.mode(AppColor.secondAppColor, BlendMode.srcIn),
+                        ))
+                  ],
                 ),
                 body: ApiResponseWidget(
                   apiResponse: addressCubit.addressesResponse,
@@ -90,7 +105,9 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: CustomButton(
+                          color: AppColor.secondAppColor,
                           text: "add_new_address".tr(),
+                          prefixIcon: SvgPicture.asset(AppImages.mapPinPlusIcon),
                           onPressed: () {
                             NavigatorMethods.pushNamed(context, AddNewLocationScreen.routeName,
                                 arguments: AddNewLocationScreenArgs(
@@ -127,18 +144,18 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
-                              CustomButton(
-                                color: AppColor.secondAppColor,
-                                text: "add_new_address".tr(),
-                                prefixIcon: SvgPicture.asset(AppImages.mapPinPlusIcon),
-                                onPressed: () => NavigatorMethods.pushNamed(
-                                    context, AddNewLocationScreen.routeName,
-                                    arguments: AddNewLocationScreenArgs(
-                                  onAddressAdded: () {
-                                    addressCubit.getaddresses();
-                                  },
-                                )),
-                              ),
+                              // CustomButton(
+                              //   color: AppColor.secondAppColor,
+                              //   text: "add_new_address".tr(),
+                              //   prefixIcon: SvgPicture.asset(AppImages.mapPinPlusIcon),
+                              //   onPressed: () => NavigatorMethods.pushNamed(
+                              //       context, AddNewLocationScreen.routeName,
+                              //       arguments: AddNewLocationScreenArgs(
+                              //     onAddressAdded: () {
+                              //       addressCubit.getaddresses();
+                              //     },
+                              //   )),
+                              // ),
                               SizedBox(
                                 height: 10,
                               ),

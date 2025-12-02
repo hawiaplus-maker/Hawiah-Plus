@@ -31,7 +31,7 @@ class OrderDetailsPricingSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocaleKey.mainPrice.tr(), style: AppTextStyle.text16_400),
-              Text(AppLocaleKey.sar.tr(args: [mainPrice.toString()]),
+              Text(AppLocaleKey.sar.tr(args: [mainPrice.toStringAsFixed(2).toString()]),
                   style: AppTextStyle.text16_400),
             ],
           ),
@@ -40,7 +40,8 @@ class OrderDetailsPricingSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocaleKey.tax.tr(args: [15.toString()]), style: AppTextStyle.text16_400),
-              Text(AppLocaleKey.sar.tr(args: [tax.toString()]), style: AppTextStyle.text16_400),
+              Text(AppLocaleKey.sar.tr(args: [tax.toStringAsFixed(2).toString()]),
+                  style: AppTextStyle.text16_400),
             ],
           ),
           Divider(),
@@ -48,7 +49,7 @@ class OrderDetailsPricingSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocaleKey.totalPrice.tr(), style: AppTextStyle.text16_400),
-              Text(AppLocaleKey.sar.tr(args: [total.toString()]),
+              Text(AppLocaleKey.sar.tr(args: [total.toStringAsFixed(2).toString()]),
                   style: AppTextStyle.text16_400.copyWith(color: AppColor.mainAppColor)),
             ],
           ),

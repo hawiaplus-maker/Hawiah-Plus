@@ -20,6 +20,11 @@ class SuccessOrderConfirmationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rawValue = ordersModel.totalPrice.toString().replaceAll(',', '');
+    final double mainPrice = double.tryParse(rawValue) ?? 0.0;
+
+    final double tax = mainPrice * 0.15;
+    final double total = mainPrice + tax;
     return Scaffold(
       appBar: CustomAppBar(
         context,
@@ -98,24 +103,68 @@ class SuccessOrderConfirmationScreen extends StatelessWidget {
               SizedBox(
                 height: 40,
               ),
-              CustomButton(
-                color: AppColor.secondAppColor,
-                text: AppLocaleKey.viewOrderDetails.tr(),
-                onPressed: () {
-                  NavigatorMethods.pushNamed(context, OrderReviewDetailes.routeName,
-                      arguments: ordersModel);
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              CustomButton(
-                text: AppLocaleKey.backToHome.tr(),
-                onPressed: () async {
-                  await LayoutMethouds.getdata();
-                  NavigatorMethods.pushNamedAndRemoveUntil(context, LayoutScreen.routeName);
-                },
-              ),
+              // CustomButton(
+              //   onPressed: () {
+              //     log("get payment link");
+              //     context.read<OrderCubit>().getPaymentLink(
+              //         orderId: ordersModel.id!,
+              //         onSuccess: (url) {
+              //           if (url.contains('already exists') == true) {
+              //             CommonMethods.showError(message: url);
+              //           } else {
+              //             NavigatorMethods.pushNamed(context, CustomPaymentWebViewScreen.routeName,
+              //                 arguments: PaymentArgs(
+              //                     url: url,
+              //                     onFailed: () {
+              //                       CommonMethods.showError(
+              //                           message: AppLocaleKey.paymentFailed.tr());
+              //                     },
+              //                     onSuccess: () {
+              //                       CommonMethods.showToast(
+              //                           message: AppLocaleKey.paymentSuccess.tr());
+              //                     }));
+              //           }
+              //         });
+              //   },
+              //   text: AppLocaleKey.payXSar.tr(
+              //     args: [total.toStringAsFixed(2).toString()],
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: 20,
+              // ),
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomButton(
+                      color: AppColor.secondAppColor,
+                      text: AppLocaleKey.viewOrderDetails.tr(),
+                      style: AppTextStyle.text14_600
+                          .copyWith(color: AppColor.whiteColor, height: -0.5),
+                      onPressed: () {
+                        NavigatorMethods.pushNamed(context, OrderReviewDetailes.routeName,
+                            arguments: ordersModel);
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: CustomButton(
+                      borderColor: AppColor.orangeColor,
+                      color: AppColor.orangeColor.withAlpha(80),
+                      text: AppLocaleKey.backToHome.tr(),
+                      style: AppTextStyle.text16_600
+                          .copyWith(color: AppColor.orangeColor, height: -0.5),
+                      onPressed: () async {
+                        await LayoutMethouds.getdata();
+                        NavigatorMethods.pushNamedAndRemoveUntil(context, LayoutScreen.routeName);
+                      },
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),

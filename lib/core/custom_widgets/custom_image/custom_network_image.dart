@@ -127,11 +127,10 @@ class CustomNetworkImage extends StatelessWidget {
         borderRadius: BorderRadius.circular(radius),
         color: Colors.grey.shade200,
       ),
-      child: const Center(
-        child: Image(
-          image: AssetImage(
-            AppImages.hawiahPlus,
-          ),
+      child: Center(
+        child: Image.asset(
+          AppImages.appWhiteLogoImage,
+          fit: BoxFit.contain,
         ),
       ),
     );
@@ -147,9 +146,10 @@ class CustomNetworkImage extends StatelessWidget {
       ),
       child: Center(
         child: Image.asset(
-          imagePlaceHolder ?? AppImages.hawiahPlus,
+          imagePlaceHolder ?? AppImages.appWhiteLogoImage,
           width: (width ?? 60) * 0.6,
           height: (height ?? width ?? 60) * 0.6,
+          fit: BoxFit.contain,
         ),
       ),
     );

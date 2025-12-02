@@ -102,7 +102,7 @@ class NearbyCardWidget extends StatelessWidget {
                             width: 5,
                           ),
                           Text(
-                            " ${AppLocaleKey.deliveryTime.tr(args: [
+                            " ${AppLocaleKey.numberOfDayes.tr(args: [
                                   providers.duration.toString(),
                                 ])}",
                             style: AppTextStyle.text10_400.copyWith(
@@ -114,26 +114,26 @@ class NearbyCardWidget extends StatelessWidget {
                       SizedBox(
                         height: 5,
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // SvgPicture.asset(AppImages.bowArrowIcon, height: 15, width: 15),
-                          // SizedBox(
-                          //   width: 5,
-                          // ),
-                          // Text(
-                          //   " ${AppLocaleKey.responseSpeed.tr(args: [
-                          //         providers.responseSpeed.toString(),
-                          //       ])}",
-                          //   style: AppTextStyle.text10_400.copyWith(
-                          //     color: AppColor.greyTextColor,
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
+                      // Row(
+                      //   mainAxisSize: MainAxisSize.min,
+                      //   children: [
+                      //     SvgPicture.asset(AppImages.bowArrowIcon, height: 15, width: 15),
+                      //     SizedBox(
+                      //       width: 5,
+                      //     ),
+                      //     Text(
+                      //       " ${AppLocaleKey.responseSpeed.tr(args: [
+                      //             providers.responseSpeed.toString(),
+                      //           ])}",
+                      //       style: AppTextStyle.text10_400.copyWith(
+                      //         color: AppColor.greyTextColor,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(
+                      //   height: 5,
+                      // ),
                     ],
                   ),
                 ),

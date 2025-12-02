@@ -48,7 +48,6 @@ class InvoiceAndContractButtonsWidget extends StatelessWidget {
     required String url,
     required Color backgroundColor,
     required Color textColor,
-    BorderSide? borderSide,
   }) {
     return Container(
       alignment: Alignment.center,

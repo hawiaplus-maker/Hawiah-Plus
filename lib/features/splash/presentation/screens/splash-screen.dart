@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
         await cubit.fetchProfile(
           onSuccess: () async {
             log("Navigation to LayoutScreen");
-
+            await LayoutMethouds.getdata(showLoading: false);
             NavigatorMethods.pushReplacementNamed(
               context,
               LayoutScreen.routeName,

@@ -41,7 +41,7 @@ class OrderReviewDetailes extends StatelessWidget {
             SizedBox(
               height: 15,
             ),
-            CouponeWidget(),
+            CouponeWidget(orderId: ordersModel.id ?? 0),
             SizedBox(
               height: 15,
             ),
@@ -79,7 +79,7 @@ class OrderReviewDetailes extends StatelessWidget {
                       padding: const EdgeInsets.all(15.0),
                       child: Text(
                         AppLocaleKey.payXSar.tr(
-                          args: [total.toString()],
+                          args: [total.toStringAsFixed(2).toString()],
                         ),
                         style: AppTextStyle.text18_700.copyWith(color: AppColor.whiteColor),
                       ),

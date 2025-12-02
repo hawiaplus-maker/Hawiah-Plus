@@ -166,7 +166,7 @@ class _RequestHawiahScreenState extends State<RequestHawiahScreen> {
                 ),
                 SizedBox(height: 20.h),
                 Text(
-                  AppLocaleKey.quickSelection.tr(),
+                  AppLocaleKey.requestLater.tr(),
                   style: AppTextStyle.text18_500,
                 ),
                 Gap(20.h),

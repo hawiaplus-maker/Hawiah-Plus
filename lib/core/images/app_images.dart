@@ -116,4 +116,6 @@ class AppImages {
   static const String evaluate = 'assets/images/Evaluate.png';
   static const String bakst = 'assets/images/bakst.png';
   static const String emptyDataImage = 'assets/images/emptyDataImage.png';
+  static const String whiteLogoImage = 'assets/images/whiteLogoImage.png';
+  static const String appWhiteLogoImage = 'assets/images/appWhiteLogoImage.png';
 }

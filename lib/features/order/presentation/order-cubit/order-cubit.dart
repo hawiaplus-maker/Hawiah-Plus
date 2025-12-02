@@ -431,18 +431,20 @@ class OrderCubit extends Cubit<OrderState> {
   // =================== applay coupon ====================
   Future<void> applyCoupon({
     required String code,
+    required int orderId,
     required VoidCallback onSuccess,
   }) async {
     NavigatorMethods.loading();
     FormData body = FormData.fromMap({
       'code': code,
+      'order_id': orderId,
     });
     final response = await ApiHelper.instance.post(
       Urls.applayCoupon,
       body: body,
     );
     NavigatorMethods.loadingOff();
-    if (response.state == ResponseState.complete) {
+    if (response.state == ResponseState.complete && response.data['success'] != false) {
       CommonMethods.showToast(
         message: response.data['message'] ?? "تم  بنجاح",
       );
