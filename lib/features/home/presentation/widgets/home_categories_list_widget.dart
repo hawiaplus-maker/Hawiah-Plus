@@ -81,6 +81,7 @@ class _HomeCategoriesListWidgetState extends State<HomeCategoriesListWidget> {
                         MaterialPageRoute(
                           builder: (context) => CategoryDetailsScreen(
                             id: item.id ?? 0,
+                            title: item.title ?? '',
                           ),
                         ),
                       );

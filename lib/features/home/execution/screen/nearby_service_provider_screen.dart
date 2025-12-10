@@ -8,19 +8,18 @@ import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/home/execution/widget/nearby_card_widget.dart';
 import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
-import 'package:hawiah_client/features/location/presentation/model/address_model.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-state.dart';
 
 class NearbyServiceProviderArguments {
   final int catigoryId;
   final int serviceProviderId;
-  final AddressModel address;
+  final int addressId;
   final ShowCategoriesModel showCategoriesModel;
   NearbyServiceProviderArguments({
     required this.catigoryId,
     required this.serviceProviderId,
-    required this.address,
+    required this.addressId,
     required this.showCategoriesModel,
   });
 }
@@ -37,7 +36,7 @@ class NearbyServiceProviderScreen extends StatelessWidget {
       create: (context) => OrderCubit()
         ..getNearbyProviders(
           serviceProviderId: args.serviceProviderId,
-          addressId: args.address.id!,
+          addressId: args.addressId,
           onBadRequest: () {
             Navigator.pop(context);
           },
@@ -53,7 +52,7 @@ class NearbyServiceProviderScreen extends StatelessWidget {
             return ApiResponseWidget(
               apiResponse: providers.nearbyServiceProviderResponse,
               onReload: () => providers.getNearbyProviders(
-                  serviceProviderId: args.serviceProviderId, addressId: args.address.id!),
+                  serviceProviderId: args.serviceProviderId, addressId: args.addressId),
               isEmpty: providers.nearbyServiceProvider.isEmpty,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),

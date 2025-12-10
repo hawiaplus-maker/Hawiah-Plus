@@ -11,7 +11,6 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/order/presentation/screens/current-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/old-order-screen.dart';
 import 'package:hawiah_client/features/order/presentation/widget/order_card_widget.dart';
-import 'package:hawiah_client/injection_container.dart';
 
 import '../order-cubit/order-cubit.dart';
 import '../order-cubit/order-state.dart';
@@ -35,7 +34,7 @@ class _OrderTapListState extends State<OrderTapList> {
   }
 
   void _onScroll() {
-    final cubit = sl<OrderCubit>();
+    final cubit = context.read<OrderCubit>();
     // تحميل الصفحة التالية عند الاقتراب من النهاية
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 150 &&
         cubit.canLoadMoreCurrent &&
@@ -65,7 +64,7 @@ class _OrderTapListState extends State<OrderTapList> {
         final isPaginating = widget.isCurrent ? cubit.isLoadingMoreCurrent : cubit.isLoadingMoreOld;
 
         // لو لسه أول تحميل
-        if (orders.isEmpty && state is OrderLoading) {
+        if (state is OrderLoading) {
           return Center(
               child: SingleChildScrollView(
             child: Column(
@@ -83,30 +82,33 @@ class _OrderTapListState extends State<OrderTapList> {
               ],
             ),
           ));
-        } else if (orders.isEmpty && state is OrderSuccess) {
-          return Center(
+        } else if (state is OrderSuccess) {
+          if (orders.isEmpty) {
+            return Center(
               child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SvgPicture.asset(
-                AppImages.containerIcon,
-                height: 120,
-                colorFilter: ColorFilter.mode(AppColor.mainAppColor, BlendMode.srcIn),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(
+                    AppImages.containerIcon,
+                    height: 120,
+                    colorFilter: ColorFilter.mode(AppColor.mainAppColor, BlendMode.srcIn),
+                  ),
+                  Text(
+                    widget.isCurrent
+                        ? AppLocaleKey.noCurrentOrders.tr()
+                        : AppLocaleKey.noOldOrders.tr(),
+                    style: AppTextStyle.text16_700,
+                  ),
+                  const SizedBox(height: 10),
+                  CustomButton(
+                    width: MediaQuery.of(context).size.width / 2.5,
+                    radius: 5,
+                    text: "request_hawaia".tr(),
+                  )
+                ],
               ),
-              Text(
-                widget.isCurrent
-                    ? AppLocaleKey.noCurrentOrders.tr()
-                    : AppLocaleKey.noOldOrders.tr(),
-                style: AppTextStyle.text16_700,
-              ),
-              const SizedBox(height: 10),
-              CustomButton(
-                width: MediaQuery.of(context).size.width / 2.5,
-                radius: 5,
-                text: "request_hawaia".tr(),
-              )
-            ],
-          ));
+            );
+          }
         }
 
         return ListView.separated(

@@ -75,40 +75,38 @@ class OrderCubit extends Cubit<OrderState> {
 
     final bool isCurrent = orderStatus == 0;
 
-    // =================== Prevent Re-fetching =====================
-    if (!isLoadMore) {
-      if (isCurrent && currentOrders.isNotEmpty) {
-        log("✔ Skipping fetch: current orders already loaded");
-        emit(OrderSuccess(
-          ordersModel: OrdersModel(
-            data: OrdersData(
-              data: currentOrders,
-              pagination: Pagination(
-                currentPage: currentPageCurrent,
-                lastPage: lastPageCurrent,
-              ),
-            ),
-          ),
-        ));
-        return;
-      }
+    // // =================== Prevent Re-fetching =====================
+    // if (!isLoadMore) {
+    //   if (isCurrent) {
+    //     emit(OrderSuccess(
+    //       ordersModel: OrdersModel(
+    //         data: OrdersData(
+    //           data: currentOrders,
+    //           pagination: Pagination(
+    //             currentPage: currentPageCurrent,
+    //             lastPage: lastPageCurrent,
+    //           ),
+    //         ),
+    //       ),
+    //     ));
+    //     return;
+    //   }
 
-      if (!isCurrent && oldOrders.isNotEmpty) {
-        log("✔ Skipping fetch: old orders already loaded");
-        emit(OrderSuccess(
-          ordersModel: OrdersModel(
-            data: OrdersData(
-              data: oldOrders,
-              pagination: Pagination(
-                currentPage: currentPageOld,
-                lastPage: lastPageOld,
-              ),
-            ),
-          ),
-        ));
-        return;
-      }
-    }
+    //   if (!isCurrent) {
+    //     emit(OrderSuccess(
+    //       ordersModel: OrdersModel(
+    //         data: OrdersData(
+    //           data: oldOrders,
+    //           pagination: Pagination(
+    //             currentPage: currentPageOld,
+    //             lastPage: lastPageOld,
+    //           ),
+    //         ),
+    //       ),
+    //     ));
+    //     return;
+    //   }
+    // }
     // =================== Load =====================
     if (isLoadMore) {
       if (isCurrent ? isLoadingMoreCurrent : isLoadingMoreOld) return;
@@ -242,6 +240,7 @@ class OrderCubit extends Cubit<OrderState> {
     required int priceId,
     required int addressId,
     required String fromDate,
+    required String fromTime,
     required Function(OrderDetailsModel? order) onSuccess,
   }) async {
     NavigatorMethods.loading();
@@ -250,6 +249,7 @@ class OrderCubit extends Cubit<OrderState> {
       "price_id": priceId,
       'address_id': addressId,
       "from_date": fromDate,
+      "from_time": fromTime,
     });
     final response = await ApiHelper.instance.post(
       Urls.createOrder,
@@ -432,7 +432,8 @@ class OrderCubit extends Cubit<OrderState> {
   Future<void> applyCoupon({
     required String code,
     required int orderId,
-    dynamic Function(String discountValue, int discount)? onSuccess,
+    dynamic Function(String discountValue, int discount, String priceAfterDiscount, String copone)?
+        onSuccess,
   }) async {
     NavigatorMethods.loading();
     FormData body = FormData.fromMap({
@@ -449,8 +450,10 @@ class OrderCubit extends Cubit<OrderState> {
         message: response.data['message'] ?? "تم  بنجاح",
       );
       onSuccess?.call(
-        response.data['0']['discount_value'].toString(),
-        response.data['0']['discount'],
+        response.data['discount_amount'].toString(),
+        response.data['discount_percent'],
+        response.data['price_after_discount'].toString(),
+        response.data['code'].toString(),
       );
     } else if (response.state == ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(

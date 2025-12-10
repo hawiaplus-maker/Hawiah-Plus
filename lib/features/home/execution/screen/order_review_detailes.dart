@@ -28,10 +28,10 @@ class OrderReviewDetailes extends StatefulWidget {
 class _OrderReviewDetailesState extends State<OrderReviewDetailes> {
   String? discountValue;
   int? discount;
+  String? priceAfterDiscount;
+  String? copone;
   @override
   Widget build(BuildContext context) {
-    final rawValue = widget.ordersModel.totalPrice.toString().replaceAll(',', '');
-
     return Scaffold(
       appBar: CustomAppBar(context, titleText: AppLocaleKey.orderSummary.tr()),
       body: SingleChildScrollView(
@@ -46,16 +46,20 @@ class _OrderReviewDetailesState extends State<OrderReviewDetailes> {
               ordersModel: widget.ordersModel,
               discount: discount,
               discountValue: discountValue,
+              priceAfterDiscount: priceAfterDiscount,
+              copone: copone,
             ),
             SizedBox(
               height: 15,
             ),
             CouponeWidget(
               orderId: widget.ordersModel.id ?? 0,
-              onCouponeAppLayed: (discountValue, discount) {
+              onCouponeAppLayed: (discountValue, discount, priceAfterDiscount, copone) {
                 setState(() {
                   this.discountValue = discountValue;
                   this.discount = discount;
+                  this.priceAfterDiscount = priceAfterDiscount;
+                  this.copone = copone;
                 });
               },
             ),
@@ -71,8 +75,7 @@ class _OrderReviewDetailesState extends State<OrderReviewDetailes> {
                       if (url.contains('already exists') == true) {
                         CommonMethods.showError(message: url);
                       } else {
-                        NavigatorMethods.pushReplacementNamed(
-                            context, CustomPaymentWebViewScreen.routeName,
+                        NavigatorMethods.pushNamed(context, CustomPaymentWebViewScreen.routeName,
                             arguments: PaymentArgs(
                                 url: url,
                                 onFailed: () {
@@ -99,9 +102,7 @@ class _OrderReviewDetailesState extends State<OrderReviewDetailes> {
                         AppLocaleKey.payXSar.tr(
                           args: [
                             discountValue != null
-                                ? ((double.tryParse(widget.ordersModel.totalPrice ?? "0") ?? 0) -
-                                        (double.tryParse(discountValue ?? "0") ?? 0))
-                                    .toStringAsFixed(2)
+                                ? priceAfterDiscount ?? ""
                                 : widget.ordersModel.totalPrice ?? ""
                           ],
                         ),

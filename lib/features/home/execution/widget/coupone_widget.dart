@@ -17,7 +17,9 @@ class CouponeWidget extends StatefulWidget {
     this.onCouponeAppLayed,
   });
   final int orderId;
-  final dynamic Function(String discountValue, int discount)? onCouponeAppLayed;
+  final dynamic Function(
+          String discountValue, int discount, String priceAfterDiscount, String copone)?
+      onCouponeAppLayed;
   @override
   State<CouponeWidget> createState() => _CouponeWidgetState();
 }
@@ -86,8 +88,9 @@ class _CouponeWidgetState extends State<CouponeWidget> {
                         context.read<OrderCubit>().applyCoupon(
                               code: controller.text,
                               orderId: widget.orderId,
-                              onSuccess: (discountValue, discount) {
-                                widget.onCouponeAppLayed?.call(discountValue, discount);
+                              onSuccess: (discountValue, discount, priceAfterDiscount, copone) {
+                                widget.onCouponeAppLayed
+                                    ?.call(discountValue, discount, priceAfterDiscount, copone);
                                 controller.clear();
                               },
                             );

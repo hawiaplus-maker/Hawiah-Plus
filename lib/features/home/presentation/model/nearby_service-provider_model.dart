@@ -3,26 +3,24 @@ class NearbyServiceProviderModel {
   int? productId;
   String? image;
   String? price;
-  String? yearlyPrice;
+
   int? duration;
-  int? deliveryTime;
-  String? responseSpeed;
+
   int? active;
   dynamic serviceProviderId;
   String? serviceProviderName;
+  int? serviceProviderRating;
 
   NearbyServiceProviderModel({
     this.id,
     this.productId,
     this.image,
     this.price,
-    this.yearlyPrice,
     this.duration,
-    this.deliveryTime,
-    this.responseSpeed,
     this.active,
     this.serviceProviderId,
     this.serviceProviderName,
+    this.serviceProviderRating,
   });
 
   NearbyServiceProviderModel.fromJson(Map<String, dynamic> json) {
@@ -30,13 +28,13 @@ class NearbyServiceProviderModel {
     productId = json['product_id'];
     image = json['image'];
     price = json['price'];
-    yearlyPrice = json['yearly_price'];
+
     duration = json['duration'];
-    deliveryTime = json['delivery_time'];
-    responseSpeed = json['response_speed'];
+
     active = json['active'];
     serviceProviderId = json['service_provider_id'];
     serviceProviderName = json['service_provider_name'];
+    serviceProviderRating = json['service_provider_rating'];
   }
 
   Map<String, dynamic> toJson() {
@@ -45,13 +43,13 @@ class NearbyServiceProviderModel {
     data['product_id'] = productId;
     data['image'] = image;
     data['price'] = price;
-    data['yearly_price'] = yearlyPrice;
+
     data['duration'] = duration;
-    data['delivery_time'] = deliveryTime;
-    data['response_speed'] = responseSpeed;
+
     data['active'] = active;
     data['service_provider_id'] = serviceProviderId;
     data['service_provider_name'] = serviceProviderName;
+    data['service_provider_rating'] = serviceProviderRating;
     return data;
   }
 }

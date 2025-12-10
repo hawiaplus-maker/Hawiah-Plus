@@ -16,12 +16,6 @@ class PricingSectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double totalPrice = double.tryParse(
-          ordersData.totalPrice?.replaceAll(",", "") ?? "0",
-        ) ??
-        0;
-    final double vat = totalPrice * 0.15;
-    final double netTotal = totalPrice + vat;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
@@ -39,7 +33,7 @@ class PricingSectionWidget extends StatelessWidget {
           SizedBox(height: 10),
           CustomListItem(
             title: AppLocaleKey.total.tr(),
-            subtitle: "${totalPrice.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
+            subtitle: "${ordersData.totalPrice} ${AppLocaleKey.sarr.tr()}",
           ),
           SizedBox(height: 10),
 
@@ -47,10 +41,11 @@ class PricingSectionWidget extends StatelessWidget {
             CustomListItem(
               title: AppLocaleKey.priceAfterDiscount.tr(),
               subtitle:
-                  "${((double.tryParse(ordersData.totalPrice ?? "0") ?? 0) - (double.tryParse(ordersData.discountValue.toString() ?? "0") ?? 0)).toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
+                  "${((double.tryParse(ordersData.totalPrice ?? "0") ?? 0) - (double.tryParse(ordersData.discountValue.toString()) ?? 0)).toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
             ),
             SizedBox(height: 10),
-          ]
+          ],
+          SizedBox(height: 10),
           // if (ordersData.paidStatus == 0)
           //   Padding(
           //     padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),

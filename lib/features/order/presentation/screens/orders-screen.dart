@@ -11,7 +11,6 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/dialog/unauthenticated_dialog.dart';
 import 'package:hawiah_client/features/order/presentation/widget/order_tap_list.dart';
-import 'package:hawiah_client/injection_container.dart';
 
 import '../order-cubit/order-cubit.dart';
 import '../order-cubit/order-state.dart';
@@ -37,10 +36,11 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
         NavigatorMethods.showAppDialog(context, UnauthenticatedDialog());
       });
     }
-    final cubit = sl<OrderCubit>();
+    // final cubit = sl<OrderCubit>();
 
-    cubit.getOrders(orderStatus: 0);
-    cubit.getOrders(orderStatus: 1);
+    // cubit.getOrders(orderStatus: 0, page: 1, isLoadMore: false);
+    // cubit.getOrders(orderStatus: 1, page: 1, isLoadMore: false);
+
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -48,8 +48,10 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: sl<OrderCubit>(),
+    return BlocProvider(
+      create: (context) => OrderCubit()
+        ..getOrders(orderStatus: 0, page: 1, isLoadMore: false)
+        ..getOrders(orderStatus: 1, page: 1, isLoadMore: false),
       child: Scaffold(
         appBar: CustomAppBar(
           context,

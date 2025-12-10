@@ -13,9 +13,11 @@ class CategoryDetailsScreen extends StatefulWidget {
   const CategoryDetailsScreen({
     super.key,
     required this.id,
+    required this.title,
   });
 
   final int id;
+  final String title;
 
   @override
   State<CategoryDetailsScreen> createState() => _CategoryDetailsScreenState();
@@ -40,7 +42,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
         return Scaffold(
           appBar: CustomAppBar(
             context,
-            titleText: data?.title ?? "",
+            titleText: widget.title,
             centerTitle: true,
           ),
           body: Builder(

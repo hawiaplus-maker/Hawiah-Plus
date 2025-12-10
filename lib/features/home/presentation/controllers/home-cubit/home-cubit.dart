@@ -32,6 +32,7 @@ class HomeCubit extends Cubit<HomeState> {
   DateTime focusedDay = DateTime.now();
   DateTime? selectedDay;
   DateTime? rangeStart;
+  DateTime? fromTime;
   DateTime? rangeEnd;
 
   int selectedIndex = -1;
@@ -46,10 +47,16 @@ class HomeCubit extends Cubit<HomeState> {
   void clearRanges() {
     rangeStart = null;
     rangeEnd = null;
+    fromTime = null;
   }
 
   changeRebuild() {
     emit(HomeChange());
+  }
+
+  void setFromTime(DateTime time) {
+    fromTime = time;
+    changeRebuild();
   }
 
   void setRangeStart(DateTime start, int days) {

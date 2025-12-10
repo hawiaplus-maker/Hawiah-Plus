@@ -92,7 +92,7 @@ class CategoryCardWidget extends StatelessWidget {
                       style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
                     ),
                     Text(
-                      ' ${homeCubit.showCategories?.message?.services?[index].length.toString() ?? ""} * ${homeCubit.showCategories?.message?.services?[index].width.toString() ?? ""} * ${homeCubit.showCategories?.message?.services?[index].height.toString() ?? ""}',
+                      homeCubit.showCategories?.message?.services?[index].measurements ?? "",
                       style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
                     ),
                   ],

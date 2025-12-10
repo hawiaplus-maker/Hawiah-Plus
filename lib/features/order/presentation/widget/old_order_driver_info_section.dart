@@ -15,8 +15,6 @@ class OldDriverInfoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vehicle = data.vehicles?.isNotEmpty == true ? data.vehicles!.first : null;
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
       decoration: BoxDecoration(

@@ -9,13 +9,13 @@ import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart'
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 
-//!الشاشة دي مش مستخدمة يا أبوعمو
 class PaymentScreenArgs {
   final int catigoryId;
   final int serviceProviderId;
   final int priceId;
   final int addressId;
   final String fromDate;
+  final String fromTime;
   final double totalPrice;
   final double price;
   final double vatValue;
@@ -26,6 +26,7 @@ class PaymentScreenArgs {
       required this.priceId,
       required this.addressId,
       required this.fromDate,
+      required this.fromTime,
       required this.totalPrice,
       required this.price,
       required this.vatValue});
@@ -126,6 +127,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   priceId: widget.args.priceId,
                   addressId: widget.args.addressId,
                   fromDate: widget.args.fromDate,
+                  fromTime: widget.args.fromTime,
                   onSuccess: (v) async {
                     await LayoutMethouds.getdata();
                     NavigatorMethods.pushReplacementNamed(

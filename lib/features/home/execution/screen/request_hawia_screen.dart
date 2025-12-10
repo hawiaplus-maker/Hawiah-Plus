@@ -14,7 +14,6 @@ import 'package:hawiah_client/core/utils/date_methods.dart';
 import 'package:hawiah_client/features/home/execution/widget/request_hawiah_execute_order_widget.dart';
 import 'package:hawiah_client/features/home/presentation/model/nearby_service-provider_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
-import 'package:hawiah_client/features/location/presentation/model/address_model.dart';
 import 'package:hawiah_client/features/location/presentation/widget/quick_selection_card_widget.dart';
 
 import '../../presentation/controllers/home-cubit/home-cubit.dart';
@@ -23,14 +22,14 @@ import '../../presentation/controllers/home-cubit/home-state.dart';
 class RequestHawiahScreenArgs {
   final int catigoryId;
   final int serviceProviderId;
-  final AddressModel address;
+  final int addressId;
   final NearbyServiceProviderModel nearbyServiceProviderModel;
   final ShowCategoriesModel showCategoriesModel;
 
   const RequestHawiahScreenArgs({
     required this.catigoryId,
     required this.serviceProviderId,
-    required this.address,
+    required this.addressId,
     required this.nearbyServiceProviderModel,
     required this.showCategoriesModel,
   });
@@ -59,6 +58,7 @@ class _RequestHawiahScreenState extends State<RequestHawiahScreen> {
   void dispose() {
     homeCubit.rangeStart = null;
     homeCubit.rangeEnd = null;
+    homeCubit.fromTime = null;
 
     super.dispose();
   }
@@ -104,15 +104,26 @@ class _RequestHawiahScreenState extends State<RequestHawiahScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomTextField(
-                        onTap: () => DateMethods.pickDate(context,
-                            initialDate: DateTime.now(), firstDate: DateTime.now(), onSuccess: (v) {
-                          homeCubit.rangeStart = v;
-                          setState(() {});
-                        }),
+                        onTap: () => DateMethods.pickDate(
+                          context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          onSuccess: (selectedDate) {
+                            homeCubit.rangeStart = selectedDate;
+                            DateMethods.pickTime(
+                              context,
+                              initialDate: DateTime.now(),
+                              onSuccess: (selectedTime) {
+                                homeCubit.fromTime = selectedTime;
+                                setState(() {});
+                              },
+                            );
+                          },
+                        ),
                         title: AppLocaleKey.startdate.tr(),
                         hintText: homeCubit.rangeStart == null
                             ? AppLocaleKey.selectStartDate.tr()
-                            : DateFormat('yyyy-MM-dd').format(homeCubit.rangeStart!),
+                            : "${DateFormat('yyyy-MM-dd', 'en').format(homeCubit.rangeStart!)} ${DateFormat('HH:mm', 'en').format(homeCubit.fromTime ?? DateTime.now())}",
                         readOnly: true,
                         prefixIcon: Padding(
                           padding: const EdgeInsets.all(12),
@@ -123,7 +134,7 @@ class _RequestHawiahScreenState extends State<RequestHawiahScreen> {
                       CustomTextField(
                         title: AppLocaleKey.enddate.tr(),
                         hintText: homeCubit.rangeStart != null
-                            ? DateFormat('yyyy-MM-dd', 'en').format(
+                            ? DateFormat('yyyy-MM-dd HH:mm', 'en').format(
                                 (homeCubit.rangeStart?.add(
                                       Duration(
                                         days: args.nearbyServiceProviderModel.duration ?? 0,

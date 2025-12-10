@@ -28,7 +28,7 @@ class NearbyCardWidget extends StatelessWidget {
           onTap: () {
             NavigatorMethods.pushNamed(context, RequestHawiahScreen.routeName,
                 arguments: RequestHawiahScreenArgs(
-                    address: args.address,
+                    addressId: args.addressId,
                     catigoryId: args.catigoryId,
                     serviceProviderId: args.serviceProviderId,
                     nearbyServiceProviderModel: providers,
@@ -58,21 +58,24 @@ class NearbyCardWidget extends StatelessWidget {
                         providers.serviceProviderName ?? "",
                         style: AppTextStyle.text16_700,
                       ),
-                      // Row(
-                      //   mainAxisSize: MainAxisSize.min,
-                      //   children: [
-                      //     SvgPicture.asset(AppImages.starIcon, height: 15, width: 15),
-                      //     SizedBox(
-                      //       width: 5,
-                      //     ),
-                      //     Text(
-                      //       "5.0",
-                      //       style: AppTextStyle.text10_400.copyWith(
-                      //         color: AppColor.greyTextColor,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(AppImages.starIcon, height: 15, width: 15),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            providers.serviceProviderRating.toString(),
+                            style: AppTextStyle.text10_400.copyWith(
+                              color: AppColor.greyTextColor,
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(
                         height: 5,
                       ),

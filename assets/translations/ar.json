@@ -390,7 +390,8 @@
    "evaluationAdditionalNotes": "ملاحظات إضافية (اختياري)",
    "evaluationHint": "شاركنا رأيك في الخدمة...",
    "evaluationSend": "إرسال التقييم",
-   "orderReordered":"تم اعادة الطلب بنجاح"
-
+   "orderReordered":"تم اعادة الطلب بنجاح",
+   "coupon":"الكوبون",
+   "accepted":"مقبول"
 
 }

@@ -20,7 +20,7 @@ class ShowCategoriesModel {
 class Message {
   int? id;
   String? title;
-  String? subtitle; 
+  String? subtitle;
   String? image;
   List<Services>? services;
 
@@ -29,7 +29,7 @@ class Message {
   Message.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
-    subtitle = json['subtitle']; 
+    subtitle = json['subtitle'];
     image = json['image'];
     if (json['services'] != null) {
       services = <Services>[];
@@ -43,7 +43,7 @@ class Message {
     final data = <String, dynamic>{};
     data['id'] = id;
     data['title'] = title;
-    data['subtitle'] = subtitle; 
+    data['subtitle'] = subtitle;
     data['image'] = image;
     if (services != null) data['services'] = services!.map((v) => v.toJson()).toList();
     return data;
@@ -53,12 +53,10 @@ class Message {
 class Services {
   int? id;
   String? title;
-  String? description; 
-  String? unit; 
-  int? size; 
-  int? length; 
-  int? width; 
-  int? height; 
+  String? description;
+  String? unit;
+  dynamic size;
+  String? measurements;
   String? image;
 
   Services({
@@ -67,21 +65,17 @@ class Services {
     this.description,
     this.unit,
     this.size,
-    this.length,
-    this.width,
-    this.height,
+    this.measurements,
     this.image,
   });
 
   Services.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
-    description = json['description']; 
-    unit = json['unit']; 
-    size = json['size']; 
-    length = json['length']; 
-    width = json['width']; 
-    height = json['height']; 
+    description = json['description'];
+    unit = json['unit'];
+    size = json['size'];
+    measurements = json['measurements'];
     image = json['image'];
   }
 
@@ -92,9 +86,7 @@ class Services {
     data['description'] = description;
     data['unit'] = unit;
     data['size'] = size;
-    data['length'] = length;
-    data['width'] = width;
-    data['height'] = height;
+    data['measurements'] = measurements;
     data['image'] = image;
     return data;
   }

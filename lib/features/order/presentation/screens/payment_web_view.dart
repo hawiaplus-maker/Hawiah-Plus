@@ -6,8 +6,6 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/execution/screen/success_order_confirmation_screen.dart';
-import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
-import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
@@ -109,26 +107,16 @@ class _CustomPaymentWebViewScreenState extends State<CustomPaymentWebViewScreen>
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) async {
-        await LayoutMethouds.getdata();
-        NavigatorMethods.pushNamedAndRemoveUntil(
-          context,
-          LayoutScreen.routeName,
-        );
-      },
-      child: Scaffold(
-        body: SafeArea(
-          child: Stack(
-            children: [
-              WebViewWidget(controller: _controller),
-              progress < 1.0
-                  ? Positioned(
-                      top: 0, right: 0, left: 0, child: LinearProgressIndicator(value: progress))
-                  : Container(),
-            ],
-          ),
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            WebViewWidget(controller: _controller),
+            progress < 1.0
+                ? Positioned(
+                    top: 0, right: 0, left: 0, child: LinearProgressIndicator(value: progress))
+                : Container(),
+          ],
         ),
       ),
     );
@@ -143,8 +131,8 @@ class _CustomPaymentWebViewScreenState extends State<CustomPaymentWebViewScreen>
       CommonMethods.showToast(message: AppLocaleKey.paymentSuccess.tr());
 
       log('Payment successful ya abo khaled');
-      NavigatorMethods.pushNamedAndRemoveUntil(context, SuccessOrderConfirmationScreen.routeName);
-      //  WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pop(context));
+      NavigatorMethods.pushReplacementNamed(context, SuccessOrderConfirmationScreen.routeName);
+
       return NavigationDecision.prevent;
     } else if (isFailed) {
       widget.args.onFailed.call();

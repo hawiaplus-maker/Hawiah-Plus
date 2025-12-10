@@ -73,7 +73,8 @@ class AllCategoriesScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => CategoryDetailsScreen(id: item.id ?? 0),
+                          builder: (_) =>
+                              CategoryDetailsScreen(id: item.id ?? 0, title: item.title ?? ''),
                         ),
                       );
                     },

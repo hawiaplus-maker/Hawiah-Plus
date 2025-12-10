@@ -7,9 +7,16 @@ import 'package:hawiah_client/features/order/presentation/model/order_details_mo
 
 class OrderDetailsPricingSection extends StatelessWidget {
   const OrderDetailsPricingSection(
-      {super.key, required this.ordersModel, this.discountValue, this.discount});
+      {super.key,
+      required this.ordersModel,
+      this.discountValue,
+      this.discount,
+      this.priceAfterDiscount,
+      this.copone});
   final OrderDetailsModel ordersModel;
   final String? discountValue;
+  final String? priceAfterDiscount;
+  final String? copone;
   final int? discount;
   @override
   Widget build(BuildContext context) {
@@ -48,6 +55,16 @@ class OrderDetailsPricingSection extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Text(AppLocaleKey.coupon.tr(), style: AppTextStyle.text16_400),
+                Text(copone ?? "", style: AppTextStyle.text16_400),
+              ],
+            )
+          ],
+          if (discountValue != null) ...[
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
                 Text(AppLocaleKey.discount.tr(), style: AppTextStyle.text16_400),
                 Text(AppLocaleKey.sar.tr(args: [discountValue ?? ""]),
                     style: AppTextStyle.text16_400),
@@ -71,11 +88,7 @@ class OrderDetailsPricingSection extends StatelessWidget {
                 Text(AppLocaleKey.priceAfterDiscount.tr(), style: AppTextStyle.text16_400),
                 Text(
                     AppLocaleKey.sar.tr(
-                      args: [
-                        ((double.tryParse(ordersModel.totalPrice ?? "0") ?? 0) -
-                                (double.tryParse(discountValue ?? "0") ?? 0))
-                            .toStringAsFixed(2)
-                      ],
+                      args: [priceAfterDiscount ?? ""],
                     ),
                     style: AppTextStyle.text16_400.copyWith(color: AppColor.mainAppColor)),
               ],

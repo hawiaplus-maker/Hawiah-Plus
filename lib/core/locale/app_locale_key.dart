@@ -284,4 +284,6 @@ class AppLocaleKey {
   static const String orderReordered = 'orderReordered';
   static const String discount = 'discount';
   static const String priceAfterDiscount = 'priceAfterDiscount';
+  static const String coupon = 'coupon';
+  static const String accepted = 'accepted';
 }

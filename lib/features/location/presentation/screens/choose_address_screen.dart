@@ -19,7 +19,6 @@ import 'package:hawiah_client/features/home/presentation/model/show_categories_m
 import 'package:hawiah_client/features/home/presentation/widgets/location-item-widget.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_state.dart';
-import 'package:hawiah_client/features/location/presentation/model/address_model.dart';
 import 'package:hawiah_client/features/location/presentation/screens/add-new-location-screen.dart';
 
 class ChooseAddressScreenArgs {
@@ -44,6 +43,7 @@ class ChooseAddressScreen extends StatefulWidget {
 
 class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
   bool isVesetor = false;
+  int? addressId;
   @override
   initState() {
     super.initState();
@@ -55,7 +55,6 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
     }
   }
 
-  AddressModel? address;
   @override
   Widget build(BuildContext context) {
     return isVesetor
@@ -70,6 +69,10 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
             create: (BuildContext context) => AddressCubit()..getaddresses(),
             child: BlocBuilder<AddressCubit, AddressState>(builder: (context, state) {
               AddressCubit addressCubit = context.read<AddressCubit>();
+              if (addressId == null && addressCubit.addresses.isNotEmpty) {
+                addressId = addressCubit.addresses.first.id;
+              }
+
               return Scaffold(
                 appBar: CustomAppBar(
                   context,
@@ -133,9 +136,9 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                                 title: addressCubit.addresses[index].title ?? "",
                                 address:
                                     "${addressCubit.addresses[index].city ?? ""} - ${addressCubit.addresses[index].neighborhood ?? ""}",
-                                isSelected: address == addressCubit.addresses[index],
+                                isSelected: addressId == addressCubit.addresses[index].id,
                                 onTap: () {
-                                  address = addressCubit.addresses[index];
+                                  addressId = addressCubit.addresses[index].id;
                                   setState(() {});
                                 },
                               );
@@ -164,7 +167,7 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                                   : CustomButton(
                                       text: "confirm_address".tr(),
                                       onPressed: () {
-                                        if (address == null) {
+                                        if (addressId == null) {
                                           return CommonMethods.showError(
                                               message: AppLocaleKey.youHaveToChooseAddress.tr());
                                         } else {
@@ -176,7 +179,7 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                                                     widget.args.showCategoriesModel,
                                                 catigoryId: widget.args.catigoryId,
                                                 serviceProviderId: widget.args.serviceProviderId,
-                                                address: address!),
+                                                addressId: addressId!),
                                           );
                                         }
                                       },
