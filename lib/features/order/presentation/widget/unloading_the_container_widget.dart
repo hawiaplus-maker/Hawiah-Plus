@@ -14,16 +14,20 @@ import 'package:hawiah_client/features/order/presentation/widget/evaluation_resu
 
 class UnloadingTheContainerWidget extends StatefulWidget {
   const UnloadingTheContainerWidget(
-      {super.key, required this.orderId, required this.serviceProviderId});
+      {super.key,
+      required this.orderId,
+      required this.serviceProviderId,
+      required this.serviceProviderRating});
   final int orderId;
   final int serviceProviderId;
+  final double serviceProviderRating;
   @override
   State<UnloadingTheContainerWidget> createState() => _UnloadingTheContainerWidgetState();
 }
 
 class _UnloadingTheContainerWidgetState extends State<UnloadingTheContainerWidget> {
   bool isPressed = false;
-
+  bool hasEvaluated = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -109,32 +113,37 @@ class _UnloadingTheContainerWidgetState extends State<UnloadingTheContainerWidge
                 ),
               ),
               Gap(10.w),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () async {
-                    showEvaluationDialog(context,
-                        orderId: widget.orderId, serviceProviderId: widget.serviceProviderId);
-                  },
-                  child: Container(
-                    height: 45.h,
-                    decoration: BoxDecoration(
-                      color: AppColor.warning400.withAlpha(50),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(AppImages.evaluate, height: 20.h, width: 20.w),
-                        Gap(5.w),
-                        Text(
-                          AppLocaleKey.delegateEvaluation.tr(),
-                          style: AppTextStyle.text14_500.copyWith(color: AppColor.warning400),
+              widget.serviceProviderRating == null
+                  ? Expanded(
+                      child: GestureDetector(
+                        onTap: () async {
+                          showEvaluationDialog(context,
+                              orderId: widget.orderId, serviceProviderId: widget.serviceProviderId);
+                          setState(() {
+                            hasEvaluated = true;
+                          });
+                        },
+                        child: Container(
+                          height: 45.h,
+                          decoration: BoxDecoration(
+                            color: AppColor.warning400.withAlpha(50),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(AppImages.evaluate, height: 20.h, width: 20.w),
+                              Gap(5.w),
+                              Text(
+                                AppLocaleKey.delegateEvaluation.tr(),
+                                style: AppTextStyle.text14_500.copyWith(color: AppColor.warning400),
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                      ),
+                    )
+                  : const SizedBox(),
             ],
           )
         ],

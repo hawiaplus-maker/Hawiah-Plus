@@ -9,7 +9,7 @@ import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
+import 'package:hawiah_client/features/order/presentation/model/single_order_model.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 import 'package:hawiah_client/features/order/presentation/screens/payment_web_view.dart';
 import 'package:hawiah_client/features/order/presentation/widget/custom_list_item.dart';
@@ -20,12 +20,12 @@ class PricingSectionWidget extends StatelessWidget {
     required this.ordersData,
   });
 
-  final SingleOrderData ordersData;
+  final SingleOrderModel ordersData;
 
   @override
   Widget build(BuildContext context) {
     final double totalPrice = double.tryParse(
-          ordersData.totalPrice?.replaceAll(",", "") ?? "0",
+          ordersData.data?.totalPrice.toString() ?? "".replaceAll(",", ""),
         ) ??
         0;
     final double vat = totalPrice * 0.15;
@@ -50,14 +50,14 @@ class PricingSectionWidget extends StatelessWidget {
             subtitle: "${totalPrice.toStringAsFixed(2)} ${AppLocaleKey.sarr.tr()}",
           ),
           SizedBox(height: 10),
-          if (ordersData.paidStatus == 0)
+          if (ordersData.data?.paidStatus == 0)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: CustomButton(
                 onPressed: () {
                   log("get payment link");
                   context.read<OrderCubit>().getPaymentLink(
-                      orderId: ordersData.id!,
+                      orderId: ordersData.data?.id! ?? 0,
                       onSuccess: (url) {
                         if (url.contains('already exists') == true) {
                           CommonMethods.showError(message: url);

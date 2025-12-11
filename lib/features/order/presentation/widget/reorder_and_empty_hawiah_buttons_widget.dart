@@ -7,15 +7,14 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/url_luncher_methods.dart';
-import 'package:hawiah_client/features/order/presentation/screens/current-order-screen.dart';
 
 class ReOrderAndEmptyHawiahButtons extends StatelessWidget {
   const ReOrderAndEmptyHawiahButtons({
     super.key,
-    required this.widget,
+    required this.support,
   });
 
-  final CurrentOrderScreen widget;
+  final String support;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class ReOrderAndEmptyHawiahButtons extends StatelessWidget {
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Expanded(
               child: GestureDetector(
-                onTap: () => UrlLauncherMethods.launchURL(widget.ordersData.support),
+                onTap: () => UrlLauncherMethods.launchURL(support),
                 child: Container(
                   height: 45.h,
                   decoration: BoxDecoration(
@@ -55,8 +54,7 @@ class ReOrderAndEmptyHawiahButtons extends StatelessWidget {
             Gap(10.w),
             Expanded(
               child: GestureDetector(
-                onTap: () =>
-                    UrlLauncherMethods.launchURL(widget.ordersData.support, isWhatsapp: true),
+                onTap: () => UrlLauncherMethods.launchURL(support, isWhatsapp: true),
                 child: Container(
                   height: 45.h,
                   decoration: BoxDecoration(
