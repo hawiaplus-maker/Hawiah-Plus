@@ -2,7 +2,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 abstract class UrlLauncherMethods {
- static Future<void> launchURL(String? url, {bool isWhatsapp = false, bool isEmail = false}) async {
+  static Future<void> launchURL(String? url,
+      {bool isWhatsapp = false, bool isEmail = false}) async {
     if (url == null || url.isEmpty) return;
 
     Uri uri;

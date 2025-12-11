@@ -8,11 +8,11 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
-import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
+import 'package:hawiah_client/features/order/presentation/model/single_order_model.dart';
 
 class OldOrderHeaderSection extends StatelessWidget {
   const OldOrderHeaderSection({required this.data});
-  final SingleOrderData data;
+  final SingleOrderModel data;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class OldOrderHeaderSection extends StatelessWidget {
               const Spacer(),
               Container(
                 decoration: BoxDecoration(
-                  color: gtOrderStatusColor(data.status?['en'] ?? '').withAlpha(50),
+                  color: gtOrderStatusColor(data.data?.status?.en ?? '').withAlpha(50),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Center(
@@ -39,10 +39,10 @@ class OldOrderHeaderSection extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Text(
                       context.locale.languageCode == 'ar'
-                          ? (data.status?['ar'] ?? '')
-                          : (data.status?['en'] ?? ''),
+                          ? (data.data?.status?.ar ?? '')
+                          : (data.data?.status?.en ?? ''),
                       style: AppTextStyle.text16_500.copyWith(
-                        color: gtOrderStatusColor(data.status?['en'] ?? ''),
+                        color: gtOrderStatusColor(data.data?.status?.en ?? ''),
                       ),
                     ),
                   ),
@@ -57,7 +57,7 @@ class OldOrderHeaderSection extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15.0),
                   child: CustomNetworkImage(
-                    imageUrl: data.image ?? "",
+                    imageUrl: data.data?.image ?? "",
                     fit: BoxFit.fill,
                     height: 60.h,
                     width: 60.w,
@@ -69,7 +69,7 @@ class OldOrderHeaderSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    data.product ?? "",
+                    data.data?.product ?? "",
                     style: AppTextStyle.text16_700,
                   ),
                   SizedBox(height: 5.h),
@@ -86,7 +86,7 @@ class OldOrderHeaderSection extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: data.referenceNumber ?? '',
+                              text: data.data?.referenceNumber ?? '',
                               style: AppTextStyle.text14_500.copyWith(
                                 color: AppColor.greyColor.withValues(alpha: 0.7),
                               ),
@@ -101,7 +101,7 @@ class OldOrderHeaderSection extends StatelessWidget {
                     children: [
                       Image.asset(AppImages.requestCode, height: 24.h, width: 24.w),
                       Text(
-                        data.serviceProvider ?? '',
+                        data.data?.serviceProvider ?? '',
                         style: AppTextStyle.text14_500.copyWith(
                           color: AppColor.greyColor.withValues(alpha: 0.7),
                         ),
@@ -125,7 +125,7 @@ class OldOrderHeaderSection extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(data.otp.toString(),
+                            Text(data.data?.otp.toString() ?? '',
                                 style: AppTextStyle.text12_400.copyWith(color: Color(0xff6E11B0))),
                           ],
                         ),
@@ -161,7 +161,7 @@ class OldOrderHeaderSection extends StatelessWidget {
 
 class OrderInfoTexts extends StatelessWidget {
   const OrderInfoTexts({required this.data});
-  final SingleOrderData data;
+  final SingleOrderModel data;
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +169,7 @@ class OrderInfoTexts extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 10.h),
-        Text(data.product ?? "", style: AppTextStyle.text16_700),
+        Text(data.data?.product ?? "", style: AppTextStyle.text16_700),
         SizedBox(height: 5.h),
         RichText(
           text: TextSpan(
@@ -180,7 +180,7 @@ class OrderInfoTexts extends StatelessWidget {
                     .copyWith(color: AppColor.blackColor.withValues(alpha: 0.7)),
               ),
               TextSpan(
-                text: data.referenceNumber ?? '',
+                text: data.data?.referenceNumber ?? '',
                 style: AppTextStyle.text16_500
                     .copyWith(color: AppColor.blackColor.withValues(alpha: 0.7)),
               ),
@@ -190,7 +190,7 @@ class OrderInfoTexts extends StatelessWidget {
         SizedBox(height: 5.h),
         Text(
           DateMethods.formatToFullData(
-            DateTime.tryParse(data.createdAt ?? "") ?? DateTime.now(),
+            DateTime.tryParse(data.data?.createdAt ?? "") ?? DateTime.now(),
           ),
           style:
               AppTextStyle.text16_600.copyWith(color: AppColor.blackColor.withValues(alpha: 0.3)),

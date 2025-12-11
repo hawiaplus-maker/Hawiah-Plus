@@ -11,7 +11,7 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/core/utils/url_luncher_methods.dart';
 import 'package:hawiah_client/features/chat/presentation/screens/single-chat-screen.dart';
-import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
+import 'package:hawiah_client/features/order/presentation/model/single_order_model.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 
 class DriverCardWidget extends StatelessWidget {
@@ -20,12 +20,13 @@ class DriverCardWidget extends StatelessWidget {
     required this.ordersData,
   });
 
-  final SingleOrderData ordersData;
+  final SingleOrderModel ordersData;
 
   @override
   Widget build(BuildContext context) {
-    final vehicle = ordersData.vehicles?.isNotEmpty == true ? ordersData.vehicles!.first : null;
-    final driverName = ordersData.driver ?? '';
+    final vehicle =
+        ordersData.data?.vehicles?.isNotEmpty == true ? ordersData.data?.vehicles!.first : null;
+    final driverName = ordersData.data?.driver ?? '';
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
@@ -76,8 +77,8 @@ class DriverCardWidget extends StatelessWidget {
                 ],
                 Gap(20.h),
                 GestureDetector(
-                  onTap: () =>
-                      UrlLauncherMethods.launchURL(ordersData.driverMobile, isWhatsapp: false),
+                  onTap: () => UrlLauncherMethods.launchURL(ordersData.data?.driverMobile,
+                      isWhatsapp: false),
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     decoration: BoxDecoration(
@@ -104,8 +105,8 @@ class DriverCardWidget extends StatelessWidget {
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        onTap: () =>
-                            UrlLauncherMethods.launchURL(ordersData.driverMobile, isWhatsapp: true),
+                        onTap: () => UrlLauncherMethods.launchURL(ordersData.data?.driverMobile,
+                            isWhatsapp: true),
                         child: Container(
                           height: 45.h,
                           decoration: BoxDecoration(
@@ -168,13 +169,13 @@ class DriverCardWidget extends StatelessWidget {
       SingleChatScreen.routeName,
       arguments: SingleChatScreenArgs(
         onMessageSent: () {},
-        receiverId: ordersData.driverId.toString(),
+        receiverId: ordersData.data?.driverId.toString() ?? "",
         receiverType: "driver",
         receiverName: driverName,
         receiverImage: Urls.testUserImage,
         senderId: profileCubit.user!.id.toString(),
         senderType: "user",
-        orderId: ordersData.id.toString(),
+        orderId: ordersData.data?.id.toString() ?? "",
       ),
     );
   }

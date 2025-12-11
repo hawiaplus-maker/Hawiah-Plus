@@ -13,6 +13,8 @@ import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/presentation/model/nearby_service-provider_model.dart';
 import 'package:hawiah_client/features/order/presentation/model/order_details_model.dart';
 import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
+import 'package:hawiah_client/features/order/presentation/model/single_order_model.dart'
+    hide SingleOrderData;
 import 'package:table_calendar/table_calendar.dart';
 
 import 'order-state.dart';
@@ -180,6 +182,27 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
+  Future<void> singleOrder({required int orderId}) async {
+    emit(OrderLoading());
+
+    final response = await ApiHelper.instance.get(Urls.showOrder(orderId));
+
+    if (response.state == ResponseState.complete) {
+      if (response.data?['success'] == true && response.data?['data'] != null) {
+        final order = SingleOrderModel.fromJson(response.data);
+        emit(CurrentOrderLoaded(order));
+      } else {
+        emit(CurrentOrderError(response.data?['message'] ?? 'حدث خطأ'));
+      }
+    } else if (response.state == ResponseState.unauthorized) {
+      CommonMethods.showAlertDialog(
+        message: tr(AppLocaleKey.youMustLogInFirst),
+      );
+    } else {
+      emit(CurrentOrderError(response.data?['message'] ?? 'حدث خطأ'));
+    }
+  }
+
   //================== get nearby provider ====================
   void initialNearbyServiceProvider() {
     _nearbyServiceProviderResponse = ApiResponse(
@@ -324,7 +347,7 @@ class OrderCubit extends Cubit<OrderState> {
     NavigatorMethods.loadingOff();
     if (response.state == ResponseState.complete) {
       CommonMethods.showToast(
-        message: response.data['message'] ?? "تم افراغ الطلب بنجاح",
+        message: response.data['message'] ?? "تم طلب افراغ الحاوية بنجاح",
       );
       onSuccess.call();
     } else if (response.state == ResponseState.unauthorized) {

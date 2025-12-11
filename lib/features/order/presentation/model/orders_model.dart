@@ -58,11 +58,14 @@ class Pagination {
   Pagination({this.currentPage, this.lastPage, this.perPage, this.total});
 
   factory Pagination.fromJson(Map<String, dynamic> json) {
+    int? parseInt(dynamic value) =>
+        value != null ? (value is num ? value.toInt() : int.tryParse(value.toString())) : null;
+
     return Pagination(
-      currentPage: json['current_page'],
-      lastPage: json['last_page'],
-      perPage: json['per_page'],
-      total: json['total'],
+      currentPage: parseInt(json['current_page']),
+      lastPage: parseInt(json['last_page']),
+      perPage: parseInt(json['per_page']),
+      total: parseInt(json['total']),
     );
   }
 
@@ -84,7 +87,7 @@ class SingleOrderData {
   double? longitude;
   int? orderStatus;
   int? paidStatus;
-  Map<String, String>? status; // سيبها كما هي
+  Map<String, String>? status;
   int? priceId;
   int? serviceProviderId;
   int? duration;
@@ -93,6 +96,7 @@ class SingleOrderData {
   String? toDate;
   int? discount;
   dynamic discountValue;
+
   String? createdAt;
   String? product;
   String? image;
@@ -101,6 +105,7 @@ class SingleOrderData {
   String? driverMobile;
   String? serviceProvider;
   String? serviceProviderMobile;
+  double? serviceProviderRating;
   List<VehicleModel>? vehicles;
   String? otp;
   String? user;
@@ -114,6 +119,9 @@ class SingleOrderData {
   String? contract;
   String? invoice;
   String? support;
+  String? priceBeforeTax;
+  double? vat;
+  double? vatValue;
 
   SingleOrderData({
     this.id,
@@ -139,6 +147,7 @@ class SingleOrderData {
     this.driverMobile,
     this.serviceProvider,
     this.serviceProviderMobile,
+    this.serviceProviderRating,
     this.vehicles,
     this.otp,
     this.user,
@@ -153,37 +162,47 @@ class SingleOrderData {
     this.invoice,
     this.support,
     this.serviceProviderId,
+    this.priceBeforeTax,
+    this.vat,
+    this.vatValue,
   });
 
   factory SingleOrderData.fromJson(Map<String, dynamic> json) {
+    int? parseInt(dynamic value) =>
+        value != null ? (value is num ? value.toInt() : int.tryParse(value.toString())) : null;
+    double? parseDouble(dynamic value) => value != null
+        ? (value is num ? value.toDouble() : double.tryParse(value.toString()))
+        : null;
+
     return SingleOrderData(
-      id: json['id'],
+      id: parseInt(json['id']),
       referenceNumber: json['reference_number'],
       address: json['address'],
-      latitude: double.tryParse(json['latitude']?.toString() ?? ''),
-      longitude: double.tryParse(json['longitude']?.toString() ?? ''),
-      orderStatus: json['order_status'],
-      paidStatus: json['paid_status'],
+      latitude: parseDouble(json['latitude']),
+      longitude: parseDouble(json['longitude']),
+      orderStatus: parseInt(json['order_status']),
+      paidStatus: parseInt(json['paid_status']),
       status: json['status'] != null ? Map<String, String>.from(json['status']) : null,
-      priceId: json['price_id'],
-      duration: json['duration'],
+      priceId: parseInt(json['price_id']),
+      duration: parseInt(json['duration']),
       totalPrice: json['total_price'],
       fromDate: json['from_date'],
       toDate: json['to_date'],
-      discount: json['discount'],
-      discountValue: json['discount_value'],
+      discount: parseInt(json['discount']),
+      discountValue: parseDouble(json['discount_value']),
       createdAt: json['created_at'],
       product: json['product'],
       image: json['image'],
       driver: json['driver'],
-      driverId: json['driver_id'],
+      driverId: parseInt(json['driver_id']),
       driverMobile: json['driver_mobile'],
       serviceProvider: json['service_provider'],
       serviceProviderMobile: json['service_provider_mobile'],
+      serviceProviderRating: parseDouble(json['service_provider_rating']),
       vehicles: (json['vehicles'] as List?)?.map((v) => VehicleModel.fromJson(v)).toList(),
       otp: json['otp'],
       user: json['user'],
-      userId: json['user_id'],
+      userId: parseInt(json['user_id']),
       userMobile: json['user_mobile'],
       userImage: json['user_image'],
       driverFcmToken: json['driver_fcm_token'],
@@ -193,7 +212,10 @@ class SingleOrderData {
       contract: json['contract'],
       invoice: json['invoice'],
       support: json['support'],
-      serviceProviderId: json['service_provider_id'],
+      serviceProviderId: parseInt(json['service_provider_id']),
+      priceBeforeTax: json['price_before_tax'],
+      vat: parseDouble(json['vat']),
+      vatValue: parseDouble(json['vat_value']),
     );
   }
 
@@ -222,6 +244,7 @@ class SingleOrderData {
     map['driver_mobile'] = driverMobile;
     map['service_provider'] = serviceProvider;
     map['service_provider_mobile'] = serviceProviderMobile;
+    map['service_provider_rating'] = serviceProviderRating;
     if (vehicles != null) map['vehicles'] = vehicles!.map((v) => v.toJson()).toList();
     map['otp'] = otp;
     map['user'] = user;
@@ -236,6 +259,9 @@ class SingleOrderData {
     map['invoice'] = invoice;
     map['support'] = support;
     map['service_provider_id'] = serviceProviderId;
+    map['price_before_tax'] = priceBeforeTax;
+    map['vat'] = vat;
+    map['vat_value'] = vatValue;
     return map;
   }
 }

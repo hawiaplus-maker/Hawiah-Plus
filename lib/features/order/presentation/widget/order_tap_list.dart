@@ -8,12 +8,10 @@ import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
-import 'package:hawiah_client/features/order/presentation/screens/current-order-screen.dart';
-import 'package:hawiah_client/features/order/presentation/screens/old-order-screen.dart';
+import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
+import 'package:hawiah_client/features/order/presentation/order-cubit/order-state.dart';
+import 'package:hawiah_client/features/order/presentation/screens/order_details_screen.dart';
 import 'package:hawiah_client/features/order/presentation/widget/order_card_widget.dart';
-
-import '../order-cubit/order-cubit.dart';
-import '../order-cubit/order-state.dart';
 
 class OrderTapList extends StatefulWidget {
   const OrderTapList({super.key, required this.isCurrent});
@@ -35,9 +33,7 @@ class _OrderTapListState extends State<OrderTapList> {
 
   void _onScroll() {
     final cubit = context.read<OrderCubit>();
-    // تحميل الصفحة التالية عند الاقتراب من النهاية
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 150 &&
-        cubit.canLoadMoreCurrent &&
         cubit.state is! OrderPaginationLoading) {
       cubit.getOrders(
         orderStatus: widget.isCurrent ? 0 : 1,
@@ -60,7 +56,6 @@ class _OrderTapListState extends State<OrderTapList> {
       builder: (context, state) {
         final cubit = context.watch<OrderCubit>();
         final orders = widget.isCurrent ? cubit.currentOrders : cubit.oldOrders;
-
         final isPaginating = widget.isCurrent ? cubit.isLoadingMoreCurrent : cubit.isLoadingMoreOld;
 
         // لو لسه أول تحميل
@@ -68,18 +63,16 @@ class _OrderTapListState extends State<OrderTapList> {
           return Center(
               child: SingleChildScrollView(
             child: Column(
-              children: [
-                ...List.generate(
-                    6,
-                    (index) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 3.5, horizontal: 16),
-                          child: CustomShimmer(
-                            height: 120,
-                            width: double.infinity,
-                            radius: 15,
-                          ),
-                        ))
-              ],
+              children: List.generate(
+                  6,
+                  (index) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3.5, horizontal: 16),
+                        child: CustomShimmer(
+                          height: 120,
+                          width: double.infinity,
+                          radius: 15,
+                        ),
+                      )),
             ),
           ));
         } else if (state is OrderSuccess) {
@@ -112,10 +105,10 @@ class _OrderTapListState extends State<OrderTapList> {
         }
 
         return ListView.separated(
-          separatorBuilder: (context, index) => SizedBox(height: 7),
+          separatorBuilder: (context, index) => const SizedBox(height: 7),
           controller: _scrollController,
           itemCount: orders.length + (isPaginating ? 1 : 0),
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           itemBuilder: (context, index) {
             if (index < orders.length) {
               final order = orders[index];
@@ -124,11 +117,10 @@ class _OrderTapListState extends State<OrderTapList> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => widget.isCurrent
-                          ? CurrentOrderScreen(ordersData: order)
-                          : OldOrderScreen(
-                              ordersData: order,
-                            ),
+                      builder: (_) => OrderDetailsScreen(
+                        orderId: order.id ?? 0,
+                        isCurrent: widget.isCurrent,
+                      ),
                     ),
                   );
                 },
@@ -138,11 +130,12 @@ class _OrderTapListState extends State<OrderTapList> {
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 20),
                 child: Center(
-                    child: CustomShimmer(
-                  height: 120,
-                  width: double.infinity,
-                  radius: 15,
-                )),
+                  child: CustomShimmer(
+                    height: 120,
+                    width: double.infinity,
+                    radius: 15,
+                  ),
+                ),
               );
             }
           },

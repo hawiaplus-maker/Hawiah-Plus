@@ -4,17 +4,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/url_luncher_methods.dart';
-import 'package:hawiah_client/features/order/presentation/screens/current-order-screen.dart';
+import 'package:hawiah_client/features/order/presentation/model/single_order_model.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:hawiah_client/injection_container.dart';
 
 class DriverAndSupportContactButtons extends StatelessWidget {
   const DriverAndSupportContactButtons({
     super.key,
-    required this.widget,
+    required this.ordersData,
   });
 
-  final CurrentOrderScreen widget;
+  final SingleOrderModel ordersData;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class DriverAndSupportContactButtons extends StatelessWidget {
         InkWell(
           onTap: () {
             UrlLauncherMethods.launchURL(
-              widget.ordersData.driverMobile ?? "",
+              ordersData.data?.driverMobile ?? "",
             );
           },
           child: Column(

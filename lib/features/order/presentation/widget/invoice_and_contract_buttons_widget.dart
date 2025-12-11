@@ -5,7 +5,7 @@ import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
-import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
+import 'package:hawiah_client/features/order/presentation/model/single_order_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InvoiceAndContractButtonsWidget extends StatelessWidget {
@@ -14,26 +14,30 @@ class InvoiceAndContractButtonsWidget extends StatelessWidget {
     required this.ordersData,
   });
 
-  final SingleOrderData ordersData;
+  final SingleOrderModel ordersData;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (ordersData.contract != null)
+        if (ordersData.data?.contract != null)
           _buildPdfButton(
             context,
             label: AppLocaleKey.downloadThePDFContract.tr(),
-            url: ordersData.contract!,
+            title: AppLocaleKey.viewContract.tr(),
+            message: AppLocaleKey.downloadContract.tr(),
+            url: ordersData.data?.contract! ?? "",
             backgroundColor: AppColor.secondAppColor,
             textColor: AppColor.whiteColor,
           ),
         const SizedBox(height: 10),
-        if (ordersData.invoice != null)
+        if (ordersData.data?.invoice != null)
           _buildPdfButton(
             context,
+            title: AppLocaleKey.viewInvoice.tr(),
+            message: AppLocaleKey.downloadInvoice.tr(),
             label: AppLocaleKey.downloadPDF.tr(),
-            url: ordersData.invoice!,
+            url: ordersData.data?.invoice! ?? "",
             backgroundColor: AppColor.mainAppColor,
             textColor: AppColor.whiteColor,
           ),
@@ -48,13 +52,15 @@ class InvoiceAndContractButtonsWidget extends StatelessWidget {
     required String url,
     required Color backgroundColor,
     required Color textColor,
+    required String title,
+    required String message,
   }) {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
       child: CustomButton(
         text: label,
-        onPressed: () => _showPdfOptionsBottomSheet(context, url),
+        onPressed: () => _showPdfOptionsBottomSheet(context, url, title: title, message: message),
         color: backgroundColor,
         style: AppTextStyle.buttonStyle.copyWith(
           color: textColor,
@@ -65,7 +71,8 @@ class InvoiceAndContractButtonsWidget extends StatelessWidget {
     );
   }
 
-  void _showPdfOptionsBottomSheet(BuildContext context, String pdfUrl) {
+  void _showPdfOptionsBottomSheet(BuildContext context, String pdfUrl,
+      {required String title, required String message}) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -83,7 +90,7 @@ class InvoiceAndContractButtonsWidget extends StatelessWidget {
             const SizedBox(height: 20),
             _buildOptionTile(
               icon: Icons.remove_red_eye,
-              title: AppLocaleKey.viewInvoice.tr(),
+              title: title,
               context: context,
               pdfUrl: pdfUrl,
               launchMode: LaunchMode.inAppWebView,
@@ -91,7 +98,7 @@ class InvoiceAndContractButtonsWidget extends StatelessWidget {
             const Divider(),
             _buildOptionTile(
               icon: Icons.download,
-              title: AppLocaleKey.downloadInvoice.tr(),
+              title: message,
               context: context,
               pdfUrl: pdfUrl,
               launchMode: LaunchMode.externalApplication,
