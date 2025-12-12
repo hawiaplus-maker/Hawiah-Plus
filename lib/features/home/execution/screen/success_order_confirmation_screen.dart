@@ -145,17 +145,34 @@ class SuccessOrderConfirmationScreen extends StatelessWidget {
                   // SizedBox(
                   //   width: 20,
                   // ),
-                  Expanded(
-                    child: CustomButton(
-                      text: AppLocaleKey.backToHome.tr(),
-                      onPressed: () async {
-                        await LayoutMethouds.getdata();
-                        NavigatorMethods.pushNamedAndRemoveUntil(context, LayoutScreen.routeName);
-                      },
-                    ),
-                  ),
                 ],
               )
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        bottom: true,
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomButton(
+                color: AppColor.secondAppColor,
+                text: AppLocaleKey.backToOrderSummary.tr(),
+                onPressed: () => Navigator.pop(context),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              CustomButton(
+                text: AppLocaleKey.backToHome.tr(),
+                onPressed: () async {
+                  await LayoutMethouds.getdata();
+                  NavigatorMethods.pushNamedAndRemoveUntil(context, LayoutScreen.routeName);
+                },
+              ),
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 // add_new_location_screen.dart
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/core/utils/validation_methods.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_state.dart';
+import 'package:hawiah_client/features/location/presentation/model/neighborhood_model.dart';
 import 'package:hawiah_client/features/location/presentation/screens/map_screen.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
 import 'package:location/location.dart';
@@ -50,6 +52,8 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   int? selectedNeighborhood;
   LatLng? currentPosition;
   String currentAddress = "Getting location...";
+  String? city;
+  List<NeighborhoodModel> neighborhoods = [];
 
   @override
   void initState() {
@@ -170,7 +174,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
             children: [
               CustomSingleSelect(
                 title: AppLocaleKey.city.tr(),
-                hintText: AppLocaleKey.cityHint.tr(),
+                hintText: city ?? AppLocaleKey.cityHint.tr(),
                 value: selectedCity,
                 items: addressCubit.citys
                     .map((e) => CustomSelectItem(
@@ -194,7 +198,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
                 hintText: AppLocaleKey.cityHint.tr(),
                 apiResponse: addressCubit.neighborhoodsResponse,
                 value: selectedNeighborhood,
-                items: addressCubit.neighborhoods
+                items: neighborhoods
                     .map((e) => CustomSelectItem(
                           name: e.title ?? "",
                           value: e.id,
@@ -226,8 +230,18 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
           },
           onTap: (LatLng argument) async {
             NavigatorMethods.pushNamed(context, MapScreen.routeName, arguments: MapScreenArgs(
-              onLocationSelected: (lat, lng, locality) {
-                safeLocationSelected(lat, lng, locality);
+              onLocationSelected: (lat, lng, city, locality) {
+                log("============================================ $city ================================");
+                setState(() {
+                  this.city = city;
+                  context.read<AddressCubit>().getneighborhoodsByName(city, (neighborhoods) {
+                    setState(() {
+                      this.neighborhoods = neighborhoods;
+                    });
+                  });
+                });
+
+                safeLocationSelected(lat, lng, city, locality);
               },
             ));
 
@@ -306,7 +320,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
         );
   }
 
-  void safeLocationSelected(double lat, double lng, String locality) {
+  void safeLocationSelected(double lat, double lng, String city, String locality) {
     if (!mounted) return;
 
     setState(() {

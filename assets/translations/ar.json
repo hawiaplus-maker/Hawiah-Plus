@@ -393,6 +393,11 @@
    "evaluationSend": "إرسال التقييم",
    "orderReordered":"تم اعادة الطلب بنجاح",
    "coupon":"الكوبون",
-   "accepted":"مقبول"
+   "accepted":"مقبول",
+   "backToOrderSummary":"العودة إلي ملخص الطلب",
+    "update_title": "تحديث جديد متوفر",
+  "update_content": "هناك إصدار جديد متاح ({store_version}).\nأنت تستخدم حالياً الإصدار ({local_version}). يرجى التحديث.",
+  "update_later": "لاحقاً",
+  "update_now": "تحديث الآن"
 
 }

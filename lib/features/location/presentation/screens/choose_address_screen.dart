@@ -162,28 +162,6 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                               SizedBox(
                                 height: 10,
                               ),
-                              addressCubit.addresses.isEmpty == true
-                                  ? SizedBox()
-                                  : CustomButton(
-                                      text: "confirm_address".tr(),
-                                      onPressed: () {
-                                        if (addressId == null) {
-                                          return CommonMethods.showError(
-                                              message: AppLocaleKey.youHaveToChooseAddress.tr());
-                                        } else {
-                                          NavigatorMethods.pushNamed(
-                                            context,
-                                            NearbyServiceProviderScreen.routeName,
-                                            arguments: NearbyServiceProviderArguments(
-                                                showCategoriesModel:
-                                                    widget.args.showCategoriesModel,
-                                                catigoryId: widget.args.catigoryId,
-                                                serviceProviderId: widget.args.serviceProviderId,
-                                                addressId: addressId!),
-                                          );
-                                        }
-                                      },
-                                    )
                             ],
                           ),
                         )
@@ -191,6 +169,33 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                     ),
                   ),
                 ),
+                bottomNavigationBar: addressCubit.addresses.isEmpty == true
+                    ? SizedBox()
+                    : Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: SafeArea(
+                          bottom: true,
+                          child: CustomButton(
+                            text: "confirm_address".tr(),
+                            onPressed: () {
+                              if (addressId == null) {
+                                return CommonMethods.showError(
+                                    message: AppLocaleKey.youHaveToChooseAddress.tr());
+                              } else {
+                                NavigatorMethods.pushNamed(
+                                  context,
+                                  NearbyServiceProviderScreen.routeName,
+                                  arguments: NearbyServiceProviderArguments(
+                                      showCategoriesModel: widget.args.showCategoriesModel,
+                                      catigoryId: widget.args.catigoryId,
+                                      serviceProviderId: widget.args.serviceProviderId,
+                                      addressId: addressId!),
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      ),
               );
             }),
           );

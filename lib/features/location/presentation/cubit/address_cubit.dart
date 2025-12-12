@@ -91,6 +91,31 @@ class AddressCubit extends Cubit<AddressState> {
       emit(AddressUpdate());
     }
   }
+
+  //====================== get neighborhoods by city name ===================
+  Future<void> getneighborhoodsByName(
+      String name, Function(List<NeighborhoodModel>) onSuccess) async {
+    _neighborhoodsResponse = ApiResponse(
+      state: ResponseState.loading,
+      data: null,
+    );
+    _neighborhoods = [];
+    emit(AddressUpdate());
+    _neighborhoodsResponse = await ApiHelper.instance.get(
+      Urls.neighborhoodsByName,
+      queryParameters: {
+        'city_name': name,
+      },
+    );
+    if (_neighborhoodsResponse.state == ResponseState.complete) {
+      Iterable iterable = _neighborhoodsResponse.data['neighborhoods'];
+
+      _neighborhoods = iterable.map((e) => NeighborhoodModel.fromJson(e)).toList();
+      onSuccess(_neighborhoods);
+      emit(AddressUpdate());
+    }
+  }
+
   //====================== Store Address ===================================
 
   Future<void> storeAddress(

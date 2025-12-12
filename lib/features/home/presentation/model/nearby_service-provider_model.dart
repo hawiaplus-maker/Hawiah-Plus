@@ -9,7 +9,7 @@ class NearbyServiceProviderModel {
   int? active;
   dynamic serviceProviderId;
   String? serviceProviderName;
-  int? serviceProviderRating;
+  num? serviceProviderRating;
 
   NearbyServiceProviderModel({
     this.id,

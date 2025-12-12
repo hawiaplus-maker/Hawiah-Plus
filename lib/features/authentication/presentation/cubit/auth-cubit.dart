@@ -253,11 +253,11 @@ class AuthCubit extends Cubit<AuthState> {
     );
     final message = response.data['message'];
     if (response.state == ResponseState.complete) {
-      if (message == "complete login" && response.data['success'] == true) {
+      if ((response.data['data']['flag'] == 1)) {
         emit(ValidateMobileSuccess(message: message));
       } else if (response.data["status_Code"] == 422 || response.data["status_Code"] == 401) {
         emit(ValidateMobilePhoneIsNotRegistered());
-      } else if (message == "messages.first_login") {
+      } else if (response.data['data']['user']['flag'] == 2) {
         emit(ValidateFirestLoginSuccess(
             message: message, otp: response.data['data']['user']['otp']));
       } else {

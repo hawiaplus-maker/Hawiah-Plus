@@ -61,4 +61,5 @@ class Urls {
   static String questions = '${baseUrl}faq';
   static String sliders = '${baseUrl}sliders';
   static String showOrder(int id) => '${baseUrl}users/user-orders/$id';
+  static String neighborhoodsByName = '${baseUrl}get-nieghborhoods-by-cityname';
 }

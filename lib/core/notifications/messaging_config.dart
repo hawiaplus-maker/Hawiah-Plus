@@ -11,8 +11,10 @@ import 'package:hawiah_client/features/layout/presentation/screens/layout-screen
 
 @pragma('vm:entry-point')
 final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
+
 @pragma('vm:entry-point')
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
 late final GlobalKey<NavigatorState> navigatorKey;
 
 @pragma('vm:entry-point')
@@ -29,23 +31,30 @@ void notificationTapBackground(NotificationResponse details) {
   }
 }
 
-enum NotificationType { trackOrder }
+// === تعريف أنواع الإشعارات ===
+enum NotificationType { trackOrder, general }
 
 class NotificationData {
   final NotificationType type;
   final int? orderId;
+
   NotificationData._({required this.type, this.orderId});
+
   factory NotificationData.fromMap(Map<String, dynamic> map) {
+    // تحليل البيانات بناءً على النوع القادم من الباك اند
     switch (map['notification_type'] as String?) {
       case '1':
         return NotificationData._(
           type: NotificationType.trackOrder,
           orderId: int.tryParse(map['order_id']?.toString() ?? ''),
         );
-      default:
-        throw ArgumentError(
-          'Unsupported notification type: ${map['notification_type']}',
+      case 'general_notifications':
+        return NotificationData._(
+          type: NotificationType.general,
         );
+      default:
+        // أي نوع غير معروف يتم التعامل معه كإشعار عام
+        return NotificationData._(type: NotificationType.general);
     }
   }
 }
@@ -53,22 +62,25 @@ class NotificationData {
 Future<void> _showLocalNotification(RemoteMessage message) async {
   final notification = message.notification;
   final payload = jsonEncode(message.data);
-  await _localNotifications.show(
-    notification.hashCode,
-    notification?.title,
-    notification?.body,
-    const NotificationDetails(
-      android: AndroidNotificationDetails(
-        'high_importance',
-        'High Importance',
-        channelDescription: 'Important notifications',
-        sound: RawResourceAndroidNotificationSound('custom_sound'),
-        icon: '@mipmap/ic_launcher',
+
+  if (notification != null) {
+    await _localNotifications.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'high_importance',
+          'High Importance',
+          channelDescription: 'Important notifications',
+          sound: RawResourceAndroidNotificationSound('custom_sound'),
+          icon: '@mipmap/ic_launcher',
+        ),
+        iOS: DarwinNotificationDetails(sound: 'custom_sound.caf'),
       ),
-      iOS: DarwinNotificationDetails(sound: 'custom_sound.caf'),
-    ),
-    payload: payload,
-  );
+      payload: payload,
+    );
+  }
 }
 
 void handleNotificationTap(Map<String, dynamic> data) {
@@ -103,6 +115,14 @@ void _performNavigation(NotificationData data) async {
         LayoutScreen.routeName,
       );
       break;
+
+    case NotificationType.general:
+      // الإشعارات العامة توجه للصفحة الرئيسية فقط
+      NavigatorMethods.pushNamed(
+        ctx,
+        LayoutScreen.routeName,
+      );
+      break;
   }
 }
 
@@ -115,6 +135,11 @@ class MessagingService {
     navigatorKey = navKey;
     await Firebase.initializeApp();
     await _createAndroidChannel();
+
+    // === (تم التعديل) تفعيل الاشتراك في القناة العامة ===
+    // هذا السطر ضروري جداً لاستقبال الإشعارات الجماعية
+    await _firebaseMessaging.subscribeToTopic('general_notifications');
+    log('✅ Successfully subscribed to topic: general_notifications');
 
     await _localNotifications.initialize(
       const InitializationSettings(
@@ -140,6 +165,7 @@ class MessagingService {
     FirebaseMessaging.onMessage.listen((msg) async {
       await _showLocalNotification(msg);
     });
+
     FirebaseMessaging.onMessageOpenedApp.listen((msg) {
       handleNotificationTap(msg.data);
     });

@@ -35,12 +35,12 @@ class Datum {
   int? notifiableId;
   String? modelType;
   int? modelId;
-  bool? seen; // ← تعديل مهم جداً
+  bool? seen;
   int? userId;
   Data? data;
   DateTime? createdAt;
   DateTime? updatedAt;
-  dynamic showClient; // ← dynamic لأن API متغير
+  dynamic showClient;
   dynamic showCompany;
   dynamic showPuncher;
   dynamic showEmployee;

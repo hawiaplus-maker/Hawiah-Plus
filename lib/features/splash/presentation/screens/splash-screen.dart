@@ -23,13 +23,14 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    _initializeApp();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeApp();
+    });
   }
 
   Future<void> _initializeApp() async {
     final settingCubit = sl<SettingCubit>();
     settingCubit.getsetting();
-
     log("is first time ${HiveMethods.isFirstTime()}");
     final cubit = sl<ProfileCubit>();
     if (HiveMethods.isFirstTime() == true) {
@@ -44,18 +45,22 @@ class _SplashScreenState extends State<SplashScreen> {
         await cubit.fetchProfile(
           onSuccess: () async {
             log("Navigation to LayoutScreen");
+
             await LayoutMethouds.getdata(showLoading: false);
+
             NavigatorMethods.pushReplacementNamed(
               context,
               LayoutScreen.routeName,
             );
           },
           onError: () {
-            log("Navigation to AppLanguageScreen");
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const ValidateMobileScreen()),
+            );
           },
         );
       } else {
-        await LayoutMethouds.getdata(showLoading: false);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const ValidateMobileScreen()),

@@ -30,6 +30,7 @@ class _OrderReviewDetailesState extends State<OrderReviewDetailes> {
   int? discount;
   String? priceAfterDiscount;
   String? copone;
+  bool isPaymentSuccess = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,67 +53,73 @@ class _OrderReviewDetailesState extends State<OrderReviewDetailes> {
             SizedBox(
               height: 15,
             ),
-            CouponeWidget(
-              orderId: widget.ordersModel.id ?? 0,
-              onCouponeAppLayed: (discountValue, discount, priceAfterDiscount, copone) {
-                setState(() {
-                  this.discountValue = discountValue;
-                  this.discount = discount;
-                  this.priceAfterDiscount = priceAfterDiscount;
-                  this.copone = copone;
-                });
-              },
-            ),
+            if (isPaymentSuccess == false)
+              CouponeWidget(
+                orderId: widget.ordersModel.id ?? 0,
+                onCouponeAppLayed: (discountValue, discount, priceAfterDiscount, copone) {
+                  setState(() {
+                    this.discountValue = discountValue;
+                    this.discount = discount;
+                    this.priceAfterDiscount = priceAfterDiscount;
+                    this.copone = copone;
+                  });
+                },
+              ),
             SizedBox(
               height: 15,
             ),
-            GestureDetector(
-              onTap: () {
-                log("get payment link");
-                context.read<OrderCubit>().getPaymentLink(
-                    orderId: widget.ordersModel.id!,
-                    onSuccess: (url) {
-                      if (url.contains('already exists') == true) {
-                        CommonMethods.showError(message: url);
-                      } else {
-                        NavigatorMethods.pushNamed(context, CustomPaymentWebViewScreen.routeName,
-                            arguments: PaymentArgs(
-                                url: url,
-                                onFailed: () {
-                                  CommonMethods.showError(message: AppLocaleKey.paymentFailed.tr());
-                                },
-                                onSuccess: () {
-                                  CommonMethods.showToast(
-                                      message: AppLocaleKey.paymentSuccess.tr());
-                                }));
-                      }
-                    });
-              },
-              child: SizedBox(
-                width: double.infinity,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  color: AppColor.mainAppColor,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        AppLocaleKey.payXSar.tr(
-                          args: [
-                            discountValue != null
-                                ? priceAfterDiscount ?? ""
-                                : widget.ordersModel.totalPrice ?? ""
-                          ],
+            if (isPaymentSuccess == false)
+              GestureDetector(
+                onTap: () {
+                  log("get payment link");
+                  context.read<OrderCubit>().getPaymentLink(
+                      orderId: widget.ordersModel.id!,
+                      onSuccess: (url) {
+                        if (url.contains('already exists') == true) {
+                          CommonMethods.showError(message: url);
+                        } else {
+                          NavigatorMethods.pushNamed(context, CustomPaymentWebViewScreen.routeName,
+                              arguments: PaymentArgs(
+                                  url: url,
+                                  onFailed: () {
+                                    CommonMethods.showError(
+                                        message: AppLocaleKey.paymentFailed.tr());
+                                  },
+                                  onSuccess: () {
+                                    setState(() {
+                                      isPaymentSuccess = true;
+                                    });
+                                    CommonMethods.showToast(
+                                        message: AppLocaleKey.paymentSuccess.tr());
+                                  }));
+                        }
+                      });
+                },
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    color: AppColor.mainAppColor,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          AppLocaleKey.payXSar.tr(
+                            args: [
+                              discountValue != null
+                                  ? priceAfterDiscount ?? ""
+                                  : widget.ordersModel.totalPrice ?? ""
+                            ],
+                          ),
+                          style: AppTextStyle.text18_700.copyWith(color: AppColor.whiteColor),
                         ),
-                        style: AppTextStyle.text18_700.copyWith(color: AppColor.whiteColor),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
             SizedBox(
               height: 15,
             ),
