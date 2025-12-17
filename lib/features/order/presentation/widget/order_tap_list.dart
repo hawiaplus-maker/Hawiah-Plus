@@ -1,13 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_shimmer.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
-import 'package:hawiah_client/core/locale/app_locale_key.dart';
-import 'package:hawiah_client/core/theme/app_colors.dart';
-import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
+import 'package:hawiah_client/features/home/presentation/screens/all_categories_screen.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-state.dart';
 import 'package:hawiah_client/features/order/presentation/screens/order_details_screen.dart';
@@ -57,7 +55,7 @@ class _OrderTapListState extends State<OrderTapList> {
         final cubit = context.watch<OrderCubit>();
         final orders = widget.isCurrent ? cubit.currentOrders : cubit.oldOrders;
         final isPaginating = widget.isCurrent ? cubit.isLoadingMoreCurrent : cubit.isLoadingMoreOld;
-
+        final homeCubit = HomeCubit.get(context);
         // لو لسه أول تحميل
         if (state is OrderLoading) {
           return Center(
@@ -77,30 +75,7 @@ class _OrderTapListState extends State<OrderTapList> {
           ));
         } else if (state is OrderSuccess) {
           if (orders.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SvgPicture.asset(
-                    AppImages.containerIcon,
-                    height: 120,
-                    colorFilter: ColorFilter.mode(AppColor.mainAppColor, BlendMode.srcIn),
-                  ),
-                  Text(
-                    widget.isCurrent
-                        ? AppLocaleKey.noCurrentOrders.tr()
-                        : AppLocaleKey.noOldOrders.tr(),
-                    style: AppTextStyle.text16_700,
-                  ),
-                  const SizedBox(height: 10),
-                  CustomButton(
-                    width: MediaQuery.of(context).size.width / 2.5,
-                    radius: 5,
-                    text: "request_hawaia".tr(),
-                  )
-                ],
-              ),
-            );
+            return _buildEmptyOrderWidget(context, homeCubit);
           }
         }
 
@@ -141,6 +116,40 @@ class _OrderTapListState extends State<OrderTapList> {
           },
         );
       },
+    );
+  }
+
+  Center _buildEmptyOrderWidget(BuildContext context, HomeCubit homeCubit) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(
+            AppImages.noOrderImage,
+            height: MediaQuery.of(context).size.height / 3,
+          ),
+          // Text(
+          //   widget.isCurrent ? AppLocaleKey.noCurrentOrders.tr() : AppLocaleKey.noOldOrders.tr(),
+          //   style: AppTextStyle.text16_700,
+          // ),
+          // const SizedBox(height: 10),
+          CustomButton(
+            width: MediaQuery.of(context).size.width / 2.5,
+            radius: 5,
+            text: "request_hawaia".tr(),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AllCategoriesScreen(
+                    categories: homeCubit.categories,
+                  ),
+                ),
+              );
+            },
+          )
+        ],
+      ),
     );
   }
 }

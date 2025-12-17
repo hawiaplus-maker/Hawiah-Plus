@@ -70,10 +70,13 @@ class HomeAppBarTitle extends StatelessWidget {
                   style: AppTextStyle.text18_500
                       .copyWith(fontFamily: "DINNextLTArabic", color: AppColor.mainAppColor),
                 ),
-                Text(
-                  user.name,
-                  style: AppTextStyle.text18_500
-                      .copyWith(color: AppColor.mainAppColor, fontFamily: "DINNextLTArabic"),
+                Flexible(
+                  child: Text(
+                    user.name,
+                    style: AppTextStyle.text18_500
+                        .copyWith(color: AppColor.mainAppColor, fontFamily: "DINNextLTArabic"),
+                    maxLines: 1,
+                  ),
                 ),
               ],
             ),

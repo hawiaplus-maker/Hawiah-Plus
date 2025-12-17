@@ -291,4 +291,6 @@ class AppLocaleKey {
   static const updateContent = 'update_content';
   static const updateLater = 'update_later';
   static const updateNow = 'update_now';
+  static const deleteAccount = 'deleteAccount';
+  static const deleteAccountContent = 'deleteAccountContent';
 }

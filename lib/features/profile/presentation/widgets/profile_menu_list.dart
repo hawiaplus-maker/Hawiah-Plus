@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/all_addresses_screen.dart';
@@ -11,6 +12,7 @@ import 'package:hawiah_client/features/profile/presentation/screens/privacy-poli
 import 'package:hawiah_client/features/profile/presentation/screens/support_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/terms-and-conditions.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/user_profile_screen.dart';
+import 'package:hawiah_client/features/profile/presentation/widgets/delete_account_dialog.dart';
 import 'package:hawiah_client/features/profile/presentation/widgets/logout_button.dart';
 import 'package:hawiah_client/features/profile/presentation/widgets/person_profile_list_tile.dart';
 
@@ -80,6 +82,16 @@ class ProfileMenuList extends StatelessWidget {
                     context, ValidateMobileScreen.routeName),
               )
             : const LogoutButton(),
+        isGuest
+            ? SizedBox()
+            : PersonProfileListTile(
+                title: AppLocaleKey.deleteAccount.tr(),
+                logo: AppImages.deleteUserIcon,
+                logoColor: AppColor.redColor,
+                titleColor: AppColor.redColor,
+                onTap: () {
+                  NavigatorMethods.showAppDialog(context, DeleteAccountDialog());
+                }),
       ],
     );
   }

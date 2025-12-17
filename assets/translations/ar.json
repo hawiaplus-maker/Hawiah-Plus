@@ -398,6 +398,8 @@
     "update_title": "تحديث جديد متوفر",
   "update_content": "هناك إصدار جديد متاح ({store_version}).\nأنت تستخدم حالياً الإصدار ({local_version}). يرجى التحديث.",
   "update_later": "لاحقاً",
-  "update_now": "تحديث الآن"
+  "update_now": "تحديث الآن",
+  "deleteAccount":"حذف الحساب",
+  "deleteAccountContent":"هل أنت متأكد أنك تريد حذف حسابك؟ سيتم فقدان جميع بياناتك ولن تتمكن من استعادتها."
 
 }

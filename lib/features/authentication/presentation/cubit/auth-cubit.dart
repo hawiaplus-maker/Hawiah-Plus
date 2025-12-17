@@ -246,25 +246,47 @@ class AuthCubit extends Cubit<AuthState> {
   // -------------------------------------------------
   Future<void> validateMobile({required String? phoneNumber}) async {
     emit(validateLoading());
+
     final response = await ApiHelper.instance.post(
       Urls.validateMobile,
       body: FormData.fromMap({'mobile': phoneNumber}),
       hasToken: false,
     );
-    final message = response.data['message'];
-    if (response.state == ResponseState.complete) {
-      if ((response.data['data']['flag'] == 1)) {
-        emit(ValidateMobileSuccess(message: message));
-      } else if (response.data["status_Code"] == 422 || response.data["status_Code"] == 401) {
-        emit(ValidateMobilePhoneIsNotRegistered());
-      } else if (response.data['data']['user']['flag'] == 2) {
-        emit(ValidateFirestLoginSuccess(
-            message: message, otp: response.data['data']['user']['otp']));
-      } else {
-        emit(ValidateMobileError(message: message ?? "حدث خطأ أثناء العملية"));
-      }
-    } else {
+
+    final data = response.data;
+    final message = data?['message'];
+
+    if (response.state != ResponseState.complete) {
       emit(ValidateMobileError(message: message));
+      return;
+    }
+
+    if (data['success'] == false) {
+      if (data['status_Code'] == 401 || data['status_Code'] == 422) {
+        emit(ValidateMobilePhoneIsNotRegistered());
+      } else {
+        emit(ValidateMobileError(
+          message: message ?? "حدث خطأ أثناء العملية",
+        ));
+      }
+      return;
+    }
+
+    final flag = data['data']?['flag'];
+
+    if (flag == 1) {
+      emit(ValidateMobileSuccess(message: message));
+    } else if (data['data']?['user']?['flag'] == 2) {
+      emit(
+        ValidateFirestLoginSuccess(
+          message: message,
+          otp: data['data']['user']['otp'],
+        ),
+      );
+    } else {
+      emit(ValidateMobileError(
+        message: message ?? "حدث خطأ أثناء العملية",
+      ));
     }
   }
 
@@ -506,6 +528,28 @@ class AuthCubit extends Cubit<AuthState> {
         message: response.data['message'] ?? '',
         data: response.data['data'] as Map<String, dynamic>,
       ));
+    } else {
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+    }
+  }
+
+  //=================== delete account ===========================
+  Future<void> deleteAccount({void Function()? onSuccess}) async {
+    emit(AuthLoading());
+    NavigatorMethods.loading();
+
+    final response = await ApiHelper.instance.delete(
+      Urls.deleteAccount,
+    );
+    NavigatorMethods.loadingOff();
+
+    if (response.state == ResponseState.complete) {
+      onSuccess?.call();
+      final msg = response.data['message'] ?? 'Logout completed';
+      HiveMethods.deleteToken();
+      HiveMethods.updateIsVisitor(true);
+      emit(LogOutSuccess(message: msg));
+      CommonMethods.showToast(message: msg);
     } else {
       emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }

@@ -26,7 +26,6 @@ class _HomeCategoriesListWidgetState extends State<HomeCategoriesListWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
       final homeCubit = HomeCubit.get(context);
-
       return Container(
         margin: EdgeInsets.symmetric(horizontal: 10.w),
         child: Column(
