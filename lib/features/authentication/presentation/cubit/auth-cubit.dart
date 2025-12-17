@@ -510,6 +510,28 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
     }
   }
+
+  //=================== delete account ===========================
+  Future<void> deleteAccount({void Function()? onSuccess}) async {
+    emit(AuthLoading());
+    NavigatorMethods.loading();
+
+    final response = await ApiHelper.instance.delete(
+      Urls.logout,
+    );
+    NavigatorMethods.loadingOff();
+
+    if (response.state == ResponseState.complete) {
+      onSuccess?.call();
+      final msg = response.data['message'] ?? 'Logout completed';
+      HiveMethods.deleteToken();
+      HiveMethods.updateIsVisitor(true);
+      emit(LogOutSuccess(message: msg));
+      CommonMethods.showToast(message: msg);
+    } else {
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+    }
+  }
 }
 
 class PasswordCriteria {

@@ -98,18 +98,13 @@ class CustomNetworkImage extends StatelessWidget {
   }
 
   Widget _buildOptimizedImage(BuildContext context) {
-    final deviceRatio = MediaQuery.of(context).devicePixelRatio;
-    final w = (width ?? 60) * deviceRatio;
-    final h = (height ?? width ?? 60) * deviceRatio;
-
     return CachedNetworkImage(
       cacheManager: AppCacheManager.instance,
       imageUrl: imageUrl!,
       width: width,
       height: height,
       fit: fit,
-      memCacheWidth: w.toInt(),
-      memCacheHeight: h.toInt(),
+      // تم حذف memCacheWidth و memCacheHeight لتجنب البكسلة
       placeholder: (_, __) => _buildPlaceholder(),
       errorWidget: (_, __, ___) => _buildErrorWidget(),
       useOldImageOnUrlChange: true,

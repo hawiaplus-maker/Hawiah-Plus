@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/api_response_widget.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_shimmer.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_slider/custom_slider.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
@@ -15,6 +16,11 @@ class HomeSliderWidgets extends StatefulWidget {
 }
 
 class _HomeSliderWidgetsState extends State<HomeSliderWidgets> {
+  final List<String> sliderImages = [
+    "assets/images/slide-1.png",
+    "assets/images/slide-2.png",
+    "assets/images/slide-3.png",
+  ];
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
@@ -50,38 +56,37 @@ class _HomeSliderWidgetsState extends State<HomeSliderWidgets> {
               ...List.generate(
                   homeCubit.homeSliders.length,
                   (index) => SliderArguments(
-                          child: Image.asset(
-                        "assets/images/slide-1-size1920-r72.png",
-                        fit: BoxFit.fill,
-                      )
-                          //  CustomNetworkImage(
-                          //   fit: BoxFit.fill,
-                          //   imageUrl: homeCubit.homeSliders[index].image ?? '',
-
-                          // ),
-                          //  Padding(
-                          //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-                          //   child: Row(
-                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //     children: [
-                          //       SizedBox(width: 10),
-                          //       Flexible(
-                          //         child: Text(
-                          //           homeCubit.homeSliders[index].title ?? '',
-                          //           style:
-                          //               AppTextStyle.text18_700.copyWith(color: AppColor.whiteColor),
-                          //         ),
-                          //       ),
-                          //       CustomNetworkImage(
-                          //         fit: BoxFit.contain,
-                          //         height: 136.h,
-                          //         width: 136.w,
-                          //         imageUrl: homeCubit.homeSliders[index].image ?? '',
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                          ))
+                        //      Image.asset(
+                        //   "assets/images/slide-1-size1920-r72.png",
+                        //   fit: BoxFit.fill,
+                        // )
+                        child: CustomNetworkImage(
+                          fit: BoxFit.fill,
+                          imageUrl: homeCubit.homeSliders[index].image ?? '',
+                        ),
+                        //  Padding(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       SizedBox(width: 10),
+                        //       Flexible(
+                        //         child: Text(
+                        //           homeCubit.homeSliders[index].title ?? '',
+                        //           style:
+                        //               AppTextStyle.text18_700.copyWith(color: AppColor.whiteColor),
+                        //         ),
+                        //       ),
+                        //       CustomNetworkImage(
+                        //         fit: BoxFit.contain,
+                        //         height: 136.h,
+                        //         width: 136.w,
+                        //         imageUrl: homeCubit.homeSliders[index].image ?? '',
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                      ))
             ],
           ),
         ),

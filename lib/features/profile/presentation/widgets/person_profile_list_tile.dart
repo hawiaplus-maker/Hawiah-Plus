@@ -7,8 +7,11 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 class PersonProfileListTile extends StatelessWidget {
   final String title;
   final String logo;
+
   final VoidCallback onTap;
   final Widget? trailing;
+  final Color? logoColor;
+  final Color? titleColor;
   final bool isHaveLine;
 
   const PersonProfileListTile({
@@ -18,6 +21,8 @@ class PersonProfileListTile extends StatelessWidget {
     required this.onTap,
     this.trailing,
     this.isHaveLine = true,
+    this.logoColor,
+    this.titleColor,
   }) : super(key: key);
 
   @override
@@ -34,13 +39,15 @@ class PersonProfileListTile extends StatelessWidget {
                   logo,
                   height: 24.h,
                   width: 24.w,
-                  color: AppColor.blackColor,
+                  colorFilter: ColorFilter.mode(logoColor ?? AppColor.blackColor, BlendMode.srcIn),
                 ),
                 SizedBox(width: 15.w),
                 Expanded(
                   child: Text(
                     title,
-                    style: AppTextStyle.text14_400,
+                    style: AppTextStyle.text14_400.copyWith(
+                      color: titleColor ?? AppColor.blackColor,
+                    ),
                   ),
                 ),
                 trailing ??
