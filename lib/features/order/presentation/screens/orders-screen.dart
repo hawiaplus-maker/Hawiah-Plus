@@ -5,6 +5,7 @@ import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/no_data_widget.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
@@ -115,6 +116,7 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
                   if (state is Unauthenticated) {
                     return Center(
                         child: NoDataWidget(
+                      assetImage: AppImages.containerImage,
                       message: AppLocaleKey.noCurrentOrders.tr(),
                     ));
                   }

@@ -91,13 +91,11 @@ class AppImages {
   static const String mapPinCheckIcon = 'assets/svg/mapPinCheckIcon.svg';
   static const String mapPinCheckMainIcon = 'assets/svg/mapPinCheckMainIcon.svg';
   static const String mapPinPlusIcon = 'assets/svg/mapPinPlusIcon.svg';
-
   static const String starIcon = 'assets/svg/starIcon.svg';
   static const String timerIcon = 'assets/svg/timerIcon.svg';
   static const String trustedIcon = 'assets/svg/trustedIcon.svg';
   static const String trustedImage = 'assets/images/trustedImage.png';
   static const String bowArrowIcon = 'assets/svg/bowArrowIcon.svg';
-
   static const String calendar = 'assets/svg/calendar-fold.svg';
   static const String successCheckImage = 'assets/images/successCheckImage.png';
   static const String contractImage = 'assets/images/contractImage.png';
@@ -119,4 +117,9 @@ class AppImages {
   static const String whiteLogoImage = 'assets/images/whiteLogoImage.png';
   static const String appWhiteLogoImage = 'assets/images/appWhiteLogoImage.png';
   static const String deleteUserIcon = 'assets/svg/deleteUserIcon.svg';
+  static const String containerImage = 'assets/images/containerImage.png';
+  static const String driverImage = 'assets/images/driverImage.jpg';
+  static const String guestImage = 'assets/images/guestImage.png';
+  static const String noOrderImage = 'assets/images/noOrderImage.png';
+  static const String serviceProviderImage = 'assets/images/serviceProviderImage.png';
 }
