@@ -21,6 +21,7 @@ class Urls {
   static const String settings = '${baseUrl}settings';
 
   static const String logout = '${baseUrl}logout';
+  static const String deleteAccount = '${baseUrl}profile';
   static const String register = '${baseUrl}register';
   static const String companyRegister = '${baseUrl}company/register';
   static const String individualRegister = '${baseUrl}complete-register';

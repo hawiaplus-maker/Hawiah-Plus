@@ -388,5 +388,15 @@
   "evaluationAdditionalNotes": "اضافی نوٹس (اختیاری)",
   "evaluationHint": "سروس کے بارے میں اپنی رائے لکھیں...",
   "evaluationSend": "درجہ بندی بھیجیں",
-  "orderReordered": "آرڈر کامیابی سے دوبارہ کیا گیا"
+  "orderReordered": "آرڈر کامیابی سے دوبارہ کیا گیا",
+   "coupon": "کوپن",
+  "accepted": "منظور شدہ",
+  "backToOrderSummary": "آرڈر کے خلاصے پر واپس جائیں",
+  "update_title": "نئی اپڈیٹ دستیاب ہے",
+  "update_content": "ایک نیا ورژن دستیاب ہے ({store_version}).\nآپ اس وقت ورژن ({local_version}) استعمال کر رہے ہیں۔ براہ کرم اپڈیٹ کریں۔",
+  "update_later": "بعد میں",
+  "update_now": "ابھی اپڈیٹ کریں",
+  "deleteAccount": "اکاؤنٹ حذف کریں",
+  "deleteAccountContent": "کیا آپ واقعی اپنا اکاؤنٹ حذف کرنا چاہتے ہیں؟ آپ کا تمام ڈیٹا ضائع ہو جائے گا اور اسے دوبارہ حاصل نہیں کیا جا سکے گا۔"
+
 }

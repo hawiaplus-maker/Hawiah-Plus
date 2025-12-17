@@ -246,25 +246,47 @@ class AuthCubit extends Cubit<AuthState> {
   // -------------------------------------------------
   Future<void> validateMobile({required String? phoneNumber}) async {
     emit(validateLoading());
+
     final response = await ApiHelper.instance.post(
       Urls.validateMobile,
       body: FormData.fromMap({'mobile': phoneNumber}),
       hasToken: false,
     );
-    final message = response.data['message'];
-    if (response.state == ResponseState.complete) {
-      if ((response.data['data']['flag'] == 1)) {
-        emit(ValidateMobileSuccess(message: message));
-      } else if (response.data["status_Code"] == 422 || response.data["status_Code"] == 401) {
-        emit(ValidateMobilePhoneIsNotRegistered());
-      } else if (response.data['data']['user']['flag'] == 2) {
-        emit(ValidateFirestLoginSuccess(
-            message: message, otp: response.data['data']['user']['otp']));
-      } else {
-        emit(ValidateMobileError(message: message ?? "حدث خطأ أثناء العملية"));
-      }
-    } else {
+
+    final data = response.data;
+    final message = data?['message'];
+
+    if (response.state != ResponseState.complete) {
       emit(ValidateMobileError(message: message));
+      return;
+    }
+
+    if (data['success'] == false) {
+      if (data['status_Code'] == 401 || data['status_Code'] == 422) {
+        emit(ValidateMobilePhoneIsNotRegistered());
+      } else {
+        emit(ValidateMobileError(
+          message: message ?? "حدث خطأ أثناء العملية",
+        ));
+      }
+      return;
+    }
+
+    final flag = data['data']?['flag'];
+
+    if (flag == 1) {
+      emit(ValidateMobileSuccess(message: message));
+    } else if (data['data']?['user']?['flag'] == 2) {
+      emit(
+        ValidateFirestLoginSuccess(
+          message: message,
+          otp: data['data']['user']['otp'],
+        ),
+      );
+    } else {
+      emit(ValidateMobileError(
+        message: message ?? "حدث خطأ أثناء العملية",
+      ));
     }
   }
 
@@ -517,7 +539,7 @@ class AuthCubit extends Cubit<AuthState> {
     NavigatorMethods.loading();
 
     final response = await ApiHelper.instance.delete(
-      Urls.logout,
+      Urls.deleteAccount,
     );
     NavigatorMethods.loadingOff();
 
