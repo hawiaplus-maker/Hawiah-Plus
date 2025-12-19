@@ -11,15 +11,19 @@ class UpdateChecker {
     );
 
     final status = await newVersion.getVersionStatus();
-    final forceTest = true;
 
-    if ((status != null && status.canUpdate) || forceTest) {
-      _showUpdateDialog(context, status!, newVersion);
+    if (status == null) return;
+
+    if (status.canUpdate) {
+      _showUpdateDialog(context, status, newVersion);
     }
   }
 
   static void _showUpdateDialog(
-      BuildContext context, VersionStatus status, NewVersionPlus newVersion) {
+    BuildContext context,
+    VersionStatus status,
+    NewVersionPlus newVersion,
+  ) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -43,7 +47,6 @@ class UpdateChecker {
               onPressed: () async {
                 const playStoreLink =
                     "https://play.google.com/store/apps/details?id=com.hawiah.plus";
-
                 const appStoreLink = "https://apps.apple.com/app/id1234567890";
 
                 final link =
@@ -52,7 +55,7 @@ class UpdateChecker {
                 await newVersion.launchAppStore(link);
               },
               child: Text(AppLocaleKey.updateNow.tr()),
-            )
+            ),
           ],
         );
       },
