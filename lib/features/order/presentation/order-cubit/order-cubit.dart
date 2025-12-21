@@ -451,6 +451,27 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
+  //============================ confirm payment ====================
+  Future<void> confirmPayment({
+    required int orderId,
+  }) async {
+    final response = await ApiHelper.instance.get(
+      Urls.confirmPayment(orderId),
+    );
+
+    if (response.state == ResponseState.complete && response.data['success'] != false) {
+    } else if (response.state == ResponseState.unauthorized) {
+      CommonMethods.showAlertDialog(
+        message: tr(AppLocaleKey.youMustLogInFirst),
+      );
+    } else {
+      CommonMethods.showError(
+        message: response.data['message'] ?? 'حدث خطأ',
+        apiResponse: response,
+      );
+    }
+  }
+
   // =================== applay coupon ====================
   Future<void> applyCoupon({
     required String code,

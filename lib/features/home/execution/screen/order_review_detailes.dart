@@ -86,6 +86,9 @@ class _OrderReviewDetailesState extends State<OrderReviewDetailes> {
                                         message: AppLocaleKey.paymentFailed.tr());
                                   },
                                   onSuccess: () {
+                                    context.read<OrderCubit>().confirmPayment(
+                                          orderId: widget.ordersModel.id!,
+                                        );
                                     setState(() {
                                       isPaymentSuccess = true;
                                     });

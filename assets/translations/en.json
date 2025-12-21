@@ -397,7 +397,8 @@
   "update_later": "Later",
   "update_now": "Update Now",
   "deleteAccount": "Delete Account",
-  "deleteAccountContent": "Are you sure you want to delete your account? All your data will be lost and cannot be recovered."
+  "deleteAccountContent": "Are you sure you want to delete your account? All your data will be lost and cannot be recovered.",
+  "selectCityNotFound": "Sorry, no data found for this city. You can select a city from the list."
 
 
 }

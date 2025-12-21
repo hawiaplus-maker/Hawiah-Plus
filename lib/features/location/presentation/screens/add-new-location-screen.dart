@@ -54,6 +54,8 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   String currentAddress = "Getting location...";
   String? city;
   List<NeighborhoodModel> neighborhoods = [];
+  double? lat;
+  double? lng;
 
   @override
   void initState() {
@@ -67,6 +69,8 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
       setState(() {
         currentPosition = LatLng(location.latitude!, location.longitude!);
         currentAddress = "${location.latitude}, ${location.longitude}";
+        lat = location.latitude;
+        lng = location.longitude;
       });
       _updateCameraPosition();
     }
@@ -175,7 +179,8 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
               CustomSingleSelect(
                 title: AppLocaleKey.city.tr(),
                 hintText: city ?? AppLocaleKey.cityHint.tr(),
-                value: selectedCity,
+                hintStyle: city != null ? AppTextStyle.textFormStyle : AppTextStyle.hintStyle,
+                value: city == null ? selectedCity : null,
                 items: addressCubit.citys
                     .map((e) => CustomSelectItem(
                           name: e.title ?? "",
@@ -186,7 +191,9 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
                   if (v != null) {
                     context.read<AddressCubit>().getneighborhoods(v);
                     setState(() {
+                      this.city = null;
                       selectedCity = v;
+
                       selectedNeighborhood = null;
                     });
                   }
@@ -198,12 +205,19 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
                 hintText: AppLocaleKey.cityHint.tr(),
                 apiResponse: addressCubit.neighborhoodsResponse,
                 value: selectedNeighborhood,
-                items: neighborhoods
-                    .map((e) => CustomSelectItem(
-                          name: e.title ?? "",
-                          value: e.id,
-                        ))
-                    .toList(),
+                items: neighborhoods.isNotEmpty
+                    ? neighborhoods
+                        .map((e) => CustomSelectItem(
+                              name: e.title ?? "",
+                              value: e.id,
+                            ))
+                        .toList()
+                    : addressCubit.neighborhoods
+                        .map((e) => CustomSelectItem(
+                              name: e.title ?? "",
+                              value: e.id,
+                            ))
+                        .toList(),
                 onChanged: (v) {
                   if (v != null) {
                     setState(() {
@@ -229,21 +243,26 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
             mapController.complete(controller);
           },
           onTap: (LatLng argument) async {
-            NavigatorMethods.pushNamed(context, MapScreen.routeName, arguments: MapScreenArgs(
-              onLocationSelected: (lat, lng, city, locality) {
-                log("============================================ $city ================================");
-                setState(() {
-                  this.city = city;
-                  context.read<AddressCubit>().getneighborhoodsByName(city, (neighborhoods) {
+            NavigatorMethods.pushNamed(context, MapScreen.routeName,
+                arguments: MapScreenArgs(
+                  initialLat: this.lat,
+                  initialLng: this.lng,
+                  onLocationSelected: (lat, lng, city, locality) {
+                    log("============================================ $city ================================");
                     setState(() {
-                      this.neighborhoods = neighborhoods;
+                      this.city = city;
+                      context.read<AddressCubit>().getneighborhoodsByName(city, (neighborhoods) {
+                        setState(() {
+                          this.neighborhoods = neighborhoods;
+                          this.lat = lat;
+                          this.lng = lng;
+                        });
+                      });
                     });
-                  });
-                });
 
-                safeLocationSelected(lat, lng, city, locality);
-              },
-            ));
+                    safeLocationSelected(lat, lng, city, locality);
+                  },
+                ));
 
             _updateCameraPosition();
           },
@@ -326,6 +345,8 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
     setState(() {
       currentPosition = LatLng(lat, lng); // Create new instance
       currentAddress = locality;
+      this.lat = lat;
+      this.lng = lng;
       _updateCameraPosition();
     });
   }

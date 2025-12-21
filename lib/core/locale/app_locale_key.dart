@@ -293,4 +293,5 @@ class AppLocaleKey {
   static const updateNow = 'update_now';
   static const deleteAccount = 'deleteAccount';
   static const deleteAccountContent = 'deleteAccountContent';
+  static const selectCityNotFound = 'selectCityNotFound';
 }
