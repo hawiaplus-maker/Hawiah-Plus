@@ -29,7 +29,6 @@ class NearbyCardWidget extends StatelessWidget {
             NavigatorMethods.pushNamed(context, RequestHawiahScreen.routeName,
                 arguments: RequestHawiahScreenArgs(
                     addressId: args.addressId,
-                    catigoryId: args.catigoryId,
                     serviceProviderId: args.serviceProviderId,
                     nearbyServiceProviderModel: providers,
                     showCategoriesModel: args.showCategoriesModel));

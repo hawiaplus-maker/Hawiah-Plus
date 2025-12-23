@@ -12,12 +12,10 @@ import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubi
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-state.dart';
 
 class NearbyServiceProviderArguments {
-  final int catigoryId;
   final int serviceProviderId;
   final int addressId;
   final ShowCategoriesModel showCategoriesModel;
   NearbyServiceProviderArguments({
-    required this.catigoryId,
     required this.serviceProviderId,
     required this.addressId,
     required this.showCategoriesModel,

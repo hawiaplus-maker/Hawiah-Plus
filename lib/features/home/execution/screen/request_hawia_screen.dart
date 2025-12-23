@@ -20,14 +20,12 @@ import '../../presentation/controllers/home-cubit/home-cubit.dart';
 import '../../presentation/controllers/home-cubit/home-state.dart';
 
 class RequestHawiahScreenArgs {
-  final int catigoryId;
   final int serviceProviderId;
   final int addressId;
   final NearbyServiceProviderModel nearbyServiceProviderModel;
   final ShowCategoriesModel showCategoriesModel;
 
   const RequestHawiahScreenArgs({
-    required this.catigoryId,
     required this.serviceProviderId,
     required this.addressId,
     required this.nearbyServiceProviderModel,

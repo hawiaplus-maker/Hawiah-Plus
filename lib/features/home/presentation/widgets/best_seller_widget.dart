@@ -83,18 +83,11 @@ class _BestSellerWidgtState extends State<BestSellerWidgt> {
               ),
               color: AppColor.mainAppColor,
               onPressed: () {
-                homeCubit.getshowCategories(
-                  widget.item.id ?? 0,
-                  onSuccess: () {
-                    NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
-                        arguments: ChooseAddressScreenArgs(
-                          showCategoriesModel: homeCubit.showCategories!,
-                          catigoryId: widget.item.categoryId.first,
-                          serviceProviderId:
-                              homeCubit.showCategories?.message?.services?[widget.index].id ?? 0,
-                        ));
-                  },
-                );
+                NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
+                    arguments: ChooseAddressScreenArgs(
+                      showCategoriesModel: homeCubit.showCategories!,
+                      serviceProviderId: widget.item.id ?? 0,
+                    ));
               },
             )
           ],
