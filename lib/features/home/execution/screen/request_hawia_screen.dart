@@ -13,7 +13,6 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/date_methods.dart';
 import 'package:hawiah_client/features/home/execution/widget/request_hawiah_execute_order_widget.dart';
 import 'package:hawiah_client/features/home/presentation/model/nearby_service-provider_model.dart';
-import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
 import 'package:hawiah_client/features/location/presentation/widget/quick_selection_card_widget.dart';
 
 import '../../presentation/controllers/home-cubit/home-cubit.dart';
@@ -23,13 +22,11 @@ class RequestHawiahScreenArgs {
   final int serviceProviderId;
   final int addressId;
   final NearbyServiceProviderModel nearbyServiceProviderModel;
-  final ShowCategoriesModel showCategoriesModel;
 
   const RequestHawiahScreenArgs({
     required this.serviceProviderId,
     required this.addressId,
     required this.nearbyServiceProviderModel,
-    required this.showCategoriesModel,
   });
 }
 

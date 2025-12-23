@@ -85,7 +85,6 @@ class _BestSellerWidgtState extends State<BestSellerWidgt> {
               onPressed: () {
                 NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
                     arguments: ChooseAddressScreenArgs(
-                      showCategoriesModel: homeCubit.showCategories!,
                       serviceProviderId: widget.item.id ?? 0,
                     ));
               },

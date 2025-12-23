@@ -1,6 +1,5 @@
 // add_new_location_screen.dart
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +25,27 @@ import 'package:hawiah_client/features/location/presentation/screens/map_screen.
 import 'package:hawiah_client/features/location/service/location_service.dart';
 import 'package:location/location.dart';
 
+typedef OnLocationSelected = void Function(
+  double lat,
+  double lng,
+  String city,
+  String fullAddress,
+);
+
 class AddNewLocationScreenArgs {
   final void Function() onAddressAdded;
+  final double? lat;
+  final double? lng;
+  final String? city;
+  final String? locality;
 
-  AddNewLocationScreenArgs({required this.onAddressAdded});
+  AddNewLocationScreenArgs({
+    required this.onAddressAdded,
+    this.lat,
+    this.lng,
+    this.city,
+    this.locality,
+  });
 }
 
 class AddNewLocationScreen extends StatefulWidget {
@@ -61,6 +77,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   void initState() {
     super.initState();
     _initializeLocation();
+    _setupInitialData();
   }
 
   Future<void> _initializeLocation() async {
@@ -243,28 +260,27 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
             mapController.complete(controller);
           },
           onTap: (LatLng argument) async {
-            NavigatorMethods.pushNamed(context, MapScreen.routeName,
-                arguments: MapScreenArgs(
-                  initialLat: this.lat,
-                  initialLng: this.lng,
-                  onLocationSelected: (lat, lng, city, locality) {
-                    log("============================================ $city ================================");
-                    setState(() {
-                      this.city = city;
-                      context.read<AddressCubit>().getneighborhoodsByName(city, (neighborhoods) {
-                        setState(() {
-                          this.neighborhoods = neighborhoods;
-                          this.lat = lat;
-                          this.lng = lng;
-                        });
-                      });
-                    });
-
-                    safeLocationSelected(lat, lng, city, locality);
-                  },
-                ));
-
-            _updateCameraPosition();
+            NavigatorMethods.pushNamed(
+              context,
+              MapScreen.routeName,
+              arguments: MapScreenArgs(
+                initialLat: this.lat,
+                initialLng: this.lng,
+                onLocationSelected: (newLat, newLng, newCity, newLocality) {
+                  setState(() {
+                    this.lat = newLat;
+                    this.lng = newLng;
+                    this.city = newCity;
+                    this.currentAddress = newLocality;
+                    this.currentPosition = LatLng(newLat, newLng);
+                  });
+                  context.read<AddressCubit>().getneighborhoodsByName(newCity, (list) {
+                    setState(() => this.neighborhoods = list);
+                  });
+                  _updateCameraPosition();
+                },
+              ),
+            );
           },
           initialCameraPosition: CameraPosition(
             target: currentPosition ?? const LatLng(24.7136, 46.6753),
@@ -348,6 +364,35 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
       this.lat = lat;
       this.lng = lng;
       _updateCameraPosition();
+    });
+  }
+
+  void _setupInitialData() {
+    // نستخدم Future.delayed لأننا بحاجة للوصول لـ context في initState لاستخدام الـ Cubit
+    Future.delayed(Duration.zero, () {
+      final args = widget.args;
+      if (args.lat != null) {
+        setState(() {
+          lat = args.lat;
+          lng = args.lng;
+          city = args.city;
+          currentAddress = args.locality ?? "";
+          currentPosition = LatLng(lat!, lng!);
+        });
+
+        // 2. جلب الأحياء فوراً بناءً على المدينة القادمة من الخريطة
+        if (city != null && city!.isNotEmpty) {
+          context.read<AddressCubit>().getneighborhoodsByName(city!, (list) {
+            setState(() {
+              neighborhoods = list;
+            });
+          });
+        }
+        _updateCameraPosition();
+      } else {
+        // إذا لم تأتِ بيانات (حالة احتياطية)، نجلب الموقع الحالي
+        _initializeLocation();
+      }
     });
   }
 }

@@ -6,6 +6,8 @@ import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/location/presentation/screens/add-new-location-screen.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
 
 typedef OnLocationSelected = void Function(
@@ -16,11 +18,11 @@ typedef OnLocationSelected = void Function(
 );
 
 class MapScreenArgs {
-  final OnLocationSelected onLocationSelected;
+  final OnLocationSelected? onLocationSelected;
   final double? initialLat;
   final double? initialLng;
 
-  const MapScreenArgs({required this.onLocationSelected, this.initialLat, this.initialLng});
+  const MapScreenArgs({this.onLocationSelected, this.initialLat, this.initialLng});
 }
 
 class MapScreen extends StatefulWidget {
@@ -246,14 +248,29 @@ class _MapScreenState extends State<MapScreen> {
           text: AppLocaleKey.confirmcurrentlocation.tr(),
           onPressed: () {
             if (_lat != null && _lng != null) {
-              widget.args.onLocationSelected(
-                _lat!,
-                _lng!,
+              widget.args.onLocationSelected?.call(
+                _lat ?? 0.0,
+                _lng ?? 0.0,
                 _city ?? "",
                 _locality ?? "",
               );
+              NavigatorMethods.pushReplacementNamed(context, AddNewLocationScreen.routeName,
+                  arguments: AddNewLocationScreenArgs(
+                    onAddressAdded: () {
+                      widget.args.onLocationSelected?.call(
+                        _lat ?? 0.0,
+                        _lng ?? 0.0,
+                        _city ?? "",
+                        _locality ?? "",
+                      );
+                    },
+                    lat: _lat,
+                    lng: _lng,
+                    city: _city,
+                    locality: _locality,
+                  ));
             }
-            Navigator.pop(context);
+            // Navigator.pop(context);
           },
         ),
       ),
