@@ -124,7 +124,7 @@ class CustomNetworkImage extends StatelessWidget {
       ),
       child: Center(
         child: Image.asset(
-          AppImages.appWhiteLogoImage,
+          AppImages.newAppLogoImage,
           fit: BoxFit.contain,
         ),
       ),
@@ -141,7 +141,7 @@ class CustomNetworkImage extends StatelessWidget {
       ),
       child: Center(
         child: Image.asset(
-          imagePlaceHolder ?? AppImages.appWhiteLogoImage,
+          imagePlaceHolder ?? AppImages.newAppLogoImage,
           width: (width ?? 60) * 0.6,
           height: (height ?? width ?? 60) * 0.6,
           fit: BoxFit.contain,

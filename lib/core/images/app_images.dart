@@ -122,4 +122,5 @@ class AppImages {
   static const String guestImage = 'assets/images/guestImage.png';
   static const String noOrderImage = 'assets/images/noOrderImage.png';
   static const String serviceProviderImage = 'assets/images/serviceProviderImage.png';
+  static const String newAppLogoImage = 'assets/images/newAppLogoImage.png';
 }
