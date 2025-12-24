@@ -3,7 +3,8 @@ import 'dart:convert';
 NotificationsModel notificationsModelFromJson(String str) =>
     NotificationsModel.fromJson(json.decode(str));
 
-String notificationsModelToJson(NotificationsModel data) => json.encode(data.toJson());
+String notificationsModelToJson(NotificationsModel data) =>
+    json.encode(data.toJson());
 
 class NotificationsModel {
   bool success;
@@ -14,16 +15,21 @@ class NotificationsModel {
     required this.notifications,
   });
 
-  factory NotificationsModel.fromJson(Map<String, dynamic> json) => NotificationsModel(
+  factory NotificationsModel.fromJson(Map<String, dynamic> json) =>
+      NotificationsModel(
         success: json["success"] ?? false,
-        notifications: json["message"] != null
-            ? List<Datum>.from(json["message"].map((x) => Datum.fromJson(x)))
+        notifications: json["message"] is List
+            ? List<Datum>.from(
+                json["message"].map((x) => Datum.fromJson(x)),
+              )
             : [],
       );
 
   Map<String, dynamic> toJson() => {
         "success": success,
-        "message": List<dynamic>.from(notifications.map((x) => x.toJson())),
+        "message": List<dynamic>.from(
+          notifications.map((x) => x.toJson()),
+        ),
       };
 }
 
@@ -68,19 +74,40 @@ class Datum {
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
-        title: json["title"] != null ? Message.fromJson(json["title"]) : null,
-        message: json["message"] != null ? Message.fromJson(json["message"]) : null,
+
+        title: json["title"] is Map<String, dynamic>
+            ? Message.fromJson(json["title"])
+            : null,
+
+        message: json["message"] is Map<String, dynamic>
+            ? Message.fromJson(json["message"])
+            : null,
+
         notifiableType: json["notifiable_type"],
         notifiableId: json["notifiable_id"],
         modelType: json["model_type"],
         modelId: json["model_id"],
-        seen: json["seen"], // ← Boolean
+
+        seen: json["seen"] == true || json["seen"] == 1,
+
         userId: json["user_id"],
+
         data: json["data"] != null
-            ? Data.fromJson(json["data"] is String ? jsonDecode(json["data"]) : json["data"])
+            ? Data.fromJson(
+                json["data"] is String
+                    ? jsonDecode(json["data"])
+                    : json["data"],
+              )
             : null,
-        createdAt: json["created_at"] != null ? DateTime.tryParse(json["created_at"]) : null,
-        updatedAt: json["updated_at"] != null ? DateTime.tryParse(json["updated_at"]) : null,
+
+        createdAt: json["created_at"] != null
+            ? DateTime.tryParse(json["created_at"])
+            : null,
+
+        updatedAt: json["updated_at"] != null
+            ? DateTime.tryParse(json["updated_at"])
+            : null,
+
         showClient: json["show_client"],
         showCompany: json["show_company"],
         showPuncher: json["show_puncher"],
