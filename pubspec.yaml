@@ -87,8 +87,9 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/appWhiteLogoImage.png"
+  image_path: "assets/images/newAppLogoImage.png"
   min_sdk_android: 21
+  remove_alpha_ios: true
 
 flutter:
   # Use Material Design icons
@@ -111,7 +112,7 @@ flutter:
           weight: 700
 
 flutter_native_splash:
-  image: "assets/images/appWhiteLogoImage.png"
+  image: "assets/images/newAppLogoImage.png"
   color: "FFFFFF"
   android: true
   ios: true

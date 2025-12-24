@@ -53,15 +53,9 @@
 	<true/>
 	<key>UIStatusBarHidden</key>
 	<false/>
-
-	<!-- PERMISSIONS ADDED TO FIX APP STORE CONNECT ISSUE -->
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your photo library to allow you to upload your profile picture or documents.</string>
-
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We need access to your location to provide location-based services within the app.</string>
-
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>We need access to your location to provide location-based services even when the app is in the background.</string>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>Your location is used to let you select your address on the map by placing a marker, so it can be saved and used when requesting a container delivery.</string>
 </dict>
 </plist>
