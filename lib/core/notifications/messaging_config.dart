@@ -10,7 +10,8 @@ import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart'
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 
 @pragma('vm:entry-point')
-final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin _localNotifications =
+    FlutterLocalNotificationsPlugin();
 
 @pragma('vm:entry-point')
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -31,7 +32,8 @@ void notificationTapBackground(NotificationResponse details) {
   }
 }
 
-// === تعريف أنواع الإشعارات ===
+// ================= Notification Types =================
+
 enum NotificationType { trackOrder, general }
 
 class NotificationData {
@@ -41,7 +43,6 @@ class NotificationData {
   NotificationData._({required this.type, this.orderId});
 
   factory NotificationData.fromMap(Map<String, dynamic> map) {
-    // تحليل البيانات بناءً على النوع القادم من الباك اند
     switch (map['notification_type'] as String?) {
       case '1':
         return NotificationData._(
@@ -49,15 +50,14 @@ class NotificationData {
           orderId: int.tryParse(map['order_id']?.toString() ?? ''),
         );
       case 'general_notifications':
-        return NotificationData._(
-          type: NotificationType.general,
-        );
+        return NotificationData._(type: NotificationType.general);
       default:
-        // أي نوع غير معروف يتم التعامل معه كإشعار عام
         return NotificationData._(type: NotificationType.general);
     }
   }
 }
+
+// ================= Local Notification =================
 
 Future<void> _showLocalNotification(RemoteMessage message) async {
   final notification = message.notification;
@@ -68,29 +68,38 @@ Future<void> _showLocalNotification(RemoteMessage message) async {
       notification.hashCode,
       notification.title,
       notification.body,
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
+      NotificationDetails(
+        android: const AndroidNotificationDetails(
           'high_importance',
           'High Importance',
           channelDescription: 'Important notifications',
+          importance: Importance.max,
+          priority: Priority.high,
           sound: RawResourceAndroidNotificationSound('custom_sound'),
           icon: '@mipmap/ic_launcher',
         ),
-        iOS: DarwinNotificationDetails(sound: 'custom_sound.caf'),
+        iOS: const DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+          sound: 'custom_sound.caf',
+        ),
       ),
       payload: payload,
     );
   }
 }
 
+// ================= Navigation =================
+
 void handleNotificationTap(Map<String, dynamic> data) {
   log('Handling notification tap with data: $data');
   try {
     final notificationData = NotificationData.fromMap(data);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final ctx = navigatorKey.currentContext;
       if (ctx == null || !ctx.mounted) {
-        log('Context not available, retrying...');
         Future.delayed(const Duration(milliseconds: 500), () {
           if (navigatorKey.currentContext?.mounted ?? false) {
             _performNavigation(notificationData);
@@ -107,24 +116,15 @@ void handleNotificationTap(Map<String, dynamic> data) {
 
 void _performNavigation(NotificationData data) async {
   final ctx = navigatorKey.currentContext!;
-  switch (data.type) {
-    case NotificationType.trackOrder:
-      await LayoutMethouds.getdata();
-      NavigatorMethods.pushNamed(
-        ctx,
-        LayoutScreen.routeName,
-      );
-      break;
+  await LayoutMethouds.getdata();
 
-    case NotificationType.general:
-      // الإشعارات العامة توجه للصفحة الرئيسية فقط
-      NavigatorMethods.pushNamed(
-        ctx,
-        LayoutScreen.routeName,
-      );
-      break;
-  }
+  NavigatorMethods.pushNamed(
+    ctx,
+    LayoutScreen.routeName,
+  );
 }
+
+// ================= Messaging Service =================
 
 class MessagingService {
   MessagingService._();
@@ -133,13 +133,21 @@ class MessagingService {
     required GlobalKey<NavigatorState> navKey,
   }) async {
     navigatorKey = navKey;
+
     await Firebase.initializeApp();
+
+    // 🔥 iOS: انتظر APNs Token
+    if (Theme.of(navKey.currentContext!).platform == TargetPlatform.iOS) {
+      await _waitForApnsToken();
+    }
+
+    // 🔥 احصل على FCM Token بعد APNs
+    final fcmToken = await _firebaseMessaging.getToken();
+    log('📲 FCM Token: $fcmToken');
+
     await _createAndroidChannel();
 
-    // === (تم التعديل) تفعيل الاشتراك في القناة العامة ===
-    // هذا السطر ضروري جداً لاستقبال الإشعارات الجماعية
     await _firebaseMessaging.subscribeToTopic('general_notifications');
-    log('✅ Successfully subscribed to topic: general_notifications');
 
     await _localNotifications.initialize(
       const InitializationSettings(
@@ -148,11 +156,11 @@ class MessagingService {
       ),
       onDidReceiveNotificationResponse: (details) {
         if (details.payload != null) {
-          final data = jsonDecode(details.payload!);
-          handleNotificationTap(data);
+          handleNotificationTap(jsonDecode(details.payload!));
         }
       },
-      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+      onDidReceiveBackgroundNotificationResponse:
+          notificationTapBackground,
     );
 
     final settings = await _firebaseMessaging.requestPermission(
@@ -160,22 +168,47 @@ class MessagingService {
       badge: true,
       sound: true,
     );
-    log('Permission status: ${settings.authorizationStatus}');
+    log('🔐 Permission status: ${settings.authorizationStatus}');
 
-    FirebaseMessaging.onMessage.listen((msg) async {
-      await _showLocalNotification(msg);
-    });
+    FirebaseMessaging.onMessage.listen(_showLocalNotification);
 
-    FirebaseMessaging.onMessageOpenedApp.listen((msg) {
-      handleNotificationTap(msg.data);
-    });
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (msg) => handleNotificationTap(msg.data),
+    );
 
-    final initialMessage = await _firebaseMessaging.getInitialMessage();
-    if (initialMessage != null) handleNotificationTap(initialMessage.data);
+    FirebaseMessaging.onBackgroundMessage(
+      firebaseMessagingBackgroundHandler,
+    );
 
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    final initialMessage =
+        await _firebaseMessaging.getInitialMessage();
+    if (initialMessage != null) {
+      handleNotificationTap(initialMessage.data);
+    }
+
     return initialMessage;
   }
+
+  // ================= APNs Fix =================
+
+  static Future<void> _waitForApnsToken() async {
+    String? apnsToken;
+
+    for (int i = 0; i < 10; i++) {
+      apnsToken = await _firebaseMessaging.getAPNSToken();
+      if (apnsToken != null) {
+        log('🍏 APNs Token: $apnsToken');
+        break;
+      }
+      await Future.delayed(const Duration(seconds: 1));
+    }
+
+    if (apnsToken == null) {
+      log('⚠️ APNs token not received');
+    }
+  }
+
+  // ================= Android Channel =================
 
   static Future<void> _createAndroidChannel() async {
     const channel = AndroidNotificationChannel(
@@ -185,8 +218,10 @@ class MessagingService {
       importance: Importance.max,
       sound: RawResourceAndroidNotificationSound('custom_sound'),
     );
+
     await _localNotifications
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
   }
 }
