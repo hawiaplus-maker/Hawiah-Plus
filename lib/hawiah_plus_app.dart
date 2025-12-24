@@ -59,14 +59,14 @@ class _HawiahPlusAppState extends State<HawiahPlusApp> {
 
   void _navigateFromNotification(Map<String, dynamic> data) {
     try {
-      final context = navigatorKey.currentContext;
+      final context = navigatorKey?.currentContext;
       if (context != null && context.mounted) {
         log('Navigating from initial notification with data: $data');
         handleNotificationTap(data);
       } else {
         log('Context not available for initial navigation');
         Future.delayed(const Duration(milliseconds: 1000), () {
-          if (navigatorKey.currentContext?.mounted ?? false) {
+          if (navigatorKey?.currentContext?.mounted ?? false) {
             handleNotificationTap(data);
           }
         });

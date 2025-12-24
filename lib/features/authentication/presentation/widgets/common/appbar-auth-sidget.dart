@@ -20,8 +20,8 @@ class CustomAuthAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 20),
           child: Image.asset(
-            AppImages.hawiahPlus,
-            height: 30.h,
+            AppImages.newAppLogoImage,
+            height: 120,
           ),
         ),
       ),

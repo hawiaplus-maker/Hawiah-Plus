@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io'; // تم إضافة هذا الاستيراد
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,13 +11,13 @@ import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart'
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 
 @pragma('vm:entry-point')
-final FlutterLocalNotificationsPlugin _localNotifications =
-    FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
 
 @pragma('vm:entry-point')
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
-late final GlobalKey<NavigatorState> navigatorKey;
+// تم إزالة late لتجنب الـ Initialization Error واستخدامها بشكل أمن
+GlobalKey<NavigatorState>? navigatorKey;
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -27,8 +28,12 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse details) {
   if (details.payload != null) {
-    final data = jsonDecode(details.payload!);
-    handleNotificationTap(data);
+    try {
+      final data = jsonDecode(details.payload!);
+      handleNotificationTap(data);
+    } catch (e) {
+      log('Error decoding background notification payload: $e');
+    }
   }
 }
 
@@ -75,14 +80,13 @@ Future<void> _showLocalNotification(RemoteMessage message) async {
           channelDescription: 'Important notifications',
           importance: Importance.max,
           priority: Priority.high,
-          sound: RawResourceAndroidNotificationSound('custom_sound'),
-          icon: '@mipmap/ic_launcher',
+          // تم تغيير اسم الأيقونة هنا ليطابق إعداداتك الجديدة
+          icon: '@mipmap/launcher_icon',
         ),
         iOS: const DarwinNotificationDetails(
           presentAlert: true,
           presentBadge: true,
           presentSound: true,
-          sound: 'custom_sound.caf',
         ),
       ),
       payload: payload,
@@ -98,16 +102,13 @@ void handleNotificationTap(Map<String, dynamic> data) {
     final notificationData = NotificationData.fromMap(data);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final ctx = navigatorKey.currentContext;
-      if (ctx == null || !ctx.mounted) {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          if (navigatorKey.currentContext?.mounted ?? false) {
-            _performNavigation(notificationData);
-          }
+      if (navigatorKey == null || navigatorKey?.currentContext == null) {
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          _performNavigation(notificationData);
         });
-        return;
+      } else {
+        _performNavigation(notificationData);
       }
-      _performNavigation(notificationData);
     });
   } catch (e) {
     log('Error handling notification tap: $e');
@@ -115,13 +116,20 @@ void handleNotificationTap(Map<String, dynamic> data) {
 }
 
 void _performNavigation(NotificationData data) async {
-  final ctx = navigatorKey.currentContext!;
-  await LayoutMethouds.getdata();
-
-  NavigatorMethods.pushNamed(
-    ctx,
-    LayoutScreen.routeName,
-  );
+  final ctx = navigatorKey?.currentContext;
+  if (ctx != null && ctx.mounted) {
+    try {
+      await LayoutMethouds.getdata();
+      NavigatorMethods.pushNamed(
+        ctx,
+        LayoutScreen.routeName,
+      );
+    } catch (e) {
+      log('Navigation error: $e');
+    }
+  } else {
+    log('Navigation failed: Context is null or not mounted');
+  }
 }
 
 // ================= Messaging Service =================
@@ -136,12 +144,12 @@ class MessagingService {
 
     await Firebase.initializeApp();
 
-    // 🔥 iOS: انتظر APNs Token
-    if (Theme.of(navKey.currentContext!).platform == TargetPlatform.iOS) {
+    // 🔥 الحل: استخدم Platform.isIOS بدلاً من Theme.of(context)
+    if (Platform.isIOS) {
       await _waitForApnsToken();
     }
 
-    // 🔥 احصل على FCM Token بعد APNs
+    // احصل على FCM Token
     final fcmToken = await _firebaseMessaging.getToken();
     log('📲 FCM Token: $fcmToken');
 
@@ -151,7 +159,8 @@ class MessagingService {
 
     await _localNotifications.initialize(
       const InitializationSettings(
-        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        // تم تغيير اسم الأيقونة هنا أيضاً
+        android: AndroidInitializationSettings('@mipmap/launcher_icon'),
         iOS: DarwinInitializationSettings(),
       ),
       onDidReceiveNotificationResponse: (details) {
@@ -159,8 +168,7 @@ class MessagingService {
           handleNotificationTap(jsonDecode(details.payload!));
         }
       },
-      onDidReceiveBackgroundNotificationResponse:
-          notificationTapBackground,
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
 
     final settings = await _firebaseMessaging.requestPermission(
@@ -180,8 +188,7 @@ class MessagingService {
       firebaseMessagingBackgroundHandler,
     );
 
-    final initialMessage =
-        await _firebaseMessaging.getInitialMessage();
+    final initialMessage = await _firebaseMessaging.getInitialMessage();
     if (initialMessage != null) {
       handleNotificationTap(initialMessage.data);
     }
@@ -193,7 +200,6 @@ class MessagingService {
 
   static Future<void> _waitForApnsToken() async {
     String? apnsToken;
-
     for (int i = 0; i < 10; i++) {
       apnsToken = await _firebaseMessaging.getAPNSToken();
       if (apnsToken != null) {
@@ -202,9 +208,8 @@ class MessagingService {
       }
       await Future.delayed(const Duration(seconds: 1));
     }
-
     if (apnsToken == null) {
-      log('⚠️ APNs token not received');
+      log('⚠️ APNs token not received - push might not work on iOS real device');
     }
   }
 
@@ -216,12 +221,10 @@ class MessagingService {
       'High Importance',
       description: 'Important notifications',
       importance: Importance.max,
-      sound: RawResourceAndroidNotificationSound('custom_sound'),
     );
 
     await _localNotifications
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
   }
 }
