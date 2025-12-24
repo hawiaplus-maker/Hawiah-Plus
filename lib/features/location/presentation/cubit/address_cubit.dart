@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_toast.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
@@ -113,6 +114,11 @@ class AddressCubit extends Cubit<AddressState> {
       _neighborhoods = iterable.map((e) => NeighborhoodModel.fromJson(e)).toList();
       onSuccess(_neighborhoods);
       emit(AddressUpdate());
+    } else {
+      CommonMethods.showToast(
+          type: ToastType.warning,
+          title: _neighborhoodsResponse.data['message'],
+          message: tr(AppLocaleKey.selectCityNotFound));
     }
   }
 

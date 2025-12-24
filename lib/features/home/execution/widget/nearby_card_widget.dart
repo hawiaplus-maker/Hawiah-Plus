@@ -28,11 +28,10 @@ class NearbyCardWidget extends StatelessWidget {
           onTap: () {
             NavigatorMethods.pushNamed(context, RequestHawiahScreen.routeName,
                 arguments: RequestHawiahScreenArgs(
-                    addressId: args.addressId,
-                    catigoryId: args.catigoryId,
-                    serviceProviderId: args.serviceProviderId,
-                    nearbyServiceProviderModel: providers,
-                    showCategoriesModel: args.showCategoriesModel));
+                  addressId: args.addressId,
+                  serviceProviderId: args.serviceProviderId,
+                  nearbyServiceProviderModel: providers,
+                ));
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),

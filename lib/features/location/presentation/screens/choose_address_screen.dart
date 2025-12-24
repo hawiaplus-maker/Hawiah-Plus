@@ -15,21 +15,15 @@ import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/dialog/unauthenticated_dialog.dart';
 import 'package:hawiah_client/features/home/execution/screen/nearby_service_provider_screen.dart';
-import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/location-item-widget.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_state.dart';
-import 'package:hawiah_client/features/location/presentation/screens/add-new-location-screen.dart';
+import 'package:hawiah_client/features/location/presentation/screens/map_screen.dart';
 
 class ChooseAddressScreenArgs {
-  final int catigoryId;
   final int serviceProviderId;
-  final ShowCategoriesModel showCategoriesModel;
 
-  ChooseAddressScreenArgs(
-      {required this.showCategoriesModel,
-      required this.catigoryId,
-      required this.serviceProviderId});
+  ChooseAddressScreenArgs({required this.serviceProviderId});
 }
 
 class ChooseAddressScreen extends StatefulWidget {
@@ -80,9 +74,9 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                   actions: [
                     IconButton(
                         onPressed: () {
-                          NavigatorMethods.pushNamed(context, AddNewLocationScreen.routeName,
-                              arguments: AddNewLocationScreenArgs(
-                            onAddressAdded: () {
+                          NavigatorMethods.pushNamed(context, MapScreen.routeName,
+                              arguments: MapScreenArgs(
+                            onLocationSelected: (lat, lng, city, fullAddress) {
                               addressCubit.getaddresses();
                             },
                           ));
@@ -112,9 +106,9 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                           text: "add_new_address".tr(),
                           prefixIcon: SvgPicture.asset(AppImages.mapPinPlusIcon),
                           onPressed: () {
-                            NavigatorMethods.pushNamed(context, AddNewLocationScreen.routeName,
-                                arguments: AddNewLocationScreenArgs(
-                              onAddressAdded: () {
+                            NavigatorMethods.pushNamed(context, MapScreen.routeName,
+                                arguments: MapScreenArgs(
+                              onLocationSelected: (lat, lng, city, fullAddress) {
                                 addressCubit.getaddresses();
                               },
                             ));
@@ -186,8 +180,6 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                                   context,
                                   NearbyServiceProviderScreen.routeName,
                                   arguments: NearbyServiceProviderArguments(
-                                      showCategoriesModel: widget.args.showCategoriesModel,
-                                      catigoryId: widget.args.catigoryId,
                                       serviceProviderId: widget.args.serviceProviderId,
                                       addressId: addressId!),
                                 );

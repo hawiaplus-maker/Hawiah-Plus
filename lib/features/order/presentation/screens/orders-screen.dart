@@ -122,7 +122,7 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
                   }
                   return TabBarView(
                     controller: _tabController,
-                    physics: BouncingScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     children: [
                       OrderTapList(
                         isCurrent: true,

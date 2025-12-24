@@ -6,6 +6,8 @@ import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/location/presentation/screens/add-new-location-screen.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
 
 typedef OnLocationSelected = void Function(
@@ -16,9 +18,11 @@ typedef OnLocationSelected = void Function(
 );
 
 class MapScreenArgs {
-  final OnLocationSelected onLocationSelected;
+  final OnLocationSelected? onLocationSelected;
+  final double? initialLat;
+  final double? initialLng;
 
-  const MapScreenArgs({required this.onLocationSelected});
+  const MapScreenArgs({this.onLocationSelected, this.initialLat, this.initialLng});
 }
 
 class MapScreen extends StatefulWidget {
@@ -54,19 +58,28 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> _initializeLocation() async {
     setState(() => _loading = true);
-
-    final data = await _locationService.getCurrentLocation();
-
-    if (data != null && data.latitude != null && data.longitude != null) {
+    if (widget.args.initialLat != null && widget.args.initialLng != null) {
       await _updateLocation(
-        data.latitude!,
-        data.longitude!,
+        widget.args.initialLat!,
+        widget.args.initialLng!,
         fetchLocality: true,
+        shouldAnimate: true,
       );
+      _manualSelection = true;
+    } else {
+      final data = await _locationService.getCurrentLocation();
 
-      _startListening();
+      if (data != null && data.latitude != null && data.longitude != null) {
+        await _updateLocation(
+          data.latitude!,
+          data.longitude!,
+          fetchLocality: true,
+          shouldAnimate: true,
+        );
+
+        _startListening();
+      }
     }
-
     setState(() => _loading = false);
   }
 
@@ -80,12 +93,12 @@ class _MapScreenState extends State<MapScreen> {
       if (_lastUpdate != null && now.difference(_lastUpdate!).inMilliseconds < 1500) {
         return;
       }
-
       _lastUpdate = now;
 
       await _updateLocation(
         location.latitude!,
         location.longitude!,
+        shouldAnimate: false,
       );
     });
   }
@@ -94,12 +107,15 @@ class _MapScreenState extends State<MapScreen> {
     double lat,
     double lng, {
     bool fetchLocality = false,
+    bool shouldAnimate = false, // Add this
   }) async {
     final data = await _locationService.updateLocation(
       lat,
       lng,
       fetchLocality: fetchLocality,
     );
+
+    if (!mounted) return;
 
     setState(() {
       _lat = data["lat"];
@@ -108,7 +124,8 @@ class _MapScreenState extends State<MapScreen> {
       _locality = data["locality"];
     });
 
-    if (_mapController != null) {
+    // Only move the camera if specifically requested
+    if (shouldAnimate && _mapController != null) {
       _mapController!.animateCamera(
         CameraUpdate.newLatLng(LatLng(_lat!, _lng!)),
       );
@@ -127,9 +144,18 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Future<void> _goToCurrentLocation() async {
-    _manualSelection = false;
+    setState(() => _manualSelection = false); // Reset manual flag
     _locationService.resumeLocationStream();
-    await _initializeLocation();
+
+    final data = await _locationService.getCurrentLocation();
+    if (data != null) {
+      await _updateLocation(
+        data.latitude!,
+        data.longitude!,
+        fetchLocality: true,
+        shouldAnimate: true,
+      );
+    }
   }
 
   @override
@@ -169,7 +195,15 @@ class _MapScreenState extends State<MapScreen> {
             ),
           },
           onTap: _onMapTap,
+          onCameraMoveStarted: () {
+            setState(() {
+              _manualSelection = true;
+            });
+            _locationService.pauseLocationStream();
+          },
           zoomControlsEnabled: false,
+          myLocationEnabled: false,
+          myLocationButtonEnabled: false,
         ),
 
         /// 🔹 Address Card
@@ -214,14 +248,29 @@ class _MapScreenState extends State<MapScreen> {
           text: AppLocaleKey.confirmcurrentlocation.tr(),
           onPressed: () {
             if (_lat != null && _lng != null) {
-              widget.args.onLocationSelected(
-                _lat!,
-                _lng!,
+              widget.args.onLocationSelected?.call(
+                _lat ?? 0.0,
+                _lng ?? 0.0,
                 _city ?? "",
                 _locality ?? "",
               );
+              NavigatorMethods.pushReplacementNamed(context, AddNewLocationScreen.routeName,
+                  arguments: AddNewLocationScreenArgs(
+                    onAddressAdded: () {
+                      widget.args.onLocationSelected?.call(
+                        _lat ?? 0.0,
+                        _lng ?? 0.0,
+                        _city ?? "",
+                        _locality ?? "",
+                      );
+                    },
+                    lat: _lat,
+                    lng: _lng,
+                    city: _city,
+                    locality: _locality,
+                  ));
             }
-            Navigator.pop(context);
+            // Navigator.pop(context);
           },
         ),
       ),

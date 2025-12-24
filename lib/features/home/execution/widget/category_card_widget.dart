@@ -30,8 +30,6 @@ class CategoryCardWidget extends StatelessWidget {
       onTap: () {
         NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
             arguments: ChooseAddressScreenArgs(
-              showCategoriesModel: homeCubit.showCategories!,
-              catigoryId: widget.id,
               serviceProviderId: homeCubit.showCategories?.message?.services?[index].id ?? 0,
             ));
       },
@@ -126,8 +124,6 @@ class CategoryCardWidget extends StatelessWidget {
                   onPressed: () {
                     NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
                         arguments: ChooseAddressScreenArgs(
-                          showCategoriesModel: homeCubit.showCategories!,
-                          catigoryId: widget.id,
                           serviceProviderId:
                               homeCubit.showCategories?.message?.services?[index].id ?? 0,
                         ));

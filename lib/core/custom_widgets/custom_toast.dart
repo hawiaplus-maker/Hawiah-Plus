@@ -26,7 +26,6 @@ class CustomToast extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 90,
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -34,63 +33,67 @@ class CustomToast extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         // border: Border.all(color: backgroundColor ?? _backgroundColor()),
       ),
-      child: Row(
-        children: [
-          Center(
-            child: type == ToastType.success
-                ? Image.asset(
-                    AppImages.successGif,
-                    height: 30,
-                    width: 30,
-                    color: Colors.white,
-                  )
-                : CircleAvatar(
-                    radius: 24,
-                    backgroundColor: backgroundColor ?? _backgroundColor(),
-                    child: SvgPicture.asset(
-                      icon ?? _icons(),
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Center(
+              child: type == ToastType.success
+                  ? Image.asset(
+                      AppImages.successGif,
                       height: 30,
                       width: 30,
-                      colorFilter: const ColorFilter.mode(
-                        Colors.white,
-                        BlendMode.srcIn,
+                      color: Colors.white,
+                    )
+                  : CircleAvatar(
+                      radius: 24,
+                      backgroundColor: backgroundColor ?? _backgroundColor(),
+                      child: SvgPicture.asset(
+                        icon ?? _icons(),
+                        height: 30,
+                        width: 30,
+                        colorFilter: const ColorFilter.mode(
+                          Colors.white,
+                          BlendMode.srcIn,
+                        ),
                       ),
                     ),
-                  ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (title != null) ...{
+            ),
+            const SizedBox(width: 10),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (title != null) ...{
+                    Text(
+                      title!,
+                      style: TextStyle(
+                        color: textColor ?? Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      maxLines: 1,
+                    ),
+                    const SizedBox(height: 8),
+                  },
                   Text(
-                    title!,
+                    message,
                     style: TextStyle(
                       color: textColor ?? Colors.white,
                       fontSize: 16,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w500,
                     ),
-                    maxLines: 1,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.justify,
                   ),
-                  const SizedBox(height: 8),
-                },
-                Text(
-                  message,
-                  style: TextStyle(
-                    color: textColor ?? Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.justify,
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

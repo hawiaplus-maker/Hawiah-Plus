@@ -25,6 +25,10 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
+<<<<<<< HEAD
 	<string>1:561693097751:ios:cc4e12087623c0f148c152</string>
+=======
+	<string>1:479407077856:ios:98e62c5ab9f3a796225385</string>
+>>>>>>> ca46ff693ef96b5c156d543578aa3dc22367620d
 </dict>
 </plist>

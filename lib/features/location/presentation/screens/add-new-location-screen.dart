@@ -1,6 +1,5 @@
 // add_new_location_screen.dart
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +25,27 @@ import 'package:hawiah_client/features/location/presentation/screens/map_screen.
 import 'package:hawiah_client/features/location/service/location_service.dart';
 import 'package:location/location.dart';
 
+typedef OnLocationSelected = void Function(
+  double lat,
+  double lng,
+  String city,
+  String fullAddress,
+);
+
 class AddNewLocationScreenArgs {
   final void Function() onAddressAdded;
+  final double? lat;
+  final double? lng;
+  final String? city;
+  final String? locality;
 
-  AddNewLocationScreenArgs({required this.onAddressAdded});
+  AddNewLocationScreenArgs({
+    required this.onAddressAdded,
+    this.lat,
+    this.lng,
+    this.city,
+    this.locality,
+  });
 }
 
 class AddNewLocationScreen extends StatefulWidget {
@@ -54,11 +70,14 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   String currentAddress = "Getting location...";
   String? city;
   List<NeighborhoodModel> neighborhoods = [];
+  double? lat;
+  double? lng;
 
   @override
   void initState() {
     super.initState();
     _initializeLocation();
+    _setupInitialData();
   }
 
   Future<void> _initializeLocation() async {
@@ -67,6 +86,8 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
       setState(() {
         currentPosition = LatLng(location.latitude!, location.longitude!);
         currentAddress = "${location.latitude}, ${location.longitude}";
+        lat = location.latitude;
+        lng = location.longitude;
       });
       _updateCameraPosition();
     }
@@ -175,7 +196,8 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
               CustomSingleSelect(
                 title: AppLocaleKey.city.tr(),
                 hintText: city ?? AppLocaleKey.cityHint.tr(),
-                value: selectedCity,
+                hintStyle: city != null ? AppTextStyle.textFormStyle : AppTextStyle.hintStyle,
+                value: city == null ? selectedCity : null,
                 items: addressCubit.citys
                     .map((e) => CustomSelectItem(
                           name: e.title ?? "",
@@ -186,7 +208,9 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
                   if (v != null) {
                     context.read<AddressCubit>().getneighborhoods(v);
                     setState(() {
+                      this.city = null;
                       selectedCity = v;
+
                       selectedNeighborhood = null;
                     });
                   }
@@ -198,12 +222,19 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
                 hintText: AppLocaleKey.cityHint.tr(),
                 apiResponse: addressCubit.neighborhoodsResponse,
                 value: selectedNeighborhood,
-                items: neighborhoods
-                    .map((e) => CustomSelectItem(
-                          name: e.title ?? "",
-                          value: e.id,
-                        ))
-                    .toList(),
+                items: neighborhoods.isNotEmpty
+                    ? neighborhoods
+                        .map((e) => CustomSelectItem(
+                              name: e.title ?? "",
+                              value: e.id,
+                            ))
+                        .toList()
+                    : addressCubit.neighborhoods
+                        .map((e) => CustomSelectItem(
+                              name: e.title ?? "",
+                              value: e.id,
+                            ))
+                        .toList(),
                 onChanged: (v) {
                   if (v != null) {
                     setState(() {
@@ -229,23 +260,27 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
             mapController.complete(controller);
           },
           onTap: (LatLng argument) async {
-            NavigatorMethods.pushNamed(context, MapScreen.routeName, arguments: MapScreenArgs(
-              onLocationSelected: (lat, lng, city, locality) {
-                log("============================================ $city ================================");
-                setState(() {
-                  this.city = city;
-                  context.read<AddressCubit>().getneighborhoodsByName(city, (neighborhoods) {
-                    setState(() {
-                      this.neighborhoods = neighborhoods;
-                    });
+            NavigatorMethods.pushNamed(
+              context,
+              MapScreen.routeName,
+              arguments: MapScreenArgs(
+                initialLat: this.lat,
+                initialLng: this.lng,
+                onLocationSelected: (newLat, newLng, newCity, newLocality) {
+                  setState(() {
+                    this.lat = newLat;
+                    this.lng = newLng;
+                    this.city = newCity;
+                    this.currentAddress = newLocality;
+                    this.currentPosition = LatLng(newLat, newLng);
                   });
-                });
-
-                safeLocationSelected(lat, lng, city, locality);
-              },
-            ));
-
-            _updateCameraPosition();
+                  context.read<AddressCubit>().getneighborhoodsByName(newCity, (list) {
+                    setState(() => this.neighborhoods = list);
+                  });
+                  _updateCameraPosition();
+                },
+              ),
+            );
           },
           initialCameraPosition: CameraPosition(
             target: currentPosition ?? const LatLng(24.7136, 46.6753),
@@ -326,7 +361,38 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
     setState(() {
       currentPosition = LatLng(lat, lng); // Create new instance
       currentAddress = locality;
+      this.lat = lat;
+      this.lng = lng;
       _updateCameraPosition();
+    });
+  }
+
+  void _setupInitialData() {
+    // نستخدم Future.delayed لأننا بحاجة للوصول لـ context في initState لاستخدام الـ Cubit
+    Future.delayed(Duration.zero, () {
+      final args = widget.args;
+      if (args.lat != null) {
+        setState(() {
+          lat = args.lat;
+          lng = args.lng;
+          city = args.city;
+          currentAddress = args.locality ?? "";
+          currentPosition = LatLng(lat!, lng!);
+        });
+
+        // 2. جلب الأحياء فوراً بناءً على المدينة القادمة من الخريطة
+        if (city != null && city!.isNotEmpty) {
+          context.read<AddressCubit>().getneighborhoodsByName(city!, (list) {
+            setState(() {
+              neighborhoods = list;
+            });
+          });
+        }
+        _updateCameraPosition();
+      } else {
+        // إذا لم تأتِ بيانات (حالة احتياطية)، نجلب الموقع الحالي
+        _initializeLocation();
+      }
     });
   }
 }

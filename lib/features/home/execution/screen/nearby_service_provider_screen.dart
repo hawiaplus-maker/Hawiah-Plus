@@ -7,20 +7,17 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/home/execution/widget/nearby_card_widget.dart';
-import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-state.dart';
 
 class NearbyServiceProviderArguments {
-  final int catigoryId;
   final int serviceProviderId;
   final int addressId;
-  final ShowCategoriesModel showCategoriesModel;
+
   NearbyServiceProviderArguments({
-    required this.catigoryId,
     required this.serviceProviderId,
     required this.addressId,
-    required this.showCategoriesModel,
+
   });
 }
 
