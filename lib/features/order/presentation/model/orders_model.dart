@@ -122,6 +122,7 @@ class SingleOrderData {
   String? priceBeforeTax;
   double? vat;
   double? vatValue;
+  List<ContainerImage>? containerImages;
 
   SingleOrderData({
     this.id,
@@ -165,6 +166,7 @@ class SingleOrderData {
     this.priceBeforeTax,
     this.vat,
     this.vatValue,
+    this.containerImages,
   });
 
   factory SingleOrderData.fromJson(Map<String, dynamic> json) {
@@ -216,6 +218,8 @@ class SingleOrderData {
       priceBeforeTax: json['price_before_tax'],
       vat: parseDouble(json['vat']),
       vatValue: parseDouble(json['vat_value']),
+      containerImages:
+          (json['container_images'] as List?)?.map((v) => ContainerImage.fromJson(v)).toList(),
     );
   }
 
@@ -262,7 +266,33 @@ class SingleOrderData {
     map['price_before_tax'] = priceBeforeTax;
     map['vat'] = vat;
     map['vat_value'] = vatValue;
+    if (containerImages != null)
+      map['container_images'] = containerImages!.map((v) => v.toJson()).toList();
     return map;
+  }
+}
+
+class ContainerImage {
+  final int id;
+  final String url;
+
+  ContainerImage({
+    required this.id,
+    required this.url,
+  });
+
+  factory ContainerImage.fromJson(Map<String, dynamic> json) {
+    return ContainerImage(
+      id: json['id'],
+      url: json['url'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'url': url,
+    };
   }
 }
 

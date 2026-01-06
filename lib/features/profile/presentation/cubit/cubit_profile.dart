@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
+import 'package:hawiah_client/features/authentication/presentation/cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/model/question_model.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/model/user_profile_model.dart';
@@ -83,10 +84,15 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateProfile({
     required String name,
     String? mobile,
-    required String email,
+    String? email,
     File? imageFile,
+    File? taxNumberFile,
+    File? commercialRegistrationFile,
+    String? taxNumber,
+    String? commercialRegistration,
     String? password,
     String? password_confirmation,
+    AccountType? accountType,
   }) async {
     emit(ProfileUpdating());
 
@@ -95,8 +101,12 @@ class ProfileCubit extends Cubit<ProfileState> {
         'name': name,
         'mobile': mobile,
         'email': email,
-        'password': password,
-        'password_confirmation': password_confirmation,
+        if (password != null) 'password': password,
+        if (password_confirmation != null) 'password_confirmation': password_confirmation,
+        if (accountType == AccountType.company) ...{
+          if (taxNumber != null) 'tax_number': taxNumber,
+          if (commercialRegistration != null) 'commercial_registration': commercialRegistration,
+        }
       };
 
       if (imageFile != null) {
@@ -105,12 +115,24 @@ class ProfileCubit extends Cubit<ProfileState> {
           filename: "profile.jpg",
         );
       }
-
-      final formData = FormData.fromMap(data);
+      if (accountType == AccountType.company) {
+        if (taxNumberFile != null) {
+          data['tax_number_file'] = await MultipartFile.fromFile(
+            taxNumberFile.path,
+            filename: "tax_number.jpg",
+          );
+        }
+        if (commercialRegistrationFile != null) {
+          data['commercial_registration_file'] = await MultipartFile.fromFile(
+            commercialRegistrationFile.path,
+            filename: "commercial_registration.jpg",
+          );
+        }
+      }
 
       final response = await ApiHelper.instance.post(
         Urls.updateProfile,
-        body: formData,
+        body: data,
         hasToken: true,
         isMultipart: true,
       );

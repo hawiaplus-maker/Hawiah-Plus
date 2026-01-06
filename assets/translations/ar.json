@@ -401,6 +401,18 @@
   "update_now": "تحديث الآن",
   "deleteAccount":"حذف الحساب",
   "deleteAccountContent":"هل أنت متأكد أنك تريد حذف حسابك؟ سيتم فقدان جميع بياناتك ولن تتمكن من استعادتها.",
-  "selectCityNotFound":"عذرا لا توجد بيانات لهذه المدينه , يمكنك إختيار مدينه من القائمة"
+  "selectCityNotFound":"عذرا لا توجد بيانات لهذه المدينه , يمكنك إختيار مدينه من القائمة",
+  "addDeliveryLocationImages":"إضافة صور موقع التسليم",
+  "convertToCompanyUser":"هل تريد تحويل الحساب  الشخصي إلي حساب شركة ؟",
+  "failedToReadMessages": "فشل قراءة الرسائل",
+  "orderIdNotInitialized": "رقم الطلب غير مهيأ",
+  "driverName": "اسم السواق",
+  "driverImage": "صورة السواق",
+  "clientName": "اسم العميل",
+  "clientImage": "صورة العميل",
+  "failedToSendMessage": "فشل إرسال الرسالة",
+  "failedToLoadChats": "فشل تحميل المحادثات",
+  "imagesFromDeliveryLocation":"صور من موقع التسليم",
+  "register":"تسجيل"
 
 }

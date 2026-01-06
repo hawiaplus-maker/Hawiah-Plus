@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -264,6 +265,7 @@ class OrderCubit extends Cubit<OrderState> {
     required int addressId,
     required String fromDate,
     required String fromTime,
+    List<File>? images,
     required Function(OrderDetailsModel? order) onSuccess,
   }) async {
     NavigatorMethods.loading();
@@ -274,6 +276,11 @@ class OrderCubit extends Cubit<OrderState> {
       "from_date": fromDate,
       "from_time": fromTime,
     });
+    if (images != null) {
+      for (var image in images) {
+        body.files.add(MapEntry('images[]', await MultipartFile.fromFile(image.path)));
+      }
+    }
     final response = await ApiHelper.instance.post(
       Urls.createOrder,
       body: body,

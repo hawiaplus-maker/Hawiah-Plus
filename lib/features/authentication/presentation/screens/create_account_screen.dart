@@ -113,22 +113,26 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         CustomTextField(
                           controller: nameController,
                           title: "name".tr(),
+                          validator: ValidationMethods.validateEmptyField,
                           // hintText: "cream_name".tr(),
                         ),
                       if (accountType == AccountType.company) ...[
                         CustomTextField(
                           controller: nameController,
                           title: AppLocaleKey.companyName.tr(),
+                          validator: ValidationMethods.validateEmptyField,
                         ),
                         SizedBox(height: 20),
                         CustomTextField(
                           controller: taxNumberController,
                           title: AppLocaleKey.taxNumber.tr(),
+                          validator: ValidationMethods.validateEmptyField,
                         ),
                         SizedBox(height: 20),
                         CustomTextField(
                           controller: commercialRegistration,
                           title: AppLocaleKey.commercialRegistration.tr(),
+                          validator: ValidationMethods.validateEmptyField,
                         ),
                       ],
                       SizedBox(height: 20.h),

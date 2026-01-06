@@ -93,7 +93,7 @@ class InvoiceAndContractButtonsWidget extends StatelessWidget {
               title: title,
               context: context,
               pdfUrl: pdfUrl,
-              launchMode: LaunchMode.inAppWebView,
+              launchMode: LaunchMode.externalApplication,
             ),
             const Divider(),
             _buildOptionTile(

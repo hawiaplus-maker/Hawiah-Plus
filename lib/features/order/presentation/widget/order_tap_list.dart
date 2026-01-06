@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_shimmer.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/screens/all_categories_screen.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
@@ -31,8 +32,11 @@ class _OrderTapListState extends State<OrderTapList> {
 
   void _onScroll() {
     final cubit = context.read<OrderCubit>();
+    final canLoadMore = widget.isCurrent ? cubit.canLoadMoreCurrent : cubit.canLoadMoreOld;
+
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 150 &&
-        cubit.state is! OrderPaginationLoading) {
+        cubit.state is! OrderPaginationLoading &&
+        canLoadMore) {
       cubit.getOrders(
         orderStatus: widget.isCurrent ? 0 : 1,
         page: widget.isCurrent ? cubit.currentPageCurrent + 1 : cubit.currentPageOld + 1,
@@ -73,47 +77,71 @@ class _OrderTapListState extends State<OrderTapList> {
                       )),
             ),
           ));
-        } else if (state is OrderSuccess) {
+        }
+
+        if (state is OrderSuccess) {
           if (orders.isEmpty) {
-            return _buildEmptyOrderWidget(context, homeCubit);
+            return RefreshIndicator(
+              color: AppColor.mainAppColor,
+              onRefresh: () async {
+                cubit.getOrders(
+                  orderStatus: widget.isCurrent ? 0 : 1,
+                  page: 1,
+                  isLoadMore: false,
+                );
+              },
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: _buildEmptyOrderWidget(context, homeCubit),
+              ),
+            );
           }
         }
 
-        return ListView.separated(
-          separatorBuilder: (context, index) => const SizedBox(height: 7),
-          controller: _scrollController,
-          itemCount: orders.length + (isPaginating ? 1 : 0),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          itemBuilder: (context, index) {
-            if (index < orders.length) {
-              final order = orders[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => OrderDetailsScreen(
-                        orderId: order.id ?? 0,
-                        isCurrent: widget.isCurrent,
-                      ),
-                    ),
-                  );
-                },
-                child: OrderCardWidget(order: order),
-              );
-            } else {
-              return const Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: Center(
-                  child: CustomShimmer(
-                    height: 120,
-                    width: double.infinity,
-                    radius: 15,
-                  ),
-                ),
-              );
-            }
+        return RefreshIndicator(
+          onRefresh: () async {
+            cubit.getOrders(
+              orderStatus: widget.isCurrent ? 0 : 1,
+              page: 1,
+              isLoadMore: false,
+            );
           },
+          child: ListView.separated(
+            separatorBuilder: (context, index) => const SizedBox(height: 7),
+            controller: _scrollController,
+            itemCount: orders.length + (isPaginating ? 1 : 0),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemBuilder: (context, index) {
+              if (index < orders.length) {
+                final order = orders[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => OrderDetailsScreen(
+                          orderId: order.id ?? 0,
+                          isCurrent: widget.isCurrent,
+                        ),
+                      ),
+                    );
+                  },
+                  child: OrderCardWidget(order: order),
+                );
+              } else {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Center(
+                    child: CustomShimmer(
+                      height: 120,
+                      width: double.infinity,
+                      radius: 15,
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
         );
       },
     );

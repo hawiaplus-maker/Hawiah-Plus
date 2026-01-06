@@ -143,6 +143,12 @@ class AppRouters {
             ordersModel: args,
           ),
         );
+      case IndividualToCompanyTransfareProfile.routeName:
+        return MaterialPageRoute(
+          builder: (_) => IndividualToCompanyTransfareProfile(
+            args: args,
+          ),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const ValidateMobileScreen(),

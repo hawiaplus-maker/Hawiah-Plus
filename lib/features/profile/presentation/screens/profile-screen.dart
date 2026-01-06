@@ -36,6 +36,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             nationalId: "",
             city: "",
             id: 0,
+            type: "",
+            userCompany: null,
           )
         : profileCubit.user;
     log('user profile screen build, isGuest: $isGuest, user: $user');

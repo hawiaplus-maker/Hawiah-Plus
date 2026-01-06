@@ -10,13 +10,16 @@ import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart'
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_toast.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
+import 'package:hawiah_client/core/utils/validation_methods.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
-import 'package:hawiah_client/features/profile/presentation/widgets/custom_dialog_widget.dart';
+import 'package:hawiah_client/features/profile/presentation/screens/individual_to_company_transfare_profile.dart';
 import 'package:hawiah_client/injection_container.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -29,13 +32,17 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  final _controllers = {
-    "name": TextEditingController(),
-    "mobile": TextEditingController(),
-  };
-
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController taxNumberController = TextEditingController();
+  final TextEditingController commercialRegistration = TextEditingController();
   final _picker = ImagePicker();
   File? _pickedImage;
+  File? _pickedTaxNumberImage;
+  File? _pickedCommercialRegistrationImage;
 
   Future<void> _pickImage() async {
     final picked = await _picker.pickImage(source: ImageSource.gallery);
@@ -47,19 +54,16 @@ class _UserProfileState extends State<UserProfile> {
   @override
   void initState() {
     final cubit = sl<ProfileCubit>();
-    if (cubit.user != null) {
-      _controllers['name']!.text = cubit.user!.name;
-      _controllers['mobile']!.text = cubit.user!.mobile;
-    }
+    if (cubit.user != null) {}
     super.initState();
   }
 
   void _onUpdatePressed() async {
     final cubit = sl<ProfileCubit>();
     await cubit.updateProfile(
-      name: _controllers['name']!.text,
-      mobile: _controllers['mobile']!.text,
-      email: '',
+      name: nameController.text,
+      mobile: mobileController.text,
+      email: emailController.text,
       imageFile: _pickedImage,
     );
   }
@@ -75,7 +79,10 @@ class _UserProfileState extends State<UserProfile> {
       child: Stack(
         alignment: Alignment.bottomRight,
         children: [
-          CircleAvatar(radius: 60, backgroundImage: imageProvider),
+          CircleAvatar(
+              radius: 62,
+              backgroundColor: AppColor.mainAppColor,
+              child: CircleAvatar(radius: 60, backgroundImage: imageProvider)),
           CircleAvatar(
             radius: 14,
             backgroundColor: AppColor.mainAppColor,
@@ -86,16 +93,6 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
-  List<Widget> _buildTextFields() => _controllers.entries
-      .map((entry) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: CustomTextField(
-              title: entry.key.tr(),
-              controller: entry.value,
-            ),
-          ))
-      .toList();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,31 +101,10 @@ class _UserProfileState extends State<UserProfile> {
         bloc: sl<ProfileCubit>(),
         listener: (context, state) async {
           if (state is ProfileUpdateSuccess) {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (ctx) => CustomConfirmDialog(
-                content: AppLocaleKey.saveChangesSuccess.tr(),
-                image: AppImages.successGif,
-              ),
-            );
-
-            await Future.delayed(const Duration(seconds: 5));
-            if (mounted) Navigator.pop(context);
-          }
-
-          if (state is ProfileError) {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (ctx) => CustomConfirmDialog(
-                content: AppLocaleKey.somethingWentWrong.tr(),
-                image: AppImages.errorSvg,
-              ),
-            );
-
-            await Future.delayed(const Duration(seconds: 5));
-            if (mounted) Navigator.pop(context);
+            CommonMethods.showToast(message: AppLocaleKey.saveChangesSuccess.tr());
+          } else if (state is ProfileError) {
+            CommonMethods.showToast(
+                message: AppLocaleKey.somethingWentWrong.tr(), type: ToastType.error);
           }
         },
         builder: (context, state) {
@@ -140,26 +116,91 @@ class _UserProfileState extends State<UserProfile> {
           }
 
           return SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              child: Column(
-                children: [
-                  const SizedBox(height: 40),
-                  _buildProfileImage(user.image),
-                  const SizedBox(height: 30),
-                  ..._buildTextFields(),
-                  Gap(40.h),
-                  state is ProfileUpdating
-                      ? const CustomLoading()
-                      : CustomButton(
-                          onPressed: _onUpdatePressed,
-                          child: Text(
-                            AppLocaleKey.saveChanges.tr(),
-                            style: AppTextStyle.text16_600.copyWith(color: AppColor.whiteColor),
-                          ),
-                        ),
-                  const SizedBox(height: 20),
-                ],
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 40),
+                    Center(child: _buildProfileImage(user.image)),
+                    const SizedBox(height: 30),
+                    Gap(20.h),
+                    CustomTextField(
+                      controller: nameController,
+                      title: AppLocaleKey.name.tr(),
+                      validator: ValidationMethods.validateName,
+                    ),
+                    Gap(20.h),
+                    CustomTextField(
+                      controller: mobileController,
+                      title: AppLocaleKey.phoneNumber.tr(),
+                      validator: ValidationMethods.validatePhone,
+                    ),
+                    Gap(20.h),
+                    CustomTextField(
+                      controller: emailController,
+                      title: AppLocaleKey.email.tr(),
+                      validator: ValidationMethods.validateEmail,
+                    ),
+                    Gap(20.h),
+                    if (user.type == 'company') ...[
+                      CustomTextField(
+                        controller: taxNumberController,
+                        title: AppLocaleKey.taxNumber.tr(),
+                        validator: ValidationMethods.validateEmptyField,
+                      ),
+                      Gap(20.h),
+                      CustomTextField(
+                        controller: commercialRegistration,
+                        title: AppLocaleKey.commercialRegistration.tr(),
+                        validator: ValidationMethods.validateEmptyField,
+                      ),
+                      Gap(20.h),
+                    ],
+                    CustomTextField(
+                      validator: (v) => ValidationMethods.validatePassword(passwordController.text),
+                      controller: passwordController,
+                      title: 'password'.tr(),
+                      hintText: 'enter_your_password'.tr(),
+                      isPassword: true,
+                    ),
+                    SizedBox(height: 20),
+                    CustomTextField(
+                      validator: (v) =>
+                          ValidationMethods.validateConfirmPassword(v, passwordController.text),
+                      controller: confirmPasswordController,
+                      title: 'confirm_password'.tr(),
+                      hintText: 'enter_your_password'.tr(),
+                      isPassword: true,
+                    ),
+                    Gap(20.h),
+                    if (user.type != 'company')
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, IndividualToCompanyTransfareProfile.routeName,
+                                arguments: IndividualToCompanyTransfareProfileArgs(
+                                  name: user.name,
+                                  mobile: user.mobile,
+                                  email: user.email,
+                                ));
+                          },
+                          child: Text(AppLocaleKey.convertToCompanyUser.tr(),
+                              style:
+                                  AppTextStyle.text14_400.copyWith(color: AppColor.mainAppColor))),
+                    Gap(40.h),
+                    CustomButton(
+                      isLoading: state is ProfileUpdating,
+                      onPressed: _onUpdatePressed,
+                      child: Text(
+                        AppLocaleKey.saveChanges.tr(),
+                        style: AppTextStyle.text16_600.copyWith(color: AppColor.whiteColor),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
           );
@@ -170,9 +211,13 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   void dispose() {
-    for (final controller in _controllers.values) {
-      controller.dispose();
-    }
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    nameController.dispose();
+    mobileController.dispose();
+    emailController.dispose();
+    taxNumberController.dispose();
+    commercialRegistration.dispose();
     super.dispose();
   }
 }

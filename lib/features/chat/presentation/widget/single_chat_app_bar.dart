@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/extension/context_extension.dart';
-import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
@@ -58,7 +56,7 @@ class SingleChatAppBar extends StatelessWidget {
                     height: 40,
                     width: 40,
                     radius: 30,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                   ),
                   if (snapshot.hasData &&
                       snapshot.data!.data() != null &&
@@ -101,18 +99,18 @@ class SingleChatAppBar extends StatelessWidget {
           centerTitle: false,
           leadingWidth: 70,
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: SvgPicture.asset(AppImages.phoneCallIcon),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: SvgPicture.asset(AppImages.videoCallIcon),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.more_vert, color: AppColor.lightGreyColor),
-            ),
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: SvgPicture.asset(AppImages.phoneCallIcon),
+            // ),
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: SvgPicture.asset(AppImages.videoCallIcon),
+            // ),
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: Icon(Icons.more_vert, color: AppColor.lightGreyColor),
+            // ),
           ],
         );
       },

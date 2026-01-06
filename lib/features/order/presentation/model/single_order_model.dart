@@ -66,6 +66,7 @@ class SingleOrderData {
   String? invoice;
   String? support;
   int? driverId;
+  List<ContainerImage>? containerImages;
 
   SingleOrderData({
     this.id,
@@ -106,6 +107,7 @@ class SingleOrderData {
     this.invoice,
     this.support,
     this.driverId,
+    this.containerImages,
   });
 
   factory SingleOrderData.fromJson(Map<String, dynamic> json) => SingleOrderData(
@@ -153,6 +155,8 @@ class SingleOrderData {
         invoice: json['invoice'],
         support: json['support'],
         driverId: json['driver_id'],
+        containerImages:
+            (json['container_images'] as List?)?.map((v) => ContainerImage.fromJson(v)).toList(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -194,7 +198,32 @@ class SingleOrderData {
         'invoice': invoice,
         'support': support,
         'driver_id': driverId,
+        'container_images': containerImages?.map((v) => v.toJson()).toList(),
       };
+}
+
+class ContainerImage {
+  final int id;
+  final String url;
+
+  ContainerImage({
+    required this.id,
+    required this.url,
+  });
+
+  factory ContainerImage.fromJson(Map<String, dynamic> json) {
+    return ContainerImage(
+      id: json['id'],
+      url: json['url'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'url': url,
+    };
+  }
 }
 
 class LocalizedTitle {

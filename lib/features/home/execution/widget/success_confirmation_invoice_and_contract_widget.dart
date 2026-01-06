@@ -30,7 +30,7 @@ class SuccessConfirmationInvoiceAndContractWidget extends StatelessWidget {
               DocumentAction(
                 icon: Icons.remove_red_eye,
                 title: AppLocaleKey.viewInvoice.tr(),
-                launchMode: LaunchMode.inAppWebView,
+                launchMode: LaunchMode.externalApplication,
               ),
               DocumentAction(
                 icon: Icons.download,
@@ -52,7 +52,7 @@ class SuccessConfirmationInvoiceAndContractWidget extends StatelessWidget {
               DocumentAction(
                 icon: Icons.remove_red_eye,
                 title: AppLocaleKey.viewContract.tr(),
-                launchMode: LaunchMode.inAppWebView,
+                launchMode: LaunchMode.externalApplication,
               ),
               DocumentAction(
                 icon: Icons.download,

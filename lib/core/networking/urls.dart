@@ -15,11 +15,11 @@ class Urls {
 
   //! ===================> Live Api <=================== !//
   static const String oldbaseUrl = 'https://hawia-sa.com/api/';
-  static const String baseUrl = 'https://hawiaplus.com/api/';
+  // static const String baseUrl = 'https://hawiaplus.com/api/';
+  static const String baseUrl = 'https://testing.hawiaplus.com/api/';
   static const String login = '${baseUrl}login';
   static const String validateMobile = '${baseUrl}validate-mobile';
   static const String settings = '${baseUrl}settings';
-
   static const String logout = '${baseUrl}logout';
   static const String deleteAccount = '${baseUrl}profile';
   static const String register = '${baseUrl}register';

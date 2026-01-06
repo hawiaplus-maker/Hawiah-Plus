@@ -21,6 +21,7 @@ import 'package:hawiah_client/features/location/presentation/screens/map_screen.
 import 'package:hawiah_client/features/location/presentation/screens/time_period_screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/payment_web_view.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/faq-screen.dart';
+import 'package:hawiah_client/features/profile/presentation/screens/individual_to_company_transfare_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/language-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/privacy-policy-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/support_screen.dart';

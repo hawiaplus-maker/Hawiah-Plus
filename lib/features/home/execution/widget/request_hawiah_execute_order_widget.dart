@@ -40,8 +40,10 @@ class RequestHawiahExecuteOrderWidget extends StatelessWidget {
                   fromDate:
                       DateFormat('yyyy-MM-dd', 'en').format(homeCubit.rangeStart ?? DateTime.now()),
                   fromTime: DateFormat('HH:mm', 'en').format(homeCubit.fromTime ?? DateTime.now()),
+                  images: homeCubit.deliveryLocationImages,
                   onSuccess: (order) {
                     homeCubit.selectedIndex = -1;
+                    homeCubit.deliveryLocationImages.clear();
                     NavigatorMethods.pushNamed(context, OrderReviewDetailes.routeName,
                         arguments: order);
                   });

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +13,7 @@ import 'package:hawiah_client/features/home/presentation/model/services_model.da
 import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/slider_model.dart';
 import 'package:hawiah_client/features/location/presentation/model/quick_selection_card_model.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'home-state.dart';
@@ -47,7 +50,25 @@ class HomeCubit extends Cubit<HomeState> {
   void clearRanges() {
     rangeStart = null;
     rangeEnd = null;
+    rangeEnd = null;
     fromTime = null;
+    deliveryLocationImages.clear();
+  }
+
+  List<File> deliveryLocationImages = [];
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> pickDeliveryLocationImages() async {
+    final List<XFile> images = await _picker.pickMultiImage();
+    if (images.isNotEmpty) {
+      deliveryLocationImages.addAll(images.map((e) => File(e.path)).toList());
+      emit(HomeChange());
+    }
+  }
+
+  void removeDeliveryLocationImage(int index) {
+    deliveryLocationImages.removeAt(index);
+    emit(HomeChange());
   }
 
   changeRebuild() {

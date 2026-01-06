@@ -294,4 +294,17 @@ class AppLocaleKey {
   static const deleteAccount = 'deleteAccount';
   static const deleteAccountContent = 'deleteAccountContent';
   static const selectCityNotFound = 'selectCityNotFound';
+  static const addDeliveryLocationImages = 'addDeliveryLocationImages';
+  static const convertToCompanyUser = 'convertToCompanyUser';
+  static const email = 'email';
+  static const failedToReadMessages = 'failedToReadMessages';
+  static const orderIdNotInitialized = 'orderIdNotInitialized';
+  static const driverName = 'driverName';
+  static const driverImage = 'driverImage';
+  static const clientName = 'clientName';
+  static const clientImage = 'clientImage';
+  static const failedToSendMessage = 'failedToSendMessage';
+  static const failedToLoadChats = 'failedToLoadChats';
+  static const imagesFromDeliveryLocation = 'imagesFromDeliveryLocation';
+  static const register = 'register';
 }

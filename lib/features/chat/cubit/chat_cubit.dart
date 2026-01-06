@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/features/chat/model/chat_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -51,7 +53,7 @@ class ChatCubit extends Cubit<ChatState> {
 
       emit(ChatLoaded(messages));
     } catch (e) {
-      emit(ChatError('فشل قراءة الرسائل: $e'));
+      emit(ChatError('${AppLocaleKey.failedToReadMessages.tr()}: $e'));
     }
   }
 
@@ -66,7 +68,7 @@ class ChatCubit extends Cubit<ChatState> {
     required String receiverImage,
   }) async {
     if (_orderId == null) {
-      emit(ChatError('Order ID not initialized'));
+      emit(ChatError(AppLocaleKey.orderIdNotInitialized.tr()));
       return;
     }
 
@@ -87,13 +89,13 @@ class ChatCubit extends Cubit<ChatState> {
         'last_message_time': FieldValue.serverTimestamp(),
         'driver_id': senderType == 'driver' ? senderId : receiverId,
         'user_id': senderType == 'user' ? senderId : receiverId,
-        'driver_name': senderType == 'driver' ? 'اسم السواق' : receiverName,
-        'driver_image': senderType == 'driver' ? 'صورة السواق' : receiverImage,
-        'user_name': senderType == 'user' ? 'اسم العميل' : receiverName,
-        'user_image': senderType == 'user' ? 'صورة العميل' : receiverImage,
+        'driver_name': senderType == 'driver' ? AppLocaleKey.driverName.tr() : receiverName,
+        'driver_image': senderType == 'driver' ? AppLocaleKey.driverImage.tr() : receiverImage,
+        'user_name': senderType == 'user' ? AppLocaleKey.clientName.tr() : receiverName,
+        'user_image': senderType == 'user' ? AppLocaleKey.clientImage.tr() : receiverImage,
       }, SetOptions(merge: true));
     } catch (e) {
-      emit(ChatError('فشل إرسال الرسالة: $e'));
+      emit(ChatError('${AppLocaleKey.failedToSendMessage.tr()}: $e'));
       rethrow;
     }
   }
@@ -131,7 +133,7 @@ class ChatCubit extends Cubit<ChatState> {
       emit(RecentChatsLoaded(chats));
       if (chats.isEmpty) emit(ChatEmpty());
     }, onError: (error) {
-      emit(ChatError('فشل تحميل المحادثات: $error'));
+      emit(ChatError('${AppLocaleKey.failedToLoadChats.tr()}: $error'));
     });
   }
 

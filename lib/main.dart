@@ -19,7 +19,6 @@ final bool isGuest = HiveMethods.getToken() == null;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await AppInjector.init();
   await EasyLocalization.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
