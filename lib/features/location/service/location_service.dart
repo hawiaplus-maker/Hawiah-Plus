@@ -95,7 +95,7 @@ class LocationService {
             p.subLocality,
             city,
             p.postalCode,
-          ].where((v) => v != null && v!.isNotEmpty).join(", ");
+          ].where((v) => v != null && v.isNotEmpty).join(", ");
         }
       } catch (e) {
         print("Reverse geocode error: $e");

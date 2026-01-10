@@ -54,7 +54,13 @@ class _UserProfileState extends State<UserProfile> {
   @override
   void initState() {
     final cubit = sl<ProfileCubit>();
-    if (cubit.user != null) {}
+    if (cubit.user != null) {
+      nameController.text = cubit.user!.name;
+      mobileController.text = cubit.user!.mobile;
+      emailController.text = cubit.user!.email;
+      taxNumberController.text = cubit.user!.userCompany?.taxNumber ?? "";
+      commercialRegistration.text = cubit.user!.userCompany?.commercialRecord ?? "";
+    }
     super.initState();
   }
 
@@ -65,6 +71,11 @@ class _UserProfileState extends State<UserProfile> {
       mobile: mobileController.text,
       email: emailController.text,
       imageFile: _pickedImage,
+      accountType: cubit.user?.type,
+      taxNumber: taxNumberController.text,
+      commercialRegistration: commercialRegistration.text,
+      password: passwordController.text,
+      password_confirmation: confirmPasswordController.text,
     );
   }
 

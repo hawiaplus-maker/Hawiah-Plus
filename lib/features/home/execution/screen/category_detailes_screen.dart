@@ -59,14 +59,8 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
 
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-                child: GridView.builder(
+                child: ListView.builder(
                   itemCount: services.length,
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200.w,
-                    crossAxisSpacing: 10.w,
-                    mainAxisSpacing: 10.h,
-                    childAspectRatio: .53,
-                  ),
                   itemBuilder: (context, index) {
                     return CategoryCardWidget(
                       homeCubit: cubit,

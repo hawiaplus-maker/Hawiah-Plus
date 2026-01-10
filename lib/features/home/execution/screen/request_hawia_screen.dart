@@ -14,7 +14,6 @@ import 'package:hawiah_client/core/utils/date_methods.dart';
 import 'package:hawiah_client/features/home/execution/widget/delivery_location_images_container.dart';
 import 'package:hawiah_client/features/home/execution/widget/request_hawiah_execute_order_widget.dart';
 import 'package:hawiah_client/features/home/presentation/model/nearby_service-provider_model.dart';
-import 'package:hawiah_client/features/location/presentation/widget/quick_selection_card_widget.dart';
 
 import '../../presentation/controllers/home-cubit/home-cubit.dart';
 import '../../presentation/controllers/home-cubit/home-state.dart';
@@ -108,7 +107,7 @@ class _RequestHawiahScreenState extends State<RequestHawiahScreen> {
                             onSuccess: (selectedDate) {
                               homeCubit.rangeStart = selectedDate;
                               homeCubit.selectedIndex = -1;
-                              DateMethods.pickTime(
+                              DateMethods.pickHourOnly(
                                 context,
                                 initialDate: DateTime.now(),
                                 onSuccess: (selectedTime) {
@@ -173,38 +172,39 @@ class _RequestHawiahScreenState extends State<RequestHawiahScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20.h),
-                  Text(
-                    AppLocaleKey.requestLater.tr(),
-                    style: AppTextStyle.text18_500,
-                  ),
-                  Gap(20.h),
-                  GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 2.4,
-                    ),
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(0),
-                    itemCount: homeCubit.quickList.length,
-                    itemBuilder: (context, index) {
-                      final item = homeCubit.quickList[index];
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            homeCubit.selectedIndex = index;
-                          });
-                          homeCubit.rangeStart = DateTime.now().add(Duration(days: item.days!));
-                        },
-                        child: QuickSelectionCard(
-                          day: item.day ?? "",
-                          isSelected: homeCubit.selectedIndex == index,
-                        ),
-                      );
-                    },
-                  ),
+                  // SizedBox(height: 20.h),
+                  // Text(
+                  //   AppLocaleKey.requestLater.tr(),
+                  //   style: AppTextStyle.text18_500,
+                  // ),
+                  // Gap(20.h),
+                  // GridView.builder(
+                  //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  //     crossAxisCount: 3,
+                  //     crossAxisSpacing: 10,
+                  //     mainAxisSpacing: 10,
+                  //     childAspectRatio: 2.4,
+                  //   ),
+                  //   shrinkWrap: true,
+                  //   padding: const EdgeInsets.all(0),
+                  //   itemCount: homeCubit.quickList.length,
+                  //   itemBuilder: (context, index) {
+                  //     final item = homeCubit.quickList[index];
+                  //     return GestureDetector(
+                  //       onTap: () {
+                  //         setState(() {
+                  //           homeCubit.selectedIndex = index;
+                  //         });
+                  //         homeCubit.rangeStart = DateTime.now().add(Duration(days: item.days!));
+                  //       },
+                  //       child: QuickSelectionCard(
+                  //         day: item.day ?? "",
+                  //         isSelected: homeCubit.selectedIndex == index,
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
+
                   Gap(20.h),
                   Text(
                     AppLocaleKey.addDeliveryLocationImages.tr(),

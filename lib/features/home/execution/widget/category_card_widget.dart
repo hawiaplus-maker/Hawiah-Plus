@@ -42,13 +42,19 @@ class CategoryCardWidget extends StatelessWidget {
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
+                Stack(
+                  children: [
+                    CustomNetworkImage(
+                      imageUrl: homeCubit.showCategories?.message?.services?[index].image ?? "",
+                      height: 95.h,
+                      width: 95.w,
+                      fit: BoxFit.fill,
+                    ),
+                    Container(
                       height: 20.h,
                       width: 37.w,
                       decoration: BoxDecoration(
@@ -59,75 +65,80 @@ class CategoryCardWidget extends StatelessWidget {
                         style: AppTextStyle.text10_400.copyWith(color: AppColor.whiteColor),
                         maxLines: 1,
                       ),
-                    )),
-                SizedBox(height: 20.h),
-                Center(
-                  child: CustomNetworkImage(
-                    imageUrl: homeCubit.showCategories?.message?.services?[index].image ?? "",
-                    height: 95.h,
-                    width: 95.w,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                Text(
-                  homeCubit.showCategories?.message?.services?[index].title ?? "",
-                  style: AppTextStyle.text14_500,
-                  maxLines: 1,
-                ),
-                SizedBox(height: 5.h),
-                Text(
-                  homeCubit.showCategories?.message?.services?[index].description ?? "",
-                  style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
-                  maxLines: 1,
-                ),
-                SizedBox(height: 10.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppLocaleKey.dimensions.tr(),
-                      style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
-                    ),
-                    Text(
-                      homeCubit.showCategories?.message?.services?[index].measurements ?? "",
-                      style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
                     ),
                   ],
                 ),
                 SizedBox(height: 10.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppLocaleKey.Capacity.tr(),
-                      style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      ' ${homeCubit.showCategories?.message?.services?[index].size.toString() ?? ""}${AppLocaleKey.cubicMeter.tr()} ',
-                      style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                CustomButton(
-                  height: 30.h,
-                  radius: 5,
-                  child: Text(
-                    AppLocaleKey.requestnow.tr(),
-                    style: AppTextStyle.text10_500
-                        .copyWith(color: AppColor.whiteColor, fontWeight: FontWeight.bold),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            homeCubit.showCategories?.message?.services?[index].title ?? "",
+                            style: AppTextStyle.text14_500,
+                            maxLines: 1,
+                          ),
+                          CustomButton(
+                            height: 25.h,
+                            width: 70.w,
+                            radius: 10,
+                            child: Text(
+                              AppLocaleKey.requestnow.tr(),
+                              style: AppTextStyle.text10_500.copyWith(
+                                  color: AppColor.whiteColor, fontWeight: FontWeight.bold),
+                            ),
+                            color: AppColor.mainAppColor,
+                            onPressed: () {
+                              NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
+                                  arguments: ChooseAddressScreenArgs(
+                                    serviceProviderId:
+                                        homeCubit.showCategories?.message?.services?[index].id ?? 0,
+                                  ));
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5.h),
+                      Text(
+                        homeCubit.showCategories?.message?.services?[index].description ?? "",
+                        style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
+                        maxLines: 4,
+                      ),
+                      SizedBox(height: 10.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            AppLocaleKey.dimensions.tr(),
+                            style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
+                          ),
+                          Text(
+                            homeCubit.showCategories?.message?.services?[index].measurements ?? "",
+                            style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            AppLocaleKey.Capacity.tr(),
+                            style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            ' ${homeCubit.showCategories?.message?.services?[index].size.toString() ?? ""}${AppLocaleKey.cubicMeter.tr()} ',
+                            style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  color: AppColor.mainAppColor,
-                  onPressed: () {
-                    NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
-                        arguments: ChooseAddressScreenArgs(
-                          serviceProviderId:
-                              homeCubit.showCategories?.message?.services?[index].id ?? 0,
-                        ));
-                  },
                 )
               ],
             ),

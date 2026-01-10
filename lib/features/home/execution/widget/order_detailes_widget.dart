@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_image/custom_network_image.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
@@ -27,14 +25,14 @@ class OrderDetailesWidget extends StatelessWidget {
             AppLocaleKey.orderDetails.tr(),
             style: AppTextStyle.text16_700,
           ),
-          SizedBox(height: 10),
-          Center(
-            child: CustomNetworkImage(
-              imageUrl: ordersModel.image ?? '',
-              height: 120.h,
-              width: MediaQuery.of(context).size.width * 0.6,
-            ),
-          ),
+          // SizedBox(height: 10),
+          // Center(
+          //   child: CustomNetworkImage(
+          //     imageUrl: ordersModel.image ?? '',
+          //     height: 120.h,
+          //     width: MediaQuery.of(context).size.width * 0.6,
+          //   ),
+          // ),
           ListTile(
             dense: true,
             contentPadding: EdgeInsets.zero,

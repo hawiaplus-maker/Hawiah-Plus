@@ -1,6 +1,10 @@
 class AppLocaleKey {
   static const appName = 'appName';
   static const confirm = 'confirm';
+  static const pickHour = 'pickHour';
+  static const done = 'done';
+  static const am = 'am';
+  static const pm = 'pm';
   static const String validateName = 'validateName';
   static const String validateEmail = 'validateEmail';
   static const String validateEmailStructure = 'validateEmailStructure';

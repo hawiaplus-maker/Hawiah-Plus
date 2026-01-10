@@ -413,6 +413,9 @@
   "failedToSendMessage": "فشل إرسال الرسالة",
   "failedToLoadChats": "فشل تحميل المحادثات",
   "imagesFromDeliveryLocation":"صور من موقع التسليم",
-  "register":"تسجيل"
-
+  "register":"تسجيل",
+  "pickHour": "اختر الساعة",
+  "done": "تم",
+  "am": "صباحاً",
+  "pm": "مساءً"
 }

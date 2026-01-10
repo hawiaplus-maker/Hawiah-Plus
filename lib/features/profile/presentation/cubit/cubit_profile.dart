@@ -7,7 +7,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
-import 'package:hawiah_client/features/authentication/presentation/cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/model/question_model.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/model/user_profile_model.dart';
@@ -92,7 +91,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     String? commercialRegistration,
     String? password,
     String? password_confirmation,
-    AccountType? accountType,
+    String? accountType,
   }) async {
     emit(ProfileUpdating());
 
@@ -103,7 +102,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         'email': email,
         if (password != null) 'password': password,
         if (password_confirmation != null) 'password_confirmation': password_confirmation,
-        if (accountType == AccountType.company) ...{
+        if (accountType == "company") ...{
           if (taxNumber != null) 'tax_number': taxNumber,
           if (commercialRegistration != null) 'commercial_registration': commercialRegistration,
         }
@@ -115,7 +114,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           filename: "profile.jpg",
         );
       }
-      if (accountType == AccountType.company) {
+      if (accountType == "company") {
         if (taxNumberFile != null) {
           data['tax_number_file'] = await MultipartFile.fromFile(
             taxNumberFile.path,

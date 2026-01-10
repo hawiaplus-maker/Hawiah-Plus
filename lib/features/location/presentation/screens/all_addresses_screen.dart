@@ -17,7 +17,6 @@ import 'package:hawiah_client/features/authentication/presentation/screens/valid
 import 'package:hawiah_client/features/home/presentation/widgets/location-item-widget.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_state.dart';
-import 'package:hawiah_client/features/location/presentation/screens/add-new-location-screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/location-map-screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/map_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
@@ -128,9 +127,8 @@ class AllAddressesScreen extends StatelessWidget {
                               prefixIcon: SvgPicture.asset(AppImages.mapPinPlusIcon),
                               text: "add_new_address".tr(),
                               onPressed: () => NavigatorMethods.pushNamed(
-                                      context, AddNewLocationScreen.routeName,
-                                      arguments: AddNewLocationScreenArgs(
-                                    onAddressAdded: () {
+                                      context, MapScreen.routeName, arguments: MapScreenArgs(
+                                    onLocationSelected: (lat, lng, city, fullAddress) {
                                       addressCubit.getaddresses();
                                     },
                                   ))),

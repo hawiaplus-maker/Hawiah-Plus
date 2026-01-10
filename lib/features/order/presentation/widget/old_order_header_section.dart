@@ -75,7 +75,7 @@ class OldOrderHeaderSection extends StatelessWidget {
                   SizedBox(height: 5.h),
                   Row(
                     children: [
-                      Image.asset(AppImages.requestName, height: 24.h, width: 24.w),
+                      Image.asset(AppImages.codeImage, height: 24.h, width: 24.w),
                       RichText(
                         text: TextSpan(
                           children: [
@@ -99,7 +99,7 @@ class OldOrderHeaderSection extends StatelessWidget {
                   SizedBox(height: 5.h),
                   Row(
                     children: [
-                      Image.asset(AppImages.requestCode, height: 24.h, width: 24.w),
+                      Image.asset(AppImages.serviceProviderImage, height: 24.h, width: 24.w),
                       Text(
                         data.data?.serviceProvider ?? '',
                         style: AppTextStyle.text14_500.copyWith(
@@ -116,20 +116,8 @@ class OldOrderHeaderSection extends StatelessWidget {
                         style: AppTextStyle.text14_500,
                       ),
                       Gap(5.w),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: Color(0xffF3E8FF),
-                          borderRadius: BorderRadius.circular(11),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(data.data?.otp.toString() ?? '',
-                                style: AppTextStyle.text12_400.copyWith(color: Color(0xff6E11B0))),
-                          ],
-                        ),
-                      ),
+                      Text(data.data?.otp.toString() ?? '',
+                          style: AppTextStyle.text12_400.copyWith(color: AppColor.redColor)),
                     ],
                   ),
                 ],

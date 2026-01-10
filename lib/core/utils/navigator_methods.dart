@@ -31,6 +31,17 @@ class NavigatorMethods {
     );
   }
 
+  static void pushNamedAndRemoveUntilRoute(
+      BuildContext context, String newRouteName, String untilRouteName,
+      {dynamic arguments}) {
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      newRouteName,
+      ModalRoute.withName(untilRouteName),
+      arguments: arguments,
+    );
+  }
+
   static Future<T?> showAppDialog<T>(
     BuildContext context,
     Widget dialog, {
