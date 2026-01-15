@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
+import 'package:hawiah_client/core/networking/snapchat_service.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
@@ -232,6 +233,7 @@ class AuthCubit extends Cubit<AuthState> {
         HiveMethods.updateUserId(data['id']);
 
         await sl<ProfileCubit>().fetchProfile();
+        SnapchatService.instance.trackLogin(email: emailController.text, phoneNumber: phoneNumber);
         emit(AuthSuccess(message: message));
       } else {
         emit(AuthError(message));
@@ -346,6 +348,8 @@ class AuthCubit extends Cubit<AuthState> {
         if (response.state == ResponseState.complete && response.data['success'] == true) {
           HiveMethods.updateToken(response.data['data']['api_token']);
           await sl<ProfileCubit>().fetchProfile();
+          SnapchatService.instance
+              .trackSignUp(email: emailController.text, phoneNumber: phoneNumber);
           emit(RegisterSuccess(
             message: response.data['message'] ?? '',
             data: response.data['data'] as Map<String, dynamic>,
@@ -373,6 +377,8 @@ class AuthCubit extends Cubit<AuthState> {
         if (response.state == ResponseState.complete && response.data['success'] == true) {
           HiveMethods.updateToken(response.data['data']['api_token']);
           await sl<ProfileCubit>().fetchProfile();
+          SnapchatService.instance
+              .trackSignUp(email: emailController.text, phoneNumber: phoneNumber);
           emit(RegisterSuccess(
             message: response.data['message'] ?? '',
             data: response.data['data'] as Map<String, dynamic>,
@@ -524,6 +530,7 @@ class AuthCubit extends Cubit<AuthState> {
     );
 
     if (response.state == ResponseState.complete) {
+      SnapchatService.instance.trackSignUp(email: emailController.text, phoneNumber: phoneNumber);
       emit(CompleteRegisterSuccess(
         message: response.data['message'] ?? '',
         data: response.data['data'] as Map<String, dynamic>,

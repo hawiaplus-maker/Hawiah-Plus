@@ -76,6 +76,7 @@ dependencies:
   new_version_plus: ^0.1.1
   webview_flutter: ^4.7.0
   rive: ^0.13.18
+  crypto: ^3.0.7
 
 
 dev_dependencies:

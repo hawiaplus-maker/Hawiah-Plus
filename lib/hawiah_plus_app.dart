@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/app_theme.dart';
 import 'package:hawiah_client/core/bloc-config/bloc_providers.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
+import 'package:hawiah_client/core/networking/snapchat_service.dart';
 import 'package:hawiah_client/core/notifications/messaging_config.dart';
 import 'package:hawiah_client/core/routes/app_routers_import.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
@@ -32,6 +33,7 @@ class HawiahPlusApp extends StatefulWidget {
 class _HawiahPlusAppState extends State<HawiahPlusApp> {
   @override
   void initState() {
+    SnapchatService.instance.trackPageView();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeMessaging();
     });

@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
+import 'package:hawiah_client/core/networking/snapchat_service.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
@@ -287,11 +288,18 @@ class OrderCubit extends Cubit<OrderState> {
     );
     NavigatorMethods.loadingOff();
     if (response.state == ResponseState.complete) {
+      final order =
+          response.data['data'] != null ? OrderDetailsModel.fromJson(response.data['data']) : null;
+      if (order != null) {
+        SnapchatService.instance.trackPurchase(
+          price: double.tryParse(order.totalPrice ?? '0'),
+          phoneNumber: order.userMobile,
+        );
+      }
       CommonMethods.showToast(
         message: response.data['message'] ?? "تم انشاء الطلب بنجاح",
       );
-      onSuccess.call(
-          response.data['data'] != null ? OrderDetailsModel.fromJson(response.data['data']) : null);
+      onSuccess.call(order);
     } else if (response.state == ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(
         message: tr(AppLocaleKey.youMustLogInFirst),
