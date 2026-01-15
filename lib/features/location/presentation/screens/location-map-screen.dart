@@ -3,12 +3,15 @@ import 'dart:async';
 import 'package:defer_pointer/defer_pointer.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/features/location/presentation/widget/selected_location_widget.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
+import 'package:latlong2/latlong.dart';
 
 class LocationScreenArgs {
   final LatLng initialLatLng;
@@ -28,7 +31,7 @@ class LocationScreen extends StatefulWidget {
 
 class _LocationScreenState extends State<LocationScreen> {
   final LocationService locationService = LocationService();
-  final Completer<GoogleMapController> mapController = Completer();
+  final MapController _mapController = MapController();
   late LatLng _currentPosition;
   String _currentAddress = "Getting location...";
   bool _showContainer = true;
@@ -52,23 +55,33 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   void _handleInteraction() {
-    setState(() => _showContainer = false);
-    _startInactivityTimer();
+    if (_showContainer) {
+      setState(() => _showContainer = false);
+    }
+    _inactivityTimer?.cancel();
   }
 
   Future<void> _getAddressFromLocation(LatLng position) async {
-    // Replace with your actual geocoding implementation
+    final data = await locationService.updateLocation(
+      position.latitude,
+      position.longitude,
+      fetchLocality: true,
+    );
     setState(() {
-      _currentAddress = "Lat: ${position.latitude.toStringAsFixed(4)}, "
-          "Lng: ${position.longitude.toStringAsFixed(4)}";
+      _currentPosition = position;
+      _currentAddress = data["locality"] ??
+          "Lat: ${position.latitude.toStringAsFixed(4)}, Lng: ${position.longitude.toStringAsFixed(4)}";
     });
   }
 
-  Future<void> _updateCameraPosition() async {
-    final controller = await mapController.future;
-    await controller.animateCamera(
-      CameraUpdate.newLatLng(_currentPosition),
-    );
+  void _onPositionChanged(MapCamera camera, bool hasGesture) {
+    if (hasGesture) {
+      _currentPosition = camera.center;
+    }
+  }
+
+  Future<void> _onMapIdle() async {
+    await _getAddressFromLocation(_currentPosition);
   }
 
   @override
@@ -85,33 +98,41 @@ class _LocationScreenState extends State<LocationScreen> {
           children: [
             // Map with interaction handling
             Positioned.fill(
-              child: GestureDetector(
-                onTap: () => _handleInteraction(),
-                child: Listener(
-                  onPointerMove: (_) => _handleInteraction(),
-                  child: DeferPointer(
-                    child: GoogleMap(
-                      onMapCreated: (GoogleMapController controller) {
-                        mapController.complete(controller);
-                      },
-                      onTap: (LatLng argument) async {
-                        setState(() => _currentPosition = argument);
-                        await _getAddressFromLocation(argument);
-                        await _updateCameraPosition();
-                      },
-                      onCameraMove: (position) => _handleInteraction(),
-                      initialCameraPosition: CameraPosition(
-                        target: _currentPosition,
-                        zoom: 12,
-                      ),
-                      markers: <Marker>{
-                        Marker(
-                          markerId: const MarkerId("currentLocation"),
-                          position: _currentPosition,
-                        ),
-                      },
-                    ),
+              child: FlutterMap(
+                mapController: _mapController,
+                options: MapOptions(
+                  initialCenter: _currentPosition,
+                  initialZoom: 12,
+                  onPositionChanged: _onPositionChanged,
+                  onMapEvent: (event) {
+                    if (event is MapEventMoveStart) {
+                      _handleInteraction();
+                    } else if (event is MapEventMoveEnd) {
+                      _startInactivityTimer();
+                      _onMapIdle();
+                    }
+                  },
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'com.futuretec.hawiahplus',
+                    keepBuffer: 2,
+                    panBuffer: 1,
+                    tileProvider: CancellableNetworkTileProvider(),
                   ),
+                ],
+              ),
+            ),
+
+            /// 🔹 Center Pin
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 35),
+                child: Image.asset(
+                  AppImages.mapPin,
+                  height: 40,
+                  width: 40,
                 ),
               ),
             ),

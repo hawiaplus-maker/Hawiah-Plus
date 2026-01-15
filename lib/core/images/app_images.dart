@@ -71,6 +71,7 @@ class AppImages {
   static const String closeCircleIcon = 'assets/svg/closeCircleIcon.svg';
   static const String phoneSvg = 'assets/images/phones.png';
   static const String mapPin = 'assets/images/map-pin-pen.png';
+  static const String pinImage = 'assets/images/pin.png';
   static const String mail = 'assets/images/mail.png';
   static const String search = 'assets/svg/Search.svg';
   static const String filter = 'assets/svg/Filter.svg';

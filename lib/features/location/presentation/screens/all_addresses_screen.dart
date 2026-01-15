@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hawiah_client/core/custom_widgets/api_response_widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
@@ -21,6 +20,7 @@ import 'package:hawiah_client/features/location/presentation/screens/location-ma
 import 'package:hawiah_client/features/location/presentation/screens/map_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/state_profile.dart';
+import 'package:latlong2/latlong.dart';
 
 class AllAddressesScreen extends StatelessWidget {
   static const routeName = '/all-addresses-screen';

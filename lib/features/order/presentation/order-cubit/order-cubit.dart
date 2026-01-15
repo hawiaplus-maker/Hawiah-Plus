@@ -377,6 +377,37 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
+  //==================== new empty =====================
+  Future<void> newEmptyOrder({
+    required int orderId,
+    required VoidCallback onSuccess,
+  }) async {
+    NavigatorMethods.loading();
+    FormData body = FormData.fromMap({
+      'order_id': orderId,
+    });
+    final response = await ApiHelper.instance.post(
+      Urls.newEmptyOrder,
+      body: body,
+    );
+    NavigatorMethods.loadingOff();
+    if (response.state == ResponseState.complete) {
+      CommonMethods.showToast(
+        message: response.data['message'] ?? "تم طلب افراغ الحاوية بنجاح",
+      );
+      onSuccess.call();
+    } else if (response.state == ResponseState.unauthorized) {
+      CommonMethods.showAlertDialog(
+        message: tr(AppLocaleKey.youMustLogInFirst),
+      );
+    } else {
+      CommonMethods.showError(
+        message: response.data['message'] ?? 'حدث خطأ',
+        apiResponse: response,
+      );
+    }
+  }
+
   // =================== rate-Diver ====================
   Future<void> rateDiver({
     int? orderId,

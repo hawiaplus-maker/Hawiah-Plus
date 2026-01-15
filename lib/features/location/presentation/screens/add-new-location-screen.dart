@@ -4,15 +4,15 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:hawiah_client/core/custom_widgets/api_response_widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_shimmer.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_select/custom_select_item.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_select/custom_single_select.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
@@ -23,6 +23,7 @@ import 'package:hawiah_client/features/location/presentation/cubit/address_state
 import 'package:hawiah_client/features/location/presentation/model/neighborhood_model.dart';
 import 'package:hawiah_client/features/location/presentation/screens/map_screen.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 
 typedef OnLocationSelected = void Function(
@@ -62,11 +63,12 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController titleController = TextEditingController();
   final LocationService locationService = LocationService();
-  final Completer<GoogleMapController> mapController = Completer();
+  final MapController _mapController = MapController();
 
   int? selectedCity;
   int? selectedNeighborhood;
   LatLng? currentPosition;
+  bool _mapReady = false;
   String currentAddress = "Getting location...";
   String? city;
   List<NeighborhoodModel> neighborhoods = [];
@@ -76,7 +78,6 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   @override
   void initState() {
     super.initState();
-    _initializeLocation();
     _setupInitialData();
   }
 
@@ -94,11 +95,8 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   }
 
   Future<void> _updateCameraPosition() async {
-    if (currentPosition != null) {
-      final GoogleMapController controller = await mapController.future;
-      controller.animateCamera(
-        CameraUpdate.newLatLng(currentPosition!),
-      );
+    if (currentPosition != null && _mapReady) {
+      _mapController.move(currentPosition!, 15); // Increased zoom for better UX
     }
   }
 
@@ -112,7 +110,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AddressCubit()..getcitys(),
+      create: (BuildContext context) => AddressCubit(),
       child: Scaffold(
         appBar: CustomAppBar(
           context,
@@ -172,130 +170,166 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
       },
       builder: (BuildContext context, AddressState state) {
         final AddressCubit addressCubit = context.read<AddressCubit>();
-        return ApiResponseWidget(
-          loadingWidget: Column(mainAxisSize: MainAxisSize.min, children: [
-            ...List.generate(
-                2,
-                (index) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomShimmer(radius: 5, height: 10.h, width: 70),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        CustomShimmer(radius: 12, height: 50.h),
-                        SizedBox(height: 15.h),
-                      ],
-                    ))
-          ]),
-          apiResponse: addressCubit.citysResponse,
-          onReload: () => addressCubit.getcitys(),
-          isEmpty: addressCubit.citys.isEmpty,
-          child: Column(
-            children: [
-              CustomSingleSelect(
-                title: AppLocaleKey.city.tr(),
-                hintText: city ?? AppLocaleKey.cityHint.tr(),
-                hintStyle: city != null ? AppTextStyle.textFormStyle : AppTextStyle.hintStyle,
-                value: city == null ? selectedCity : null,
-                items: addressCubit.citys
-                    .map((e) => CustomSelectItem(
-                          name: e.title ?? "",
-                          value: e.id,
-                        ))
-                    .toList(),
-                onChanged: (v) {
-                  if (v != null) {
-                    context.read<AddressCubit>().getneighborhoods(v);
-                    setState(() {
-                      this.city = null;
-                      selectedCity = v;
+        return Column(
+          children: [
+            // CustomSingleSelect(
+            //   title: AppLocaleKey.city.tr(),
+            //   hintText: city ?? AppLocaleKey.cityHint.tr(),
+            //   hintStyle: city != null ? AppTextStyle.textFormStyle : AppTextStyle.hintStyle,
+            //   value: city == null ? selectedCity : null,
+            //   items: addressCubit.citys
+            //       .map((e) => CustomSelectItem(
+            //             name: e.title ?? "",
+            //             value: e.id,
+            //           ))
+            //       .toList(),
+            //   onChanged: (v) {
+            //     if (v != null) {
+            //       context.read<AddressCubit>().getneighborhoods(v);
+            //       setState(() {
+            //         this.city = null;
+            //         selectedCity = v;
 
-                      selectedNeighborhood = null;
-                    });
-                  }
-                },
+            //         selectedNeighborhood = null;
+            //       });
+            //     }
+            //   },
+            // ),
+            // SizedBox(height: 15.h),
+            CustomSingleSelect(
+              title: AppLocaleKey.neighborhood.tr(),
+              hintText: AppLocaleKey.cityHint.tr(),
+              apiResponse: addressCubit.neighborhoodsResponse,
+              value: selectedNeighborhood,
+              suffixIcon: Icon(
+                Icons.arrow_drop_down,
+                size: 25,
+                color: AppColor.blackColor,
               ),
-              SizedBox(height: 15.h),
-              CustomSingleSelect(
-                title: AppLocaleKey.neighborhood.tr(),
-                hintText: AppLocaleKey.cityHint.tr(),
-                apiResponse: addressCubit.neighborhoodsResponse,
-                value: selectedNeighborhood,
-                items: neighborhoods.isNotEmpty
-                    ? neighborhoods
-                        .map((e) => CustomSelectItem(
-                              name: e.title ?? "",
-                              value: e.id,
-                            ))
-                        .toList()
-                    : addressCubit.neighborhoods
-                        .map((e) => CustomSelectItem(
-                              name: e.title ?? "",
-                              value: e.id,
-                            ))
-                        .toList(),
-                onChanged: (v) {
-                  if (v != null) {
-                    setState(() {
-                      selectedNeighborhood = v;
-                    });
-                  }
-                },
-              ),
-            ],
-          ),
+              items: neighborhoods.isNotEmpty
+                  ? neighborhoods
+                      .map((e) => CustomSelectItem(
+                            name: e.title ?? "",
+                            value: e.id,
+                          ))
+                      .toList()
+                  : addressCubit.neighborhoods
+                      .map((e) => CustomSelectItem(
+                            name: e.title ?? "",
+                            value: e.id,
+                          ))
+                      .toList(),
+              onChanged: (v) {
+                if (v != null) {
+                  setState(() {
+                    selectedNeighborhood = v;
+                  });
+                }
+              },
+            ),
+          ],
         );
       },
     );
   }
 
   Widget _buildMapSection() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: SizedBox(
-        height: 200.h,
-        child: GoogleMap(
-          onMapCreated: (GoogleMapController controller) {
-            mapController.complete(controller);
-          },
-          onTap: (LatLng argument) async {
-            NavigatorMethods.pushNamed(
-              context,
-              MapScreen.routeName,
-              arguments: MapScreenArgs(
-                initialLat: this.lat,
-                initialLng: this.lng,
-                onLocationSelected: (newLat, newLng, newCity, newLocality) {
-                  setState(() {
-                    this.lat = newLat;
-                    this.lng = newLng;
-                    this.city = newCity;
-                    this.currentAddress = newLocality;
-                    this.currentPosition = LatLng(newLat, newLng);
-                  });
-                  context.read<AddressCubit>().getneighborhoodsByName(newCity, (list) {
-                    setState(() => this.neighborhoods = list);
-                  });
-                  _updateCameraPosition();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: SizedBox(
+            height: 200.h,
+            child: FlutterMap(
+              mapController: _mapController,
+              options: MapOptions(
+                initialCenter: currentPosition ?? const LatLng(24.7136, 46.6753),
+                initialZoom: 20,
+                onTap: (tapPosition, point) {
+                  NavigatorMethods.pushNamed(
+                    context,
+                    MapScreen.routeName,
+                    arguments: MapScreenArgs(
+                      initialLat: this.lat,
+                      initialLng: this.lng,
+                      onLocationSelected: (newLat, newLng, newCity, newLocality) {
+                        if (newLat == this.lat && newLng == this.lng) return;
+
+                        final bool cityChanged = newCity != this.city;
+
+                        setState(() {
+                          this.lat = newLat;
+                          this.lng = newLng;
+                          this.city = newCity;
+                          this.currentAddress = newLocality;
+                          this.currentPosition = LatLng(newLat, newLng);
+                          if (cityChanged) {
+                            this.selectedNeighborhood = null;
+                            this.neighborhoods = [];
+                          }
+                        });
+
+                        if (cityChanged && newCity.isNotEmpty) {
+                          context.read<AddressCubit>().getneighborhoodsByName(newCity, (list) {
+                            setState(() => this.neighborhoods = list);
+                          });
+                        }
+                        _updateCameraPosition();
+                      },
+                    ),
+                  );
                 },
+                onMapReady: () => _mapReady = true,
               ),
-            );
-          },
-          initialCameraPosition: CameraPosition(
-            target: currentPosition ?? const LatLng(24.7136, 46.6753),
-            zoom: 12,
-          ),
-          markers: currentPosition != null
-              ? <Marker>{
-                  Marker(
-                    markerId: const MarkerId("currentLocation"),
-                    position: currentPosition!,
+              children: [
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.futuretec.hawiahplus',
+                  keepBuffer: 2,
+                  panBuffer: 1,
+                  tileProvider: CancellableNetworkTileProvider(),
+                ),
+                if (currentPosition != null)
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        point: currentPosition!,
+                        width: 40,
+                        height: 40,
+                        child: Image.asset(
+                          AppImages.pinImage,
+                        ),
+                      ),
+                    ],
                   ),
-                }
-              : <Marker>{},
+              ],
+            ),
+          ),
         ),
-      ),
+        SizedBox(height: 10.h),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+          decoration: BoxDecoration(
+            color: const Color(0xffF9F9F9),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xffEEEEEE)),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.location_on, color: AppColor.mainAppColor, size: 20),
+              SizedBox(width: 8.w),
+              Expanded(
+                child: Text(
+                  currentAddress,
+                  style: AppTextStyle.textFormStyle.copyWith(fontSize: 13.sp),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -369,9 +403,9 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
 
   void _setupInitialData() {
     // نستخدم Future.delayed لأننا بحاجة للوصول لـ context في initState لاستخدام الـ Cubit
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () async {
       final args = widget.args;
-      if (args.lat != null) {
+      if (args.lat != null && args.lng != null) {
         setState(() {
           lat = args.lat;
           lng = args.lng;
@@ -390,8 +424,8 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
         }
         _updateCameraPosition();
       } else {
-        // إذا لم تأتِ بيانات (حالة احتياطية)، نجلب الموقع الحالي
-        _initializeLocation();
+        // إذا لم تأتِ بيانات، نجلب الموقع الحالي فقط في هذه الحالة
+        await _initializeLocation();
       }
     });
   }

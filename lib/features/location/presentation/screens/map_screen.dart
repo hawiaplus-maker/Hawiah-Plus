@@ -1,14 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
+import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/location/presentation/screens/add-new-location-screen.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
+import 'package:latlong2/latlong.dart';
 
 typedef OnLocationSelected = void Function(
   double lat,
@@ -38,10 +41,11 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   final LocationService _locationService = LocationService();
 
-  GoogleMapController? _mapController;
+  final MapController _mapController = MapController();
 
   bool _loading = true;
   bool _manualSelection = false;
+  bool _mapReady = false;
 
   double? _lat;
   double? _lng;
@@ -107,8 +111,9 @@ class _MapScreenState extends State<MapScreen> {
     double lat,
     double lng, {
     bool fetchLocality = false,
-    bool shouldAnimate = false, // Add this
+    bool shouldAnimate = false,
   }) async {
+    // Restrict to Saudi Arabia bounds if necessary, though cameraTargetBounds handles it for the UI
     final data = await _locationService.updateLocation(
       lat,
       lng,
@@ -118,29 +123,28 @@ class _MapScreenState extends State<MapScreen> {
     if (!mounted) return;
 
     setState(() {
-      _lat = data["lat"];
-      _lng = data["lng"];
-      _city = data["city"];
-      _locality = data["locality"];
+      _lat = lat;
+      _lng = lng;
+      _city = data['city'];
+      _locality = data['locality'];
     });
 
-    // Only move the camera if specifically requested
-    if (shouldAnimate && _mapController != null) {
-      _mapController!.animateCamera(
-        CameraUpdate.newLatLng(LatLng(_lat!, _lng!)),
-      );
+    if (shouldAnimate && _mapReady) {
+      _mapController.move(LatLng(_lat!, _lng!), 14);
     }
   }
 
-  Future<void> _onMapTap(LatLng latLng) async {
-    _manualSelection = true;
-    _locationService.pauseLocationStream();
+  void _onPositionChanged(MapCamera camera, bool hasGesture) {
+    if (hasGesture) {
+      _lat = camera.center.latitude;
+      _lng = camera.center.longitude;
+    }
+  }
 
-    await _updateLocation(
-      latLng.latitude,
-      latLng.longitude,
-      fetchLocality: true,
-    );
+  Future<void> _onMapIdle() async {
+    if (_lat != null && _lng != null) {
+      await _updateLocation(_lat!, _lng!, fetchLocality: true);
+    }
   }
 
   Future<void> _goToCurrentLocation() async {
@@ -182,28 +186,49 @@ class _MapScreenState extends State<MapScreen> {
   Widget _buildMap() {
     return Stack(
       children: [
-        GoogleMap(
-          initialCameraPosition: CameraPosition(
-            target: LatLng(_lat!, _lng!),
-            zoom: 14,
+        FlutterMap(
+          mapController: _mapController,
+          options: MapOptions(
+            initialCenter: LatLng(_lat!, _lng!),
+            initialZoom: 14,
+            onPositionChanged: _onPositionChanged,
+            onMapEvent: (event) {
+              if (event is MapEventMoveEnd) {
+                _onMapIdle();
+              }
+            },
+            onMapReady: () => _mapReady = true,
+            // Restrict to Saudi Arabia
+            cameraConstraint: CameraConstraint.unconstrained(),
+            onPointerDown: (event, point) {
+              setState(() {
+                _manualSelection = true;
+              });
+              _locationService.pauseLocationStream();
+            },
           ),
-          onMapCreated: (controller) => _mapController = controller,
-          markers: {
-            Marker(
-              markerId: const MarkerId("selected"),
-              position: LatLng(_lat!, _lng!),
+          children: [
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.futuretec.hawiahplus',
+              keepBuffer: 2,
+              panBuffer: 1,
+              tileProvider: CancellableNetworkTileProvider(),
             ),
-          },
-          onTap: _onMapTap,
-          onCameraMoveStarted: () {
-            setState(() {
-              _manualSelection = true;
-            });
-            _locationService.pauseLocationStream();
-          },
-          zoomControlsEnabled: false,
-          myLocationEnabled: false,
-          myLocationButtonEnabled: false,
+          ],
+        ),
+
+        /// 🔹 Center Pin
+        Center(
+          child: Padding(
+            padding:
+                const EdgeInsets.only(bottom: 35), // Offset to put the tip of the pin at the center
+            child: Image.asset(
+              AppImages.pinImage,
+              height: 50,
+              width: 50,
+            ),
+          ),
         ),
 
         /// 🔹 Address Card
@@ -248,6 +273,7 @@ class _MapScreenState extends State<MapScreen> {
           text: AppLocaleKey.confirmcurrentlocation.tr(),
           onPressed: () {
             if (_lat != null && _lng != null) {
+              _locationService.dispose();
               widget.args.onLocationSelected?.call(
                 _lat ?? 0.0,
                 _lng ?? 0.0,

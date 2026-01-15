@@ -33,7 +33,6 @@ dependencies:
   searchable_listview: ^2.16.0
   bottom_picker: ^4.1.1
   table_calendar: ^3.1.2
-  google_maps_flutter: ^2.12.0
   intl: ^0.20.2
   flutter_chat_ui: ^2.9.1
   file_picker: ^10.3.3
@@ -77,6 +76,9 @@ dependencies:
   webview_flutter: ^4.7.0
   rive: ^0.13.18
   crypto: ^3.0.7
+  flutter_map: 7.0.2
+  latlong2: 0.9.1
+  flutter_map_cancellable_tile_provider: ^3.0.0
 
 
 dev_dependencies:
