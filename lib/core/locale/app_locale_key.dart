@@ -109,6 +109,7 @@ class AppLocaleKey {
   static const String viewInvoice = "Viewinvoice";
   static const String invoiceCannotBeDisplayed = "Invoicecannotbedisplayed";
   static const String emptytheContainer = "Emptythecontainer";
+  static const String reEmptythecontainer = "reEmptythecontainer";
   static const String contactTheDriver = "Contactthedriver";
   static const String contactSupport = "ContactSupport";
   static const String representativewasuncooperative = "representativewasuncooperative";

@@ -427,5 +427,6 @@
     "locationServiceDisabled": "خدمات الموقع متوقفة",
     "enableLocationService": "يرجى تفعيل خدمات الموقع لاستخدام هذه الميزة",
     "openSettings": "فتح الإعدادات",
-    "locationRequired": "الموقع مطلوب"
+    "locationRequired": "الموقع مطلوب",
+    "reEmptythecontainer":"إفراغ الحاوية مرة أخرى"
 }

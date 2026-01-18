@@ -112,7 +112,52 @@ class _UnloadingTheContainerWidgetState extends State<UnloadingTheContainerWidge
                 ),
               ),
               Gap(10.w),
-              const SizedBox(),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    final orderCubit = context.read<OrderCubit>();
+
+                    if (!isPressed) {
+                      orderCubit.newEmptyOrder(
+                        orderId: widget.orderId,
+                        onSuccess: () {
+                          setState(() {
+                            isPressed = true;
+                          });
+                          CommonMethods.showToast(
+                            message: AppLocaleKey.emptySuccess.tr(),
+                            type: ToastType.success,
+                          );
+                        },
+                      );
+                    }
+                  },
+                  child: Container(
+                    height: 45.h,
+                    decoration: BoxDecoration(
+                      color: isPressed ? AppColor.mainAppColor : const Color(0xffFF8B7B),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          AppImages.bakst,
+                          height: 20.h,
+                          width: 20.w,
+                        ),
+                        Gap(5.w),
+                        Text(
+                          AppLocaleKey.reEmptythecontainer.tr(),
+                          style: AppTextStyle.text12_500.copyWith(
+                            color: isPressed ? AppColor.whiteColor : AppColor.redColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ],
           )
         ],

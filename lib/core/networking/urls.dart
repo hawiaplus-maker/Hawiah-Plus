@@ -36,7 +36,8 @@ class Urls {
   static const String categories = '${baseUrl}categories';
   static String showCategory(int id) => '${baseUrl}categories/$id';
   static const String completeRegister = '${baseUrl}complete-register';
-  static const String getNearbyProviders = '${baseUrl}get-nearby-providers';
+  static const String getNearbyProviders = '${baseUrl}get-nieghborhood-by-loc';
+  // static const String getNearbyProviders = '${baseUrl}get-nearby-providers';
   static const String createOrder = '${baseUrl}users/orders';
   static const String onBoarding = '${baseUrl}on-boarding';
   static String orders(int id) => '${baseUrl}users/user-orders';
