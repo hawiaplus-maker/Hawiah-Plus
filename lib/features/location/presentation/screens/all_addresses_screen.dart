@@ -91,12 +91,12 @@ class AllAddressesScreen extends StatelessWidget {
                       onTap: () {
                         NavigatorMethods.pushNamed(context, LocationScreen.routeName,
                             arguments: LocationScreenArgs(
-                              onLocationSelected: (latLng) {
+                              onLocationSelected: (latLng, locality) {
                                 addressCubit.updateAddress(
                                   addressId: addressCubit.addresses[index].id ?? 0,
                                   latitude: latLng.latitude,
                                   longitude: latLng.longitude,
-                                  title: addressCubit.addresses[index].title ?? "",
+                                  title: locality ?? addressCubit.addresses[index].title ?? "",
                                   onSuccess: () {
                                     addressCubit.initialaddresses();
                                     addressCubit.getaddresses();
