@@ -86,8 +86,7 @@ class AllAddressesScreen extends StatelessWidget {
                     return LocationItemWidget(
                       imagePath: AppImages.addressLocationIcon,
                       title: addressCubit.addresses[index].title ?? "",
-                      address:
-                          "${addressCubit.addresses[index].city ?? ""} - ${addressCubit.addresses[index].neighborhood ?? ""}",
+                      address: "${addressCubit.addresses[index].neighborhood ?? ""}",
                       isSelected: false,
                       onTap: () {
                         NavigatorMethods.pushNamed(context, LocationScreen.routeName,
@@ -97,7 +96,6 @@ class AllAddressesScreen extends StatelessWidget {
                                   addressId: addressCubit.addresses[index].id ?? 0,
                                   latitude: latLng.latitude,
                                   longitude: latLng.longitude,
-                                  neighborhoodId: 5,
                                   title: addressCubit.addresses[index].title ?? "",
                                   onSuccess: () {
                                     addressCubit.initialaddresses();

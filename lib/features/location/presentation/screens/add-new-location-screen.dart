@@ -10,8 +10,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_select/custom_select_item.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_select/custom_single_select.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
@@ -19,8 +17,6 @@ import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/core/utils/validation_methods.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
-import 'package:hawiah_client/features/location/presentation/cubit/address_state.dart';
-import 'package:hawiah_client/features/location/presentation/model/neighborhood_model.dart';
 import 'package:hawiah_client/features/location/presentation/screens/map_screen.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
 import 'package:latlong2/latlong.dart';
@@ -65,13 +61,11 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   final LocationService locationService = LocationService();
   final MapController _mapController = MapController();
 
-  int? selectedCity;
-  int? selectedNeighborhood;
+  final TextEditingController neighborhoodController = TextEditingController();
   LatLng? currentPosition;
   bool _mapReady = false;
   String currentAddress = "Getting location...";
   String? city;
-  List<NeighborhoodModel> neighborhoods = [];
   double? lat;
   double? lng;
 
@@ -103,6 +97,7 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   @override
   void dispose() {
     titleController.dispose();
+    neighborhoodController.dispose();
     locationService.dispose();
     super.dispose();
   }
@@ -160,76 +155,9 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
   }
 
   Widget _buildLocationSelectors() {
-    return BlocConsumer<AddressCubit, AddressState>(
-      listener: (BuildContext context, AddressState state) {
-        if (state is AddressError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
-        }
-      },
-      builder: (BuildContext context, AddressState state) {
-        final AddressCubit addressCubit = context.read<AddressCubit>();
-        return Column(
-          children: [
-            // CustomSingleSelect(
-            //   title: AppLocaleKey.city.tr(),
-            //   hintText: city ?? AppLocaleKey.cityHint.tr(),
-            //   hintStyle: city != null ? AppTextStyle.textFormStyle : AppTextStyle.hintStyle,
-            //   value: city == null ? selectedCity : null,
-            //   items: addressCubit.citys
-            //       .map((e) => CustomSelectItem(
-            //             name: e.title ?? "",
-            //             value: e.id,
-            //           ))
-            //       .toList(),
-            //   onChanged: (v) {
-            //     if (v != null) {
-            //       context.read<AddressCubit>().getneighborhoods(v);
-            //       setState(() {
-            //         this.city = null;
-            //         selectedCity = v;
-
-            //         selectedNeighborhood = null;
-            //       });
-            //     }
-            //   },
-            // ),
-            // SizedBox(height: 15.h),
-            CustomSingleSelect(
-              title: AppLocaleKey.neighborhood.tr(),
-              hintText: AppLocaleKey.cityHint.tr(),
-              apiResponse: addressCubit.neighborhoodsResponse,
-              value: selectedNeighborhood,
-              suffixIcon: Icon(
-                Icons.arrow_drop_down,
-                size: 25,
-                color: AppColor.blackColor,
-              ),
-              items: neighborhoods.isNotEmpty
-                  ? neighborhoods
-                      .map((e) => CustomSelectItem(
-                            name: e.title ?? "",
-                            value: e.id,
-                          ))
-                      .toList()
-                  : addressCubit.neighborhoods
-                      .map((e) => CustomSelectItem(
-                            name: e.title ?? "",
-                            value: e.id,
-                          ))
-                      .toList(),
-              onChanged: (v) {
-                if (v != null) {
-                  setState(() {
-                    selectedNeighborhood = v;
-                  });
-                }
-              },
-            ),
-          ],
-        );
-      },
+    return CustomTextField(
+      title: AppLocaleKey.neighborhood.tr(),
+      controller: neighborhoodController,
     );
   }
 
@@ -256,25 +184,14 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
                       onLocationSelected: (newLat, newLng, newCity, newLocality) {
                         if (newLat == this.lat && newLng == this.lng) return;
 
-                        final bool cityChanged = newCity != this.city;
-
                         setState(() {
                           this.lat = newLat;
                           this.lng = newLng;
                           this.city = newCity;
                           this.currentAddress = newLocality;
                           this.currentPosition = LatLng(newLat, newLng);
-                          if (cityChanged) {
-                            this.selectedNeighborhood = null;
-                            this.neighborhoods = [];
-                          }
                         });
 
-                        if (cityChanged && newCity.isNotEmpty) {
-                          context.read<AddressCubit>().getneighborhoodsByName(newCity, (list) {
-                            setState(() => this.neighborhoods = list);
-                          });
-                        }
                         _updateCameraPosition();
                       },
                     ),
@@ -370,18 +287,10 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
       return;
     }
 
-    if (selectedNeighborhood == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please select a neighborhood")),
-      );
-      return;
-    }
-
     context.read<AddressCubit>().storeAddress(
           title: titleController.text,
           latitude: currentPosition!.latitude,
           longitude: currentPosition!.longitude,
-          neighborhoodId: selectedNeighborhood!,
           onSuccess: () {
             Navigator.pop(context);
             widget.args.onAddressAdded();
@@ -414,14 +323,6 @@ class _AddNewLocationScreenState extends State<AddNewLocationScreen> {
           currentPosition = LatLng(lat!, lng!);
         });
 
-        // 2. جلب الأحياء فوراً بناءً على المدينة القادمة من الخريطة
-        if (city != null && city!.isNotEmpty) {
-          context.read<AddressCubit>().getneighborhoodsByName(city!, (list) {
-            setState(() {
-              neighborhoods = list;
-            });
-          });
-        }
         _updateCameraPosition();
       } else {
         // إذا لم تأتِ بيانات، نجلب الموقع الحالي فقط في هذه الحالة

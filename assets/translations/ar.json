@@ -413,9 +413,19 @@
   "failedToSendMessage": "فشل إرسال الرسالة",
   "failedToLoadChats": "فشل تحميل المحادثات",
   "imagesFromDeliveryLocation":"صور من موقع التسليم",
-  "register":"تسجيل",
+  "register": "تسجيل",
   "pickHour": "اختر الساعة",
   "done": "تم",
   "am": "صباحاً",
-  "pm": "مساءً"
+  "pm": "مساءً",
+  "country": "الدولة",
+  "stateRegion": "الولاية",
+  "postalCode": "الرمز البريدي",
+  "streetName": "اسم ورقم الشارع",
+  "addAddressDetails": "إضافة تفاصيل العنوان",
+    "addressDetailsSubtitle": "يرجى التحقق من تفاصيل العنوان والحي قبل الحفظ",
+    "locationServiceDisabled": "خدمات الموقع متوقفة",
+    "enableLocationService": "يرجى تفعيل خدمات الموقع لاستخدام هذه الميزة",
+    "openSettings": "فتح الإعدادات",
+    "locationRequired": "الموقع مطلوب"
 }

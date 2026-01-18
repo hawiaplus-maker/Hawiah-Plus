@@ -311,4 +311,14 @@ class AppLocaleKey {
   static const failedToLoadChats = 'failedToLoadChats';
   static const imagesFromDeliveryLocation = 'imagesFromDeliveryLocation';
   static const register = 'register';
+  static const country = 'country';
+  static const stateRegion = 'stateRegion';
+  static const postalCode = 'postalCode';
+  static const streetName = 'streetName';
+  static const addAddressDetails = 'addAddressDetails';
+  static const addressDetailsSubtitle = 'addressDetailsSubtitle';
+  static const locationServiceDisabled = 'locationServiceDisabled';
+  static const enableLocationService = 'enableLocationService';
+  static const openSettings = 'openSettings';
+  static const locationRequired = 'locationRequired';
 }

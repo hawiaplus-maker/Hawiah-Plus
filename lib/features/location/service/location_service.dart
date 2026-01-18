@@ -18,7 +18,7 @@ class LocationService {
   Future<LocationData?> getCurrentLocation() async {
     try {
       if (await checkAndRequestLocationService() && await checkAndRequestLocationPermission()) {
-        return await _location.getLocation();
+        return await _location.getLocation().timeout(const Duration(seconds: 10));
       }
       return null;
     } catch (e) {
@@ -79,6 +79,12 @@ class LocationService {
 
     String? city;
     String? locality;
+    String? country;
+    String? state;
+    String? subState;
+    String? postalCode;
+    String? street;
+    String? neighborhood;
 
     if (fetchLocality) {
       try {
@@ -94,8 +100,14 @@ class LocationService {
             p.street,
             p.subLocality,
             city,
-            p.postalCode,
           ].where((v) => v != null && v.isNotEmpty).join(", ");
+
+          country = p.country;
+          state = p.administrativeArea;
+          subState = p.subAdministrativeArea;
+          postalCode = p.postalCode;
+          street = p.street;
+          neighborhood = p.subLocality;
         }
       } catch (e) {
         print("Reverse geocode error: $e");
@@ -110,6 +122,12 @@ class LocationService {
       'lng': lastLng,
       'city': lastCity,
       'locality': lastLocality,
+      'country': country,
+      'state': state,
+      'subState': subState,
+      'postalCode': postalCode,
+      'street': street,
+      'neighborhood': neighborhood,
     };
   }
 
