@@ -322,4 +322,5 @@ class AppLocaleKey {
   static const enableLocationService = 'enableLocationService';
   static const openSettings = 'openSettings';
   static const locationRequired = 'locationRequired';
+  static const String validateDateAfterHours = 'validateDateAfterHours';
 }

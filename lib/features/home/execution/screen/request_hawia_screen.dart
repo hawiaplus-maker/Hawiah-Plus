@@ -14,6 +14,8 @@ import 'package:hawiah_client/core/utils/date_methods.dart';
 import 'package:hawiah_client/features/home/execution/widget/delivery_location_images_container.dart';
 import 'package:hawiah_client/features/home/execution/widget/request_hawiah_execute_order_widget.dart';
 import 'package:hawiah_client/features/home/presentation/model/nearby_service-provider_model.dart';
+import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
+import 'package:hawiah_client/injection_container.dart';
 
 import '../../presentation/controllers/home-cubit/home-cubit.dart';
 import '../../presentation/controllers/home-cubit/home-state.dart';
@@ -106,10 +108,14 @@ class _RequestHawiahScreenState extends State<RequestHawiahScreen> {
                             firstDate: DateTime.now(),
                             onSuccess: (selectedDate) {
                               homeCubit.rangeStart = selectedDate;
+                              final setting = sl<SettingCubit>().setting;
+                              final int hourDuration = setting?.noOfHours ?? 0;
                               homeCubit.selectedIndex = -1;
+
                               DateMethods.pickHourOnly(
                                 context,
-                                initialDate: DateTime.now(),
+                                initialDate: selectedDate,
+                                minHoursDuration: hourDuration,
                                 onSuccess: (selectedTime) {
                                   homeCubit.fromTime = selectedTime;
                                   setState(() {});

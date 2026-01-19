@@ -8,6 +8,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../extension/context_extension.dart';
 import '../locale/app_locale_key.dart';
 import '../theme/app_colors.dart';
+import 'common_methods.dart';
 
 class DateMethods {
   static String formatToDate(DateTime? dateTime) {
@@ -245,6 +246,7 @@ class DateMethods {
     Color? mainColor,
     Color backgroundColor = Colors.white,
     Color textColor = Colors.black,
+    int? minHoursDuration,
   }) async {
     // تحويل الساعة من نظام 24 إلى 12 للبداية
     int initialHour24 = initialDate.hour;
@@ -298,6 +300,16 @@ class DateMethods {
                           finalHour24,
                           0, // الدقائق دائماً صفر
                         );
+
+                        if (minHoursDuration != null) {
+                          if (resultTime
+                              .isBefore(DateTime.now().add(Duration(hours: minHoursDuration)))) {
+                            CommonMethods.showToast(
+                                message: AppLocaleKey.validateDateAfterHours
+                                    .tr(args: [minHoursDuration.toString()]));
+                            return;
+                          }
+                        }
 
                         onSuccess(resultTime);
                         Navigator.pop(context);

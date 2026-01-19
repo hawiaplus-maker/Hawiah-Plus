@@ -382,7 +382,7 @@ class OrderCubit extends Cubit<OrderState> {
   //==================== new empty =====================
   Future<void> newEmptyOrder({
     required int orderId,
-    required VoidCallback onSuccess,
+    required Function(OrderDetailsModel? order) onSuccess,
   }) async {
     NavigatorMethods.loading();
     FormData body = FormData.fromMap({
@@ -397,7 +397,9 @@ class OrderCubit extends Cubit<OrderState> {
       CommonMethods.showToast(
         message: response.data['message'] ?? "تم طلب افراغ الحاوية بنجاح",
       );
-      onSuccess.call();
+      onSuccess.call(response.data['data']['new_order'] != null
+          ? OrderDetailsModel.fromJson(response.data['data']['new_order'])
+          : null);
     } else if (response.state == ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(
         message: tr(AppLocaleKey.youMustLogInFirst),
