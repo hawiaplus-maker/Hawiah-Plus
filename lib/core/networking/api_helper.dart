@@ -1,11 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/routes/app_routers_import.dart';
-import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
@@ -36,10 +35,15 @@ class ApiHelper {
   ApiHelper._();
   static ApiHelper get instance => _instance ??= ApiHelper._();
 
+  final StreamController<void> _unauthorizedController = StreamController.broadcast();
+  Stream<void> get onUnauthorized => _unauthorizedController.stream;
+
   MediaType appMediaType(String filePath) {
     var list = "${lookupMimeType(filePath)}".split('/');
     return MediaType(list.firstOrNull ?? 'application', list.lastOrNull ?? 'octet-stream');
   }
+
+  // ... (rest of the class)
 
   final Dio _dio = Dio(
     BaseOptions(
@@ -225,8 +229,7 @@ class ApiHelper {
         Future.delayed(Duration.zero, () {
           HiveMethods.deleteToken();
           if (!HiveMethods.isVisitor()) {
-            NavigatorMethods.pushNamedAndRemoveUntil(
-                AppRouters.navigatorKey.currentContext!, ValidateMobileScreen.routeName);
+            _unauthorizedController.add(null);
           }
         });
         return ApiResponse(state: ResponseState.unauthorized, data: data);

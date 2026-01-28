@@ -32,6 +32,7 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
@@ -41,8 +42,6 @@ class _UserProfileState extends State<UserProfile> {
   final TextEditingController commercialRegistration = TextEditingController();
   final _picker = ImagePicker();
   File? _pickedImage;
-  File? _pickedTaxNumberImage;
-  File? _pickedCommercialRegistrationImage;
 
   Future<void> _pickImage() async {
     final picked = await _picker.pickImage(source: ImageSource.gallery);
@@ -65,18 +64,20 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   void _onUpdatePressed() async {
-    final cubit = sl<ProfileCubit>();
-    await cubit.updateProfile(
-      name: nameController.text,
-      mobile: mobileController.text,
-      email: emailController.text,
-      imageFile: _pickedImage,
-      accountType: cubit.user?.type,
-      taxNumber: taxNumberController.text,
-      commercialRegistration: commercialRegistration.text,
-      password: passwordController.text,
-      password_confirmation: confirmPasswordController.text,
-    );
+    if (_formKey.currentState!.validate()) {
+      final cubit = sl<ProfileCubit>();
+      cubit.updateProfile(
+        name: nameController.text,
+        mobile: mobileController.text,
+        email: emailController.text,
+        imageFile: _pickedImage,
+        accountType: cubit.user?.type,
+        taxNumber: taxNumberController.text,
+        commercialRegistration: commercialRegistration.text,
+        password: passwordController.text, // Cubit logic will now handle if this is empty
+        password_confirmation: confirmPasswordController.text,
+      );
+    }
   }
 
   Widget _buildProfileImage(String imageUrl) {
@@ -110,12 +111,14 @@ class _UserProfileState extends State<UserProfile> {
       appBar: CustomAppBar(context, titleText: AppLocaleKey.profileFile.tr(), centerTitle: true),
       body: BlocConsumer<ProfileCubit, ProfileState>(
         bloc: sl<ProfileCubit>(),
-        listener: (context, state) async {
+        listener: (context, state) {
           if (state is ProfileUpdateSuccess) {
             CommonMethods.showToast(message: AppLocaleKey.saveChangesSuccess.tr());
           } else if (state is ProfileError) {
+            // Show the actual error message from the state
             CommonMethods.showToast(
-                message: AppLocaleKey.somethingWentWrong.tr(), type: ToastType.error);
+                message: state.message, // Change this from AppLocaleKey.somethingWentWrong
+                type: ToastType.error);
           }
         },
         builder: (context, state) {
@@ -130,87 +133,99 @@ class _UserProfileState extends State<UserProfile> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 40),
-                    Center(child: _buildProfileImage(user.image)),
-                    const SizedBox(height: 30),
-                    Gap(20.h),
-                    CustomTextField(
-                      controller: nameController,
-                      title: AppLocaleKey.name.tr(),
-                      validator: ValidationMethods.validateName,
-                    ),
-                    Gap(20.h),
-                    CustomTextField(
-                      controller: mobileController,
-                      title: AppLocaleKey.phoneNumber.tr(),
-                      validator: ValidationMethods.validatePhone,
-                    ),
-                    Gap(20.h),
-                    CustomTextField(
-                      controller: emailController,
-                      title: AppLocaleKey.email.tr(),
-                      validator: ValidationMethods.validateEmail,
-                    ),
-                    Gap(20.h),
-                    if (user.type == 'company') ...[
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 40),
+                      Center(child: _buildProfileImage(user.image)),
+                      const SizedBox(height: 30),
+                      Gap(20.h),
                       CustomTextField(
-                        controller: taxNumberController,
-                        title: AppLocaleKey.taxNumber.tr(),
-                        validator: ValidationMethods.validateEmptyField,
+                        controller: nameController,
+                        title: AppLocaleKey.name.tr(),
+                        validator: ValidationMethods.validateName,
                       ),
                       Gap(20.h),
                       CustomTextField(
-                        controller: commercialRegistration,
-                        title: AppLocaleKey.commercialRegistration.tr(),
-                        validator: ValidationMethods.validateEmptyField,
+                        controller: mobileController,
+                        title: AppLocaleKey.phoneNumber.tr(),
+                        validator: ValidationMethods.validatePhone,
                       ),
                       Gap(20.h),
+                      CustomTextField(
+                        controller: emailController,
+                        title: AppLocaleKey.email.tr(),
+                        validator:
+                            emailController.text.isEmpty ? null : ValidationMethods.validateEmail,
+                      ),
+                      Gap(20.h),
+                      if (user.type == 'company') ...[
+                        CustomTextField(
+                          controller: taxNumberController,
+                          title: AppLocaleKey.taxNumber.tr(),
+                          validator: taxNumberController.text.isEmpty
+                              ? null
+                              : ValidationMethods.validateEmptyField,
+                        ),
+                        Gap(20.h),
+                        CustomTextField(
+                          controller: commercialRegistration,
+                          title: AppLocaleKey.commercialRegistration.tr(),
+                          validator: commercialRegistration.text.isEmpty
+                              ? null
+                              : ValidationMethods.validateEmptyField,
+                        ),
+                        Gap(20.h),
+                      ],
+                      CustomTextField(
+                        validator: passwordController.text.isEmpty
+                            ? null
+                            : (v) => ValidationMethods.validatePassword(passwordController.text),
+                        controller: passwordController,
+                        title: 'password'.tr(),
+                        hintText: 'enter_your_password'.tr(),
+                        isPassword: true,
+                      ),
+                      SizedBox(height: 20),
+                      CustomTextField(
+                        validator: confirmPasswordController.text.isEmpty
+                            ? null
+                            : (v) => ValidationMethods.validateConfirmPassword(
+                                v, passwordController.text),
+                        controller: confirmPasswordController,
+                        title: 'confirm_password'.tr(),
+                        hintText: 'enter_your_password'.tr(),
+                        isPassword: true,
+                      ),
+                      Gap(20.h),
+                      if (user.type != 'company')
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, IndividualToCompanyTransfareProfile.routeName,
+                                  arguments: IndividualToCompanyTransfareProfileArgs(
+                                    name: user.name,
+                                    mobile: user.mobile,
+                                    email: user.email,
+                                  ));
+                            },
+                            child: Text(AppLocaleKey.convertToCompanyUser.tr(),
+                                style: AppTextStyle.text14_400
+                                    .copyWith(color: AppColor.mainAppColor))),
+                      Gap(40.h),
+                      CustomButton(
+                        isLoading: state is ProfileUpdating,
+                        onPressed: _onUpdatePressed,
+                        child: Text(
+                          AppLocaleKey.saveChanges.tr(),
+                          style: AppTextStyle.text16_600.copyWith(color: AppColor.whiteColor),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
                     ],
-                    CustomTextField(
-                      validator: (v) => ValidationMethods.validatePassword(passwordController.text),
-                      controller: passwordController,
-                      title: 'password'.tr(),
-                      hintText: 'enter_your_password'.tr(),
-                      isPassword: true,
-                    ),
-                    SizedBox(height: 20),
-                    CustomTextField(
-                      validator: (v) =>
-                          ValidationMethods.validateConfirmPassword(v, passwordController.text),
-                      controller: confirmPasswordController,
-                      title: 'confirm_password'.tr(),
-                      hintText: 'enter_your_password'.tr(),
-                      isPassword: true,
-                    ),
-                    Gap(20.h),
-                    if (user.type != 'company')
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, IndividualToCompanyTransfareProfile.routeName,
-                                arguments: IndividualToCompanyTransfareProfileArgs(
-                                  name: user.name,
-                                  mobile: user.mobile,
-                                  email: user.email,
-                                ));
-                          },
-                          child: Text(AppLocaleKey.convertToCompanyUser.tr(),
-                              style:
-                                  AppTextStyle.text14_400.copyWith(color: AppColor.mainAppColor))),
-                    Gap(40.h),
-                    CustomButton(
-                      isLoading: state is ProfileUpdating,
-                      onPressed: _onUpdatePressed,
-                      child: Text(
-                        AppLocaleKey.saveChanges.tr(),
-                        style: AppTextStyle.text16_600.copyWith(color: AppColor.whiteColor),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
+                  ),
                 ),
               ),
             ),

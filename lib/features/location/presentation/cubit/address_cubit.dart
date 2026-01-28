@@ -59,6 +59,7 @@ class AddressCubit extends Cubit<AddressState> {
       {required String title,
       required double latitude,
       required double longitude,
+      String? neighborhood,
       required int addressId,
       required VoidCallback onSuccess}) async {
     NavigatorMethods.loading();
@@ -66,8 +67,9 @@ class AddressCubit extends Cubit<AddressState> {
       'title': title,
       'latitude': latitude,
       'longitude': longitude,
+      if (neighborhood != null) 'neighborhood': neighborhood,
     });
-    final response = await ApiHelper.instance.put(
+    final response = await ApiHelper.instance.post(
       Urls.updateAddress(addressId),
       body: body,
     );

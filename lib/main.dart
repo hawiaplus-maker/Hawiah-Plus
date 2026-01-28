@@ -19,13 +19,16 @@ final bool isGuest = HiveMethods.getToken() == null;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AppInjector.init();
-  await EasyLocalization.ensureInitialized();
-  await ScreenUtil.ensureScreenSize();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await Hive.initFlutter();
+  await Future.wait([
+    AppInjector.init(),
+    EasyLocalization.ensureInitialized(),
+    ScreenUtil.ensureScreenSize(),
+    Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    ),
+    Hive.initFlutter(),
+  ]);
+
   await Hive.openBox('app');
   Bloc.observer = MyBlocObserver();
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
