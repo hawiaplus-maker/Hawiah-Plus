@@ -4,8 +4,8 @@ import 'package:hawiah_client/core/custom_widgets/api_response_widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_shimmer.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/best_seller_widget.dart';
 
-import '../controllers/home-cubit/home-cubit.dart';
-import '../controllers/home-cubit/home-state.dart';
+import '../controllers/home-services-cubit/home-services-cubit.dart';
+import '../controllers/home-services-cubit/home-services-state.dart';
 
 class BestsellerListWidget extends StatefulWidget {
   const BestsellerListWidget({super.key});
@@ -20,16 +20,16 @@ class _BestsellerListWidgetState extends State<BestsellerListWidget> {
   @override
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(
+    return BlocBuilder<HomeServicesCubit, HomeServicesState>(
       builder: (context, state) {
-        final homeCubit = HomeCubit.get(context);
+        final homeServicesCubit = context.read<HomeServicesCubit>();
 
-        final list = homeCubit.services?.message ?? [];
+        final list = homeServicesCubit.services?.message ?? [];
         final int itemCount = expanded ? list.length : list.length.clamp(0, 4);
 
         return ApiResponseWidget(
-          apiResponse: homeCubit.servicesResponse,
-          onReload: () async => homeCubit.getservices(),
+          apiResponse: homeServicesCubit.servicesResponse,
+          onReload: () async => homeServicesCubit.getServices(),
           isEmpty: list.isEmpty,
           loadingWidget: Padding(
             padding: const EdgeInsets.all(14.0),

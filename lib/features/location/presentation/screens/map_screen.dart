@@ -292,12 +292,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () => Navigator.pop(context),
-                          ),
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 AppLocaleKey.addAddressDetails.tr(),
@@ -308,6 +304,10 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                                 style: AppTextStyle.text14_400.copyWith(color: Colors.grey),
                               ),
                             ],
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () => Navigator.pop(context),
                           ),
                         ],
                       ),

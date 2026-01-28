@@ -8,7 +8,6 @@ import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/execution/screen/category_detailes_screen.dart';
-import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/model/services_model.dart';
 import 'package:hawiah_client/features/location/presentation/screens/choose_address_screen.dart';
 
@@ -29,7 +28,6 @@ class BestSellerWidgt extends StatefulWidget {
 class _BestSellerWidgtState extends State<BestSellerWidgt> {
   @override
   Widget build(BuildContext context) {
-    final homeCubit = HomeCubit.get(context);
     return GestureDetector(
       onTap: () {
         Navigator.push(

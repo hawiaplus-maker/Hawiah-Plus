@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
+import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart'; // Ensure this path is correct
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
@@ -13,9 +14,12 @@ import 'package:latlong2/latlong.dart';
 
 class LocationScreenArgs {
   final LatLng initialLatLng;
-  final Function(LatLng latLng, String? locality) onLocationSelected;
+  final Function(LatLng latLng, String? locality, String? neighborhood) onLocationSelected;
 
-  LocationScreenArgs({required this.initialLatLng, required this.onLocationSelected});
+  LocationScreenArgs({
+    required this.initialLatLng,
+    required this.onLocationSelected,
+  });
 }
 
 class LocationScreen extends StatefulWidget {
@@ -37,7 +41,12 @@ class _LocationScreenState extends State<LocationScreen> {
   double? _lat;
   double? _lng;
   String? _city;
+  String? _neighborhood;
   String? _locality;
+  String? _country;
+  String? _stateRegion;
+  String? _postalCode;
+  String? _streetName;
 
   @override
   void initState() {
@@ -53,7 +62,6 @@ class _LocationScreenState extends State<LocationScreen> {
 
   /// Initialize map with provided location
   Future<void> _initializeMap() async {
-    // Use initial coordinates provided
     await _updateLocation(
       widget.args.initialLatLng.latitude,
       widget.args.initialLatLng.longitude,
@@ -82,6 +90,11 @@ class _LocationScreenState extends State<LocationScreen> {
       _lng = lng;
       _city = data['city'];
       _locality = data['locality'];
+      _neighborhood = data['neighborhood'];
+      _country = data['country'];
+      _stateRegion = data['state'];
+      _postalCode = data['postalCode'];
+      _streetName = data['street'];
     });
 
     if (shouldAnimate && _mapReady) {
@@ -100,6 +113,93 @@ class _LocationScreenState extends State<LocationScreen> {
     if (_lat != null && _lng != null) {
       await _updateLocation(_lat!, _lng!, fetchLocality: true);
     }
+  }
+
+  /// 🔹 The Bottom Sheet to confirm/edit neighborhood and address details
+  void _showAddressDetailsBottomSheet() {
+    final TextEditingController cityController = TextEditingController(text: _city);
+    final TextEditingController neighborhoodController = TextEditingController(text: _neighborhood);
+    final TextEditingController streetController = TextEditingController(text: _streetName);
+    final TextEditingController postalCodeController = TextEditingController(text: _postalCode);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 20,
+            right: 20,
+            top: 20,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      AppLocaleKey.addAddressDetails.tr(),
+                      style: AppTextStyle.text18_700,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                CustomTextField(
+                  title: AppLocaleKey.city.tr(),
+                  controller: cityController,
+                  readOnly: true, // Usually city is fixed by GPS
+                ),
+                const SizedBox(height: 15),
+                CustomTextField(
+                  title: AppLocaleKey.neighborhood.tr(),
+                  controller: neighborhoodController,
+                  hintText: AppLocaleKey.neighborhood.tr(),
+                ),
+                const SizedBox(height: 15),
+                CustomTextField(
+                  title: AppLocaleKey.streetName.tr(),
+                  controller: streetController,
+                  hintText: AppLocaleKey.streetName.tr(),
+                ),
+                const SizedBox(height: 15),
+                CustomTextField(
+                  title: AppLocaleKey.postalCode.tr(),
+                  controller: postalCodeController,
+                  hintText: AppLocaleKey.postalCode.tr(),
+                ),
+                const SizedBox(height: 30),
+                CustomButton(
+                  text: AppLocaleKey.saveTitle.tr(),
+                  onPressed: () {
+                    Navigator.pop(context); // Close Bottom Sheet
+                    Navigator.pop(context); // Close Location Screen
+
+                    // Return the updated data back to the previous screen
+                    widget.args.onLocationSelected.call(
+                        LatLng(_lat!, _lng!),
+                        streetController.text.isNotEmpty ? streetController.text : _locality,
+                        neighborhoodController.text);
+                  },
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -150,31 +250,28 @@ class _LocationScreenState extends State<LocationScreen> {
           ),
         ),
 
-        /// 🔹 Address Card
-        if (_city != null || _locality != null)
+        /// 🔹 Address Card (Top of Map)
+        if (_city != null || _locality != null || _neighborhood != null)
           Positioned(
-            top: MediaQuery.of(context).viewInsets.top + 50,
+            top: MediaQuery.of(context).padding.top + 20,
             left: 20,
             right: 20,
             child: Card(
               elevation: 3,
               child: Padding(
-                padding: const EdgeInsets.only(top: 12, bottom: 12.0, left: 16.0, right: 16.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (_city != null)
                       Text(
                         _city!,
-                        style: AppTextStyle.text16_700.copyWith(
-                          color: AppColor.mainAppColor,
-                        ),
+                        style: AppTextStyle.text16_700.copyWith(color: AppColor.mainAppColor),
                       ),
-                    if (_locality != null)
-                      Text(
-                        _locality!,
-                        style: const TextStyle(fontSize: 14),
-                      ),
+                    if (_neighborhood != null)
+                      Text(_neighborhood!,
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                    if (_locality != null) Text(_locality!, style: const TextStyle(fontSize: 14)),
                   ],
                 ),
               ),
@@ -192,8 +289,7 @@ class _LocationScreenState extends State<LocationScreen> {
           text: AppLocaleKey.confirmcurrentlocation.tr(),
           onPressed: () {
             if (_lat != null && _lng != null) {
-              Navigator.pop(context);
-              widget.args.onLocationSelected.call(LatLng(_lat!, _lng!), _locality);
+              _showAddressDetailsBottomSheet();
             }
           },
         ),

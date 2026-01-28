@@ -85,8 +85,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     String? mobile,
     String? email,
     File? imageFile,
-    File? taxNumberFile,
-    File? commercialRegistrationFile,
     String? taxNumber,
     String? commercialRegistration,
     String? password,
@@ -96,37 +94,30 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(ProfileUpdating());
 
     try {
-      final data = <String, dynamic>{
-        'name': name,
-        'mobile': mobile,
-        'email': email,
-        if (password != null) 'password': password,
-        if (password_confirmation != null) 'password_confirmation': password_confirmation,
-        if (accountType == "company") ...{
-          if (taxNumber != null) 'tax_number': taxNumber,
-          if (commercialRegistration != null) 'commercial_registration': commercialRegistration,
-        }
-      };
+      // 1. Only add fields that are NOT empty
+      final Map<String, dynamic> data = {'name': name};
 
+      if (mobile != null && mobile.isNotEmpty) data['mobile'] = mobile;
+      if (email != null && email.isNotEmpty) data['email'] = email;
+
+      // ONLY send password if the user actually typed one
+      if (password != null && password.isNotEmpty) {
+        data['password'] = password;
+        data['password_confirmation'] = password_confirmation;
+      }
+
+      if (accountType == "company") {
+        if (taxNumber != null) data['tax_number'] = taxNumber;
+        if (commercialRegistration != null)
+          data['commercial_registration'] = commercialRegistration;
+      }
+
+      // 2. Handle Image
       if (imageFile != null) {
         data['image'] = await MultipartFile.fromFile(
           imageFile.path,
           filename: "profile.jpg",
         );
-      }
-      if (accountType == "company") {
-        if (taxNumberFile != null) {
-          data['tax_number_file'] = await MultipartFile.fromFile(
-            taxNumberFile.path,
-            filename: "tax_number.jpg",
-          );
-        }
-        if (commercialRegistrationFile != null) {
-          data['commercial_registration_file'] = await MultipartFile.fromFile(
-            commercialRegistrationFile.path,
-            filename: "commercial_registration.jpg",
-          );
-        }
       }
 
       final response = await ApiHelper.instance.post(
@@ -136,12 +127,16 @@ class ProfileCubit extends Cubit<ProfileState> {
         isMultipart: true,
       );
 
-      if (response.data != null && response.data['message'] != null) {
-        final message = response.data['message'];
-        emit(ProfileUpdateSuccess(message));
+      // 3. Improved Response Check
+      if (response.state == ResponseState.complete && response.data['success'] == true) {
+        // Use a fallback string if 'message' is null
+        String msg = response.data['message'] ?? "Success";
+        emit(ProfileUpdateSuccess(msg));
         await fetchProfile();
       } else {
-        emit(ProfileError("فشل تحديث البيانات"));
+        // Extract specific error message from server if available
+        String errorMsg = response.data['message'] ?? "فشل تحديث البيانات";
+        emit(ProfileError(errorMsg));
       }
     } catch (e) {
       emit(ProfileError("حدث خطأ أثناء التحديث: $e"));

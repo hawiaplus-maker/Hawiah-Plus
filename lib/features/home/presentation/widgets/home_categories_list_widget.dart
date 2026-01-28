@@ -11,8 +11,8 @@ import 'package:hawiah_client/features/home/execution/screen/category_detailes_s
 import 'package:hawiah_client/features/home/presentation/screens/all_categories_screen.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/category_card_widget.dart';
 
-import '../controllers/home-cubit/home-cubit.dart';
-import '../controllers/home-cubit/home-state.dart';
+import '../controllers/home-categories-cubit/home-categories-cubit.dart';
+import '../controllers/home-categories-cubit/home-categories-state.dart';
 
 class HomeCategoriesListWidget extends StatefulWidget {
   const HomeCategoriesListWidget({super.key});
@@ -24,8 +24,8 @@ class HomeCategoriesListWidget extends StatefulWidget {
 class _HomeCategoriesListWidgetState extends State<HomeCategoriesListWidget> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
-      final homeCubit = HomeCubit.get(context);
+    return BlocBuilder<HomeCategoriesCubit, HomeCategoriesState>(builder: (context, state) {
+      final homeCategoriesCubit = context.read<HomeCategoriesCubit>();
       return Container(
         margin: EdgeInsets.symmetric(horizontal: 10.w),
         child: Column(
@@ -40,7 +40,7 @@ class _HomeCategoriesListWidgetState extends State<HomeCategoriesListWidget> {
                       context,
                       MaterialPageRoute(
                         builder: (_) => AllCategoriesScreen(
-                          categories: homeCubit.categories,
+                          categories: homeCategoriesCubit.categories,
                         ),
                       ),
                     );
@@ -58,21 +58,21 @@ class _HomeCategoriesListWidgetState extends State<HomeCategoriesListWidget> {
             ),
             SizedBox(height: 10.h),
             ApiResponseWidget(
-              apiResponse: homeCubit.homeCategoriesResponse,
-              onReload: () => homeCubit.getHomeCategories(),
-              isEmpty: homeCubit.homeCategorieS.isEmpty,
+              apiResponse: homeCategoriesCubit.homeCategoriesResponse,
+              onReload: () => homeCategoriesCubit.getHomeCategories(),
+              isEmpty: homeCategoriesCubit.homeCategories.isEmpty,
               loadingWidget: HomeCategoryLoadingShimmerWidget(),
               child: GridView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: homeCubit.homeCategorieS.length,
+                itemCount: homeCategoriesCubit.homeCategories.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 10.w,
                     mainAxisSpacing: 10.h,
                     childAspectRatio: .9),
                 itemBuilder: (context, index) {
-                  final item = homeCubit.homeCategorieS[index];
+                  final item = homeCategoriesCubit.homeCategories[index];
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(

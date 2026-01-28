@@ -1,3 +1,4 @@
+import 'dart:async'; // Added import
 import 'dart:developer';
 
 import 'package:bot_toast/bot_toast.dart';
@@ -9,9 +10,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/app_theme.dart';
 import 'package:hawiah_client/core/bloc-config/bloc_providers.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
+import 'package:hawiah_client/core/networking/api_helper.dart'; // Added import
 import 'package:hawiah_client/core/networking/snapchat_service.dart';
 import 'package:hawiah_client/core/notifications/messaging_config.dart';
 import 'package:hawiah_client/core/routes/app_routers_import.dart';
+import 'package:hawiah_client/core/utils/navigator_methods.dart'; // Added import
+import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart'; // Added import
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/splash/presentation/screens/splash-screen.dart';
 import 'package:hawiah_client/injection_container.dart';
@@ -31,6 +35,8 @@ class HawiahPlusApp extends StatefulWidget {
 }
 
 class _HawiahPlusAppState extends State<HawiahPlusApp> {
+  StreamSubscription? _unauthorizedSubscription;
+
   @override
   void initState() {
     SnapchatService.instance.trackPageView();
@@ -40,6 +46,24 @@ class _HawiahPlusAppState extends State<HawiahPlusApp> {
     _appToken();
     super.initState();
     _handleInitialNotification();
+
+    // Listen for 401 Unauthorized events
+    _unauthorizedSubscription = ApiHelper.instance.onUnauthorized.listen((_) {
+      _handleUnauthorized();
+    });
+  }
+
+  @override
+  void dispose() {
+    _unauthorizedSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _handleUnauthorized() {
+    if (AppRouters.navigatorKey.currentContext != null) {
+      NavigatorMethods.pushNamedAndRemoveUntil(
+          AppRouters.navigatorKey.currentContext!, ValidateMobileScreen.routeName);
+    }
   }
 
   void setMyAppState() {
