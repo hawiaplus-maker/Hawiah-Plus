@@ -15,8 +15,8 @@ class Urls {
 
   //! ===================> Live Api <=================== !//
   static const String oldbaseUrl = 'https://hawia-sa.com/api/';
-  static const String baseUrl = 'https://hawiaplus.com/api/';
-  //static const String baseUrl = 'https://testing.hawiaplus.com/api/';
+  //static const String baseUrl = 'https://hawiaplus.com/api/';
+  static const String baseUrl = 'https://testing.hawiaplus.com/api/';
   static const String login = '${baseUrl}login';
   static const String validateMobile = '${baseUrl}validate-mobile';
   static const String settings = '${baseUrl}settings';
@@ -36,7 +36,8 @@ class Urls {
   static const String categories = '${baseUrl}categories';
   static String showCategory(int id) => '${baseUrl}categories/$id';
   static const String completeRegister = '${baseUrl}complete-register';
-  static const String getNearbyProviders = '${baseUrl}get-nearby-providers';
+  static const String getNearbyProviders = '${baseUrl}get-nieghborhood-by-loc';
+  // static const String getNearbyProviders = '${baseUrl}get-nearby-providers';
   static const String createOrder = '${baseUrl}users/orders';
   static const String onBoarding = '${baseUrl}on-boarding';
   static String orders(int id) => '${baseUrl}users/user-orders';
@@ -64,6 +65,5 @@ class Urls {
   static String questions = '${baseUrl}faq';
   static String sliders = '${baseUrl}sliders';
   static String showOrder(int id) => '${baseUrl}users/user-orders/$id';
-  static String neighborhoodsByName = '${baseUrl}get-nieghborhoods-by-cityname';
   static String newEmptyOrder = '${baseUrl}users/orders/empty-renew-order';
 }

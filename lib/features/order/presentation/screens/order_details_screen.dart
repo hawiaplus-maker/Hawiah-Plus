@@ -89,7 +89,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 const SizedBox(height: 16),
                 if (widget.isCurrent && (driver.isNotEmpty || driverMobile.isNotEmpty))
                   DriverCardWidget(ordersData: ordersData)
-                else if (!widget.isCurrent && ordersData.data?.orderStatus == 6)
+                // else if (!widget.isCurrent && ordersData.data?.orderStatus == 6)
+                else if (!widget.isCurrent)
                   UnloadingTheContainerWidget(
                     orderId: ordersData.data?.id ?? 0,
                     serviceProviderId: ordersData.data?.serviceProviderId ?? 0,

@@ -44,27 +44,28 @@ class LocationItemWidget extends StatelessWidget {
                 width: 25, // You can adjust the size with ScreenUtil
               ),
             Gap(10.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    address.isNotEmpty ? address : title,
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  address,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: Colors.black54,
+                  SizedBox(height: 4),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: Colors.black54,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            Spacer(),
             isSelected ? SvgPicture.asset(AppImages.badgeCheckIcon) : SizedBox.shrink(),
           ],
         ),

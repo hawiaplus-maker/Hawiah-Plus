@@ -1,15 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
+import 'package:hawiah_client/core/custom_widgets/custom-text-field-widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
-import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/location/presentation/screens/add-new-location-screen.dart';
+import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -38,12 +39,13 @@ class MapScreen extends StatefulWidget {
   State<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   final LocationService _locationService = LocationService();
 
   final MapController _mapController = MapController();
 
   bool _loading = true;
+  bool _isInitializing = false;
   bool _manualSelection = false;
   bool _mapReady = false;
 
@@ -51,26 +53,74 @@ class _MapScreenState extends State<MapScreen> {
   double? _lng;
   String? _city;
   String? _locality;
+  String? _country;
+  String? _stateRegion;
+  String? _postalCode;
+  String? _streetName;
+  String? _neighborhoodName;
 
   DateTime? _lastUpdate;
 
   @override
   void initState() {
     super.initState();
-    _initializeLocation();
+    WidgetsBinding.instance.addObserver(this);
+    _initializeMapQuickly();
   }
 
-  Future<void> _initializeLocation() async {
-    setState(() => _loading = true);
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _locationService.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if (_lat == 24.7136 && _lng == 46.6753 && !_loading && !_isInitializing) {
+        _fetchUserLocationInBackground();
+      }
+    }
+  }
+
+  /// Initialize map immediately with default location, then fetch GPS in background
+  Future<void> _initializeMapQuickly() async {
+    // If initial coordinates provided, use them
     if (widget.args.initialLat != null && widget.args.initialLng != null) {
       await _updateLocation(
         widget.args.initialLat!,
         widget.args.initialLng!,
         fetchLocality: true,
-        shouldAnimate: true,
+        shouldAnimate: false,
       );
       _manualSelection = true;
+      setState(() => _loading = false);
     } else {
+      // Show map immediately at Riyadh
+      setState(() {
+        _lat = 24.7136;
+        _lng = 46.6753;
+        _loading = false;
+      });
+
+      // Fetch user location in background
+      _fetchUserLocationInBackground();
+    }
+  }
+
+  Future<void> _fetchUserLocationInBackground() async {
+    if (_isInitializing) return;
+    _isInitializing = true;
+
+    try {
+      final isServiceEnabled = await _locationService.checkAndRequestLocationService();
+      if (!isServiceEnabled) {
+        _isInitializing = false;
+        _showLocationServiceDialog();
+        return;
+      }
+
       final data = await _locationService.getCurrentLocation();
 
       if (data != null && data.latitude != null && data.longitude != null) {
@@ -83,8 +133,34 @@ class _MapScreenState extends State<MapScreen> {
 
         _startListening();
       }
+      // If GPS fails, keep the default Riyadh location (no update needed)
+    } finally {
+      _isInitializing = false;
     }
-    setState(() => _loading = false);
+  }
+
+  void _showLocationServiceDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocaleKey.locationRequired.tr()),
+        content: Text(AppLocaleKey.enableLocationService.tr()),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocaleKey.cancel.tr()),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              _fetchUserLocationInBackground();
+            },
+            child: Text(AppLocaleKey.openSettings.tr()),
+          ),
+        ],
+      ),
+    );
   }
 
   void _startListening() {
@@ -127,6 +203,11 @@ class _MapScreenState extends State<MapScreen> {
       _lng = lng;
       _city = data['city'];
       _locality = data['locality'];
+      _country = data['country'];
+      _stateRegion = data['state'];
+      _postalCode = data['postalCode'];
+      _streetName = data['street'];
+      _neighborhoodName = data['neighborhood'];
     });
 
     if (shouldAnimate && _mapReady) {
@@ -163,12 +244,6 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   @override
-  void dispose() {
-    _locationService.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -176,10 +251,147 @@ class _MapScreenState extends State<MapScreen> {
         child: const Icon(Icons.my_location, color: Colors.white),
         onPressed: _goToCurrentLocation,
       ),
-      body: _loading
-          ? const Center(child: CustomLoading())
-          : (_lat == null ? const Center(child: Text("Location unavailable")) : _buildMap()),
+      body: _loading ? const Center(child: CustomLoading()) : _buildMap(),
       bottomNavigationBar: _buildConfirmButton(),
+    );
+  }
+
+  void _showAddressDetailsBottomSheet() {
+    final TextEditingController countryController = TextEditingController(text: _country);
+    final TextEditingController cityController = TextEditingController(text: _city);
+    final TextEditingController stateController = TextEditingController(text: _stateRegion);
+    final TextEditingController postalCodeController = TextEditingController(text: _postalCode);
+    final TextEditingController streetController = TextEditingController(text: _streetName);
+    final TextEditingController neighborhoodController =
+        TextEditingController(text: _neighborhoodName);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return BlocProvider(
+          create: (context) => AddressCubit(),
+          child: StatefulBuilder(
+            builder: (context, setModalState) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                  left: 20,
+                  right: 20,
+                  top: 20,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                AppLocaleKey.addAddressDetails.tr(),
+                                style: AppTextStyle.text18_700,
+                              ),
+                              Text(
+                                AppLocaleKey.addressDetailsSubtitle.tr(),
+                                style: AppTextStyle.text14_400.copyWith(color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomTextField(
+                              title: AppLocaleKey.city.tr(),
+                              controller: cityController,
+                              readOnly: true,
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: CustomTextField(
+                              title: AppLocaleKey.country.tr(),
+                              controller: countryController,
+                              readOnly: true,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomTextField(
+                              title: AppLocaleKey.postalCode.tr(),
+                              controller: postalCodeController,
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: CustomTextField(
+                              title: AppLocaleKey.stateRegion.tr(),
+                              controller: stateController,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      CustomTextField(
+                        title: AppLocaleKey.streetName.tr(),
+                        controller: streetController,
+                      ),
+                      const SizedBox(height: 15),
+                      CustomTextField(
+                        title: AppLocaleKey.neighborhood.tr(),
+                        controller: neighborhoodController,
+                      ),
+                      const SizedBox(height: 30),
+                      CustomButton(
+                        text: AppLocaleKey.saveTitle.tr(),
+                        onPressed: () {
+                          context.read<AddressCubit>().storeAddress(
+                                title: streetController.text.isNotEmpty
+                                    ? streetController.text
+                                    : (_locality ?? ""),
+                                latitude: _lat!,
+                                longitude: _lng!,
+                                address: "${cityController.text}_${neighborhoodController.text}",
+                                onSuccess: () {
+                                  Navigator.pop(context); // Close Bottom Sheet
+                                  Navigator.pop(context); // Close Map Screen
+                                  widget.args.onLocationSelected?.call(
+                                    _lat!,
+                                    _lng!,
+                                    _city ?? "",
+                                    _locality ?? "",
+                                  );
+                                },
+                              );
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -189,7 +401,7 @@ class _MapScreenState extends State<MapScreen> {
         FlutterMap(
           mapController: _mapController,
           options: MapOptions(
-            initialCenter: LatLng(_lat!, _lng!),
+            initialCenter: LatLng(_lat ?? 24.7136, _lng ?? 46.6753),
             initialZoom: 14,
             onPositionChanged: _onPositionChanged,
             onMapEvent: (event) {
@@ -273,30 +485,8 @@ class _MapScreenState extends State<MapScreen> {
           text: AppLocaleKey.confirmcurrentlocation.tr(),
           onPressed: () {
             if (_lat != null && _lng != null) {
-              _locationService.dispose();
-              widget.args.onLocationSelected?.call(
-                _lat ?? 0.0,
-                _lng ?? 0.0,
-                _city ?? "",
-                _locality ?? "",
-              );
-              NavigatorMethods.pushReplacementNamed(context, AddNewLocationScreen.routeName,
-                  arguments: AddNewLocationScreenArgs(
-                    onAddressAdded: () {
-                      widget.args.onLocationSelected?.call(
-                        _lat ?? 0.0,
-                        _lng ?? 0.0,
-                        _city ?? "",
-                        _locality ?? "",
-                      );
-                    },
-                    lat: _lat,
-                    lng: _lng,
-                    city: _city,
-                    locality: _locality,
-                  ));
+              _showAddressDetailsBottomSheet();
             }
-            // Navigator.pop(context);
           },
         ),
       ),

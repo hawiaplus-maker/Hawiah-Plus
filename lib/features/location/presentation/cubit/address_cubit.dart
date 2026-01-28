@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_toast.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
@@ -10,8 +9,6 @@ import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_state.dart';
 import 'package:hawiah_client/features/location/presentation/model/address_model.dart';
-import 'package:hawiah_client/features/location/presentation/model/city_model.dart';
-import 'package:hawiah_client/features/location/presentation/model/neighborhood_model.dart';
 
 class AddressCubit extends Cubit<AddressState> {
   static AddressCubit get(BuildContext context) => BlocProvider.of(context);
@@ -22,120 +19,20 @@ class AddressCubit extends Cubit<AddressState> {
     emit(AddressUpdate());
   }
 
-  void initialCitys() {
-    _citysResponse = ApiResponse(
-      state: ResponseState.sleep,
-      data: null,
-    );
-    _citys = [];
-    emit(AddressUpdate());
-  }
-
-  ApiResponse _citysResponse = ApiResponse(
-    state: ResponseState.sleep,
-    data: null,
-  );
-  ApiResponse get citysResponse => _citysResponse;
-  List<CityModel> _citys = [];
-  List<CityModel> get citys => _citys;
-
-  Future<void> getcitys() async {
-    _citysResponse = ApiResponse(
-      state: ResponseState.loading,
-      data: null,
-    );
-
-    _citys = [];
-    emit(AddressUpdate());
-    _citysResponse = await ApiHelper.instance.get(
-      Urls.cities,
-    );
-    if (_citysResponse.state == ResponseState.complete) {
-      Iterable iterable = _citysResponse.data['message'];
-      _citys = iterable.map((e) => CityModel.fromJson(e)).toList();
-      emit(AddressUpdate());
-    }
-  }
-
-//====================== neighborhoods
-
-  void initialNeighborhoods() {
-    _neighborhoodsResponse = ApiResponse(
-      state: ResponseState.sleep,
-      data: null,
-    );
-    _neighborhoods = [];
-    emit(AddressUpdate());
-  }
-
-  ApiResponse _neighborhoodsResponse = ApiResponse(
-    state: ResponseState.sleep,
-    data: null,
-  );
-  ApiResponse get neighborhoodsResponse => _neighborhoodsResponse;
-  List<NeighborhoodModel> _neighborhoods = [];
-  List<NeighborhoodModel> get neighborhoods => _neighborhoods;
-
-  Future<void> getneighborhoods(int id) async {
-    _neighborhoodsResponse = ApiResponse(
-      state: ResponseState.loading,
-      data: null,
-    );
-    _neighborhoods = [];
-    emit(AddressUpdate());
-    _neighborhoodsResponse = await ApiHelper.instance.get(
-      Urls.neighborhoodsByCity(id),
-    );
-    if (_neighborhoodsResponse.state == ResponseState.complete) {
-      Iterable iterable = _neighborhoodsResponse.data['message'];
-      _neighborhoods = iterable.map((e) => NeighborhoodModel.fromJson(e)).toList();
-      emit(AddressUpdate());
-    }
-  }
-
-  //====================== get neighborhoods by city name ===================
-  Future<void> getneighborhoodsByName(
-      String name, Function(List<NeighborhoodModel>) onSuccess) async {
-    _neighborhoodsResponse = ApiResponse(
-      state: ResponseState.loading,
-      data: null,
-    );
-    _neighborhoods = [];
-    emit(AddressUpdate());
-    _neighborhoodsResponse = await ApiHelper.instance.get(
-      Urls.neighborhoodsByName,
-      queryParameters: {
-        'city_name': name,
-      },
-    );
-    if (_neighborhoodsResponse.state == ResponseState.complete) {
-      Iterable iterable = _neighborhoodsResponse.data['neighborhoods'];
-
-      _neighborhoods = iterable.map((e) => NeighborhoodModel.fromJson(e)).toList();
-      onSuccess(_neighborhoods);
-      emit(AddressUpdate());
-    } else {
-      CommonMethods.showToast(
-          type: ToastType.warning,
-          title: _neighborhoodsResponse.data['message'],
-          message: tr(AppLocaleKey.selectCityNotFound));
-    }
-  }
-
   //====================== Store Address ===================================
 
   Future<void> storeAddress(
       {required String title,
       required double latitude,
       required double longitude,
-      required int neighborhoodId,
+      String? address,
       required VoidCallback onSuccess}) async {
     NavigatorMethods.loading();
     FormData body = FormData.fromMap({
       'title': title,
       'latitude': latitude,
       'longitude': longitude,
-      'neighborhood_id': neighborhoodId
+      if (address != null) 'neighborhood': address,
     });
     final response = await ApiHelper.instance.post(
       Urls.storeAddress,
@@ -162,7 +59,6 @@ class AddressCubit extends Cubit<AddressState> {
       {required String title,
       required double latitude,
       required double longitude,
-      required int neighborhoodId,
       required int addressId,
       required VoidCallback onSuccess}) async {
     NavigatorMethods.loading();
@@ -170,7 +66,6 @@ class AddressCubit extends Cubit<AddressState> {
       'title': title,
       'latitude': latitude,
       'longitude': longitude,
-      'neighborhood_id': neighborhoodId
     });
     final response = await ApiHelper.instance.put(
       Urls.updateAddress(addressId),

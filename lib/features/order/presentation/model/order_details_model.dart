@@ -1,7 +1,7 @@
 class OrderDetailsModel {
   int? id;
   String? otp;
-  int? referenceNumber;
+  dynamic referenceNumber;
   String? address;
   double? latitude;
   double? longitude;

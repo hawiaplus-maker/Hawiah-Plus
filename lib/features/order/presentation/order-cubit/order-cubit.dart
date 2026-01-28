@@ -227,18 +227,20 @@ class OrderCubit extends Cubit<OrderState> {
 
   Future<void> getNearbyProviders({
     required int serviceProviderId,
-    required int addressId,
+    required double latitude,
+    required double longitude,
     VoidCallback? onBadRequest,
   }) async {
     NavigatorMethods.loading();
-    FormData body = FormData.fromMap({'product_id': serviceProviderId, 'address_id': addressId});
-    _nearbyServiceProviderResponse = await ApiHelper.instance.post(
+
+    _nearbyServiceProviderResponse = await ApiHelper.instance.get(
       Urls.getNearbyProviders,
-      body: body,
+      queryParameters: {'product_id': serviceProviderId, 'lat': latitude, 'lng': longitude},
     );
     NavigatorMethods.loadingOff();
     if (_nearbyServiceProviderResponse.state == ResponseState.complete) {
-      Iterable iterable = _nearbyServiceProviderResponse.data['data'];
+      // The API returns nearby_prices inside the message object
+      Iterable iterable = _nearbyServiceProviderResponse.data['message']['nearby_prices'] ?? [];
       _nearbyServiceProvider = iterable.map((e) => NearbyServiceProviderModel.fromJson(e)).toList();
       emit(OrderChange());
     } else if (_nearbyServiceProviderResponse.state == ResponseState.unauthorized) {
@@ -380,7 +382,7 @@ class OrderCubit extends Cubit<OrderState> {
   //==================== new empty =====================
   Future<void> newEmptyOrder({
     required int orderId,
-    required VoidCallback onSuccess,
+    required Function(OrderDetailsModel? order) onSuccess,
   }) async {
     NavigatorMethods.loading();
     FormData body = FormData.fromMap({
@@ -395,7 +397,9 @@ class OrderCubit extends Cubit<OrderState> {
       CommonMethods.showToast(
         message: response.data['message'] ?? "تم طلب افراغ الحاوية بنجاح",
       );
-      onSuccess.call();
+      onSuccess.call(response.data['data']['new_order'] != null
+          ? OrderDetailsModel.fromJson(response.data['data']['new_order'])
+          : null);
     } else if (response.state == ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(
         message: tr(AppLocaleKey.youMustLogInFirst),

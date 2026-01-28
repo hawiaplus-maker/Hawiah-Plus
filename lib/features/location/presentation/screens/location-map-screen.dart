@@ -1,21 +1,19 @@
-import 'dart:async';
-
-import 'package:defer_pointer/defer_pointer.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_loading.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
-import 'package:hawiah_client/features/location/presentation/widget/selected_location_widget.dart';
+import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
 import 'package:latlong2/latlong.dart';
 
 class LocationScreenArgs {
   final LatLng initialLatLng;
-  final Function(LatLng) onLocationSelected;
+  final Function(LatLng latLng, String? locality) onLocationSelected;
 
   LocationScreenArgs({required this.initialLatLng, required this.onLocationSelected});
 }
@@ -30,206 +28,173 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  final LocationService locationService = LocationService();
+  final LocationService _locationService = LocationService();
   final MapController _mapController = MapController();
-  late LatLng _currentPosition;
-  String _currentAddress = "Getting location...";
-  bool _showContainer = true;
-  Timer? _inactivityTimer;
+
+  bool _loading = true;
+  bool _mapReady = false;
+
+  double? _lat;
+  double? _lng;
+  String? _city;
+  String? _locality;
 
   @override
   void initState() {
     super.initState();
-    _currentPosition = widget.args.initialLatLng;
-    _getAddressFromLocation(_currentPosition);
-    _startInactivityTimer();
-  }
-
-  void _startInactivityTimer() {
-    _inactivityTimer?.cancel();
-    _inactivityTimer = Timer(const Duration(seconds: 3), () {
-      if (mounted) {
-        setState(() => _showContainer = true);
-      }
-    });
-  }
-
-  void _handleInteraction() {
-    if (_showContainer) {
-      setState(() => _showContainer = false);
-    }
-    _inactivityTimer?.cancel();
-  }
-
-  Future<void> _getAddressFromLocation(LatLng position) async {
-    final data = await locationService.updateLocation(
-      position.latitude,
-      position.longitude,
-      fetchLocality: true,
-    );
-    setState(() {
-      _currentPosition = position;
-      _currentAddress = data["locality"] ??
-          "Lat: ${position.latitude.toStringAsFixed(4)}, Lng: ${position.longitude.toStringAsFixed(4)}";
-    });
-  }
-
-  void _onPositionChanged(MapCamera camera, bool hasGesture) {
-    if (hasGesture) {
-      _currentPosition = camera.center;
-    }
-  }
-
-  Future<void> _onMapIdle() async {
-    await _getAddressFromLocation(_currentPosition);
+    _initializeMap();
   }
 
   @override
   void dispose() {
-    _inactivityTimer?.cancel();
+    _locationService.dispose();
     super.dispose();
+  }
+
+  /// Initialize map with provided location
+  Future<void> _initializeMap() async {
+    // Use initial coordinates provided
+    await _updateLocation(
+      widget.args.initialLatLng.latitude,
+      widget.args.initialLatLng.longitude,
+      fetchLocality: true,
+      shouldAnimate: false,
+    );
+    setState(() => _loading = false);
+  }
+
+  Future<void> _updateLocation(
+    double lat,
+    double lng, {
+    bool fetchLocality = false,
+    bool shouldAnimate = false,
+  }) async {
+    final data = await _locationService.updateLocation(
+      lat,
+      lng,
+      fetchLocality: fetchLocality,
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      _lat = lat;
+      _lng = lng;
+      _city = data['city'];
+      _locality = data['locality'];
+    });
+
+    if (shouldAnimate && _mapReady) {
+      _mapController.move(LatLng(_lat!, _lng!), 14);
+    }
+  }
+
+  void _onPositionChanged(MapCamera camera, bool hasGesture) {
+    if (hasGesture) {
+      _lat = camera.center.latitude;
+      _lng = camera.center.longitude;
+    }
+  }
+
+  Future<void> _onMapIdle() async {
+    if (_lat != null && _lng != null) {
+      await _updateLocation(_lat!, _lng!, fetchLocality: true);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DeferredPointerHandler(
-        child: Stack(
+      body: _loading ? const Center(child: CustomLoading()) : _buildMap(),
+      bottomNavigationBar: _buildConfirmButton(),
+    );
+  }
+
+  Widget _buildMap() {
+    return Stack(
+      children: [
+        FlutterMap(
+          mapController: _mapController,
+          options: MapOptions(
+            initialCenter: LatLng(_lat ?? 24.7136, _lng ?? 46.6753),
+            initialZoom: 14,
+            onPositionChanged: _onPositionChanged,
+            onMapEvent: (event) {
+              if (event is MapEventMoveEnd) {
+                _onMapIdle();
+              }
+            },
+            onMapReady: () => _mapReady = true,
+            cameraConstraint: CameraConstraint.unconstrained(),
+          ),
           children: [
-            // Map with interaction handling
-            Positioned.fill(
-              child: FlutterMap(
-                mapController: _mapController,
-                options: MapOptions(
-                  initialCenter: _currentPosition,
-                  initialZoom: 12,
-                  onPositionChanged: _onPositionChanged,
-                  onMapEvent: (event) {
-                    if (event is MapEventMoveStart) {
-                      _handleInteraction();
-                    } else if (event is MapEventMoveEnd) {
-                      _startInactivityTimer();
-                      _onMapIdle();
-                    }
-                  },
-                ),
-                children: [
-                  TileLayer(
-                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'com.futuretec.hawiahplus',
-                    keepBuffer: 2,
-                    panBuffer: 1,
-                    tileProvider: CancellableNetworkTileProvider(),
-                  ),
-                ],
-              ),
-            ),
-
-            /// 🔹 Center Pin
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 35),
-                child: Image.asset(
-                  AppImages.mapPin,
-                  height: 40,
-                  width: 40,
-                ),
-              ),
-            ),
-
-            // Top selected location widget
-            SelectedLocationWidget(showContainer: _showContainer),
-
-            // Bottom Container with animation
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: AnimatedSlide(
-                duration: const Duration(milliseconds: 300),
-                offset: _showContainer ? Offset.zero : const Offset(0, 1),
-                child: Container(
-                  height: 0.2.sh,
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 10,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            AppLocaleKey.confirmcurrentlocation.tr(),
-                            style: TextStyle(
-                              color: const Color(0xff979797),
-                              fontSize: 12.sp,
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Text(
-                            AppLocaleKey.currentaddress.tr(),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10.h),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xffF9F9F9),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: const Color(0xffF9F9F9)),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              "assets/icons/location_map_icon.png",
-                              height: 20,
-                              width: 20,
-                            ),
-                            SizedBox(width: 10.w),
-                            Expanded(
-                              child: Text(
-                                _currentAddress,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.sp,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.futuretec.hawiahplus',
+              keepBuffer: 2,
+              panBuffer: 1,
+              tileProvider: CancellableNetworkTileProvider(),
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
+
+        /// 🔹 Center Pin
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 35),
+            child: Image.asset(
+              AppImages.pinImage,
+              height: 50,
+              width: 50,
+            ),
+          ),
+        ),
+
+        /// 🔹 Address Card
+        if (_city != null || _locality != null)
+          Positioned(
+            top: MediaQuery.of(context).viewInsets.top + 50,
+            left: 20,
+            right: 20,
+            child: Card(
+              elevation: 3,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 12, bottom: 12.0, left: 16.0, right: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (_city != null)
+                      Text(
+                        _city!,
+                        style: AppTextStyle.text16_700.copyWith(
+                          color: AppColor.mainAppColor,
+                        ),
+                      ),
+                    if (_locality != null)
+                      Text(
+                        _locality!,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildConfirmButton() {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
         child: CustomButton(
-          text: "confirm_address".tr(),
+          text: AppLocaleKey.confirmcurrentlocation.tr(),
           onPressed: () {
-            Navigator.pop(context);
-            widget.args.onLocationSelected.call(_currentPosition);
+            if (_lat != null && _lng != null) {
+              Navigator.pop(context);
+              widget.args.onLocationSelected.call(LatLng(_lat!, _lng!), _locality);
+            }
           },
         ),
       ),

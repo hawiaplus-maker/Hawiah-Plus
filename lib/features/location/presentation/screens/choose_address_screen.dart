@@ -128,8 +128,7 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                               return LocationItemWidget(
                                 imagePath: AppImages.addressLocationIcon,
                                 title: addressCubit.addresses[index].title ?? "",
-                                address:
-                                    "${addressCubit.addresses[index].city ?? ""} - ${addressCubit.addresses[index].neighborhood ?? ""}",
+                                address: "${addressCubit.addresses[index].neighborhood ?? ""}",
                                 isSelected: addressId == addressCubit.addresses[index].id,
                                 onTap: () {
                                   addressId = addressCubit.addresses[index].id;
@@ -176,12 +175,22 @@ class _ChooseAddressScreenState extends State<ChooseAddressScreen> {
                                 return CommonMethods.showError(
                                     message: AppLocaleKey.youHaveToChooseAddress.tr());
                               } else {
+                                // Find the address with the matching ID
+                                final selectedAddress = addressCubit.addresses.firstWhere(
+                                  (address) => address.id == addressId,
+                                  orElse: () => addressCubit.addresses.first,
+                                );
+
                                 NavigatorMethods.pushNamed(
                                   context,
                                   NearbyServiceProviderScreen.routeName,
                                   arguments: NearbyServiceProviderArguments(
                                       serviceProviderId: widget.args.serviceProviderId,
-                                      addressId: addressId!),
+                                      addressId: selectedAddress.id!,
+                                      latitude:
+                                          double.tryParse(selectedAddress.latitude ?? "") ?? 0.0,
+                                      longitude:
+                                          double.tryParse(selectedAddress.longitude ?? "") ?? 0.0),
                                 );
                               }
                             },

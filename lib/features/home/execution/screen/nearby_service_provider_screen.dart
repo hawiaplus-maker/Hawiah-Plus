@@ -13,11 +13,14 @@ import 'package:hawiah_client/features/order/presentation/order-cubit/order-stat
 class NearbyServiceProviderArguments {
   final int serviceProviderId;
   final int addressId;
+  final double latitude;
+  final double longitude;
 
   NearbyServiceProviderArguments({
     required this.serviceProviderId,
     required this.addressId,
-
+    required this.latitude,
+    required this.longitude,
   });
 }
 
@@ -33,7 +36,8 @@ class NearbyServiceProviderScreen extends StatelessWidget {
       create: (context) => OrderCubit()
         ..getNearbyProviders(
           serviceProviderId: args.serviceProviderId,
-          addressId: args.addressId,
+          latitude: args.latitude,
+          longitude: args.longitude,
           onBadRequest: () {
             Navigator.pop(context);
           },
@@ -49,7 +53,9 @@ class NearbyServiceProviderScreen extends StatelessWidget {
             return ApiResponseWidget(
               apiResponse: providers.nearbyServiceProviderResponse,
               onReload: () => providers.getNearbyProviders(
-                  serviceProviderId: args.serviceProviderId, addressId: args.addressId),
+                  serviceProviderId: args.serviceProviderId,
+                  latitude: args.latitude,
+                  longitude: args.longitude),
               isEmpty: providers.nearbyServiceProvider.isEmpty,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
