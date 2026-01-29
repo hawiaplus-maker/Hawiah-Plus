@@ -429,5 +429,6 @@
     "openSettings": "فتح الإعدادات",
     "locationRequired": "الموقع مطلوب",
     "reEmptythecontainer": "إفراغ الحاوية مرة أخرى",
-    "validateDateAfterHours": "يجب ان يكون تاريخ الطلب بعد {} ساعة من الان"
+    "validateDateAfterHours": "يجب ان يكون تاريخ الطلب بعد {} ساعة من الان",
+    "noNearbyServiceProvider":"لا يوجد مزودي خدمة بالقرب منك في الوقت الحالي"
 }

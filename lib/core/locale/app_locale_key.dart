@@ -323,4 +323,5 @@ class AppLocaleKey {
   static const openSettings = 'openSettings';
   static const locationRequired = 'locationRequired';
   static const String validateDateAfterHours = 'validateDateAfterHours';
+  static const String noNearbyServiceProvider = 'noNearbyServiceProvider';
 }

@@ -240,8 +240,14 @@ class OrderCubit extends Cubit<OrderState> {
     NavigatorMethods.loadingOff();
     if (_nearbyServiceProviderResponse.state == ResponseState.complete) {
       // The API returns nearby_prices inside the message object
-      Iterable iterable = _nearbyServiceProviderResponse.data['message']['nearby_prices'] ?? [];
-      _nearbyServiceProvider = iterable.map((e) => NearbyServiceProviderModel.fromJson(e)).toList();
+      final nearbyPrices = _nearbyServiceProviderResponse.data['message']['nearby_prices'] ?? [];
+
+      if (nearbyPrices is List) {
+        _nearbyServiceProvider =
+            nearbyPrices.map((e) => NearbyServiceProviderModel.fromJson(e)).toList();
+      } else {
+        _nearbyServiceProvider = [];
+      }
       emit(OrderChange());
     } else if (_nearbyServiceProviderResponse.state == ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(

@@ -426,5 +426,6 @@
   "openSettings": "Open Settings",
   "locationRequired": "Location required",
   "reEmptythecontainer": "Re-empty the container",
-  "validateDateAfterHours": "Request date must be after {} hours from now"
+  "validateDateAfterHours": "Request date must be after {} hours from now",
+  "noNearbyServiceProvider":"No nearby service providers available at the moment"
 }

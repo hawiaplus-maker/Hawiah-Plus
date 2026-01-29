@@ -426,5 +426,6 @@
   "openSettings": "سیٹنگز کھولیں",
   "locationRequired": "مقام ضروری ہے",
   "reEmptythecontainer": "کنٹینر دوبارہ خالی کریں",
-  "validateDateAfterHours": "درخواست کی تاریخ اب سے {} گھنٹے بعد ہونی چاہیے"
+  "validateDateAfterHours": "درخواست کی تاریخ اب سے {} گھنٹے بعد ہونی چاہیے",
+  "noNearbyServiceProvider":"اس وقت آپ کے قریب کوئی سروس فراہم کنندہ دستیاب نہیں ہے"
 }

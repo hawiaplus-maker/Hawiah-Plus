@@ -57,6 +57,7 @@ class NearbyServiceProviderScreen extends StatelessWidget {
                   latitude: args.latitude,
                   longitude: args.longitude),
               isEmpty: providers.nearbyServiceProvider.isEmpty,
+              noDataMessage: AppLocaleKey.noNearbyServiceProvider.tr(),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -70,6 +71,7 @@ class NearbyServiceProviderScreen extends StatelessWidget {
                       AppLocaleKey.spDiscription.tr(),
                       style: AppTextStyle.text16_400.copyWith(color: AppColor.greyTextColor),
                     ),
+
                     Expanded(
                       child: ListView.builder(
                           itemCount: providers.nearbyServiceProvider.length,
