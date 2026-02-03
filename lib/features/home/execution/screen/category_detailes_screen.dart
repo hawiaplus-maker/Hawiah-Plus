@@ -58,14 +58,17 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
               }
 
               return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
                 child: ListView.builder(
                   itemCount: services.length,
                   itemBuilder: (context, index) {
-                    return CategoryCardWidget(
-                      homeCubit: cubit,
-                      widget: widget,
-                      index: index,
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5.h),
+                      child: CategoryCardWidget(
+                        homeCubit: cubit,
+                        widget: widget,
+                        index: index,
+                      ),
                     );
                   },
                 ),

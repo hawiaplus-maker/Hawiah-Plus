@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hawiah_client/core/custom_widgets/api_response_widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_app_bar.dart';
-import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
@@ -13,8 +12,6 @@ import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/execution/widget/coupone_widget.dart';
 import 'package:hawiah_client/features/home/execution/widget/order_detailes_widget.dart';
 import 'package:hawiah_client/features/home/execution/widget/order_details_pricing_section.dart';
-import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
-import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/features/order/presentation/model/order_details_model.dart';
 import 'package:hawiah_client/features/order/presentation/model/payment_model.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
@@ -88,6 +85,7 @@ class _OrderReviewDetailesState extends State<OrderReviewDetailes> {
                         discountValue: discountValue,
                         priceAfterDiscount: priceAfterDiscount,
                         copone: copone,
+                        fees: fees,
                       ),
                       SizedBox(
                         height: 15,
@@ -191,15 +189,15 @@ class _OrderReviewDetailesState extends State<OrderReviewDetailes> {
                       SizedBox(
                         height: 15,
                       ),
-                      if (showBackToHome)
-                        CustomButton(
-                          text: AppLocaleKey.backToHome.tr(),
-                          onPressed: () async {
-                            await LayoutMethouds.getdata();
-                            NavigatorMethods.pushNamedAndRemoveUntil(
-                                context, LayoutScreen.routeName);
-                          },
-                        ),
+                      // if (showBackToHome)
+                      //   CustomButton(
+                      //     text: AppLocaleKey.backToHome.tr(),
+                      //     onPressed: () async {
+                      //       await LayoutMethouds.getdata();
+                      //       NavigatorMethods.pushNamedAndRemoveUntil(
+                      //           context, LayoutScreen.routeName);
+                      //     },
+                      //   ),
                       SizedBox(
                         height: 15,
                       ),

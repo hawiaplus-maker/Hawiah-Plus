@@ -10,6 +10,7 @@ import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
+import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/features/location/presentation/cubit/address_cubit.dart';
 import 'package:hawiah_client/features/location/service/location_service.dart';
 import 'package:latlong2/latlong.dart';
@@ -60,6 +61,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   String? _neighborhoodName;
 
   DateTime? _lastUpdate;
+  bool _hasShownInitialBottomSheet = false;
+  bool _isBottomSheetOpen = false;
 
   @override
   void initState() {
@@ -96,6 +99,23 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
       );
       _manualSelection = true;
       setState(() => _loading = false);
+      if (!_hasShownInitialBottomSheet) {
+        if (_neighborhoodName == null && _postalCode == null) {
+          await Future.delayed(const Duration(milliseconds: 500));
+          await _updateLocation(
+            widget.args.initialLat!,
+            widget.args.initialLng!,
+            fetchLocality: true,
+            shouldAnimate: false,
+          );
+        }
+
+        // Only show if we actually have data now
+        if ((_neighborhoodName != null || _postalCode != null) && !_hasShownInitialBottomSheet) {
+          _hasShownInitialBottomSheet = true;
+          if (mounted) _showAddressDetailsBottomSheet();
+        }
+      }
     } else {
       // Show map immediately at Riyadh
       setState(() {
@@ -132,6 +152,25 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
         );
 
         _startListening();
+
+        if (!_hasShownInitialBottomSheet) {
+          if (_neighborhoodName == null && _postalCode == null) {
+            await Future.delayed(const Duration(milliseconds: 500));
+            // Retry update with same location
+            await _updateLocation(
+              data.latitude!,
+              data.longitude!,
+              fetchLocality: true,
+              shouldAnimate: false,
+            );
+          }
+
+          // Only show if we actually have data now
+          if ((_neighborhoodName != null || _postalCode != null) && !_hasShownInitialBottomSheet) {
+            _hasShownInitialBottomSheet = true;
+            if (mounted) _showAddressDetailsBottomSheet();
+          }
+        }
       }
       // If GPS fails, keep the default Riyadh location (no update needed)
     } finally {
@@ -201,13 +240,14 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     setState(() {
       _lat = lat;
       _lng = lng;
-      _city = data['city'];
-      _locality = data['locality'];
-      _country = data['country'];
-      _stateRegion = data['state'];
-      _postalCode = data['postalCode'];
-      _streetName = data['street'];
-      _neighborhoodName = data['neighborhood'];
+      // Only update if new data is available (don't overwrite existing with null)
+      _city = data['city'] ?? _city;
+      _locality = data['locality'] ?? _locality;
+      _country = data['country'] ?? _country;
+      _stateRegion = data['state'] ?? _stateRegion;
+      _postalCode = data['postalCode'] ?? _postalCode;
+      _streetName = data['street'] ?? _streetName;
+      _neighborhoodName = data['neighborhood'] ?? _neighborhoodName;
     });
 
     if (shouldAnimate && _mapReady) {
@@ -257,6 +297,19 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   }
 
   void _showAddressDetailsBottomSheet() {
+    if (_isBottomSheetOpen) return;
+
+    // Strict Check: If data is missing, don't open. Retry instead.
+    if (_city == null && _neighborhoodName == null) {
+      CommonMethods.showToast(message: "Wait, fetching address details...");
+      if (_lat != null && _lng != null) {
+        _updateLocation(_lat!, _lng!, fetchLocality: true);
+      }
+      return;
+    }
+
+    _isBottomSheetOpen = true;
+
     final TextEditingController countryController = TextEditingController(text: _country);
     final TextEditingController cityController = TextEditingController(text: _city);
     final TextEditingController stateController = TextEditingController(text: _stateRegion);
@@ -392,7 +445,9 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
           ),
         );
       },
-    );
+    ).whenComplete(() {
+      _isBottomSheetOpen = false;
+    });
   }
 
   Widget _buildMap() {

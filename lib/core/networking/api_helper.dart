@@ -129,13 +129,16 @@ class ApiHelper {
   // HTTP METHODS
   Future<ApiResponse> get(String url,
           {Map<String, dynamic>? queryParameters,
+          dynamic body,
           Map<String, String>? headers,
           void Function()? onFinish,
           void Function(int, int)? onReceiveProgress,
-          bool hasToken = true}) async =>
+          bool hasToken = true,
+          bool isMultipart = false}) async =>
       _run(
           () => _dio.get(url,
               queryParameters: queryParameters,
+              data: isMultipart ? FormData.fromMap(body) : body,
               options: _options(headers, hasToken),
               onReceiveProgress: onReceiveProgress),
           onFinish: onFinish);

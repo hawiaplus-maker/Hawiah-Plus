@@ -54,18 +54,18 @@ class CategoryCardWidget extends StatelessWidget {
                       width: 95.w,
                       fit: BoxFit.fill,
                     ),
-                    Container(
-                      height: 20.h,
-                      width: 37.w,
-                      decoration: BoxDecoration(
-                          color: AppColor.blackColor, borderRadius: BorderRadius.circular(10)),
-                      child: Text(
-                        '${homeCubit.showCategories?.message?.services?[index].size.toString() ?? ""} ${AppLocaleKey.meter.tr()}',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.text10_400.copyWith(color: AppColor.whiteColor),
-                        maxLines: 1,
-                      ),
-                    ),
+                    // Container(
+                    //   height: 20.h,
+                    //   width: 37.w,
+                    //   decoration: BoxDecoration(
+                    //       color: AppColor.blackColor, borderRadius: BorderRadius.circular(10)),
+                    //   child: Text(
+                    //     '${homeCubit.showCategories?.message?.services?[index].size.toString() ?? ""} ${AppLocaleKey.meter.tr()}',
+                    //     textAlign: TextAlign.center,
+                    //     style: AppTextStyle.text10_400.copyWith(color: AppColor.whiteColor),
+                    //     maxLines: 1,
+                    //   ),
+                    // ),
                   ],
                 ),
                 SizedBox(height: 10.h),
@@ -91,13 +91,6 @@ class CategoryCardWidget extends StatelessWidget {
                                   color: AppColor.whiteColor, fontWeight: FontWeight.bold),
                             ),
                             color: AppColor.mainAppColor,
-                            onPressed: () {
-                              NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
-                                  arguments: ChooseAddressScreenArgs(
-                                    serviceProviderId:
-                                        homeCubit.showCategories?.message?.services?[index].id ?? 0,
-                                  ));
-                            },
                           ),
                         ],
                       ),
@@ -107,36 +100,36 @@ class CategoryCardWidget extends StatelessWidget {
                         style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
                         maxLines: 4,
                       ),
-                      SizedBox(height: 10.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AppLocaleKey.dimensions.tr(),
-                            style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
-                          ),
-                          Text(
-                            homeCubit.showCategories?.message?.services?[index].measurements ?? "",
-                            style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AppLocaleKey.Capacity.tr(),
-                            style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            ' ${homeCubit.showCategories?.message?.services?[index].size.toString() ?? ""}${AppLocaleKey.cubicMeter.tr()} ',
-                            style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
+                      //  SizedBox(height: 10.h),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Text(
+                      //       AppLocaleKey.dimensions.tr(),
+                      //       style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
+                      //     ),
+                      //     Text(
+                      //       homeCubit.showCategories?.message?.services?[index].measurements ?? "",
+                      //       style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(height: 10.h),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Text(
+                      //       AppLocaleKey.Capacity.tr(),
+                      //       style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
+                      //       textAlign: TextAlign.center,
+                      //     ),
+                      //     Text(
+                      //       ' ${homeCubit.showCategories?.message?.services?[index].size.toString() ?? ""}${AppLocaleKey.cubicMeter.tr()} ',
+                      //       style: AppTextStyle.text10_400.copyWith(color: AppColor.greyColor),
+                      //       textAlign: TextAlign.center,
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 )

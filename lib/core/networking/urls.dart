@@ -49,8 +49,7 @@ class Urls {
   static String rateDiver = '${baseUrl}rate-service-provider';
   static String neighborhoodsByCity(int id) => '${baseUrl}neighborhoods/$id';
   static String updateAddress(int id) => '${baseUrl}user-addresses/$id';
-  static String payment(int orderId, int paymentMethodId) =>
-      '${baseUrl}paymob-paid/?order_id=$orderId&payment_method_id=$paymentMethodId';
+  static const String payment = '${baseUrl}paymob-paid';
   static String confirmPayment(int orderId) =>
       '${baseUrl}paymob-paid-confirmed?order_id=$orderId&success=true';
   static String getNotifications = '${baseUrl}notifications';

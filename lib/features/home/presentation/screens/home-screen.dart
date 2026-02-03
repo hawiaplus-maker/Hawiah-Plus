@@ -55,9 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           body: MultiBlocProvider(
             providers: [
-              BlocProvider(create: (context) => sl<HomeSlidersCubit>()),
-              BlocProvider(create: (context) => sl<HomeCategoriesCubit>()),
-              BlocProvider(create: (context) => sl<HomeServicesCubit>()),
+              BlocProvider.value(value: sl<HomeSlidersCubit>()),
+              BlocProvider.value(value: sl<HomeCategoriesCubit>()),
+              BlocProvider.value(value: sl<HomeServicesCubit>()),
             ],
             child: LayoutBuilder(
               builder: (context, constraints) {
@@ -68,13 +68,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: 10),
                       const HomeSliderWidgets(),
                       SizedBox(height: 20),
-                      HomeCategoriesListWidget(),
-                      SizedBox(height: 15),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                         child: Text(AppLocaleKey.bestseller.tr(), style: AppTextStyle.text18_500),
                       ),
                       BestsellerListWidget(),
+                      SizedBox(height: 15),
+                      HomeCategoriesListWidget(),
                     ],
                   ),
                 );

@@ -7,7 +7,6 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/home/execution/screen/category_detailes_screen.dart';
 import 'package:hawiah_client/features/home/presentation/model/services_model.dart';
 import 'package:hawiah_client/features/location/presentation/screens/choose_address_screen.dart';
 
@@ -30,13 +29,10 @@ class _BestSellerWidgtState extends State<BestSellerWidgt> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                CategoryDetailsScreen(id: widget.item.categoryId.first, title: widget.item.title),
-          ),
-        );
+        NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
+            arguments: ChooseAddressScreenArgs(
+              serviceProviderId: widget.item.id ?? 0,
+            ));
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
@@ -80,12 +76,12 @@ class _BestSellerWidgtState extends State<BestSellerWidgt> {
                     .copyWith(color: AppColor.whiteColor, fontWeight: FontWeight.bold),
               ),
               color: AppColor.mainAppColor,
-              onPressed: () {
-                NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
-                    arguments: ChooseAddressScreenArgs(
-                      serviceProviderId: widget.item.id ?? 0,
-                    ));
-              },
+              // onPressed: () {
+              //   NavigatorMethods.pushNamed(context, ChooseAddressScreen.routeName,
+              //       arguments: ChooseAddressScreenArgs(
+              //         serviceProviderId: widget.item.id ?? 0,
+              //       ));
+              // },
             )
           ],
         ),

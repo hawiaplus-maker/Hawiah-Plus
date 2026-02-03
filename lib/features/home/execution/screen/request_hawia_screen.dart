@@ -49,6 +49,10 @@ class _RequestHawiahScreenState extends State<RequestHawiahScreen> {
   void initState() {
     super.initState();
     homeCubit = HomeCubit.get(context); // safe هنا
+    homeCubit.rangeStart = DateTime.now();
+    final setting = sl<SettingCubit>().setting;
+    final int hourDuration = setting?.noOfHours ?? 0;
+    homeCubit.fromTime = DateTime.now().add(Duration(hours: hourDuration));
   }
 
   @override

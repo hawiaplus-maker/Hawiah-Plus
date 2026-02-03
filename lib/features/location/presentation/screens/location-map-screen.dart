@@ -62,13 +62,31 @@ class _LocationScreenState extends State<LocationScreen> {
 
   /// Initialize map with provided location
   Future<void> _initializeMap() async {
+    // Initial delay to ensure map/services are ready
+    await Future.delayed(const Duration(milliseconds: 200));
+
     await _updateLocation(
       widget.args.initialLatLng.latitude,
       widget.args.initialLatLng.longitude,
       fetchLocality: true,
       shouldAnimate: false,
     );
-    setState(() => _loading = false);
+
+    // Retry if data is missing
+    if (_neighborhood == null && _locality == null) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      await _updateLocation(
+        widget.args.initialLatLng.latitude,
+        widget.args.initialLatLng.longitude,
+        fetchLocality: true,
+        shouldAnimate: false,
+      );
+    }
+
+    if (mounted) {
+      setState(() => _loading = false);
+      _showAddressDetailsBottomSheet();
+    }
   }
 
   Future<void> _updateLocation(

@@ -12,14 +12,22 @@ class OrderDetailsPricingSection extends StatelessWidget {
       this.discountValue,
       this.discount,
       this.priceAfterDiscount,
-      this.copone});
+      this.copone,
+      this.fees});
   final OrderDetailsModel ordersModel;
   final String? discountValue;
   final String? priceAfterDiscount;
   final String? copone;
   final int? discount;
+  final double? fees;
   @override
   Widget build(BuildContext context) {
+    double total = double.tryParse(ordersModel.totalPrice ?? '0') ?? 0.0;
+    double priceAfterDiscountVal = double.tryParse(priceAfterDiscount ?? '0') ?? 0.0;
+    if (fees != null) {
+      total += fees!;
+      priceAfterDiscountVal += fees!;
+    }
     return Container(
       padding: const EdgeInsets.all(10),
       width: double.infinity,
@@ -71,12 +79,23 @@ class OrderDetailsPricingSection extends StatelessWidget {
               ],
             )
           ],
+          if (fees != null && fees! > 0) ...[
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(AppLocaleKey.paymentMethod.tr(), style: AppTextStyle.text16_400),
+                Text(AppLocaleKey.sar.tr(args: [fees!.toStringAsFixed(2)]),
+                    style: AppTextStyle.text16_400),
+              ],
+            )
+          ],
           Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocaleKey.totalPrice.tr(), style: AppTextStyle.text16_400),
-              Text(AppLocaleKey.sar.tr(args: [ordersModel.totalPrice ?? ""]),
+              Text(AppLocaleKey.sar.tr(args: [total.toStringAsFixed(2)]),
                   style: AppTextStyle.text16_400.copyWith(color: AppColor.mainAppColor)),
             ],
           ),
@@ -88,7 +107,7 @@ class OrderDetailsPricingSection extends StatelessWidget {
                 Text(AppLocaleKey.priceAfterDiscount.tr(), style: AppTextStyle.text16_400),
                 Text(
                     AppLocaleKey.sar.tr(
-                      args: [priceAfterDiscount ?? ""],
+                      args: [priceAfterDiscountVal.toStringAsFixed(2)],
                     ),
                     style: AppTextStyle.text16_400.copyWith(color: AppColor.mainAppColor)),
               ],

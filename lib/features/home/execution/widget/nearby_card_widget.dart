@@ -17,22 +17,25 @@ class NearbyCardWidget extends StatelessWidget {
   final int index;
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          color: AppColor.whiteColor,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColor.mainAppColor.withAlpha(50)),
-        ),
-        child: GestureDetector(
-          onTap: () {
-            NavigatorMethods.pushNamed(context, RequestHawiahScreen.routeName,
-                arguments: RequestHawiahScreenArgs(
-                  addressId: args.addressId,
-                  serviceProviderId: args.serviceProviderId,
-                  nearbyServiceProviderModel: providers,
-                ));
-          },
+    return GestureDetector(
+      onTap: () {
+        NavigatorMethods.pushNamed(
+          context,
+          RequestHawiahScreen.routeName,
+          arguments: RequestHawiahScreenArgs(
+            addressId: args.addressId,
+            serviceProviderId: args.serviceProviderId,
+            nearbyServiceProviderModel: providers,
+          ),
+        );
+      },
+      child: Container(
+          margin: EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            color: AppColor.whiteColor,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: AppColor.mainAppColor.withAlpha(50)),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -78,24 +81,24 @@ class NearbyCardWidget extends StatelessWidget {
                       SizedBox(
                         height: 5,
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.asset(AppImages.trustedImage, height: 15, width: 15),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            AppLocaleKey.trusted.tr(),
-                            style: AppTextStyle.text10_400.copyWith(
-                              color: AppColor.mainAppColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
+                      // Row(
+                      //   mainAxisSize: MainAxisSize.min,
+                      //   children: [
+                      //     Image.asset(AppImages.trustedImage, height: 15, width: 15),
+                      //     SizedBox(
+                      //       width: 5,
+                      //     ),
+                      //     Text(
+                      //       AppLocaleKey.trusted.tr(),
+                      //       style: AppTextStyle.text10_400.copyWith(
+                      //         color: AppColor.mainAppColor,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(
+                      //   height: 5,
+                      // ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -166,7 +169,7 @@ class NearbyCardWidget extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ));
+          )),
+    );
   }
 }

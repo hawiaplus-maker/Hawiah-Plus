@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hawiah_client/core/custom_widgets/custom_toast.dart';
 import 'package:hawiah_client/core/routes/app_routers_import.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -306,7 +307,8 @@ class DateMethods {
                               .isBefore(DateTime.now().add(Duration(hours: minHoursDuration)))) {
                             CommonMethods.showToast(
                                 message: AppLocaleKey.validateDateAfterHours
-                                    .tr(args: [minHoursDuration.toString()]));
+                                    .tr(args: [minHoursDuration.toString()]),
+                                type: ToastType.error);
                             return;
                           }
                         }

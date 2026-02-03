@@ -240,16 +240,25 @@ class OrderCubit extends Cubit<OrderState> {
     );
     NavigatorMethods.loadingOff();
     if (_nearbyServiceProviderResponse.state == ResponseState.complete) {
-      // The API returns nearby_prices inside the message object
-      final nearbyPrices = _nearbyServiceProviderResponse.data['message']['nearby_prices'] ?? [];
+      final message = _nearbyServiceProviderResponse.data['message'];
 
-      if (nearbyPrices is List) {
-        _nearbyServiceProvider =
-            nearbyPrices.map((e) => NearbyServiceProviderModel.fromJson(e)).toList();
+      if (message is Map) {
+        final nearbyPrices = message['nearby_prices'] ?? [];
+
+        if (nearbyPrices is List) {
+          _nearbyServiceProvider =
+              nearbyPrices.map((e) => NearbyServiceProviderModel.fromJson(e)).toList();
+        } else {
+          _nearbyServiceProvider = [];
+        }
+        emit(OrderChange());
       } else {
-        _nearbyServiceProvider = [];
+        CommonMethods.showError(
+          message: message?.toString() ?? 'حدث خطاء',
+          apiResponse: _nearbyServiceProviderResponse,
+        );
+        onBadRequest?.call();
       }
-      emit(OrderChange());
     } else if (_nearbyServiceProviderResponse.state == ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(
         message: tr(AppLocaleKey.youMustLogInFirst),
@@ -465,7 +474,11 @@ class OrderCubit extends Cubit<OrderState> {
     NavigatorMethods.loading();
 
     final response = await ApiHelper.instance.get(
-      Urls.payment(orderId, selectedPaymentMethod),
+      Urls.payment,
+      queryParameters: {
+        'order_id': orderId,
+        'payment_method_id': selectedPaymentMethod,
+      },
     );
 
     NavigatorMethods.loadingOff();
