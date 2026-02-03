@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/app-language/presentation/screens/app-language-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-cubit.dart';
+import 'package:hawiah_client/features/on-boarding/presentation/screens/on-borading-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:hawiah_client/injection_container.dart';
@@ -36,10 +36,16 @@ class _SplashScreenState extends State<SplashScreen> {
     if (HiveMethods.isFirstTime() == true) {
       await Future.delayed(Duration(seconds: 2));
       OnBoardingCubit.get(context).getOnboarding();
-      Navigator.pushReplacement(
+      Navigator.push<void>(
         context,
-        MaterialPageRoute(builder: (context) => const AppLanguageScreen()),
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => const OnBoardingScreen(),
+        ),
       );
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => const AppLanguageScreen()),
+      // );
     } else {
       if (HiveMethods.getToken() != null) {
         await cubit.fetchProfile(

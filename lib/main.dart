@@ -44,8 +44,8 @@ void main() async {
         Locale('ur'),
       ],
       path: 'assets/translations',
-      startLocale: const Locale('ar'),
-      fallbackLocale: const Locale('en'),
+      startLocale: Locale(HiveMethods.getLang()),
+      fallbackLocale: const Locale('ar'),
       child: BlocProvider(
         create: (context) => AppThemeCubit()..initial(),
         child: HawiahPlusApp(initialMessage: initialMessage),
