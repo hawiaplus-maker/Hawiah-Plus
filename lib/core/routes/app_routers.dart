@@ -131,6 +131,20 @@ class AppRouters {
         return MaterialPageRoute(
           builder: (_) => const TimePeriodScreen(),
         );
+      case MyPointsScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const MyPointsScreen(),
+        );
+      case PointsPartnerScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const PointsPartnerScreen(),
+        );
+      case PaymentMethodsScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => PaymentMethodsScreen(
+            args: args,
+          ),
+        );
       case SuccessOrderConfirmationScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => SuccessOrderConfirmationScreen(

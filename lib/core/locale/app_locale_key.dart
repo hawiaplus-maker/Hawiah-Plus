@@ -324,4 +324,37 @@ class AppLocaleKey {
   static const locationRequired = 'locationRequired';
   static const String validateDateAfterHours = 'validateDateAfterHours';
   static const String noNearbyServiceProvider = 'noNearbyServiceProvider';
+  static const String myPoints = 'myPoints';
+  static const String loyaltyPoints = 'loyaltyPoints';
+  static const String pointsPartners = 'pointsPartners';
+  static const String transfareYourPoints = 'transfareYourPoints';
+  static const String transactions = 'transactions';
+  static const String youHaveXPoints = 'youHaveXPoints';
+  static const String show = 'show';
+  static const String hide = 'hide';
+  static const String theNumberOfPointsToBeRedeemed = 'theNumberOfPointsToBeRedeemed';
+  static const String noteEachPointEquals1SAR = 'noteEachPointEquals1SAR';
+  static const String xPoint = 'xPoint';
+  static const String userCode = 'userCode';
+  static const String copyCode = 'copyCode';
+  static const String barcode = 'barcode';
+  static const String doneSuccessfully = 'doneSuccessfully';
+  static const String yourPointsHaveBeenTransferredSuccessfully =
+      'yourPointsHaveBeenTransferredSuccessfully';
+  static const String paymentMethods = 'paymentMethods';
+  static const String choosePaymentMethod = 'choosePaymentMethod';
+  static const String tamaraHeadline1 = 'tamaraHeadline1';
+  static const String tamaraHeadline2 = 'tamaraHeadline2';
+  static const String tamaraHeadline3 = 'tamaraHeadline3';
+  static const String tamaraSubtitle1 = 'tamaraSubtitle1';
+  static const String tamaraSubtitle2 = 'tamaraSubtitle2';
+  static const String tamaraSubtitle3 = 'tamaraSubtitle3';
+  static const String tabyHeadline1 = 'tabyHeadline1';
+  static const String tabyHeadline2 = 'tabyHeadline2';
+  static const String tabyHeadline3 = 'tabyHeadline3';
+  static const String tabySubtitle1 = 'tabySubtitle1';
+  static const String tabySubtitle2 = 'tabySubtitle2';
+  static const String tabySubtitle3 = 'tabySubtitle3';
+  static const String welcome = 'welcome';
+  static const String hello = 'hello';
 }

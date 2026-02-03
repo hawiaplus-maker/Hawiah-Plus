@@ -1,4 +1,5 @@
 import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
+import 'package:hawiah_client/features/order/presentation/model/payment_model.dart';
 import 'package:hawiah_client/features/order/presentation/model/single_order_model.dart';
 
 abstract class OrderState {}
@@ -37,3 +38,10 @@ class CurrentOrderError extends OrderState {
 }
 
 class CurrentOrderLoading extends OrderState {}
+
+class PaymentMethodsUpdate extends OrderState {}
+
+class PaymentMethodsLoaded extends OrderState {
+  final List<PaymentMethoudModel> paymentMethods;
+  PaymentMethodsLoaded(this.paymentMethods);
+}

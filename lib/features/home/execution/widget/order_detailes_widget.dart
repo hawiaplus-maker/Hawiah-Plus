@@ -53,30 +53,30 @@ class OrderDetailesWidget extends StatelessWidget {
               style: AppTextStyle.text16_500.copyWith(color: AppColor.textGrayColor),
             ),
           ),
-          ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.zero,
-            leading: Image.asset(AppImages.locationMainImage),
-            title: Text(AppLocaleKey.theAddress.tr(), style: AppTextStyle.text16_700),
-            subtitle: Text(
-              ordersModel.address ?? '',
-              style: AppTextStyle.text16_500.copyWith(color: AppColor.textGrayColor),
-            ),
-          ),
-          ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.zero,
-            leading: Image.asset(AppImages.calednderMainImage),
-            title: Text(AppLocaleKey.rentalPeriority.tr(), style: AppTextStyle.text16_700),
-            subtitle: Text(
-              " ${AppLocaleKey.fromxToY.tr(
-                args: [ordersModel.fromDate ?? '', ordersModel.toDate ?? ''],
-              )}\t ( ${AppLocaleKey.days.tr(
-                args: [ordersModel.duration.toString()],
-              )})",
-              style: AppTextStyle.text16_500.copyWith(color: AppColor.textGrayColor),
-            ),
-          ),
+          // ListTile(
+          //   dense: true,
+          //   contentPadding: EdgeInsets.zero,
+          //   leading: Image.asset(AppImages.locationMainImage),
+          //   title: Text(AppLocaleKey.theAddress.tr(), style: AppTextStyle.text16_700),
+          //   subtitle: Text(
+          //     ordersModel.address ?? '',
+          //     style: AppTextStyle.text16_500.copyWith(color: AppColor.textGrayColor),
+          //   ),
+          // ),
+          // ListTile(
+          //   dense: true,
+          //   contentPadding: EdgeInsets.zero,
+          //   leading: Image.asset(AppImages.calednderMainImage),
+          //   title: Text(AppLocaleKey.rentalPeriority.tr(), style: AppTextStyle.text16_700),
+          //   subtitle: Text(
+          //     " ${AppLocaleKey.fromxToY.tr(
+          //       args: [ordersModel.fromDate ?? '', ordersModel.toDate ?? ''],
+          //     )}\t ( ${AppLocaleKey.days.tr(
+          //       args: [ordersModel.duration.toString()],
+          //     )})",
+          //     style: AppTextStyle.text16_500.copyWith(color: AppColor.textGrayColor),
+          //   ),
+          // ),
         ],
       ),
     );

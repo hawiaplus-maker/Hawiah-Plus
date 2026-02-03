@@ -11,6 +11,7 @@ class UserProfileModel {
   final String image;
   final String type;
   final UserCompany? userCompany;
+  final int poinsBalance;
 
   UserProfileModel({
     required this.id,
@@ -24,6 +25,7 @@ class UserProfileModel {
     required this.image,
     required this.type,
     this.userCompany,
+    required this.poinsBalance,
   });
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
@@ -40,6 +42,7 @@ class UserProfileModel {
       image: data['image'] ?? '',
       type: data['type'] ?? '',
       userCompany: data['user_company'] != null ? UserCompany.fromJson(data['user_company']) : null,
+      poinsBalance: data['points_balance'] ?? 0,
     );
   }
 
@@ -76,6 +79,7 @@ class UserProfileModel {
       image: image,
       type: type,
       userCompany: userCompany,
+      poinsBalance: poinsBalance,
     );
   }
 }

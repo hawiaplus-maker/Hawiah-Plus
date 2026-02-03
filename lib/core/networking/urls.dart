@@ -15,8 +15,8 @@ class Urls {
 
   //! ===================> Live Api <=================== !//
   static const String oldbaseUrl = 'https://hawia-sa.com/api/';
-  //static const String baseUrl = 'https://hawiaplus.com/api/';
-  static const String baseUrl = 'https://testing.hawiaplus.com/api/';
+  static const String baseUrl = 'https://hawiaplus.com/api/';
+  //static const String baseUrl = 'https://testing.hawiaplus.com/api/';
   static const String login = '${baseUrl}login';
   static const String validateMobile = '${baseUrl}validate-mobile';
   static const String settings = '${baseUrl}settings';
@@ -49,7 +49,8 @@ class Urls {
   static String rateDiver = '${baseUrl}rate-service-provider';
   static String neighborhoodsByCity(int id) => '${baseUrl}neighborhoods/$id';
   static String updateAddress(int id) => '${baseUrl}user-addresses/$id';
-  static String payment(int orderId) => '${baseUrl}paymob-paid/?order_id=$orderId';
+  static String payment(int orderId, int paymentMethodId) =>
+      '${baseUrl}paymob-paid/?order_id=$orderId&payment_method_id=$paymentMethodId';
   static String confirmPayment(int orderId) =>
       '${baseUrl}paymob-paid-confirmed?order_id=$orderId&success=true';
   static String getNotifications = '${baseUrl}notifications';
@@ -66,4 +67,5 @@ class Urls {
   static String sliders = '${baseUrl}sliders';
   static String showOrder(int id) => '${baseUrl}users/user-orders/$id';
   static String newEmptyOrder = '${baseUrl}users/orders/empty-renew-order';
+  static String getPaymentMethodsList = '${baseUrl}paymob-methods';
 }

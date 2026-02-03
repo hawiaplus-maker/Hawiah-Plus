@@ -130,4 +130,25 @@ class AppImages {
   static const String chatImage = 'assets/images/chatImage.png';
   static const String codeImage = 'assets/images/codeImage.png';
   static const String mainCallImage = 'assets/images/mainCallImage.png';
+  static const String myPointsIcons = 'assets/svg/myPointsIcons.svg';
+
+  static const String madaPayLogoImage = 'assets/images/madaPayLogoImage.png';
+  static const String tabbyPayLogoImage = 'assets/images/tabbyPayLogoImage.png';
+  static const String tamaraPayLogoImage = 'assets/images/tamaraPayLogoImage.png';
+  static const String visaPayImage = 'assets/images/visaPayImage.png';
+  static const String applePayImage = 'assets/images/applePayImage.png';
+  static const String halalImage = 'assets/images/halal.png';
+  static const String islamicImage = 'assets/images/islamicImage.png';
+  static const String loanImage = 'assets/images/loan.png';
+  static const String moneyImage = 'assets/images/money.png';
+  static const String noChargesImage = 'assets/images/noChargesImage.png';
+  static const String nofeesImage = 'assets/images/nofees.png';
+  static const String percent25Image = 'assets/images/percent25Image.png';
+  static const String plus18Image = 'assets/images/plus18Image.png';
+  static const String saveUserImage = 'assets/images/saveUserImage.png';
+  static const String cardsImage = 'assets/images/cards.png';
+  static const String documentImage = 'assets/images/document.png';
+  static const String pointsShapesImage = 'assets/images/pointsShapesImage.png';
+  static const String transferImage = 'assets/images/transferImage.png';
+  static const String partnerImage = 'assets/images/partnerImage.png';
 }

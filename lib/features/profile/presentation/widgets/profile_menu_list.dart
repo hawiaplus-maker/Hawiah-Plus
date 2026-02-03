@@ -6,6 +6,7 @@ import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/all_addresses_screen.dart';
+import 'package:hawiah_client/features/points/presentation/view/screen/my_points_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/faq-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/language-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/privacy-policy-screen.dart';
@@ -30,6 +31,14 @@ class ProfileMenuList extends StatelessWidget {
             logo: AppImages.user,
             onTap: () {
               NavigatorMethods.pushNamed(context, UserProfile.routeName);
+            },
+          ),
+        if (!isGuest)
+          PersonProfileListTile(
+            title: AppLocaleKey.myPoints.tr(),
+            logo: AppImages.myPointsIcons,
+            onTap: () {
+              NavigatorMethods.pushNamed(context, MyPointsScreen.routeName);
             },
           ),
         isGuest

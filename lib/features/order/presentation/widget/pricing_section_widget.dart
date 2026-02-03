@@ -1,17 +1,12 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
-import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/order/presentation/model/single_order_model.dart';
-import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
-import 'package:hawiah_client/features/order/presentation/screens/payment_web_view.dart';
+import 'package:hawiah_client/features/order/presentation/screens/payment_methods_screen.dart';
 import 'package:hawiah_client/features/order/presentation/widget/custom_list_item.dart';
 
 class PricingSectionWidget extends StatelessWidget {
@@ -95,26 +90,10 @@ class PricingSectionWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: CustomButton(
                 onPressed: () {
-                  log("get payment link");
-                  context.read<OrderCubit>().getPaymentLink(
-                      orderId: ordersData.data?.id! ?? 0,
-                      onSuccess: (url) {
-                        if (url.contains('already exists') == true) {
-                          CommonMethods.showError(message: url);
-                        } else {
-                          NavigatorMethods.pushNamed(context, CustomPaymentWebViewScreen.routeName,
-                              arguments: PaymentArgs(
-                                  url: url,
-                                  onFailed: () {
-                                    CommonMethods.showError(
-                                        message: AppLocaleKey.paymentFailed.tr());
-                                  },
-                                  onSuccess: () {
-                                    CommonMethods.showToast(
-                                        message: AppLocaleKey.paymentSuccess.tr());
-                                  }));
-                        }
-                      });
+                  NavigatorMethods.pushNamed(context, PaymentMethodsScreen.routeName,
+                      arguments: PaymentMethodsArgs(
+                          orderId: ordersData.data?.id ?? 0,
+                          totalPrice: ordersData.data?.totalPrice.toString() ?? ""));
                 },
                 height: 45,
                 color: AppColor.whiteColor,

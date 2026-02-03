@@ -10,8 +10,8 @@ import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/home/execution/screen/order_review_detailes.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
-import 'package:hawiah_client/features/order/presentation/screens/payment_web_view.dart';
 
 class UnloadingTheContainerWidget extends StatefulWidget {
   const UnloadingTheContainerWidget(
@@ -127,35 +127,12 @@ class _UnloadingTheContainerWidgetState extends State<UnloadingTheContainerWidge
                           setState(() {
                             isPressed = true;
                           });
-                          orderCubit.getPaymentLink(
-                              orderId: newOrderId,
-                              onSuccess: (url) {
-                                if (url.contains('already exists') == true) {
-                                  CommonMethods.showError(message: url);
-                                } else {
-                                  NavigatorMethods.pushNamed(
-                                      context, CustomPaymentWebViewScreen.routeName,
-                                      arguments: PaymentArgs(
-                                          url: url,
-                                          onFailed: () {
-                                            CommonMethods.showError(
-                                                message: AppLocaleKey.paymentFailed.tr());
-                                          },
-                                          onSuccess: () {
-                                            context.read<OrderCubit>().confirmPayment(
-                                                  orderId: newOrderId,
-                                                );
-
-                                            CommonMethods.showToast(
-                                                message: AppLocaleKey.paymentSuccess.tr());
-                                          }));
-                                }
-                              });
-
-                          CommonMethods.showToast(
-                            message: AppLocaleKey.emptySuccess.tr(),
-                            type: ToastType.success,
-                          );
+                          NavigatorMethods.pushNamed(context, OrderReviewDetailes.routeName,
+                              arguments: order);
+                          // CommonMethods.showToast(
+                          //   message: AppLocaleKey.emptySuccess.tr(),
+                          //   type: ToastType.success,
+                          // );
                         },
                       );
                     }

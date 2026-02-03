@@ -19,7 +19,10 @@ import 'package:hawiah_client/features/location/presentation/screens/choose_addr
 import 'package:hawiah_client/features/location/presentation/screens/location-map-screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/map_screen.dart';
 import 'package:hawiah_client/features/location/presentation/screens/time_period_screen.dart';
+import 'package:hawiah_client/features/order/presentation/screens/payment_methods_screen.dart';
 import 'package:hawiah_client/features/order/presentation/screens/payment_web_view.dart';
+import 'package:hawiah_client/features/points/presentation/view/screen/my_points_screen.dart';
+import 'package:hawiah_client/features/points/presentation/view/screen/points_partner_screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/faq-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/individual_to_company_transfare_profile.dart';
 import 'package:hawiah_client/features/profile/presentation/screens/language-screen.dart';

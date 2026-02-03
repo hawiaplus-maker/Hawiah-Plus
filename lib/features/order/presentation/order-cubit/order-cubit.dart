@@ -15,6 +15,7 @@ import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/presentation/model/nearby_service-provider_model.dart';
 import 'package:hawiah_client/features/order/presentation/model/order_details_model.dart';
 import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
+import 'package:hawiah_client/features/order/presentation/model/payment_model.dart';
 import 'package:hawiah_client/features/order/presentation/model/single_order_model.dart'
     hide SingleOrderData;
 import 'package:table_calendar/table_calendar.dart';
@@ -458,12 +459,13 @@ class OrderCubit extends Cubit<OrderState> {
   // =================== get payment link ====================
   Future<void> getPaymentLink({
     required int orderId,
+    required int selectedPaymentMethod,
     required Function(String) onSuccess,
   }) async {
     NavigatorMethods.loading();
 
     final response = await ApiHelper.instance.get(
-      Urls.payment(orderId),
+      Urls.payment(orderId, selectedPaymentMethod),
     );
 
     NavigatorMethods.loadingOff();
@@ -564,6 +566,43 @@ class OrderCubit extends Cubit<OrderState> {
         message: response.data['message'] ?? 'حدث خطأ',
         apiResponse: response,
       );
+    }
+  }
+
+  //================== get payment methods list ========================
+  void initialPaymentMethodsList() {
+    _paymentMethodsListResponse = ApiResponse(
+      state: ResponseState.sleep,
+      data: null,
+    );
+    _paymentMethodsList = [];
+    emit(PaymentMethodsUpdate());
+  }
+
+  ApiResponse _paymentMethodsListResponse = ApiResponse(
+    state: ResponseState.sleep,
+    data: null,
+  );
+  ApiResponse get paymentMethodsListResponse => _paymentMethodsListResponse;
+  List<PaymentMethoudModel> _paymentMethodsList = [];
+  List<PaymentMethoudModel> get paymentMethodsList => _paymentMethodsList;
+
+  Future<void> getPaymentMethodsList() async {
+    _paymentMethodsListResponse = ApiResponse(
+      state: ResponseState.loading,
+      data: null,
+    );
+
+    _paymentMethodsList = [];
+    emit(PaymentMethodsUpdate());
+    _paymentMethodsListResponse = await ApiHelper.instance.get(
+      Urls.getPaymentMethodsList,
+    );
+    if (_paymentMethodsListResponse.state == ResponseState.complete) {
+      Iterable iterable = _paymentMethodsListResponse.data['data'];
+      _paymentMethodsList = iterable.map((e) => PaymentMethoudModel.fromJson(e)).toList();
+
+      emit(PaymentMethodsUpdate());
     }
   }
 }

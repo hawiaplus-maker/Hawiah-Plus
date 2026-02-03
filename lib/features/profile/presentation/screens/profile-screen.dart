@@ -38,6 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             id: 0,
             type: "",
             userCompany: null,
+            poinsBalance: 0,
           )
         : profileCubit.user;
     log('user profile screen build, isGuest: $isGuest, user: $user');
@@ -46,6 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: CustomAppBar(
         context,
         titleText: AppLocaleKey.profileFile.tr(),
+        leading: SizedBox(),
       ),
       body: SingleChildScrollView(
         child: Column(
