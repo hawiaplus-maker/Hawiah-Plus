@@ -129,13 +129,15 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       // 3. Improved Response Check
       if (response.state == ResponseState.complete && response.data['success'] == true) {
-        // Use a fallback string if 'message' is null
-        String msg = response.data['message'] ?? "Success";
+        // 'message' can be either a String or a Map (user data)
+        final message = response.data['message'];
+        String msg = (message is String) ? message : "تم التحديث بنجاح";
         emit(ProfileUpdateSuccess(msg));
         await fetchProfile();
       } else {
         // Extract specific error message from server if available
-        String errorMsg = response.data['message'] ?? "فشل تحديث البيانات";
+        final message = response.data['message'];
+        String errorMsg = (message is String) ? message : "فشل تحديث البيانات";
         emit(ProfileError(errorMsg));
       }
     } catch (e) {

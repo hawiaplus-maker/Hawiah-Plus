@@ -114,6 +114,13 @@ class _UserProfileState extends State<UserProfile> {
         listener: (context, state) {
           if (state is ProfileUpdateSuccess) {
             CommonMethods.showToast(message: AppLocaleKey.saveChangesSuccess.tr());
+          } else if (state is ProfileLoaded) {
+            // Update controllers with fresh data
+            nameController.text = state.user.name;
+            mobileController.text = state.user.mobile;
+            emailController.text = state.user.email;
+            taxNumberController.text = state.user.userCompany?.taxNumber ?? "";
+            commercialRegistration.text = state.user.userCompany?.commercialRecord ?? "";
           } else if (state is ProfileError) {
             // Show the actual error message from the state
             CommonMethods.showToast(
