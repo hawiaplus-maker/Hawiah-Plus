@@ -1,3 +1,4 @@
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -28,6 +29,8 @@ void main() async {
     ),
     Hive.initFlutter(),
   ]);
+
+  await AppTrackingTransparency.requestTrackingAuthorization();
 
   await Hive.openBox('app');
   Bloc.observer = MyBlocObserver();

@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -130,7 +131,10 @@ class _HawiahPlusAppState extends State<HawiahPlusApp> {
             theme: appTHeme(),
             home: child,
             builder: BotToastInit(),
-            navigatorObservers: [BotToastNavigatorObserver()],
+            navigatorObservers: [
+              BotToastNavigatorObserver(),
+              FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+            ],
             onGenerateRoute: AppRouters.onGenerateRoute,
             navigatorKey: AppRouters.navigatorKey,
             scrollBehavior: const MaterialScrollBehavior().copyWith(

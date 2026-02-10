@@ -61,5 +61,7 @@
 		</array>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>Your location is used to let you select your address on the map by placing a marker, so it can be saved and used when requesting a container delivery.</string>
+		<key>NSUserTrackingUsageDescription</key>
+<string>This identifier will be used to understand how you interact with our app to improve your experience.</string>
 	</dict>
 </plist>
