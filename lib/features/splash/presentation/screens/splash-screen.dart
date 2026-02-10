@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
@@ -14,6 +16,8 @@ import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:hawiah_client/injection_container.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -23,29 +27,51 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initializeApp();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _initAnalyticsAndATT();
+      await _initializeApp();
     });
+  }
+
+  /// 🔥 FIX #1 & #2
+  /// - Enable Firebase Analytics collection
+  /// - Request ATT at the correct time (after first frame)
+  Future<void> _initAnalyticsAndATT() async {
+    try {
+      await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+
+      final status = await AppTrackingTransparency.trackingAuthorizationStatus;
+
+      log('ATT status before request: $status');
+
+      if (status == TrackingStatus.notDetermined) {
+        final result = await AppTrackingTransparency.requestTrackingAuthorization();
+        log('ATT status after request: $result');
+      }
+    } catch (e) {
+      log('ATT / Analytics init error: $e');
+    }
   }
 
   Future<void> _initializeApp() async {
     final settingCubit = sl<SettingCubit>();
     settingCubit.getsetting();
+
     log("is first time ${HiveMethods.isFirstTime()}");
+
     final cubit = sl<ProfileCubit>();
+
     if (HiveMethods.isFirstTime() == true) {
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
+
       OnBoardingCubit.get(context).getOnboarding();
+
       Navigator.push<void>(
         context,
         MaterialPageRoute<void>(
           builder: (BuildContext context) => const OnBoardingScreen(),
         ),
       );
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => const AppLanguageScreen()),
-      // );
     } else {
       if (HiveMethods.getToken() != null) {
         await cubit.fetchProfile(
@@ -62,14 +88,18 @@ class _SplashScreenState extends State<SplashScreen> {
           onError: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const ValidateMobileScreen()),
+              MaterialPageRoute(
+                builder: (context) => const ValidateMobileScreen(),
+              ),
             );
           },
         );
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const ValidateMobileScreen()),
+          MaterialPageRoute(
+            builder: (context) => const ValidateMobileScreen(),
+          ),
         );
       }
     }
@@ -77,20 +107,17 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: Image.asset(
-              AppImages.newAppLogoImage,
-              height: 500,
-              width: 500,
-            ),
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30.0),
+          child: Image(
+            image: AssetImage(AppImages.newAppLogoImage),
+            height: 500,
+            width: 500,
           ),
-        ],
+        ),
       ),
     );
   }
