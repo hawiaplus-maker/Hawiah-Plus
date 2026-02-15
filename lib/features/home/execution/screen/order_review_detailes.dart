@@ -9,6 +9,7 @@ import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
+import 'package:hawiah_client/features/home/execution/screen/success_order_confirmation_screen.dart';
 import 'package:hawiah_client/features/home/execution/widget/coupone_widget.dart';
 import 'package:hawiah_client/features/home/execution/widget/order_detailes_widget.dart';
 import 'package:hawiah_client/features/home/execution/widget/order_details_pricing_section.dart';
@@ -134,8 +135,11 @@ class _OrderReviewDetailesState extends State<OrderReviewDetailes> {
                                       url: url,
                                       onFailed: () => Fluttertoast.showToast(
                                           msg: AppLocaleKey.paymentFailed.tr()),
-                                      onSuccess: () => Fluttertoast.showToast(
-                                          msg: AppLocaleKey.paymentSuccess.tr()),
+                                      onSuccess: () {
+                                        cubit.confirmPayment(orderId: widget.ordersModel.id!);
+                                        NavigatorMethods.pushReplacementNamed(
+                                            context, SuccessOrderConfirmationScreen.routeName);
+                                      },
                                     ),
                                   );
                                 }
