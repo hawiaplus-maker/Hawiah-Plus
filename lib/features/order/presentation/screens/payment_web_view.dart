@@ -4,8 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
-import 'package:hawiah_client/core/utils/navigator_methods.dart';
-import 'package:hawiah_client/features/home/execution/screen/success_order_confirmation_screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
@@ -129,9 +127,8 @@ class _CustomPaymentWebViewScreenState extends State<CustomPaymentWebViewScreen>
     if (isSuccess) {
       widget.args.onSuccess.call();
       CommonMethods.showToast(message: AppLocaleKey.paymentSuccess.tr());
-
+      WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pop(context));
       log('Payment successful ya abo khaled');
-      NavigatorMethods.pushReplacementNamed(context, SuccessOrderConfirmationScreen.routeName);
 
       return NavigationDecision.prevent;
     } else if (isFailed) {

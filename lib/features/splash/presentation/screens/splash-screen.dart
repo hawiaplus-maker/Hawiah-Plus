@@ -9,8 +9,6 @@ import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart';
 import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
-import 'package:hawiah_client/features/on-boarding/presentation/controllers/on-boarding-cubit/on-boarding-cubit.dart';
-import 'package:hawiah_client/features/on-boarding/presentation/screens/on-borading-screen.dart';
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
 import 'package:hawiah_client/features/setting/cubit/setting_cubit.dart';
 import 'package:hawiah_client/injection_container.dart';
@@ -61,47 +59,34 @@ class _SplashScreenState extends State<SplashScreen> {
 
     final cubit = sl<ProfileCubit>();
 
-    if (HiveMethods.isFirstTime() == true) {
-      await Future.delayed(const Duration(seconds: 2));
+    if (HiveMethods.getToken() != null) {
+      await cubit.fetchProfile(
+        onSuccess: () async {
+          log("Navigation to LayoutScreen");
 
-      OnBoardingCubit.get(context).getOnboarding();
-
-      Navigator.push<void>(
-        context,
-        MaterialPageRoute<void>(
-          builder: (BuildContext context) => const OnBoardingScreen(),
-        ),
+          await LayoutMethouds.getdata(showLoading: false);
+          await Future.delayed(const Duration(seconds: 2));
+          NavigatorMethods.pushReplacementNamed(
+            context,
+            LayoutScreen.routeName,
+          );
+        },
+        onError: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ValidateMobileScreen(),
+            ),
+          );
+        },
       );
     } else {
-      if (HiveMethods.getToken() != null) {
-        await cubit.fetchProfile(
-          onSuccess: () async {
-            log("Navigation to LayoutScreen");
-
-            await LayoutMethouds.getdata(showLoading: false);
-
-            NavigatorMethods.pushReplacementNamed(
-              context,
-              LayoutScreen.routeName,
-            );
-          },
-          onError: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ValidateMobileScreen(),
-              ),
-            );
-          },
-        );
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const ValidateMobileScreen(),
-          ),
-        );
-      }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ValidateMobileScreen(),
+        ),
+      );
     }
   }
 
