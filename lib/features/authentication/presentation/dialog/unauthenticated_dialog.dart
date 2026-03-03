@@ -36,8 +36,14 @@ class UnauthenticatedDialog extends StatelessWidget {
             AppLocaleKey.notRegisteredYet.tr(),
             style: AppTextStyle.text16_700,
           ),
-          Text(AppLocaleKey.toBrowseServicesRegisterNow.tr(),
-              style: AppTextStyle.textG16_500.copyWith(fontSize: 14)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              AppLocaleKey.toBrowseServicesRegisterNow.tr(),
+              style: AppTextStyle.textG16_500.copyWith(fontSize: 14),
+              textAlign: TextAlign.center,
+            ),
+          ),
           SizedBox(height: 15),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 5),

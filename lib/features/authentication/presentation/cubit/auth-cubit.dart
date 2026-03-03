@@ -88,6 +88,7 @@ class AuthCubit extends Cubit<AuthState> {
   PhoneNumber fullNumberResetPassword = PhoneNumber(isoCode: 'SA');
   String phoneNumberResetPassword = '';
   bool isResetPassword = false;
+  bool isLogin = false;
   String passwordReset = '';
   String passwordConfirmReset = '';
   bool passwordVisibleReset = false;
@@ -207,6 +208,45 @@ class AuthCubit extends Cubit<AuthState> {
   // -------------------------------------------------
   // 🔹 Login
   // -------------------------------------------------
+  Future<void> loginWithOtp({
+    required String? phoneNumber,
+    required String? otp,
+    required String? fcmToken,
+    required VoidCallback onSuccess,
+  }) async {
+    emit(AuthLoading());
+    final body = FormData.fromMap({
+      'otp': otp,
+      'mobile': phoneNumber,
+      'fcm_token': fcmToken,
+    });
+
+    final response = await ApiHelper.instance.post(Urls.loginWithOtp, body: body, hasToken: false);
+
+    if (response.state == ResponseState.complete && response.data['success'] == true) {
+      final data = response.data['data'];
+      final message = response.data['message'] ?? 'Login completed';
+
+      if (data != null) {
+        HiveMethods.updateToken(
+          data['api_token'],
+        );
+        HiveMethods.updateUserId(data['id']);
+
+        await sl<ProfileCubit>().fetchProfile();
+        SnapchatService.instance.trackLogin(email: emailController.text, phoneNumber: phoneNumber);
+        emit(AuthSuccess(message: message));
+        onSuccess.call();
+      } else {
+        emit(AuthError(message));
+      }
+    } else {
+      emit(AuthError(response.data['message'] ?? "حدث خطأ أثناء العملية"));
+    }
+  }
+
+  // 🔹 Login
+  // -------------------------------------------------
   Future<void> login({
     required String? phoneNumber,
     required String? password,
@@ -323,8 +363,8 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> register(
       {required String? phoneNumber,
       required String? name,
-      required String? password,
-      required String? confirmPassword,
+      // required String? password,
+      // required String? confirmPassword,
       required String? fcm,
       String? taxRecord,
       String? commercialRegister,
@@ -338,8 +378,8 @@ class AuthCubit extends Cubit<AuthState> {
           body: FormData.fromMap({
             'mobile': phoneNumber,
             'name': name,
-            'password': password,
-            'password_confirmation': confirmPassword,
+            // 'password': password,
+            // 'password_confirmation': confirmPassword,
             'fcm_token': fcm
           }),
           hasToken: false,
@@ -365,8 +405,8 @@ class AuthCubit extends Cubit<AuthState> {
           body: FormData.fromMap({
             'name': name,
             'mobile': phoneNumber,
-            'password': password,
-            'password_confirmation': confirmPassword,
+            // 'password': password,
+            // 'password_confirmation': confirmPassword,
             'tax_record': taxRecord,
             'tax_number': commercialRegister,
             'fcm_token': fcm

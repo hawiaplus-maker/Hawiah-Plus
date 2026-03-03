@@ -11,7 +11,7 @@ import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/authentication/presentation/cubit/auth-cubit.dart';
 import 'package:hawiah_client/features/authentication/presentation/cubit/auth-state.dart';
 import 'package:hawiah_client/features/authentication/presentation/screens/create_account_screen.dart';
-import 'package:hawiah_client/features/authentication/presentation/screens/login-screen.dart';
+import 'package:hawiah_client/features/authentication/presentation/screens/verification-otp-screen.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/appbar-auth-sidget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/common/phone-input-widget.dart';
 import 'package:hawiah_client/features/authentication/presentation/widgets/login-widgets/action-buttons-widget.dart';
@@ -74,7 +74,20 @@ class _ValidateMobileScreenState extends State<ValidateMobileScreen> {
         listener: (BuildContext context, AuthState state) {
           if (state is ValidateMobileSuccess) {
             CommonMethods.showToast(message: state.message);
-            NavigatorMethods.pushNamed(context, LoginScreen.routeName);
+            AuthCubit.get(context).isLogin = true;
+            // NavigatorMethods.pushNamed(context, LoginScreen.routeName);
+            context
+                .read<AuthCubit>()
+                .resendCodeToApi(phoneNumber: AuthCubit.get(context).phoneController.text);
+            NavigatorMethods.pushNamed(
+              context,
+              VerificationOtpScreen.routeName,
+              arguments: VerificationOtpScreenArgs(
+                phoneNumber: AuthCubit.get(context).phoneController.text,
+                otp: 0000,
+                isLogin: true,
+              ),
+            );
           } else if (state is ValidateMobilePhoneIsNotRegistered) {
             NavigatorMethods.showAppDialog(
                 context,

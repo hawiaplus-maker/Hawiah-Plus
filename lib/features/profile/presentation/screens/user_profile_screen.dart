@@ -33,8 +33,8 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  // final TextEditingController passwordController = TextEditingController();
+  // final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -74,8 +74,8 @@ class _UserProfileState extends State<UserProfile> {
         accountType: cubit.user?.type,
         taxNumber: taxNumberController.text,
         commercialRegistration: commercialRegistration.text,
-        password: passwordController.text, // Cubit logic will now handle if this is empty
-        password_confirmation: confirmPasswordController.text,
+        // password: passwordController.text, // Cubit logic will now handle if this is empty
+        // password_confirmation: confirmPasswordController.text,
       );
     }
   }
@@ -186,26 +186,26 @@ class _UserProfileState extends State<UserProfile> {
                         ),
                         Gap(20.h),
                       ],
-                      CustomTextField(
-                        validator: passwordController.text.isEmpty
-                            ? null
-                            : (v) => ValidationMethods.validatePassword(passwordController.text),
-                        controller: passwordController,
-                        title: 'password'.tr(),
-                        hintText: 'enter_your_password'.tr(),
-                        isPassword: true,
-                      ),
-                      SizedBox(height: 20),
-                      CustomTextField(
-                        validator: confirmPasswordController.text.isEmpty
-                            ? null
-                            : (v) => ValidationMethods.validateConfirmPassword(
-                                v, passwordController.text),
-                        controller: confirmPasswordController,
-                        title: 'confirm_password'.tr(),
-                        hintText: 'enter_your_password'.tr(),
-                        isPassword: true,
-                      ),
+                      // CustomTextField(
+                      //   validator: passwordController.text.isEmpty
+                      //       ? null
+                      //       : (v) => ValidationMethods.validatePassword(passwordController.text),
+                      //   controller: passwordController,
+                      //   title: 'password'.tr(),
+                      //   hintText: 'enter_your_password'.tr(),
+                      //   isPassword: true,
+                      // ),
+                      // SizedBox(height: 20),
+                      // CustomTextField(
+                      //   validator: confirmPasswordController.text.isEmpty
+                      //       ? null
+                      //       : (v) => ValidationMethods.validateConfirmPassword(
+                      //           v, passwordController.text),
+                      //   controller: confirmPasswordController,
+                      //   title: 'confirm_password'.tr(),
+                      //   hintText: 'enter_your_password'.tr(),
+                      //   isPassword: true,
+                      // ),
                       Gap(20.h),
                       if (user.type != 'company')
                         TextButton(
@@ -244,8 +244,8 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   void dispose() {
-    passwordController.dispose();
-    confirmPasswordController.dispose();
+    // passwordController.dispose();
+    // confirmPasswordController.dispose();
     nameController.dispose();
     mobileController.dispose();
     emailController.dispose();
