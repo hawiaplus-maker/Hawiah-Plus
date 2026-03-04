@@ -12,12 +12,9 @@ import 'package:hawiah_client/hawiah_plus_app.dart';
 import 'package:hawiah_client/injection_container.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
-
 import 'firebase_options.dart';
-
 late BuildContext genContext;
 final bool isGuest = HiveMethods.getToken() == null;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Future.wait([
