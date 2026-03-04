@@ -40,8 +40,14 @@ class CreateAccountDialog extends StatelessWidget {
             height: 90,
           ),
           Text(AppLocaleKey.notRegisteredYet.tr(), style: AppTextStyle.text16_700),
-          Text(AppLocaleKey.toBrowseServicesRegisterNow.tr(),
-              style: AppTextStyle.textG16_500.copyWith(fontSize: 14)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              AppLocaleKey.toBrowseServicesRegisterNow.tr(),
+              style: AppTextStyle.textG16_500.copyWith(fontSize: 14),
+              textAlign: TextAlign.center,
+            ),
+          ),
           SizedBox(height: 15),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 5),
@@ -50,7 +56,6 @@ class CreateAccountDialog extends StatelessWidget {
               text: "login".tr(),
               style: AppTextStyle.buttonStyle.copyWith(color: AppColor.whiteColor, fontSize: 16),
               onPressed: () {
-                
                 context.read<AuthCubit>().validateMobileForRegister(
                       phoneNumber: phoneNumber,
                       onSuccess: () {

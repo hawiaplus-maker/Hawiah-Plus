@@ -18,6 +18,7 @@ class Urls {
   static const String baseUrl = 'https://hawiaplus.com/api/';
   //static const String baseUrl = 'https://testing.hawiaplus.com/api/';
   static const String login = '${baseUrl}login';
+  static const String loginWithOtp = '${baseUrl}login-with-otp';
   static const String validateMobile = '${baseUrl}validate-mobile';
   static const String settings = '${baseUrl}settings';
   static const String logout = '${baseUrl}logout';

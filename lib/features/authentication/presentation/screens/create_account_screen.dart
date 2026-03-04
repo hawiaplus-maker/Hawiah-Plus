@@ -136,24 +136,24 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         ),
                       ],
                       SizedBox(height: 20.h),
-                      CustomTextField(
-                        validator: (v) =>
-                            ValidationMethods.validatePassword(passwordController.text),
-                        controller: passwordController,
-                        title: 'password'.tr(),
-                        hintText: 'enter_your_password'.tr(),
-                        isPassword: true,
-                      ),
-                      SizedBox(height: 20),
-                      CustomTextField(
-                        validator: (v) =>
-                            ValidationMethods.validateConfirmPassword(v, passwordController.text),
-                        controller: confirmPasswordController,
-                        title: 'confirm_password'.tr(),
-                        hintText: 'enter_your_password'.tr(),
-                        isPassword: true,
-                      ),
-                      SizedBox(height: 20),
+                      // CustomTextField(
+                      //   validator: (v) =>
+                      //       ValidationMethods.validatePassword(passwordController.text),
+                      //   controller: passwordController,
+                      //   title: 'password'.tr(),
+                      //   hintText: 'enter_your_password'.tr(),
+                      //   isPassword: true,
+                      // ),
+                      // SizedBox(height: 20),
+                      // CustomTextField(
+                      //   validator: (v) =>
+                      //       ValidationMethods.validateConfirmPassword(v, passwordController.text),
+                      //   controller: confirmPasswordController,
+                      //   title: 'confirm_password'.tr(),
+                      //   hintText: 'enter_your_password'.tr(),
+                      //   isPassword: true,
+                      // ),
+                      // SizedBox(height: 20),
                       CustomButton(
                         text: AppLocaleKey.createYourAccount.tr(),
                         isLoading: state is RegisterLoading,
@@ -162,8 +162,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             context.read<AuthCubit>().register(
                                 name: nameController.text,
                                 phoneNumber: widget.phoneNumber,
-                                password: passwordController.text,
-                                confirmPassword: confirmPasswordController.text,
+                                // password: passwordController.text,
+                                // confirmPassword: confirmPasswordController.text,
                                 taxRecord: taxNumberController.text,
                                 commercialRegister: commercialRegistration.text,
                                 fcm: fcm,

@@ -40,8 +40,8 @@ class IndividualToCompanyTransfareProfile extends StatefulWidget {
 
 class _IndividualToCompanyTransfareProfileState extends State<IndividualToCompanyTransfareProfile> {
   final formKey = GlobalKey<FormState>();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  // final TextEditingController passwordController = TextEditingController();
+  // final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -50,8 +50,8 @@ class _IndividualToCompanyTransfareProfileState extends State<IndividualToCompan
 
   @override
   void dispose() {
-    passwordController.dispose();
-    confirmPasswordController.dispose();
+    // passwordController.dispose();
+    // confirmPasswordController.dispose();
     nameController.dispose();
     mobileController.dispose();
     emailController.dispose();
@@ -113,22 +113,22 @@ class _IndividualToCompanyTransfareProfileState extends State<IndividualToCompan
                     title: AppLocaleKey.commercialRegistration.tr(),
                   ),
                   SizedBox(height: 20),
-                  CustomTextField(
-                    validator: (v) => ValidationMethods.validatePassword(passwordController.text),
-                    controller: passwordController,
-                    title: 'password'.tr(),
-                    hintText: 'enter_your_password'.tr(),
-                    isPassword: true,
-                  ),
-                  SizedBox(height: 20),
-                  CustomTextField(
-                    validator: (v) =>
-                        ValidationMethods.validateConfirmPassword(v, passwordController.text),
-                    controller: confirmPasswordController,
-                    title: 'confirm_password'.tr(),
-                    hintText: 'enter_your_password'.tr(),
-                    isPassword: true,
-                  ),
+                  // CustomTextField(
+                  //   validator: (v) => ValidationMethods.validatePassword(passwordController.text),
+                  //   controller: passwordController,
+                  //   title: 'password'.tr(),
+                  //   hintText: 'enter_your_password'.tr(),
+                  //   isPassword: true,
+                  // ),
+                  // SizedBox(height: 20),
+                  // CustomTextField(
+                  //   validator: (v) =>
+                  //       ValidationMethods.validateConfirmPassword(v, passwordController.text),
+                  //   controller: confirmPasswordController,
+                  //   title: 'confirm_password'.tr(),
+                  //   hintText: 'enter_your_password'.tr(),
+                  //   isPassword: true,
+                  // ),
                   SizedBox(height: 20),
                 ],
               ),
@@ -157,8 +157,8 @@ class _IndividualToCompanyTransfareProfileState extends State<IndividualToCompan
                     context.read<AuthCubit>().register(
                         name: nameController.text,
                         phoneNumber: mobileController.text,
-                        password: passwordController.text,
-                        confirmPassword: confirmPasswordController.text,
+                        // password: passwordController.text,
+                        // confirmPassword: confirmPasswordController.text,
                         taxRecord: taxNumberController.text,
                         commercialRegister: commercialRegistration.text,
                         fcm: fcm,
