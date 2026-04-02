@@ -13,6 +13,7 @@ import 'package:hawiah_client/injection_container.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'firebase_options.dart';
+
 late BuildContext genContext;
 final bool isGuest = HiveMethods.getToken() == null;
 void main() async {
@@ -46,6 +47,8 @@ void main() async {
       path: 'assets/translations',
       startLocale: Locale(HiveMethods.getLang()),
       fallbackLocale: const Locale('ar'),
+      useOnlyLangCode: true,
+      useFallbackTranslations: true,
       child: BlocProvider(
         create: (context) => AppThemeCubit()..initial(),
         child: HawiahPlusApp(initialMessage: initialMessage),

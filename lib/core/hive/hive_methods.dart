@@ -12,7 +12,11 @@ class HiveMethods {
   static final _box = Hive.box('app');
 
   static String getLang() {
-    return _box.get('lang', defaultValue: getDeviceLanguage());
+    String lang = _box.get('lang', defaultValue: getDeviceLanguage());
+    if (lang.startsWith('ar')) return 'ar';
+    if (lang.startsWith('en')) return 'en';
+    if (lang.startsWith('ur')) return 'ur';
+    return 'ar';
   }
 
   static void updateLang(Locale locale) {
