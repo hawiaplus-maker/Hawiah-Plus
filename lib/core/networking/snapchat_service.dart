@@ -9,11 +9,10 @@ class SnapchatService {
   static final SnapchatService instance = SnapchatService._();
   SnapchatService._();
 
-  static const String _pixelId = "0d1ccbc7-2ff0-4fd3-8a62-9937245ccf81";
+  static const String _pixelId = "2227c0a3-a147-480e-8359-638db9004c06";
   static const String _endpoint = "https://tr.snapchat.com/v2/conversion";
 
-  // TODO: Marketing team needs to provide this static long-lived token
-  static const String _accessToken = "REPLACE_WITH_YOUR_SNAPCHAT_ACCESS_TOKEN";
+  static const String _accessToken = "eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNzc1Mzk4OTU0LCJzdWIiOiJmMjcyOGU0MC04MTVjLTQ3OGQtOWY0NC03MDg5MWIxYjU2N2Z-UFJPRFVDVElPTn5lNmExNTgwYi1kZDZlLTRhNzAtYjM5MC03NGFiMjhiN2VmYWEifQ.srmzDS-K1McyAhPHO0Ex9L1XPxoEEw6mXjr0afQ6TaI";
 
   final Dio _dio = Dio();
 

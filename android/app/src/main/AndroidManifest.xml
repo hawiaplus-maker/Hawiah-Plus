@@ -30,10 +30,6 @@
               android:value="AIzaSyCTr1Bm3IWC4blGfGWbPmNOVj3Auz_zedE"/>
 
         <meta-data
-            android:name="com.snapchat.kit.sdk.clientId"
-            android:value="7cbd492e-63b6-4871-a730-d5881f034485" />
-
-        <meta-data
               android:name="firebase_messaging_auto_initialization_enabled"
               android:value="false" />
 

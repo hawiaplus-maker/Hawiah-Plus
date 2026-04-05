@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/bloc-config/bloc_observer.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
+import 'package:hawiah_client/core/networking/snapchat_service.dart';
 import 'package:hawiah_client/core/theme/cubit/app_theme_cubit.dart';
 import 'package:hawiah_client/hawiah_plus_app.dart';
 import 'package:hawiah_client/injection_container.dart';
@@ -32,8 +33,7 @@ void main() async {
   await AppTrackingTransparency.requestTrackingAuthorization();
 
   // Track App Launch events for Snapchat
-  await SnapchatAdsService.instance.trackAppOpen();
-  await SnapchatAdsService.instance.trackInstall();
+  SnapchatService.instance.trackPageView();
 
   await Hive.openBox('app');
   Bloc.observer = MyBlocObserver();
