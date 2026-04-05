@@ -61,7 +61,7 @@
 		</array>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>Your location is used to let you select your address on the map by placing a marker, so it can be saved and used when requesting a container delivery.</string>
-		
+
 		<key>SCSDKClientId</key>
 		<string>7cbd492e-63b6-4871-a730-d5881f034485</string>
 		<key>LSApplicationQueriesSchemes</key>
