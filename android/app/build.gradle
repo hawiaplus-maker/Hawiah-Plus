@@ -120,4 +120,5 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4' // Updated to a more recent version
     implementation 'androidx.window:window:1.2.0' // Updated to a more recent version
     implementation 'androidx.window:window-java:1.2.0' // Updated to a more recent version
+    implementation 'com.snapchat.kit.sdk:advertising:1.1.4'
 }

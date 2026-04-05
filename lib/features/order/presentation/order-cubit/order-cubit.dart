@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
+import 'package:hawiah_client/core/networking/snapchat_ads_service.dart';
 import 'package:hawiah_client/core/networking/snapchat_service.dart';
 import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
@@ -313,6 +314,7 @@ class OrderCubit extends Cubit<OrderState> {
           price: double.tryParse(order.totalPrice ?? '0'),
           phoneNumber: order.userMobile,
         );
+        SnapchatAdsService.instance.trackPurchase();
       }
       CommonMethods.showToast(
         message: response.data['message'] ?? "تم انشاء الطلب بنجاح",

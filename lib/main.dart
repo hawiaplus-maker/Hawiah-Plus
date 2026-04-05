@@ -13,6 +13,7 @@ import 'package:hawiah_client/injection_container.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import 'package:hawiah_client/core/networking/snapchat_ads_service.dart';
 import 'firebase_options.dart';
 
 late BuildContext genContext;
@@ -31,6 +32,10 @@ void main() async {
   ]);
 
   await AppTrackingTransparency.requestTrackingAuthorization();
+  
+  // Track App Launch events for Snapchat
+  await SnapchatAdsService.instance.trackAppOpen();
+  await SnapchatAdsService.instance.trackInstall();
 
   await Hive.openBox('app');
   Bloc.observer = MyBlocObserver();
