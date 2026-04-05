@@ -42,7 +42,7 @@ android {
     compileSdk = 36 // This is good
 
     // Using a recent NDK version is important. 27.x is good.
-    ndkVersion = "27.0.12077973"
+    ndkVersion = "28.0.12433566"
 
     defaultConfig {
         // Only arm64-v8a is required for 16KB page size support on Android 15+.
