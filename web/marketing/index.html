@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Hawiah Plus...</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f7f6;
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        a { color: #3498db; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Opening Hawiah Plus...</h2>
+        <p>If the app doesn't open, <a id="store-link" href="#">click here to download</a>.</p>
+        <div class="loader"></div>
+    </div>
+
+    <script>
+        // Store URLs - User must update these
+        const STORE_LINKS = {
+            android: "https://play.google.com/store/apps/details?id=com.hawiah.plus",
+            ios: "https://apps.apple.com/app/hawiah-plus/id6692625297" // Update with real ID if different
+        };
+
+        function getOS() {
+            var userAgent = window.navigator.userAgent,
+                platform = window.navigator.platform,
+                macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+                windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+                iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+                os = null;
+
+            if (macosPlatforms.indexOf(platform) !== -1) {
+                os = 'Mac OS';
+            } else if (iosPlatforms.indexOf(platform) !== -1) {
+                os = 'iOS';
+            } else if (windowsPlatforms.indexOf(platform) !== -1) {
+                os = 'Windows';
+            } else if (/Android/.test(userAgent)) {
+                os = 'Android';
+            } else if (!os && /Linux/.test(platform)) {
+                os = 'Linux';
+            }
+
+            return os;
+        }
+
+        const os = getOS();
+        const linkElem = document.getElementById('store-link');
+        let redirectUrl = "#";
+
+        if (os === 'Android') {
+            redirectUrl = STORE_LINKS.android;
+        } else if (os === 'iOS') {
+            redirectUrl = STORE_LINKS.ios;
+        }
+
+        linkElem.href = redirectUrl;
+
+        // Auto-redirect if not opened by deep link (which would have taken user away)
+        setTimeout(function() {
+            if (redirectUrl !== "#") {
+                window.location.href = redirectUrl;
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

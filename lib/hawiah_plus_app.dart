@@ -15,6 +15,7 @@ import 'package:hawiah_client/core/networking/api_helper.dart'; // Added import
 import 'package:hawiah_client/core/networking/snapchat_service.dart';
 import 'package:hawiah_client/core/notifications/messaging_config.dart';
 import 'package:hawiah_client/core/routes/app_routers_import.dart';
+import 'package:hawiah_client/core/services/deep_link_service.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart'; // Added import
 import 'package:hawiah_client/features/authentication/presentation/screens/validate_mobile_screen.dart'; // Added import
 import 'package:hawiah_client/features/profile/presentation/cubit/cubit_profile.dart';
@@ -43,6 +44,8 @@ class _HawiahPlusAppState extends State<HawiahPlusApp> {
     SnapchatService.instance.trackPageView();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeMessaging();
+      // Initialize Deep Links
+      DeepLinkService.instance.init(navKey: AppRouters.navigatorKey);
     });
     _appToken();
     super.initState();

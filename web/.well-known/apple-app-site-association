@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "KRHLXHF25D.com.hawiah.user.plus",
+        "paths": [
+          "/marketing/*",
+          "//marketing/*"
+        ]
+      }
+    ]
+  }
+}

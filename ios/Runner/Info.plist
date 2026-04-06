@@ -35,6 +35,8 @@
 		<string>We need access to your photo library to allow you to upload your profile picture or documents.</string>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
+		<key>FlutterDeepLinkingEnabled</key>
+		<true/>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>fetch</string>

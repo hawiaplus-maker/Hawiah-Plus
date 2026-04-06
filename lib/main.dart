@@ -42,6 +42,7 @@ void main() async {
   timeago.setLocaleMessages('ar_short', timeago.ArShortMessages());
   timeago.setLocaleMessages('en', timeago.EnMessages());
   timeago.setLocaleMessages('en_short', timeago.EnShortMessages());
+
   runApp(
     EasyLocalization(
       supportedLocales: const [

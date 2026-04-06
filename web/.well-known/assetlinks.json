@@ -1,0 +1,16 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.hawiah.plus",
+      "sha256_cert_fingerprints":
+      [
+      "A6:39:01:37:16:D0:19:08:71:7A:21:82:A5:B7:CD:BE:1E:AF:28:19:B9:39:6D:64:A0:0D:10:29:CD:29:3A:2D",
+      "11:1E:69:08:D9:69:A1:F5:5B:C9:69:26:5E:FC:6C:1F:01:D6:38:A9:5E:66:DE:38:FD:76:FE:45:E1:6E:41:7D"
+    ]
+    }
+  }
+]
