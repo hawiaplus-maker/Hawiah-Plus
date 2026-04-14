@@ -14,7 +14,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.6
   app_links: ^6.3.2
   easy_localization: ^3.0.7
@@ -83,8 +82,6 @@ dependencies:
   flutter_map: 7.0.2
   latlong2: 0.9.1
   flutter_map_cancellable_tile_provider: ^3.0.0
-
-
 dev_dependencies:
   flutter_launcher_icons: ^0.14.4
   flutter_test:

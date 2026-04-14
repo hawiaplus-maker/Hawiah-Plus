@@ -61,6 +61,19 @@
 			<string>UIInterfaceOrientationLandscapeLeft</string>
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
+		<key>CFBundleURLTypes</key>
+        <array>
+        <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLName</key>
+        <string>com.hawiah.user.plus</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+        <string>hawiaplus.com</string>
+        </array>
+        </dict>
+        </array>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>Your location is used to let you select your address on the map by placing a marker, so it can be saved and used when requesting a container delivery.</string>
 	</dict>
