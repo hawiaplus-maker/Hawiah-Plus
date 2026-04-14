@@ -7,13 +7,11 @@ class UpdateChecker {
   static Future<void> checkForUpdate(BuildContext context) async {
     final newVersion = NewVersionPlus(
       androidId: "com.hawiah.plus",
-      iOSId: "1234567890",
+      iOSId: "6756757283",
     );
 
     final status = await newVersion.getVersionStatus();
-
     if (status == null) return;
-
     if (status.canUpdate) {
       _showUpdateDialog(context, status, newVersion);
     }
@@ -47,7 +45,8 @@ class UpdateChecker {
               onPressed: () async {
                 const playStoreLink =
                     "https://play.google.com/store/apps/details?id=com.hawiah.plus";
-                const appStoreLink = "https://apps.apple.com/app/id1234567890";
+                const appStoreLink =
+                    "https://apps.apple.com/us/app/%D8%AD%D8%A7%D9%88%D9%8A%D8%A9-%D8%A8%D9%84%D8%B3/id6756757283";
 
                 final link =
                     Theme.of(context).platform == TargetPlatform.iOS ? appStoreLink : playStoreLink;
