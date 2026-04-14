@@ -345,18 +345,20 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                AppLocaleKey.addAddressDetails.tr(),
-                                style: AppTextStyle.text18_700,
-                              ),
-                              Text(
-                                AppLocaleKey.addressDetailsSubtitle.tr(),
-                                style: AppTextStyle.text14_400.copyWith(color: Colors.grey),
-                              ),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocaleKey.addAddressDetails.tr(),
+                                  style: AppTextStyle.text18_700,
+                                ),
+                                Text(
+                                  AppLocaleKey.addressDetailsSubtitle.tr(),
+                                  style: AppTextStyle.text14_400.copyWith(color: Colors.grey),
+                                ),
+                              ],
+                            ),
                           ),
                           IconButton(
                             icon: const Icon(Icons.close),
