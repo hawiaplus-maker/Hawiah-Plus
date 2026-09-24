@@ -5,6 +5,7 @@ import 'package:hawiah_client/core/custom_widgets/custom_button.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_shimmer.dart';
 import 'package:hawiah_client/core/images/app_images.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
+import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/screens/all_categories_screen.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
@@ -165,6 +166,7 @@ class _OrderTapListState extends State<OrderTapList> {
             width: MediaQuery.of(context).size.width / 2.5,
             radius: 5,
             text: "request_hawaia".tr(),
+            style: AppTextStyle.text16M_600.copyWith(color: Colors.white),
             onPressed: () {
               Navigator.push(
                 context,

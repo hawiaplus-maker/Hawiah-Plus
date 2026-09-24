@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:hawiah_client/core/custom_widgets/app_bottom_sheet.dart';
 
 class PrivacyBottomSheet extends StatelessWidget {
@@ -13,8 +13,9 @@ class PrivacyBottomSheet extends StatelessWidget {
       isLine: isLine,
       title: "privacy_policy_text".tr(),
       children: [
-        Html(
-          data: privacy,
+        HtmlWidget(
+          privacy,
+          textStyle: Theme.of(context).textTheme.bodyMedium,
         ),
       ],
     );

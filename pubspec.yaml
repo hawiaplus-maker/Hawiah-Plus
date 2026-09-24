@@ -5,7 +5,7 @@ description: "A new Flutter project."
 publish_to: "none"
 
 # Version and build number
-version: 1.0.45+53
+version: 1.0.46+54
 
 
 environment:
@@ -53,7 +53,7 @@ dependencies:
   loading_indicator: ^3.1.1
   shimmer_animation: ^2.2.1
   flutter_widget_from_html: ^0.17.1
-  flutter_html: ^3.0.0
+  # flutter_html: ^3.0.0
   animations: ^2.0.11
   geocoding: ^4.0.0
   location: ^8.0.1
@@ -75,7 +75,7 @@ dependencies:
   grouped_list: ^6.0.0
   equatable: ^2.0.7
   photo_view: ^0.15.0
-  new_version_plus: ^0.1.1
+  new_version_plus: ^1.0.1
   webview_flutter: ^4.7.0
   rive: ^0.13.18
   crypto: ^3.0.7

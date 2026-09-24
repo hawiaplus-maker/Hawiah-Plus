@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _initAnalyticsAndATT();
+      // await _initAnalyticsAndATT();
       await _initializeApp();
     });
   }

@@ -1,4 +1,4 @@
-import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+// import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -13,7 +13,9 @@ import 'package:hawiah_client/hawiah_plus_app.dart';
 import 'package:hawiah_client/injection_container.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
 import 'firebase_options.dart';
+
 late BuildContext genContext;
 final bool isGuest = HiveMethods.getToken() == null;
 void main() async {
@@ -28,7 +30,7 @@ void main() async {
     Hive.initFlutter(),
   ]);
 
-  await AppTrackingTransparency.requestTrackingAuthorization();
+  // await AppTrackingTransparency.requestTrackingAuthorization();
 
   // Track App Launch events for Snapchat
   SnapchatService.instance.trackPageView();

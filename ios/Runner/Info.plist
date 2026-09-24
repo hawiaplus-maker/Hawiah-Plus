@@ -6,6 +6,8 @@
 		<true/>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
+		<key>NSUserTrackingUsageDescription</key>
+    <string>We use this permission to provide a better experience and measure app performance.</string>
 		<key>CFBundleDisplayName</key>
 		<string>Hawiah Plus</string>
 		<key>CFBundleExecutable</key>
@@ -74,6 +76,7 @@
         </array>
         </dict>
         </array>
+
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>Your location is used to let you select your address on the map by placing a marker, so it can be saved and used when requesting a container delivery.</string>
 	</dict>
