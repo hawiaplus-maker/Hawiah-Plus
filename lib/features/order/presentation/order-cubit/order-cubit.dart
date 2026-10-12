@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hawiah_client/core/hive/hive_methods.dart';
+import 'package:hawiah_client/core/images/image_compressor.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/networking/api_helper.dart';
 import 'package:hawiah_client/core/networking/snapchat_service.dart';
@@ -288,48 +289,87 @@ class OrderCubit extends Cubit<OrderState> {
     required Function(OrderDetailsModel? order) onSuccess,
   }) async {
     NavigatorMethods.loading();
-    FormData body = FormData.fromMap({
-      'product_id': serviceProviderId,
-      "price_id": priceId,
-      'address_id': addressId,
-      "from_date": fromDate,
-      "from_time": fromTime,
-    });
-    if (images != null) {
-      for (var image in images) {
-        body.files.add(MapEntry('images[]', await MultipartFile.fromFile(image.path)));
-      }
+    bool isLoadingClosed = false;
+
+    void closeLoading() {
+      if (isLoadingClosed) return;
+      isLoadingClosed = true;
+      NavigatorMethods.loadingOff();
     }
-    final response = await ApiHelper.instance.post(
-      Urls.createOrder,
-      body: body,
-    );
-    NavigatorMethods.loadingOff();
-    if (response.state == ResponseState.complete) {
-      final order =
-          response.data['data'] != null ? OrderDetailsModel.fromJson(response.data['data']) : null;
-      if (order != null) {
-        SnapchatService.instance.trackPurchase(
-          price: double.tryParse(order.totalPrice ?? '0'),
-          phoneNumber: order.userMobile,
+
+    try {
+      final body = FormData.fromMap({
+        'product_id': serviceProviderId,
+        'price_id': priceId,
+        'address_id': addressId,
+        'from_date': fromDate,
+        'from_time': fromTime,
+      });
+
+      if (images != null) {
+        for (final image in images) {
+          final compressed = await ImageCompressor.compress(image);
+          body.files.add(
+            MapEntry(
+              'images[]',
+              await MultipartFile.fromFile(compressed.path),
+            ),
+          );
+        }
+      }
+
+      final response = await ApiHelper.instance.post(
+        Urls.createOrder,
+        body: body,
+      );
+
+      closeLoading();
+
+      if (response.state == ResponseState.complete) {
+        final data = response.data;
+
+        // الحالة المطلوبة: السيرفر رد 200 بس العملية فشلت
+        if (data?['success'] == false) {
+          CommonMethods.showError(
+            message: data?['message'] ?? ' 3 حدث خطأ',
+            apiResponse: response,
+          );
+          return; // مفيش onSuccess ولا تتبع شراء
+        }
+
+        final order = data?['data'] != null ? OrderDetailsModel.fromJson(data['data']) : null;
+
+        if (order != null) {
+          SnapchatService.instance.trackPurchase(
+            price: double.tryParse(order.totalPrice ?? '0'),
+            phoneNumber: order.userMobile,
+          );
+        }
+
+        CommonMethods.showToast(
+          message: data?['message'] ?? 'تم انشاء الطلب بنجاح',
+        );
+        onSuccess.call(order);
+      } else if (response.state == ResponseState.unauthorized) {
+        CommonMethods.showAlertDialog(
+          message: tr(AppLocaleKey.youMustLogInFirst),
+        );
+      } else {
+        CommonMethods.showError(
+          message: response.data?['message'] ?? 'حدث خطأ 2',
+          apiResponse: response,
         );
       }
-      CommonMethods.showToast(
-        message: response.data['message'] ?? "تم انشاء الطلب بنجاح",
-      );
-      onSuccess.call(order);
-    } else if (response.state == ResponseState.unauthorized) {
-      CommonMethods.showAlertDialog(
-        message: tr(AppLocaleKey.youMustLogInFirst),
-      );
-    } else {
+    } catch (e, s) {
+      debugPrint('createOrder error: $e');
+      debugPrintStack(stackTrace: s);
+      closeLoading();
       CommonMethods.showError(
-        message: response.data['message'] ?? 'حدث خطأ',
-        apiResponse: response,
+        message: 'حدث خطأ 4',
+        apiResponse: null,
       );
     }
   }
-
   // =================== repeat Order ====================
 
   Future<void> repeatOrder({
