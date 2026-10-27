@@ -24,91 +24,64 @@ def flutterVersionName = localProperties.getProperty("flutter.versionName") ?: "
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    keystorePropertiesFile.withInputStream { keystoreProperties.load(it) }
 }
 
-println "DEBUG KEYSTORE storeFile = ${keystoreProperties['storeFile']}"
-println "DEBUG KEYSTORE keyAlias  = ${keystoreProperties['keyAlias']}"
-
 android {
-    // IMPORTANT: For 16KB page size (mandatory for Google Play on Android 15+)
-    // This ensures native libraries are uncompressed and aligned in the APK.
-    packagingOptions {
-        jniLibs.useLegacyPackaging = false
-    }
-
     namespace = "com.hawiah.plus"
-    // Compile with the latest SDK for best compatibility and features
-    compileSdk = 36 // This is good
-
-    // Using a recent NDK version is important. 27.x is good.
+    compileSdk = 36
     ndkVersion = "28.0.12433566"
 
     defaultConfig {
-        // Only arm64-v8a is required for 16KB page size support on Android 15+.
-        // Other ABIs are for older devices/architectures and won't benefit from 16KB pages.
-        ndk {
-             abiFilters "arm64-v8a", "x86_64"
-        }
-         externalNativeBuild {
-            cmake {
-                // Force 16KB page alignment for your own native code
-                arguments "-DANDROID_STL=c++_shared", "-Wl,-z,max-page-size=16384"
-            }
-        }
-
         applicationId = "com.hawiah.plus"
-        minSdkVersion = flutter.minSdkVersion
-        targetSdk = 36 // This is good, aligned with compileSdk
+        minSdk = flutter.minSdkVersion
+        targetSdk = 36
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+
+        ndk {
+            abiFilters "arm64-v8a", "x86_64"
+        }
     }
-     packagingOptions {
-        // Ensure shared libraries are uncompressed for page alignment
-        jniLibs.useLegacyPackaging = false
+
+    // 16KB page size: native libs uncompressed
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false
+        }
     }
+
     signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile']
-                    ? file(keystoreProperties['storeFile'])
-                    : null
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
             storePassword keystoreProperties['storePassword']
         }
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
-            minifyEnabled false
-            shrinkResources false
-
-            lintOptions {
-                checkReleaseBuilds false
-                abortOnError false
-            }
+            signingConfig = signingConfigs.release
+            minifyEnabled = false
+            shrinkResources = false
         }
     }
 
+    lint {
+        checkReleaseBuilds = false
+        abortOnError = false
+    }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17 // Updated for newer Flutter/Android standards
-        targetCompatibility = JavaVersion.VERSION_17 // Updated for newer Flutter/Android standards
-        coreLibraryDesugaringEnabled true
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
-        jvmTarget = '17' // Updated for newer Flutter/Android standards
+        jvmTarget = "17"
     }
-
-    // Optional: If you use any native C/C++ code directly in your app
-    // and want to ensure it's linked with 16KB alignment.
-    // This is typically not needed for Flutter apps unless you have your own native modules.
-    // externalNativeBuild {
-    //     cmake {
-    //         arguments "-DANDROID_LD_FLAGS=-Wl,-z,max-page-size=16384"
-    //     }
-    // }
 }
 
 flutter {
@@ -116,8 +89,7 @@ flutter {
 }
 
 dependencies {
-    // Ensure these are up-to-date with AndroidX versions
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4' // Updated to a more recent version
-    implementation 'androidx.window:window:1.2.0' // Updated to a more recent version
-    implementation 'androidx.window:window-java:1.2.0' // Updated to a more recent version
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.4"
+    implementation "androidx.window:window:1.2.0"
+    implementation "androidx.window:window-java:1.2.0"
 }
