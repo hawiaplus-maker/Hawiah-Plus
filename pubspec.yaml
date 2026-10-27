@@ -5,7 +5,7 @@ description: "A new Flutter project."
 publish_to: "none"
 
 # Version and build number
-version: 1.0.50+58
+version: 1.0.52+60
 
 
 environment:
@@ -29,7 +29,7 @@ dependencies:
   toggle_switch: ^2.3.0
   pinput: ^6.0.1
   easy_stepper: ^0.9.1
-  awesome_dialog: ^3.2.1
+  # awesome_dialog: ^3.2.1
   awesome_bottom_bar: ^1.2.4
   searchable_listview: ^2.16.0
   bottom_picker: ^4.1.1
@@ -77,7 +77,7 @@ dependencies:
   photo_view: ^0.15.0
   new_version_plus: ^1.0.1
   webview_flutter: ^4.7.0
-  rive: ^0.13.18
+  # rive: ^0.13.18
   crypto: ^3.0.7
   flutter_map: 7.0.2
   latlong2: 0.9.1

@@ -11,8 +11,6 @@ PODS:
     - Flutter
   - open_filex (0.0.2):
     - Flutter
-  - rive_common (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
@@ -21,7 +19,6 @@ DEPENDENCIES:
   - GoogleMaps
   - location (from `.symlinks/plugins/location/ios`)
   - open_filex (from `.symlinks/plugins/open_filex/ios`)
-  - rive_common (from `.symlinks/plugins/rive_common/ios`)
 
 SPEC REPOS:
   trunk:
@@ -37,8 +34,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/location/ios"
   open_filex:
     :path: ".symlinks/plugins/open_filex/ios"
-  rive_common:
-    :path: ".symlinks/plugins/rive_common/ios"
 
 SPEC CHECKSUMS:
   device_info_plus: 71ffc6ab7634ade6267c7a93088ed7e4f74e5896
@@ -47,7 +42,6 @@ SPEC CHECKSUMS:
   GoogleMaps: 0608099d4870cac8754bdba9b6953db543432438
   location: 155caecf9da4f280ab5fe4a55f94ceccfab838f8
   open_filex: 432f3cd11432da3e39f47fcc0df2b1603854eff1
-  rive_common: dd421daaf9ae69f0125aa761dd96abd278399952
 
 PODFILE CHECKSUM: f88ae977f01c2fd750b2eed9bf54e9035968f17b
 

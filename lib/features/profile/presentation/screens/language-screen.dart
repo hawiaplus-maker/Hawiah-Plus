@@ -8,6 +8,7 @@ import 'package:hawiah_client/core/locale/app_locale_key.dart';
 import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/features/app-language/presentation/controllers/app-language-cubit/app-language-cubit.dart';
 import 'package:hawiah_client/features/app-language/presentation/controllers/app-language-cubit/app-language-state.dart';
+import 'package:hawiah_client/features/layout/presentation/layout_methouds.dart';
 import 'package:hawiah_client/hawiah_plus_app.dart';
 
 class LanguageScreen extends StatelessWidget {
@@ -106,16 +107,19 @@ class LanguageScreen extends StatelessWidget {
 
     if (language == "arabic") {
       await context.setLocale(const Locale("ar"));
-      HiveMethods.updateLang(Locale('ar'));
+      HiveMethods.updateLang(const Locale('ar'));
     } else if (language == "english") {
       await context.setLocale(const Locale("en"));
-      HiveMethods.updateLang(Locale('en'));
+      HiveMethods.updateLang(const Locale('en'));
     } else if (language == "urdu") {
       await context.setLocale(const Locale("ur"));
-      HiveMethods.updateLang(Locale('ur'));
+      HiveMethods.updateLang(const Locale('ur'));
     }
 
     cubit.changeRebuild();
     HawiahPlusApp.setMyAppState(context);
+
+    // Reload all app data and endpoints with the new language
+    await LayoutMethouds.reloadAppData(showLoading: true);
   }
 }

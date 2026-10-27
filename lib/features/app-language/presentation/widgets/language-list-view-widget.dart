@@ -31,10 +31,8 @@ class LanguageListViewWidget extends StatelessWidget {
                 await context.setLocale(const Locale("ar"));
               } else if (language == "english") {
                 await context.setLocale(const Locale("en"));
-              } else if (language == "Urdu") {
-                await context.setLocale(
-                  Locale('ur'),
-                );
+              } else if (language == "urdu") {
+                await context.setLocale(const Locale('ur'));
               }
               appLanguageCubit.changeRebuild();
             },
@@ -65,7 +63,7 @@ class LanguageListViewWidget extends StatelessWidget {
                   await context.setLocale(const Locale("ar"));
                 } else if (language == "english") {
                   await context.setLocale(const Locale("en"));
-                } else if (language == "Urdu") {
+                } else if (language == "urdu") {
                   await context.setLocale(const Locale("ur"));
                 }
                 appLanguageCubit.changeRebuild();
