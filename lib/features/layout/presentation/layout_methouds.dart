@@ -1,6 +1,7 @@
 import 'package:hawiah_client/core/hive/hive_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-categories-cubit/home-categories-cubit.dart';
+import 'package:hawiah_client/features/home/presentation/controllers/home-cubit/home-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-services-cubit/home-services-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-sliders-cubit/home-sliders-cubit.dart';
 import 'package:hawiah_client/features/order/presentation/order-cubit/order-cubit.dart';
@@ -13,6 +14,7 @@ class LayoutMethouds {
     final homeSlidersCubit = sl<HomeSlidersCubit>();
     final homeCategoriesCubit = sl<HomeCategoriesCubit>();
     final homeServicesCubit = sl<HomeServicesCubit>();
+    final homeCubit = sl<HomeCubit>();
 
     // افتح اللودينج هنا
     showLoading ? NavigatorMethods.loading() : null;
@@ -23,6 +25,7 @@ class LayoutMethouds {
       homeCategoriesCubit.getCategories(),
       homeServicesCubit.getServices(),
       homeSlidersCubit.getHomeSliders(),
+      homeCubit.getContainerTypes(),
     ]);
 
     // اقفل اللودينج

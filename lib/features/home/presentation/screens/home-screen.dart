@@ -9,6 +9,7 @@ import 'package:hawiah_client/features/home/presentation/controllers/home-catego
 import 'package:hawiah_client/features/home/presentation/controllers/home-services-cubit/home-services-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/controllers/home-sliders-cubit/home-sliders-cubit.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/best_seller_list_widget.dart';
+import 'package:hawiah_client/features/home/presentation/widgets/container_types_widget.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/home_app_bar_title.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/home_categories_list_widget.dart';
 import 'package:hawiah_client/features/home/presentation/widgets/home_slider_widget.dart';
@@ -68,13 +69,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: 10),
                       const HomeSliderWidgets(),
                       SizedBox(height: 20),
+                      SizedBox(height: 15),
+                      HomeContainerTypesWidget(),
+                      SizedBox(height: 15),
+                      HomeCategoriesListWidget(),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                         child: Text(AppLocaleKey.bestseller.tr(), style: AppTextStyle.text18_500),
                       ),
                       BestsellerListWidget(),
-                      SizedBox(height: 15),
-                      HomeCategoriesListWidget(),
                     ],
                   ),
                 );

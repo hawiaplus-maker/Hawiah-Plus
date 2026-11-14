@@ -151,4 +151,5 @@ class AppImages {
   static const String pointsShapesImage = 'assets/images/pointsShapesImage.png';
   static const String transferImage = 'assets/images/transferImage.png';
   static const String partnerImage = 'assets/images/partnerImage.png';
+  static const String hawiahImage = 'assets/images/hawiahImage.png';
 }

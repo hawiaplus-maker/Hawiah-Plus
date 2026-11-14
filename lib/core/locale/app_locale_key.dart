@@ -279,6 +279,11 @@ class AppLocaleKey {
   static const String theAddress = 'theAddress';
   static const String serviceProvider = 'serviceProvider';
   static const String hawiahType = 'hawiahType';
+  static const String containerTypes = 'containerTypes';
+  static const String containers = 'containers';
+  static const String projects = 'projects';
+  static const String cleaning = 'cleaning';
+  static const String cleaningContracts = 'cleaningContracts';
   static const String orderSummary = 'orderSummary';
   static const String paymentDetails = 'paymentDetails';
   static const String mainPrice = 'mainPrice';

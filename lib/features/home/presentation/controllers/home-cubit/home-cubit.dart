@@ -9,6 +9,7 @@ import 'package:hawiah_client/core/networking/urls.dart';
 import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/presentation/model/categories_model.dart';
+import 'package:hawiah_client/features/home/presentation/model/container_types_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/services_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/show_categories_model.dart';
 import 'package:hawiah_client/features/home/presentation/model/slider_model.dart';
@@ -161,6 +162,29 @@ class HomeCubit extends Cubit<HomeState> {
     } else if (_servicesResponse.state == ResponseState.unauthorized) {
       emit(HomeChange());
     }
+  }
+
+  ApiResponse _containerTypesResponse =
+      ApiResponse(state: ResponseState.sleep, data: null);
+  ApiResponse get containerTypesResponse => _containerTypesResponse;
+
+  List<ContainerFlowModel> _containerTypes = [];
+  List<ContainerFlowModel> get containerTypes => _containerTypes;
+
+  Future<void> getContainerTypes() async {
+    _containerTypesResponse =
+        ApiResponse(state: ResponseState.loading, data: null);
+    _containerTypes = [];
+    emit(HomeChange());
+
+    _containerTypesResponse = await ApiHelper.instance.get(Urls.containerTypes);
+    if (_containerTypesResponse.state == ResponseState.complete &&
+        _containerTypesResponse.data is Map) {
+      _containerTypes = ContainerTypesModel.fromJson(
+        Map<String, dynamic>.from(_containerTypesResponse.data),
+      ).types;
+    }
+    emit(HomeChange());
   }
 
   ///**************************categories************************ */
