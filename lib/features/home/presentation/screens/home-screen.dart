@@ -68,11 +68,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       SizedBox(height: 10),
                       const HomeSliderWidgets(),
-                      SizedBox(height: 20),
-                      SizedBox(height: 15),
-                      HomeContainerTypesWidget(),
                       SizedBox(height: 15),
                       HomeCategoriesListWidget(),
+                      SizedBox(height: 20),
+                      HomeContainerTypesWidget(),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                         child: Text(AppLocaleKey.bestseller.tr(), style: AppTextStyle.text18_500),

@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hawiah_client/core/custom_widgets/api_response_widget.dart';
 import 'package:hawiah_client/core/custom_widgets/custom_loading/custom_shimmer.dart';
 import 'package:hawiah_client/core/locale/app_locale_key.dart';
-import 'package:hawiah_client/core/theme/app_colors.dart';
 import 'package:hawiah_client/core/theme/app_text_style.dart';
 import 'package:hawiah_client/features/home/execution/screen/category_detailes_screen.dart';
 import 'package:hawiah_client/features/home/presentation/screens/all_categories_screen.dart';
@@ -33,27 +32,39 @@ class _HomeCategoriesListWidgetState extends State<HomeCategoriesListWidget> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(AppLocaleKey.sections.tr(), style: AppTextStyle.text18_500),
                 InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => AllCategoriesScreen(
-                          categories: homeCategoriesCubit.categories,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => AllCategoriesScreen(
+                            categories: homeCategoriesCubit.categories,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    AppLocaleKey.showMore.tr(),
-                    style: AppTextStyle.text16_400.copyWith(
-                      decoration: TextDecoration.underline,
-                      color: AppColor.mainAppColor,
-                      decorationColor: AppColor.mainAppColor,
-                    ),
-                  ),
-                ),
+                      );
+                    },
+                    child: Text(AppLocaleKey.sections.tr(), style: AppTextStyle.text18_500)),
+                // InkWell(
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (_) => AllCategoriesScreen(
+                //           categories: homeCategoriesCubit.categories,
+                //         ),
+                //       ),
+                //     );
+                //   },
+                //   child: Text(
+                //     AppLocaleKey.showMore.tr(),
+                //     style: AppTextStyle.text16_400.copyWith(
+                //       decoration: TextDecoration.underline,
+                //       color: AppColor.mainAppColor,
+                //       decorationColor: AppColor.mainAppColor,
+                //     ),
+                //   ),
+                // ),
+                SizedBox(width: 10.w),
               ],
             ),
             SizedBox(height: 10.h),
