@@ -15,6 +15,7 @@ import 'package:hawiah_client/core/utils/common_methods.dart';
 import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/home/presentation/model/nearby_service-provider_model.dart';
 import 'package:hawiah_client/features/order/presentation/model/order_details_model.dart';
+import 'package:hawiah_client/features/order/presentation/model/related_order_item.dart';
 import 'package:hawiah_client/features/order/presentation/model/orders_model.dart';
 import 'package:hawiah_client/features/order/presentation/model/payment_model.dart';
 import 'package:hawiah_client/features/order/presentation/model/single_order_model.dart'
@@ -64,6 +65,62 @@ class OrderCubit extends Cubit<OrderState> {
 // Helpers
   bool get canLoadMoreCurrent => currentPageCurrent < lastPageCurrent;
   bool get canLoadMoreOld => currentPageOld < lastPageOld;
+
+  List<RelatedOrderItem> relatedOrderItems = [];
+  bool _isLoadingRelatedOrderItems = false;
+
+  Future<void> getRelatedOrderItems() async {
+    if (_isLoadingRelatedOrderItems ||
+        HiveMethods.isVisitor() ||
+        HiveMethods.getToken() == null) {
+      return;
+    }
+
+    _isLoadingRelatedOrderItems = true;
+    try {
+      final responses = await Future.wait([
+        ApiHelper.instance.get(Urls.cleaningContracts),
+        ApiHelper.instance.get(Urls.projects),
+      ]);
+
+      final items = <RelatedOrderItem>[];
+      for (var index = 0; index < responses.length; index++) {
+        final response = responses[index];
+        if (response.state != ResponseState.complete) {
+          log('Could not load ${index == 0 ? 'cleaning contracts' : 'projects'}',
+              error: response.data);
+          continue;
+        }
+
+        final rows = _relatedOrderRows(response.data);
+        items.addAll(rows.map((row) => RelatedOrderItem.fromJson(
+              row,
+              type: index == 0
+                  ? RelatedOrderItemType.cleaningContract
+                  : RelatedOrderItemType.project,
+            )));
+      }
+
+      relatedOrderItems = items;
+      emit(OrderChange());
+    } finally {
+      _isLoadingRelatedOrderItems = false;
+    }
+  }
+
+  List<Map<String, dynamic>> _relatedOrderRows(dynamic responseData) {
+    if (responseData is! Map<String, dynamic>) return [];
+
+    final data = responseData['data'];
+    final rows = data is List
+        ? data
+        : data is Map<String, dynamic>
+            ? data['data']
+            : null;
+    if (rows is! List) return [];
+
+    return rows.whereType<Map<String, dynamic>>().toList();
+  }
 
 // =================== Main API Function ====================
   Future<void> getOrders({
@@ -221,11 +278,13 @@ class OrderCubit extends Cubit<OrderState> {
     state: ResponseState.sleep,
     data: null,
   );
-  ApiResponse get nearbyServiceProviderResponse => _nearbyServiceProviderResponse;
+  ApiResponse get nearbyServiceProviderResponse =>
+      _nearbyServiceProviderResponse;
 
   List<NearbyServiceProviderModel> _nearbyServiceProvider = [];
 
-  List<NearbyServiceProviderModel> get nearbyServiceProvider => _nearbyServiceProvider;
+  List<NearbyServiceProviderModel> get nearbyServiceProvider =>
+      _nearbyServiceProvider;
 
   Future<void> getNearbyProviders({
     required int serviceProviderId,
@@ -237,7 +296,11 @@ class OrderCubit extends Cubit<OrderState> {
 
     _nearbyServiceProviderResponse = await ApiHelper.instance.get(
       Urls.getNearbyProviders,
-      queryParameters: {'product_id': serviceProviderId, 'lat': latitude, 'lng': longitude},
+      queryParameters: {
+        'product_id': serviceProviderId,
+        'lat': latitude,
+        'lng': longitude
+      },
     );
     NavigatorMethods.loadingOff();
     if (_nearbyServiceProviderResponse.state == ResponseState.complete) {
@@ -247,8 +310,9 @@ class OrderCubit extends Cubit<OrderState> {
         final nearbyPrices = message['nearby_prices'] ?? [];
 
         if (nearbyPrices is List) {
-          _nearbyServiceProvider =
-              nearbyPrices.map((e) => NearbyServiceProviderModel.fromJson(e)).toList();
+          _nearbyServiceProvider = nearbyPrices
+              .map((e) => NearbyServiceProviderModel.fromJson(e))
+              .toList();
         } else {
           _nearbyServiceProvider = [];
         }
@@ -260,11 +324,13 @@ class OrderCubit extends Cubit<OrderState> {
         );
         onBadRequest?.call();
       }
-    } else if (_nearbyServiceProviderResponse.state == ResponseState.unauthorized) {
+    } else if (_nearbyServiceProviderResponse.state ==
+        ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(
         message: tr(AppLocaleKey.youMustLogInFirst),
       );
-    } else if (_nearbyServiceProviderResponse.state == ResponseState.badRequest) {
+    } else if (_nearbyServiceProviderResponse.state ==
+        ResponseState.badRequest) {
       CommonMethods.showError(
         message: _nearbyServiceProviderResponse.data['message'] ?? 'حدث خطاء',
         apiResponse: _nearbyServiceProviderResponse,
@@ -337,7 +403,9 @@ class OrderCubit extends Cubit<OrderState> {
           return; // مفيش onSuccess ولا تتبع شراء
         }
 
-        final order = data?['data'] != null ? OrderDetailsModel.fromJson(data['data']) : null;
+        final order = data?['data'] != null
+            ? OrderDetailsModel.fromJson(data['data'])
+            : null;
 
         if (order != null) {
           SnapchatService.instance.trackPurchase(
@@ -570,7 +638,8 @@ class OrderCubit extends Cubit<OrderState> {
       Urls.confirmPayment(orderId),
     );
 
-    if (response.state == ResponseState.complete && response.data['success'] != false) {
+    if (response.state == ResponseState.complete &&
+        response.data['success'] != false) {
     } else if (response.state == ResponseState.unauthorized) {
       CommonMethods.showAlertDialog(
         message: tr(AppLocaleKey.youMustLogInFirst),
@@ -587,7 +656,8 @@ class OrderCubit extends Cubit<OrderState> {
   Future<void> applyCoupon({
     required String code,
     required int orderId,
-    dynamic Function(String discountValue, int discount, String priceAfterDiscount, String copone)?
+    dynamic Function(String discountValue, int discount,
+            String priceAfterDiscount, String copone)?
         onSuccess,
   }) async {
     NavigatorMethods.loading();
@@ -600,7 +670,8 @@ class OrderCubit extends Cubit<OrderState> {
       body: body,
     );
     NavigatorMethods.loadingOff();
-    if (response.state == ResponseState.complete && response.data['success'] != false) {
+    if (response.state == ResponseState.complete &&
+        response.data['success'] != false) {
       CommonMethods.showToast(
         message: response.data['message'] ?? "تم  بنجاح",
       );
@@ -653,7 +724,8 @@ class OrderCubit extends Cubit<OrderState> {
     );
     if (_paymentMethodsListResponse.state == ResponseState.complete) {
       Iterable iterable = _paymentMethodsListResponse.data['data'];
-      _paymentMethodsList = iterable.map((e) => PaymentMethoudModel.fromJson(e)).toList();
+      _paymentMethodsList =
+          iterable.map((e) => PaymentMethoudModel.fromJson(e)).toList();
 
       emit(PaymentMethodsUpdate());
     }

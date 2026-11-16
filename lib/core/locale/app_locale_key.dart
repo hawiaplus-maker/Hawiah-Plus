@@ -10,7 +10,8 @@ class AppLocaleKey {
   static const String validateEmailStructure = 'validateEmailStructure';
   static const String validatePhone = 'validatePhone';
   static const String validatePhoneStartWithZero = 'validatePhoneStartWithZero';
-  static const String validatePhoneContainTenNumbers = 'validatePhoneContainTenNumbers';
+  static const String validatePhoneContainTenNumbers =
+      'validatePhoneContainTenNumbers';
   static const String validatePassword = 'validatePassword';
   static const String enterYourPassword = 'enterYourPassword';
   static const String validateConfirmPassword = 'validateConfirmPassword';
@@ -36,6 +37,17 @@ class AppLocaleKey {
   static const String chooseServiceProvider = 'chooseServiceProvider';
   static const String youHaveToChooseAddress = 'youHaveToChooseAddress';
   static const String paymentMethod = 'paymentMethod';
+  static const String paymentStatus = 'paymentStatus';
+  static const String progress = 'progress';
+  static const String subtotal = 'subtotal';
+  static const String vatAmount = 'vatAmount';
+  static const String containerPrice = 'containerPrice';
+  static const String pricePerDischarge = 'pricePerDischarge';
+  static const String duration = 'duration';
+  static const String frequency = 'frequency';
+  static const String quantity = 'quantity';
+  static const String dischargesPerWeek = 'dischargesPerWeek';
+  static const String deliveryStatus = 'deliveryStatus';
   static const String youHaveToChooseStartDate = 'youHaveToChooseStartDate';
   static const String guest = 'guest';
   static const String noAddresses = 'noAddresses';
@@ -43,6 +55,9 @@ class AppLocaleKey {
   static const String tomorrow = 'tomorrow';
   static const String message = 'message';
   static const String tracking = "tracking";
+  static const String pickups = "pickups";
+  static const String imageBefore = "imageBefore";
+  static const String imageAfter = "imageAfter";
   static const String imageSelected = "Imageselected";
   static const String termsAndConditions = "TermsandConditions";
   static const String settings = "settings";
@@ -112,7 +127,8 @@ class AppLocaleKey {
   static const String reEmptythecontainer = "reEmptythecontainer";
   static const String contactTheDriver = "Contactthedriver";
   static const String contactSupport = "ContactSupport";
-  static const String representativewasuncooperative = "representativewasuncooperative";
+  static const String representativewasuncooperative =
+      "representativewasuncooperative";
   static const String confirmcurrentlocation = "Confirmcurrentlocation";
   static const String currentaddress = "Currentaddress";
   static const String pleaselog = "Pleaselog";
@@ -160,7 +176,8 @@ class AppLocaleKey {
   static const String lastseen = 'lastseen';
   static const String notconnected = 'notconnected';
   static const String loginNow = 'loginNow';
-  static const String toBrowseServicesRegisterNow = 'toBrowseServicesRegisterNow';
+  static const String toBrowseServicesRegisterNow =
+      'toBrowseServicesRegisterNow';
   static const String notificationDeleted = 'notificationDeleted';
   static const String notificationDeleteFailed = 'notificationDeleteFailed';
   static const String notRegisteredYet = 'notRegisteredYet';
@@ -263,15 +280,18 @@ class AppLocaleKey {
   static const String nextSteps = 'nextSteps';
   static const String downloadContract = 'downloadContract';
   static const String downloadInvoice = 'downloadInvoice';
-  static const String viewAndDownloadServiceContract = 'viewAndDownloadServiceContract';
-  static const String viewAndDownloadOrderInvoice = 'viewAndDownloadOrderInvoice';
+  static const String viewAndDownloadServiceContract =
+      'viewAndDownloadServiceContract';
+  static const String viewAndDownloadOrderInvoice =
+      'viewAndDownloadOrderInvoice';
   static const String contract = 'contract';
   static const String invoice = 'invoice';
   static const String ordernumber = 'ordernumber';
   static const String backToHome = 'backToHome';
 
   static const String viewContract = 'viewContract';
-  static const String allTransactionsSecureAndEncrypted = 'allTransactionsSecureAndEncrypted';
+  static const String allTransactionsSecureAndEncrypted =
+      'allTransactionsSecureAndEncrypted';
   static const String apply = 'apply';
   static const String enterDiscountCoupon = 'enterDiscountCoupon';
   static const String discountCoupon = 'discountCoupon';
@@ -337,7 +357,8 @@ class AppLocaleKey {
   static const String youHaveXPoints = 'youHaveXPoints';
   static const String show = 'show';
   static const String hide = 'hide';
-  static const String theNumberOfPointsToBeRedeemed = 'theNumberOfPointsToBeRedeemed';
+  static const String theNumberOfPointsToBeRedeemed =
+      'theNumberOfPointsToBeRedeemed';
   static const String noteEachPointEquals1SAR = 'noteEachPointEquals1SAR';
   static const String xPoint = 'xPoint';
   static const String userCode = 'userCode';

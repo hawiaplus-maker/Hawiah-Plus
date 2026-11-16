@@ -3,7 +3,8 @@ class Urls {
       'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?cs=srgb&amp;dl=pexels-mike-b-170811.jpg&amp;fm=jpg';
   static const String testWhiteCarImage =
       'https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?cs=srgb&amp;dl=pexels-mike-b-116675.jpg&amp;fm=jpg';
-  static const String testCarLogoImage = 'https://cdn.worldvectorlogo.com/logos/bmw-logo.svg';
+  static const String testCarLogoImage =
+      'https://cdn.worldvectorlogo.com/logos/bmw-logo.svg';
   static const String testUserImage =
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLlsHCzHU2GndYsMJQscyixYSlDVggHDzbXtXSuEmLAc309Z-6e1TUhHJFCLCw40Kicw0';
   static const String testAppleLogo =
@@ -41,6 +42,8 @@ class Urls {
   static const String getNearbyProviders = '${baseUrl}get-nieghborhood-by-loc';
   // static const String getNearbyProviders = '${baseUrl}get-nearby-providers';
   static const String createOrder = '${baseUrl}users/orders';
+  static const String cleaningContracts = '${baseUrl}v2/cleaning-contracts';
+  static const String projects = '${baseUrl}v2/projects';
   static const String onBoarding = '${baseUrl}on-boarding';
   static String orders(int id) => '${baseUrl}users/user-orders';
   static const String cities = '${baseUrl}cities';

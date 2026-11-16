@@ -23,7 +23,8 @@ class OrdersScreen extends StatefulWidget {
   State<OrdersScreen> createState() => _OrdersScreenState();
 }
 
-class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderStateMixin {
+class _OrdersScreenState extends State<OrdersScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   bool _isDialogOpen = false;
 
@@ -52,7 +53,8 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
     return BlocProvider(
       create: (context) => OrderCubit()
         ..getOrders(orderStatus: 0, page: 1, isLoadMore: false)
-        ..getOrders(orderStatus: 1, page: 1, isLoadMore: false),
+        ..getOrders(orderStatus: 1, page: 1, isLoadMore: false)
+        ..getRelatedOrderItems(),
       child: Scaffold(
         appBar: CustomAppBar(
           context,
@@ -66,7 +68,8 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
               child: TabBar(
                 controller: _tabController,
                 labelColor: AppColor.whiteColor,
-                labelStyle: AppTextStyle.text20_700.copyWith(fontFamily: "DINNextLTArabic"),
+                labelStyle: AppTextStyle.text20_700
+                    .copyWith(fontFamily: "DINNextLTArabic"),
                 indicatorColor: Colors.transparent,
                 dividerHeight: 0,
                 labelPadding: const EdgeInsets.symmetric(horizontal: 3),
@@ -108,7 +111,8 @@ class _OrdersScreenState extends State<OrdersScreen> with SingleTickerProviderSt
                 listener: (context, state) async {
                   if (state is Unauthenticated && !_isDialogOpen) {
                     _isDialogOpen = true;
-                    await NavigatorMethods.showAppDialog(context, UnauthenticatedDialog());
+                    await NavigatorMethods.showAppDialog(
+                        context, UnauthenticatedDialog());
                     _isDialogOpen = false;
                   }
                 },
