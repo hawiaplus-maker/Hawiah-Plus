@@ -17,8 +17,11 @@ class LocationService {
   /// Get current location
   Future<LocationData?> getCurrentLocation() async {
     try {
-      if (await checkAndRequestLocationService() && await checkAndRequestLocationPermission()) {
-        return await _location.getLocation().timeout(const Duration(seconds: 10));
+      if (await checkAndRequestLocationService() &&
+          await checkAndRequestLocationPermission()) {
+        return await _location
+            .getLocation()
+            .timeout(const Duration(seconds: 10));
       }
       return null;
     } catch (e) {
@@ -88,19 +91,20 @@ class LocationService {
 
     if (fetchLocality) {
       try {
-        final placemarks = await placemarkFromCoordinates(lat, lng);
+        final placemarks = await Geocoding().placemarkFromCoordinates(lat, lng);
         if (placemarks.isNotEmpty) {
           final p = placemarks.first;
 
           // ⬅ السعودية: المدن بترجع بشكل ممتاز هنا
-          city =
-              p.locality?.trim() ?? p.subAdministrativeArea?.trim() ?? p.administrativeArea?.trim();
+          city = p.locality?.trim() ??
+              p.subAdministrativeArea?.trim() ??
+              p.administrativeArea?.trim();
 
           locality = [
             p.street,
             p.subLocality,
             city,
-          ].where((v) => v != null && v.isNotEmpty).join(", ");
+          ].whereType<String>().where((v) => v.isNotEmpty).join(", ");
 
           country = p.country;
           state = p.administrativeArea;

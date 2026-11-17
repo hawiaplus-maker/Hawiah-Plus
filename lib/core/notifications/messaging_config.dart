@@ -10,7 +10,8 @@ import 'package:hawiah_client/core/utils/navigator_methods.dart';
 import 'package:hawiah_client/features/layout/presentation/screens/layout-screen.dart';
 
 @pragma('vm:entry-point')
-final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin _localNotifications =
+    FlutterLocalNotificationsPlugin();
 
 @pragma('vm:entry-point')
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -84,10 +85,10 @@ Future<void> _showLocalNotification(RemoteMessage message) async {
   final payload = jsonEncode(data);
 
   await _localNotifications.show(
-    message.hashCode,
-    title,
-    body,
-    const NotificationDetails(
+    id: message.hashCode,
+    title: title,
+    body: body,
+    notificationDetails: const NotificationDetails(
       android: AndroidNotificationDetails(
         'high_importance',
         'High Importance',
@@ -142,7 +143,7 @@ class MessagingService {
 
     // 1. تهيئة الإشعارات المحلية
     await _localNotifications.initialize(
-      const InitializationSettings(
+      settings: const InitializationSettings(
         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
         iOS: DarwinInitializationSettings(),
       ),
@@ -194,7 +195,8 @@ class MessagingService {
       sound: RawResourceAndroidNotificationSound('custom_sound'),
     );
     await _localNotifications
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
   }
 }

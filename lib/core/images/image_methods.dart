@@ -52,7 +52,7 @@ class ImageMethods {
     FileType type = FileType.any,
     List<String>? allowedExtensions,
   }) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    FilePickerResult? result = await FilePicker.pickFiles(
       type: type,
       allowedExtensions: allowedExtensions,
     );
